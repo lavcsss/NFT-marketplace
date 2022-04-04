@@ -1,0 +1,23 @@
+<div id="Reportuser-modal" class="zoom-anim-dialog mfp-hide modal sm_modal">
+  <button class="modal__close md_cls" type="button"><i class="fas fa-times"></i></button>
+  <h4 class="modal-title share_link_page_h4"><%= t('users.show.report_user') %></h4>
+
+  <div class="modal-body pt-10 pb-10">
+    <p class="buynow-content">
+      <span class="innertitle"> <%= t('users.show.report_message') %></span>
+      <span class="frm-title"><b><%= @user.full_name %></b></span>
+    </p>
+
+    <%= form_tag report_users_path(@user.address), method: :post, remote: true, multipart: true, id: 'reportUserForm' do %>
+      <div class="form-group" style="margin-left: 12px;">
+        <div>
+          <label class="sign__label" for="size">Message</label>
+          <textarea id="message" name="report_user[message]" class="sign__textarea" placeholder="Enter the Message" required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="text-align:center">
+        <a class="btn theme-btn triggerReportUserValidation" href="" role="button">Report</a>
+      </div>
+    <% end %>
+  </div>
+</div>

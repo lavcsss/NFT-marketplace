@@ -1,0 +1,355 @@
+<main class="main m_home">
+
+  <%= render "common/home_header"%>
+  <div class="container">
+    <div class="row row--grid">
+      <div class="col-12">
+        <div class="main__title">
+          <h2><a href="#">Live auctions</a></h2>
+        </div>
+      </div>
+      <div class="col-12">
+      
+      <% if @hot_bids.present? %>
+        <div class="main__carousel-wrap">
+          <div class="main__carousel main__carousel--live owl-carousel" id="live">
+            
+            <% @hot_bids.each do |collection|%>
+              <%= render "hot_bids", collection: collection %>
+            <%end%>
+            
+          </div>
+          <div class="one-elements">
+            <a href="<%= search_path%>" class="explore-all">Explore all</a>
+            <button class="main__nav main__nav--prev" data-nav="#live" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17,11H9.41l3.3-3.29a1,1,0,1,0-1.42-1.42l-5,5a1,1,0,0,0-.21.33,1,1,0,0,0,0,.76,1,1,0,0,0,.21.33l5,5a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42L9.41,13H17a1,1,0,0,0,0-2Z"/></svg></button>
+            <button class="main__nav main__nav--next" data-nav="#live" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.92,11.62a1,1,0,0,0-.21-.33l-5-5a1,1,0,0,0-1.42,1.42L14.59,11H7a1,1,0,0,0,0,2h7.59l-3.3,3.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l5-5a1,1,0,0,0,.21-.33A1,1,0,0,0,17.92,11.62Z"/></svg></button>
+          </div>
+        </div>
+      <% else %>
+        <%= render partial: 'common/empty' %>
+      <% end %>
+
+      </div>
+    </div>
+
+    <div class="row row--grid">
+      <!-- title -->
+      <div class="col-12">
+        <div class="main__title">
+          <h2><a href="/search"><%= t('dashboard.explore')%></a></h2>
+        </div>
+      </div>
+      <!-- end title -->
+      <div class="col-12 filters-content">
+        <div class="row row--grid">
+          <% if @category_collections.present? %>
+            <% @category_collections.each do |collection| %>
+              <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                <%= render "dashboard/collection_card", collection: collection %>
+              </div>
+            <% end %>
+          <% else %>
+            <% 1.times do %>
+              <div class="col-12">
+                <%= render partial: 'common/empty' %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <% if params[:page_no].to_i < @category_collections.total_pages %>
+        <div class="row">
+          <div class="col-md-12 pt-15 pb-15">
+            <div class="load-more-items">
+              <a href="javascript:void(0)" data-page-no="2" category="" class="dashboard-load-more">Load more items</a>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+
+  <section class="contain-slick">
+      <div class="row row--grid">
+        <!-- title -->
+        <div class="col-12">
+          <div class="main__title">
+            <h2><a href="javascript:void(0);">Explore by Category</a></h2>
+          </div>
+        </div>
+        <!-- end title -->
+      </div>
+      <div class="row row--grid">
+
+        <div class="col-12">
+          <ul id="slider">
+            <li class="slide-item">
+
+              <div class="one-direct">
+                <div class="li-first-range all-out-one">
+                  <a href="https://crosstower.com/_nft/coming-soon.html">
+                    <div class="blank-img">
+                      <img src="/assets/category/art.png" class="object-position-left">
+                    </div>
+                    <div class="pre-heading">
+                      <h4>Art</h4>
+                    </div>
+                  </a>  
+                </div>
+                <div class="li-second-range">
+                  <div class="all-out-one">
+                    <a href="https://crosstower.com/_nft/coming-soon.html">
+                      <div class="blank-img">
+                        <img src="/assets/category/Celebrities.png">
+                      </div>
+                      <div class="pre-heading">
+                        <h4>Celebrities</h4>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="all-out-one">
+                    <a href="https://crosstower.com/_nft/coming-soon.html">
+                      <div class="blank-img">
+                        <img src="/assets/category/Domain-names.png">
+                      </div>
+                      <div class="pre-heading">
+                        <h4>Domain Names</h4>
+                      </div>
+                    </a>  
+                  </div>
+                </div>
+              </div>
+              
+            </li>
+            <li class="slide-item">
+              <div class="trap-allone">
+                <div class="all-out-one">
+                  <a href="https://crosstower.com/_nft/coming-soon.html">
+                    <div class="blank-img">
+                      <img src="/assets/category/entertainment.png">
+                    </div>
+                    <div class="pre-heading">
+                      <h4>Entertainment</h4>
+                    </div>
+                  </a>  
+                </div>
+              </div>
+            </li>
+            <li class="slide-item">
+              <div class="one-direct-end">
+                <div class="all-end-direct">
+                  <div class="all-out-one">
+                    <a href="https://crosstower.com/_nft/coming-soon.html">
+                      <div class="blank-img">
+                        <img src="/assets/category/Event-ticket.png">
+                      </div>
+                      <div class="pre-heading">
+                        <h4>Event Ticket</h4>
+                      </div>
+                    </a>     
+                  </div>
+                </div>
+                <div class="all-end-direct-one">
+                  <div class="all-out-one">
+                    <a href="https://crosstower.com/_nft/coming-soon.html">
+                      <div class="blank-img">
+                        <img src="/assets/category/games.png">
+                      </div>
+                      <div class="pre-heading">
+                        <h4>Games</h4>
+                      </div>
+                    </a>  
+                  </div>
+                  <div class="all-out-one">
+                    <a href="https://crosstower.com/_nft/coming-soon.html">
+                      <div class="blank-img">
+                        <img src="/assets/category/media.png">
+                      </div>
+                      <div class="pre-heading">
+                        <h4>Media</h4>
+                      </div>
+                    </a>  
+                  </div>
+                </div>
+              </div>
+              
+            </li>
+
+            <li class="slide-item">
+              <div class="trap-allone">
+                <div class="all-out-one">
+                  <a href="https://crosstower.com/_nft/coming-soon.html">
+                    <div class="blank-img">
+                      <img src="/assets/category/Memes.png">
+                    </div>
+                    <div class="pre-heading">
+                      <h4>Memes</h4>
+                    </div>
+                  </a>  
+                </div>
+              </div>
+            </li>
+
+            <li class="slide-item">
+
+              <div class="one-direct">
+                <div class="li-first-range all-out-one">
+                  <a href="https://crosstower.com/_nft/coming-soon.html">
+                    <div class="blank-img">
+                      <img src="/assets/category/music.png">
+                    </div>
+                    <div class="pre-heading">
+                      <h4>Music</h4>
+                    </div>
+                  </a>  
+                </div>
+                <div class="li-second-range">
+                  <div class="all-out-one">
+                    <a href="https://crosstower.com/_nft/coming-soon.html">
+                      <div class="blank-img">
+                        <img src="/assets/category/real-estate.png">
+                      </div>
+                      <div class="pre-heading">
+                        <h4>Real Estate</h4>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="all-out-one">
+                    <a href="https://crosstower.com/_nft/coming-soon.html">
+                      <div class="blank-img">
+                        <img src="/assets/category/Real-world-assets.png">
+                      </div>
+                      <div class="pre-heading">
+                        <h4>Real World Assets</h4>
+                      </div>
+                    </a>  
+                  </div>
+                </div>
+              </div>
+              
+            </li>
+            <li class="slide-item">
+              <div class="trap-allone">
+                <div class="all-out-one">
+                  <a href="https://crosstower.com/_nft/coming-soon.html">
+                    <div class="blank-img">
+                      <img src="/assets/category/Virtual-Fashion.png">
+                    </div>
+                    <div class="pre-heading">
+                      <h4>Virtual Fashion</h4>
+                    </div>
+                  </a>  
+                </div>
+              </div>
+            </li>
+            
+          </ul>
+        </div>
+
+      </div>
+  </section>
+  
+  <% if @featured_users.present? %>
+    <div class="row row--grid">
+      <div class="col-12">
+        <div class="main__title">
+          <h2><a href="javascript:void(0);"><%= t('dashboard.featured_users')%></a></h2>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="featureLayer owl-carousel">
+          <% @featured_users.each do |featured_user| %>
+            <div class="item">
+              <%= render "dashboard/featured_user_card", featured_user: featured_user %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+    <section class="one-youtube">
+      <div class="row align-items-center">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="youtube-video">
+            <iframe class="youtube-format" src="https://www.youtube.com/embed/L_JCJo_pKwc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>      
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="learn-create">
+            <h3>Learn and Create NFT’s</h3>
+            <p>NFTs (Non-fungible tokens) are unique digital tokens powered by blockchain technology.
+            These are digital assets like digital art, videos, movies, digital sports cards, and even GIFs!
+            The CrossTower NFT Marketplace is an exclusive platform where digital artists have creative
+            freedom and new ways to share their work with the world. Our carefully curated selection
+            brings you outstanding. unique pieces to add to your NFT collections.</p>
+            <!-- <a href="https://crosstower.com/nft/blogs.html" class="learnMore">Learn More</a> -->
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <%#= render "dashboard/top_sellers"%>
+    <%#= render "dashboard/top_buyers"%>
+
+    <!-- <div class="row row--grid">
+      <div class="col-12">
+        <div class="main__title">
+          <h2><%#= t('dashboard.title')%></h2>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="feature">
+            <span class="feature__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,7H18V6a3,3,0,0,0-3-3H5A3,3,0,0,0,2,6H2V18a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V10A3,3,0,0,0,19,7ZM5,5H15a1,1,0,0,1,1,1V7H5A1,1,0,0,1,5,5ZM20,15H19a1,1,0,0,1,0-2h1Zm0-4H19a3,3,0,0,0,0,6h1v1a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V8.83A3,3,0,0,0,5,9H19a1,1,0,0,1,1,1Z"/></svg>
+            </span>
+          <h3 class="feature__title"><%#= t('dashboard.set_your_wallet')%></h3>
+          <%#if current_user %>
+            <p class="feature__text"><%#= t('dashboard.wallet_configuration_msg')%><br>   
+          <%#else%>
+            <p class="feature__text"><%#= t('dashboard.wallet_choice', app_name: Rails.application.credentials.config[:app_name])%> <br>   
+            <a class="open-modal" href="#connect_to_wallet"><%#= t('dashboard.connect_my_wallet')%></a>.
+          <%#end%>
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="feature">
+            <span class="feature__icon feature__icon--green">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10,13H4a1,1,0,0,0-1,1v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V14A1,1,0,0,0,10,13ZM9,19H5V15H9ZM20,3H14a1,1,0,0,0-1,1v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V4A1,1,0,0,0,20,3ZM19,9H15V5h4Zm1,7H18V14a1,1,0,0,0-2,0v2H14a1,1,0,0,0,0,2h2v2a1,1,0,0,0,2,0V18h2a1,1,0,0,0,0-2ZM10,3H4A1,1,0,0,0,3,4v6a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V4A1,1,0,0,0,10,3ZM9,9H5V5H9Z"/></svg>
+            </span>
+          <h3 class="feature__title"><%#= t('dashboard.create_collection')%></h3>
+          <p class="feature__text"><%#= t('dashboard.create_collection_text')%></p>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="feature">
+            <span class="feature__icon feature__icon--purple">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22.71,6.29a1,1,0,0,0-1.42,0L20,7.59V2a1,1,0,0,0-2,0V7.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l3,3a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l3-3A1,1,0,0,0,22.71,6.29ZM19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h8a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21Z"/></svg>
+            </span>
+          <h3 class="feature__title"><%#= t('dashboard.add_nfts')%></h3>
+          <p class="feature__text"><%#= t('dashboard.nfts_help_text')%></p>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="feature feature--last">
+            <span class="feature__icon feature__icon--red">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15,12a1,1,0,1,0,1-1A1,1,0,0,0,15,12Zm6.71-.71-5-5A1,1,0,0,0,16,6H5A3,3,0,0,0,2,9v6a3,3,0,0,0,3,3H16a1,1,0,0,0,.71-.29l5-5A1,1,0,0,0,21.71,11.29ZM15.59,16H5a1,1,0,0,1-1-1V9A1,1,0,0,1,5,8H15.59l4,4Z"/></svg>
+            </span>
+          <h3 class="feature__title"><%#= t('dashboard.list_for_sale')%></h3>
+          <p class="feature__text"><%#= t('dashboard.choose_how_to_sell')%></p>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+
+</main>

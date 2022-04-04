@@ -1,0 +1,8 @@
+<div class="card featured-users">
+  <div class="secondary-div">
+    <%= image_tag featured_user.profile_image %>
+    <div class="user-name">
+      <a href="<%=user_path(featured_user.address)%>" data-toggle="tooltip" data-placement="top"><%= featured_user.full_name %></a>
+    </div>
+  </div>
+</div>
