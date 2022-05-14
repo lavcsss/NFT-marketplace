@@ -4,6 +4,54 @@
   <% else %>
     <div class="main__author" data-bg="/assets/dummy-image.jpg" style="background: url(/assets/dummy-image.jpg) center center / cover no-repeat;"></div>
   <% end %>-->
+  <% if !@nft.nil? %>
+    <script>
+      $(function(){
+        $("#collection-type").hide();
+        $("#royalties").parent().parent().hide();
+        $("#itemname").val("<%= @nft[:title] %>");
+        $("#itemname").prop('disabled', true);
+        $("#description").val("<%= @nft[:description] %>");
+        $("#description").prop('disabled', true);
+        $("#no_of_copies").prop('disabled', true);
+        <% if ['audio/mp3', 'audio/webm', 'audio/mpeg'].include?(@nft[:file_type]) %>
+          $("#imagePreviewRes").append('<audio width="300" height="300" controls=""><source src="<%= @nft[:url] %>" id="audio_here"> </audio>');
+          dispalyPreviewImage();
+        <% elsif ['video/mp4', 'video/webm'].include?(@nft[:file_type]) %>
+          $("#imagePreviewRes").append('<video width="300" height="200" controls=""><source src="<%= @nft[:url] %>" id="video_here"> </video>');
+          dispalyPreviewImage();
+        <% else %>
+          $("#imagePreviewRes").css({"background-image": "url(<%= @nft[:url] %>)", "height": "225px", "width": "300px", "background-size": "cover", "background-repeat": "no-repeat", "background-position": "center center", "margin-left": "auto", "margin-right": "auto", "border-radius": "15px"});
+          $('#my-preview-section').html('<img id="img_prv" width="300" height="300" src="<%= @nft[:url] %>" controls/>');
+          $('#my-preview-section').hide();
+          $('#my-preview-section').fadeIn(650);
+        <% end %>
+        $("#file-1").hide();
+        $('#placeholder').fadeOut(100);
+        $('#file-1').fadeOut(100);
+        $('#choose_file_selected').fadeOut(100);
+        $('#imagePreviewRes').hide();
+        $('#imagePreviewRes').fadeIn(650);
+      });
+
+      function dispalyPreviewImage() {
+        <% preview_url = if @nft[:preview_url].present? then @nft[:preview_url] else "/assets/banner-1.png" end%>
+        $('#my-preview-section').html('<img id="img_prv" width="300" height="300" src="<%= preview_url %>" controls/>');
+        $('.coverUpload').removeClass("hide");
+        $('#my-preview-section').hide();
+        $('#my-preview-section').fadeIn(650);
+        $('#imagePreviewRes2').html('<img id="img_prv" width="300" height="300" src="<%= preview_url %>" controls/>')
+        <% unless @nft[:preview_url].present? %>
+          $('#close-preview-button2').css('display', 'inline-block');
+        <% end %>
+        $('#placeholder2').fadeOut(100);
+        $('#file-2').fadeOut(100);
+        $('#choose_file_selected2').fadeOut(100);
+        $('#imagePreviewRes2').hide();
+        $('#imagePreviewRes2').fadeIn(650);
+      }
+    </script>
+  <% end %>
   <div class="container">
     <div class="row row--grid">
       <!-- author -->
@@ -41,6 +89,15 @@
             <%= form_tag collections_path, method: :post, multipart: true, remote: true, authenticity_token: true, id: "collectionCreateForm", :class => "sign__form sign__form--create" do %>
               <%= hidden_field_tag 'collection[collection_type]', @collection_type %>
               <%= hidden_field_tag 'collection[data]', nil, class: 'collection-data-val' %>
+              <%= hidden_field_tag 'collection[source]', if @nft.nil? then 'self' else 'opensea' end %>
+              <% unless @nft.nil? %>
+                <%= hidden_field_tag 'collection[nft_link]', @nft[:metadata] %>
+                <%= hidden_field_tag 'collection[token]', @nft[:token] %>
+                <%= hidden_field_tag 'collection[total_copies]', @nft[:num_copies] %>
+                <%= hidden_field_tag 'collection[contract_address]', @nft[:contract_address] %>
+                <%= hidden_field_tag 'collection[contract_type]', @nft[:contract_type] %>
+                <%= hidden_field_tag 'collection[imported]', true %>
+              <% end %>
               <div class="row">
                 <div class="col-12">
                   <h4 class="sign__title"><%= t('collections.form.upload_file') %> *</h4>
@@ -58,7 +115,7 @@
                     <div class="codrops-header">
                       <div class="box">
                         <span class="placeholder" id="placeholder" style=""><b>Upload file</b>PNG, GIF, MP4 or MP3. Max 100mb.</span>
-                        <input accept="image/png,image/jpeg,image/gif,video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg" type="file" name="collection[attachment]" id="file-1" class="sign__file-upload create_file_upload" required/>
+                        <input accept="image/png,image/jpeg,image/gif,video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg" type="file" name="collection[attachment]" id="file-1" class="sign__file-upload create_file_upload"/>
                         <div id="imagePreviewRes"></div>
                         <label id="choose_file_selected" for="file-1"><span><%= t('collections.form.choose_file') %></span></label>
                         <div class="close-preview-button" id="close-preview-button">
@@ -118,7 +175,12 @@
                   <div class="col-12">
                     <div class="sign__group">
                       <label class="sign__label" for="no_of_copies"><%= t('collections.form.number_of_copies') %></label>
-                      <input type="number" min="1" id="no_of_copies" name="collection[no_of_copies]" class="sign__input" placeholder="e.g 5" required></input>
+                      <% if !@nft.nil? %>
+                        <input type="number" min="1" max="<%= @nft[:num_copies] %>" value="<%= @nft[:num_copies] %>" id="no_of_copies" name="collection[no_of_copies]" class="sign__input" placeholder="e.g 5" required></input>
+                        <p style="font-size: 14px; color: #666; margin-left: 2px;"> You have <%= @nft[:num_copies] %> <%= if @nft[:num_copies].to_i > 1 then 'copies' else 'copy' end %> only</p>
+                      <% else %>
+                        <input type="number" min="1" id="no_of_copies" name="collection[no_of_copies]" class="sign__input" placeholder="e.g 5" required></input>
+                      <% end %>
                     </div>
                   </div>
                 <% end %>
@@ -178,18 +240,16 @@
                 </div>
 
 
-                <div class="col-12">
+                <div class="col-12" id="collection-type">
                   <h4 class="sign__title"><%= t('collections.form.choose_collection') %></h4>
                   <div class="sign__group sign__group--row">
                     <ul class="sign__radio">
                       <li>
-                        <!--<input id="type4" type="radio" name="type" checked="">-->
-                        <%= radio_button_tag 'chooseCollection', "create", nil, class: "chooseCollectionErc", :id => "type4" %>
+                        <%= radio_button_tag 'chooseCollection', "create", nil, class: "chooseCollectionErc chooseCollectionType", :id => "type4" %>
                         <label for="type4">Owntoken<%#= collection_type @collection_type %></label>
                       </li>
                       <li>
-                        <!--<input id="type5" type="radio" name="type">-->
-                        <%= radio_button_tag 'chooseCollection', "nft", nil, class: "chooseCollectionNft", :id => "type5", :checked => true %>
+                        <%= radio_button_tag 'chooseCollection', "nft", nil, class: "chooseCollectionNft chooseCollectionType", :id => "type5", :checked => true %>
                         <label for="type5">Crosstower<%#= t('collections.form.nft') %></label>
                       </li>
                     </ul>
@@ -203,12 +263,28 @@
                   <%end%>
                   <%=render partial: 'own_contract',  locals: {blank:true, contract: nil} %>
                 </div>
-
+                <div class="col-12 <%= 'hide' if @nft.present? %>">
+                  <h4 class="sign__title">Choose Minting Type</h4>
+                  <div class="sign__group sign__group--row">
+                    <ul class="sign__radio">
+                      <li>
+                        <%= radio_button_tag 'chooseMintType', "mint", nil, class: "chooseCollectionErc", :checked => true%>
+                        <label for="chooseMintType_mint">Instant Minting</label>
+                      </li>
+                      <% if @nft.nil? && false %>>
+                        <li id="lazy_minting">
+                          <%= radio_button_tag 'chooseMintType', "lazy", nil, class: "chooseCollectionNft", disabled: @nft.present? %>
+                          <label for="chooseMintType_lazy">Lazy Minting</label>
+                        </li>
+                      <% end  %>
+                    </ul>
+                  </div>
+                </div>   
                 <div class="col-12">
-                  <!--<button type="submit" class="sign__btn">Create Contract</button>-->
                   <%= submit_tag 'Create', class: 'sign__btn hide', id: 'submitCollection', 'data-disable-with': "<i class='fa fa-spinner fa-spin'></i> Creating...".html_safe %>
-                  <a class="sign__btn create-item collection-submit-btn triggerCollectionValidation" href="#" role="button"><%= t('collections.form.create_contract') %></a>
-
+                  <a class="sign__btn create-item collection-submit-btn triggerCollectionValidation" href="#" role="button">
+                    <%= @nft.nil? ? t('collections.form.create_contract') : t('shared.put_on_sale') %>
+                  </a>
                 </div>
               </div>
             <% end %>
@@ -248,8 +324,6 @@
 <div class="zoom-anim-dialog mfp-hide modal sm_modal" id="createOwnErc721">
   <button class="modal__close md_cls own-contract-close" type="button"><i class="fas fa-times"></i></button>
   <h4 class="modal-title share_link_page_h4"><%= t('collections.form.contract_detail') %></h4>
-  <h5><b>Great things take time! But this one will be only a few minutes.</b></h5>
-
   <div class="row">
     <div class="col-12 col-md-12">
       <div class="box">
@@ -305,8 +379,6 @@
 <div class="zoom-anim-dialog mfp-hide modal sm_modal" id="deployContract">
   <button class="modal__close md_cls" type="button"><i class="fas fa-times"></i></button>
   <h4 class="modal-title share_link_page_h4"><%= t('collections.form.follow_steps') %></h4>
-  <h5><b>Great things take time! But this one will be only a few minutes.</b></h5>
-
   <div class="modal-body pl-30 pr-30 last_bdr_remove">
     <div class="row deployContract">
       <%= render partial: 'deploy_contract' %>
@@ -321,9 +393,6 @@
 <div class="zoom-anim-dialog mfp-hide modal sm_modal" id="collectionStepModal">
   <button class="modal__close md_cls collectionModalClose" type="button"><i class="fas fa-times"></i></button>
   <h4 class="modal-title share_link_page_h4"><%= t('collections.form.follow_steps') %></h4>
-  <h5><b>Great things take time! But this one will be only a few minutes.</b></h5>
-
-
   <div class="modal-body pl-30 pr-30 last_bdr_remove">
     <div class="row approveFlow">
       <%= render partial: 'approve' %>

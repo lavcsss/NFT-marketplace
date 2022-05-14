@@ -11,8 +11,8 @@
           you ready to explore?</p>
 
           <div class="home__btns">
-              <a href="<%= search_path%>" class="home__btn home__btn--clr" data-turbolinks="false">Discover</a>
-              <!--    <a href="<%= new_collection_path %>" class="home__btn">Create NFT’s</a>-->
+            <a href="<%= search_path%>" class="home__btn home__btn--clr" data-turbolinks="false">Discover</a>
+            <a href="<%= new_collection_path %>" class="home__btn">Create NFT’s</a>
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
               <% if @featured_collections.empty? %>
                 <div class="item">
                   <div class="banner-section">
-                    <%= image_tag "/assets/category/headers.png", class: 'img-responsive' %>
+                    <%= image_tag "/assets/category/header.png", class: 'img-responsive' %>
 
                     <!-- <div class="author-details">
                       <h3>Young Amitabh</h3>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="item">
                   <div class="banner-section">
-                    <%= image_tag "/assets/category/headers_2.png", class: 'img-responsive' %>
+                    <%= image_tag "/assets/category/header_2.png", class: 'img-responsive' %>
 
                     <!-- <div class="author-details">
                       <h3>Young Amitabh</h3>

@@ -53,7 +53,9 @@ Rails.application.routes.draw do
       post :change_price
       post :transfer_token
       post :sign_metadata_hash
+      post :sign_metadata_with_creator
       post :sign_fixed_price
+      post :approve
       post :owner_transfer
       post :burn
       post :save_contract_nonce_value

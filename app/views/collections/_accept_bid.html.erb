@@ -6,8 +6,13 @@
     <i class="allRetry acceptBidRetry fa fa-check-circle hide grey"></i>
   </div>
   <div class="follow-step-content">
-    <h4><%= t('shared.accept_bid')%></h4>
-    <p class="para-color"><%= t('shared.transaction_with_wallet')%></p>
+    <% if @collection.is_lazy_minted? %>
+      <h4>Mint and Accept Bid</h4>
+      <p class="para-color">Send transaction with your wallet</p>
+    <%else%>
+      <h4><%= t('shared.accept_bid')%></h4>
+      <p class="para-color"><%= t('shared.transaction_with_wallet')%></p>
+    <%end%>
   </div>
   <div class="follow-step-button">
     <a href="javascript:void(0)" class="allStart acceptBidStart disabledLink grey"><%= t('shared.start')%></a>

@@ -186,7 +186,7 @@ en:
     no_new_notifications: There are no new notification available for you ...!
     loading_text: Loading Please Wait . . .
     wrong_network: Wrong Network
-    wrong_ntk_error: Please change your network to Ethereum Mainnet
+    wrong_ntk_error: Please change your network to Rinkeby
   shared:
     cancel: Cancel
     change: Change
@@ -290,6 +290,7 @@ en:
       confirm_new_password: Confirm new password
       report_user: Report User
       report_message: You are about to report the
+      nft_collection: Nft Collections
     form:
       name: Account Name
       bio: Tell about yourself in a few words

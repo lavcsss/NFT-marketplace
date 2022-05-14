@@ -4,9 +4,13 @@
   <p><%= t('header.wallet_help') %> <a href="#what-wallet" class="open-modal"><%= t('header.wallet_info') %></a></p>
 
   <div class="w_btn">
-    <a href="javascript:void(0);" onclick="window.connect()">
+    <a href="javascript:void(0);" onclick="window.connect('metamask')">
       <span class="w_btn_icon"><img src="/assets/metamask.png"></span>
       <%= t('header.metamask_wallet') %>
+    </a>
+    <a href="javascript:void(0);" onclick="window.connect('walletConnect')">
+    <span class="w_btn_icon"><img src="/assets/wallet.png"></span>
+    WalletConnect &nbsp; &nbsp;
     </a>
   </div>
   <p class="mt-20"><%= t('header.wallet_confi') %></p>
