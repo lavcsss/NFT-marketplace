@@ -1,18 +1,78 @@
 class CollectionsController < ApplicationController
   skip_before_action :authenticate_user, only: [:show]
   #before_action :is_approved, only: [:show]
- before_action :is_approved, except: [:show]
+  before_action :is_approved, except: [:show]
   # before_action :set_collection, only: [:show, :bid, :execute_max_bid, :remove_from_sale, :execute_bid, :buy]
   before_action :set_collection, except: [:new, :create, :update_token_id, :sign_metadata_hash]
 
   skip_before_action :verify_authenticity_token
 
-
   def new
     @collection_type = params[:type]
+    if params[:contract_address] && params[:token]
+      begin
+        asset_response = JSON.parse(URI.open(Rails.application.credentials.config[:opensea_url] + "/api/v1/asset/#{params[:contract_address]}/#{params[:token]}").read)
+        if asset_response["top_ownerships"]
+          contract_symbol = asset_response["asset_contract"]["symbol"]
+          contract_type = (contract_symbol.include?("NFT1155") || contract_symbol.include?("NFT721")) ? "Shared" : "Own"
+          num_of_copy = asset_response["top_ownerships"].find { |resp| resp["owner"]["address"].downcase == current_user.address.downcase }.try(:fetch, "quantity")
+          if params[:nft]
+            data = JSON.parse(URI.open(params[:nft]).read)
+          else
+            data = { }
+            data["name"] = asset_response["name"]
+            data["description"] = asset_response["description"]
+            data["image"] = asset_response["image_url"]
+          end
+
+          @nft = {
+            title: data["name"],
+            description: data["description"],
+            metadata: params[:nft],
+            token: params[:token],
+            contract_type: contract_type,
+            num_copies: num_of_copy,
+            contract_address: params[:contract_address]
+          }
+
+          OpenURI::Buffer.send :remove_const, 'StringMax' if OpenURI::Buffer.const_defined?('StringMax')
+          OpenURI::Buffer.const_set 'StringMax', 0
+          if data.has_key?("animation_url")
+            file = URI.open(asset_response['animation_url'])
+            @nft.merge!({
+              url: asset_response['animation_url'],
+              file_path: file.path,
+              file_type: file.content_type,
+              preview_url: asset_response['image_url']
+            })
+          elsif data.has_key?("image")
+            image = data['image'].match(/ipfs:\/\/ipfs/).present? ? asset_response['image_url'] : data["image"]
+            file = URI.open(image)
+            @nft.merge!({
+              url: image,
+              file_path: file.path,
+              file_type: file.content_type
+            })
+          elsif data.has_key?("image_url")
+            file = URI.open("https://ipfs.io/ipfs/" + data["image_url"].split("://")[1])
+            @nft.merge!({
+              url: "https://ipfs.io/ipfs/" + data["image_url"].split("://")[1],
+              file_path: file.path,
+              file_type: file.content_type
+            })
+          end
+        else
+          raise "Unable to fetch the asset details"
+        end
+     rescue Exception => e
+        Rails.logger.warn "################## Exception while reading Opensea Collection file ##################"
+        redirect_to user_path(id: current_user.address, tab: 'nft_collections')
+      end
+    end
   end
 
   def show
+    import_validate if @collection.imported? rescue
     @tab = params[:tab]
     @activities = PaperTrail::Version.where(item_type: "Collection", item_id: @collection.id).order("created_at desc")
     @max_bid = @collection.max_bid
@@ -22,15 +82,57 @@ class CollectionsController < ApplicationController
   def create
     begin
       # ActiveRecord::Base.transaction do
-        @collection = Collection.new(collection_params)
+        @collection = Collection.new(collection_params.except(:source, :nft_link, :token, :total_copies, :contract_address, :contract_type))
         @collection.state = :pending
+        if collection_params[:source] == "opensea"
+          @collection.state = :approved
+          asset_response = JSON.parse(URI.open(Rails.application.credentials.config[:opensea_url] + "/api/v1/asset/#{collection_params[:contract_address]}/#{collection_params[:token]}").read)
+          if collection_params[:nft_link].present?
+            data = JSON.parse(URI.open(collection_params[:nft_link]).read)
+            OpenURI::Buffer.send :remove_const, 'StringMax' if OpenURI::Buffer.const_defined?('StringMax')
+            OpenURI::Buffer.const_set 'StringMax', 0
+          else
+            data = { }
+            data["name"] = asset_response["name"]
+            data["description"] = asset_response["description"]
+            data["image"] = asset_response["image_url"]
+          end
+
+          if data["animation_url"]
+            file = URI.open(asset_response["animation_url"])
+          elsif data["image_url"]
+            file = URI.open("https://ipfs.io/ipfs/" + data["image_url"].split("://")[1])
+          else
+            image = data['image'].match(/ipfs:\/\/ipfs/).present? ? asset_response['image_url'] : data["image"]
+            file = URI.open(image)
+          end
+          @collection.name = data['name']
+          unless @collection.nft_contract.address == collection_params[:contract_address]
+            @collection.nft_contract = NftContract.find_or_create_by(contract_type: @collection.nft_contract.contract_type, symbol: collection_params[:contract_type], address: collection_params[:contract_address])
+          end
+          @collection.royalty = 0
+          @collection.token = collection_params[:token]
+          @collection.no_of_copies = collection_params[:total_copies]
+          @collection.owned_tokens = collection_params[:no_of_copies].present? ? collection_params[:no_of_copies] : collection_params[:total_copies]
+          @collection.description = data["description"]
+          @collection.attachment.attach(io: file, filename: data["name"], content_type: file.content_type)
+          # for music and video if no cover added then we add default banner image as cover
+          if ['audio/mp3', 'audio/webm', 'audio/mpeg', 'video/mp4', 'video/webm'].include?(file.content_type) && !@collection.cover.present?
+            if data.has_key?("animation_url")
+              preview_file = URI.open(asset_response["image_url"])
+              @collection.cover.attach(io: preview_file, filename: data["name"], content_type: preview_file.content_type)
+            else
+              @collection.cover.attach(io: File.open('app/assets/images/banner-1.png'), filename: 'banner-1.png')
+            end
+          end
+        else
+          @collection.owned_tokens = @collection.no_of_copies
+        end
         # ITS A RAND STRING FOR IDENTIFIYING THE COLLECTION. NOT CONTRACT ADDRESS
         @collection.address = Collection.generate_uniq_token
         @collection.creator_id = current_user.id
         @collection.owner_id = current_user.id
-        @collection.royalty = 0 unless @collection.royalty.present?
         @collection.data = JSON.parse(collection_params[:data]) if collection_params[:data].present?
-        @collection.owned_tokens = @collection.no_of_copies
         if @collection.valid?
           @collection.save
           @metadata_hash = Api::Pinata.new.upload(@collection)
@@ -69,7 +171,8 @@ class CollectionsController < ApplicationController
   def sell
     begin
       ActiveRecord::Base.transaction do
-        @redirect_address = @collection.execute_bid(params[:address], params[:bid_id], params[:transaction_hash]) if @collection.is_owner?(current_user)
+        lazy_minted = lazy_mint_token_update
+        @redirect_address = @collection.execute_bid(params[:address], params[:bid_id], params[:transaction_hash], lazy_minted) if @collection.is_owner?(current_user)
       end
     rescue Exception => e
       Rails.logger.warn "################## Exception while selling collection ##################"
@@ -82,7 +185,8 @@ class CollectionsController < ApplicationController
   def buy
     begin
       ActiveRecord::Base.transaction do
-        @redirect_address = @collection.direct_buy(current_user, params[:quantity].to_i, params[:transaction_hash])
+        lazy_minted = lazy_mint_token_update
+        @redirect_address = @collection.direct_buy(current_user, params[:quantity].to_i, params[:transaction_hash], lazy_minted)
       end
     rescue Exception => e
       Rails.logger.warn "################## Exception while buying collection ##################"
@@ -95,7 +199,7 @@ class CollectionsController < ApplicationController
   def update_token_id
     collection = current_user.collections.unscoped.where(address: params[:collectionId]).take
     collection.approve! unless collection.instant_sale_enabled
-    collection.update(token: params[:tokenId], transaction_hash: params[:tx_id])
+    collection.update(token: params[:tokenId].to_i, transaction_hash: params[:tx_id])
   end
 
   def change_price
@@ -139,6 +243,23 @@ class CollectionsController < ApplicationController
     render json: sign.present? ? sign.merge("nonce" => nonce) : {}
   end
 
+  def sign_metadata_with_creator
+    sign = if params[:address].present?
+        account = User.where(address: params[:address]).first
+        find_collection = account.collections.where(metadata_hash: params[:tokenURI]).exists?
+        if(find_collection)
+          obj = Utils::Web3.new
+          nonce = DateTime.now.strftime('%Q').to_i
+          obj.sign_metadata_hash(Settings.tradeContractAddress, account.address, params[:tokenURI],nonce)
+        else 
+          ""
+        end
+    else
+      ""
+    end
+    render json: sign.present? ? sign.merge("nonce" => nonce) : {}
+  end
+
   def fetch_details
     render json: {data: @collection.fetch_details(params[:bid_id], params[:erc20_address])}
   end
@@ -157,6 +278,13 @@ class CollectionsController < ApplicationController
     collection = current_user.collections.unscoped.where(address: params[:id]).take
     collection.approve! if collection.pending?
     collection.update(sign_instant_sale_price: params[:sign])
+  end
+
+  def approve
+    collection = current_user.collections.unscoped.where(address: params[:id]).take
+    if collection.metadata_hash.present?
+      collection.approve! if collection.pending?
+    end
   end
 
   def owner_transfer
@@ -189,6 +317,55 @@ class CollectionsController < ApplicationController
 
   private
 
+  def import_validate
+    balance = nft_balance
+    if @collection.collection_type == 'single' && @collection.owner.address.downcase != balance.downcase
+      import721 balance
+    elsif @collection.collection_type == 'multiple'
+      import1155 balance
+    end
+  end
+
+  def import721(address)
+    user = User.find_by_address(address.downcase)
+    @collection.update(
+      state: :import_invalid,
+      put_on_sale: false,
+      instant_sale_price: nil,
+      instant_sale_enabled: false,
+      owner: user.present? ? user : @collection.owner
+    )
+  end
+
+  def import1155(balance)
+    return @collection.update(
+      state: :import_invalid,
+      owned_tokens: 0,
+      put_on_sale: false,
+      instant_sale_price: nil,
+      instant_sale_enabled: false
+    ) if balance.nil? || balance.to_i.zero?
+
+    @collection.update(owned_tokens: balance)
+  end
+
+  def nft_balance
+    Utils::Web3.new.check_ownership(
+      @collection.collection_type,
+      @collection.nft_contract.address,
+      @collection.owner.address,
+      @collection.token
+    )
+  end
+
+  def lazy_mint_token_update
+    # After getting sold, the owner will mint with creators name and transfer
+    lazy_minted = @collection.is_lazy_minted?
+    @collection.update(token: params[:tokenId].to_i) if lazy_minted && params[:tokenId]&.to_i != 0 
+    lazy_minted
+    # Double validation because tokenId cant be 0
+  end
+
   # Collection param from React  
   # def collection_params
   #   params.permit(:name, :description, :collection_address, :put_on_sale, :instant_sale_price, :unlock_on_purchase,
@@ -202,7 +379,7 @@ class CollectionsController < ApplicationController
     params['collection']['erc20_token_id'] = Erc20Token.where(address: params[:collection][:currency]).first&.id if params[:collection][:currency].present?
     params.require(:collection).permit(:name, :description, :collection_address, :put_on_sale, :instant_sale_enabled, :instant_sale_price, :unlock_on_purchase,
                                :bid_id, :no_of_copies, :attachment, :cover, :data, :collection_type, :royalty, :nft_contract_id, :unlock_description,
-                               :erc20_token_id, category: [])
+                               :erc20_token_id, :source, :nft_link, :token, :total_copies, :contract_address, :contract_type, :imported, category: [])
   end
 
   def change_price_params

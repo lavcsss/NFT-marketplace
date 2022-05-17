@@ -69,9 +69,9 @@
             <li class="nav-item">
               <a class="nav-link <%= 'active' if @tab == 'collectibles' %>" href="<%= user_path(id: @user.address, tab: "collectibles", page_no: @page_no) %>"><%= t('users.show.collectibles') %></a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link <%= 'active' if @tab == 'my_collections' %>" href="<%= user_path(id: @user.address, tab: "my_collections", page_no: @page_no) %>" >My Collections</a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a class="nav-link <%= 'active' if @tab == 'liked' %>" href="<%= user_path(id: @user.address, tab: "liked") %>"><%= t('users.show.liked') %></a>
             </li>
@@ -91,7 +91,11 @@
                 <span class="notify"><%= @followers_count %></span>
               <% end %>
             </li>
-
+            <li class="nav-item">
+              <%= link_to user_path(id: @user.address, tab: "nft_collections"), class: "nav-link #{'active' if @tab == 'nft_collections'}" do %>
+                <%= t('users.show.nft_collection') %>
+              <% end %>
+            </li>
           </ul>
           <!-- end tabs nav -->
         </div>
@@ -121,29 +125,45 @@
         <div class="tab-content user-collection-section">
           <div class="tab-pane fade <%= 'active show' if !['liked', 'activity', 'following', 'followers'].include?(@tab) %>" id="tab-1" role="tabpanel">
             <div class="row row--grid">
-                <% if !['liked', 'activity','following','followers'].include?(@tab) and @data.present? %>
-                    <% if @tab=="my_collections"%>
-                      <%@data.each do |single_contract|%>
-                          <div class="col-12 col-md-6 col-lg-4">
-                            <%= render 'dashboard/own_contract', contract: single_contract %>
-                          </div>
-                        <%end%>
-                    <%else%>
-                      <% @data.each do |collection| %>
-                          <div class="col-12 col-md-6 col-lg-4">
-                            <%= render "/dashboard/collection_card", collection: collection %>
-                          </div>
-                      <% end %>
-                    <%end%>
-                <% else %>
-                  <% 3.times do %>
+              <% if !['liked', 'activity','following','followers', 'nft_collections'].include?(@tab) and @data.present? %>
+                <% if @tab=="my_collections"%>
+                  <% @data.each do |single_contract| %>
                     <div class="col-12 col-md-6 col-lg-4">
-                      <%= render partial: 'common/empty_card_collection' %>
+                      <%= render 'dashboard/own_contract', contract: single_contract %>
+                    </div>
+                  <% end %>
+                <% else %>
+                  <% @data.each do |collection| %>
+                    <div class="col-12 col-md-6 col-lg-4">
+                      <%= render "/dashboard/collection_card", collection: collection %>
                     </div>
                   <% end %>
                 <% end %>
-               <!-- end collapse -->
-              </div>
+              <% elsif ['nft_collections'].include?(@tab) and @data.present? %>
+                <div class="row collection-section">
+                  <div class="row col-12" style="float: right !important;">
+                    <% if @page_no.to_i > 1 %>
+                      <p class="text-right"><a href="<%= user_path(id: @user.address, tab: "nft_collections", page_no: @page_no.to_i - 1) %>"><span class="pull-right">Previous</span></a></p>
+                    <% end %>
+                    <% if @data[:next_page]%>
+                      <p class="text-right"><a href="<%= user_path(id: @user.address, tab: "nft_collections", page_no: @page_no.to_i + 1) %>"><span class="pull-right">Next</span></a></p>
+                    <% end %>
+                  </div>
+                  <% @data[:collections].each do |collection| %>
+                    <div class="col-12 col-md-6 col-lg-4">
+                      <%= render "my_collection_card", collection: collection %>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <% 3.times do %>
+                  <div class="col-12 col-md-6 col-lg-4">
+                    <%= render partial: 'common/empty_card_collection' %>
+                  </div>
+                <% end %>
+              <% end %>
+              <!-- end collapse -->
+            </div>
           </div>
 
             <!-- Like Section -->

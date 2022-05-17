@@ -115,41 +115,6 @@ $(document).ready(function () {
 		mouseDrag: true,
 		touchDrag: true,
 		dots: true,
-		autoplay: true,
-		autoplayHoverPause: true,
-		autoplayTimeout: 5000,
-		smartSpeed: 600,
-		margin: 20,
-		autoHeight: true,
-		responsive: {
-			0 : {
-				items: 1,
-			},
-			576 : {
-				items: 2,
-			},
-			768 : {
-				items: 3,
-				margin: 30,
-			},
-			992 : {
-				items: 4,
-				margin: 30,
-			},
-			1200 : {
-				items: 4,
-				margin: 30,
-				mouseDrag: false,
-				dots: false,
-			},
-		}
-	});
-
-
-	$('.carousel-collection').owlCarousel({
-		mouseDrag: true,
-		touchDrag: true,
-		dots: true,
 		loop: true,
 		autoplay: true,
 		autoplayHoverPause: true,

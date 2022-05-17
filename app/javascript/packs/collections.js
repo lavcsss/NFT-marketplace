@@ -98,24 +98,27 @@ $(document).ready(function () {
     processAttribute($(this))
   })
 
-  // // ERC 721 section
-  // $(document).on("click", ".chooseCollectionNft", function() {
-  //   $("#createOwnErc721").modal("hide")
-  //   $("#createOwnErc721").find(":input").prop("disabled", true)
-  // })
-  // // ERC 721 section end
-
-  // Process and Approve section
-
   $(document).on("click", ".triggerCollectionValidation", function (e) {
     e.preventDefault()
     var form = $("#collectionCreateForm")[0]
-    if (form.checkValidity()) {
-      if ($('#collection_instant_sale_enabled').is(":checked") && (!validFloat($("#instant-price").val()))) {
-        return toastr.error('Please enter valid instant price')
+    var source = $("#collection_source").val();
+    if (source == "opensea" || form.checkValidity()) {
+      const mintType = $("input[name=chooseMintType]").filter(":checked").val();
+      if(mintType == undefined) {
+        return toastr.error('Please select minting type')
       } else {
-        $("#submitCollection").click();
-        $("#collectionCreateForm :input").prop("disabled", true);
+        if ($('#collection_instant_sale_enabled').is(":checked") && (!validFloat($("#instant-price").val()))) {
+          return toastr.error('Please enter valid instant price')
+        }else if($("input[name=chooseCollection]").filter(":checked").val()=="create" && mintType == "lazy"){
+          return toastr.error('Lazy Minting disabled with Own Contract');
+        } else if ($('#no_of_copies').length && !validNum($('#no_of_copies').val())) {
+          return toastr.error('Please enter valid no of copies')
+        } else if ($('#no_of_copies').length && $("#no_of_copies")[0].validationMessage !== "") {
+          return toastr.error("Number of copies " + $("#no_of_copies")[0].validationMessage.toLowerCase())
+        } else {
+          $("#submitCollection").click();
+          $("#collectionCreateForm :input").prop("disabled", true);
+        }
       }
     } else {
       var collectionType = $("input[name=chooseCollection]").filter(":checked").val();
@@ -185,8 +188,10 @@ $(document).ready(function () {
       });
     } else {
       var compiled_details = getContractABIAndBytecode('', contractType, false); //shared=false
+      console.log(compiled_details)
       var abi = compiled_details['compiled_contract_details']['abi']
       var bytecode = compiled_details['compiled_contract_details']['bytecode']
+      console.log(abi, bytecode, name, symbol, contractType, collectionId)
       contractDeployInit()
       deployContract(abi, bytecode, name, symbol, contractType, collectionId, image, desc, cover_image);
     }
@@ -212,9 +217,16 @@ $(document).ready(function () {
   }
 
   window.contractDeploySuccess = function contractDeploySuccess(contractAddress, contractType) {
+    console.log("Contract Address: " + contractAddress);
     $('.deployProgress').addClass('hide')
     $('.deployProgress').addClass('hide')
     $('.deployDone').addClass('disabledLink').removeClass('hide')
+
+    //  OPEN SIGN METHOD
+    // $('.signDone').addClass('hide')
+    // $('.signStart').addClass('hide')
+    // $('.signProgress').removeClass('hide')
+    console.log(contractAddress, contractType)
     initCollectionCreate(contractAddress, contractType)
   }
 
@@ -230,28 +242,42 @@ $(document).ready(function () {
   })
 
   window.initCollectionCreate = function initCollectionCreate(contractAddress, contractType) {
-    collectionCreateInit(contractAddress)
+    var existingToken = $("#collection_token").val()
+    collectionCreateInit(false, existingToken)
     var sharedCollection = ($("input[name=chooseCollection]").filter(":checked").val() === 'nft')
-    approveNFT(contractType, contractAddress, sharedCollection)
+    approveNFT(contractType, contractAddress, sharedCollection, 'collection', existingToken)
   }
 
-  window.collectionCreateInit = function collectionCreateInit(contractAddress) {
+  window.initLazyMint = function initLazyMint()
+  {
+    approveCollection($('#collection_id').val());
+    if ($('#collection_instant_sale_enabled').is(":checked")){
+     collectionCreateInit(true)
+     console.log('Signing using metamask')
+     initsignFixedPriceProcess(true)
+    }else{
+      toastr.success('Collection created succcessfully.')
+      window.location.href = '/collections/' + $('#collection_id').val()
+    }
+  }
+
+  window.collectionCreateInit = function collectionCreateInit(lazy_minting=false, existingToken=null) {
     if ($('#collection_instant_sale_enabled').is(":checked")) {
       $('.signFixedPrice').removeClass('hide')
     } else {
       $('.signFixedPrice').addClass('hide')
     }
-    // $("#deployContract").modal("hide")
-    // $("#collectionStepModal").modal("show")
-    $.magnificPopup.close();
-    $.magnificPopup.open({
-      closeOnBgClick: false ,
-		  enableEscapeKey: false,
-      items: {
-        src: '#collectionStepModal'
-      },
-      type: 'inline'
-    });
+    show_modal('#collectionStepModal')
+    if (existingToken) {
+      $('.mintFlow').addClass('hide')
+    }
+    if(lazy_minting){
+      $('.mintFlow').addClass('hide')
+      $('.approveFlow').addClass('hide')
+    }
+    $("#deployContract").modal("hide")
+    $("#collectionStepModal").modal("show")
+
     $('.allProgress').addClass('hide')
     $('.allDone').addClass('hide')
     $('.allRetry').addClass('hide')
@@ -259,11 +285,11 @@ $(document).ready(function () {
     $('.approveProgress').removeClass('hide')
   }
 
-  window.collectionApproveSuccess = function collectionApproveSuccess(contractType) {
-    mintCollectionCreate(contractType)
+  window.collectionApproveSuccess = function collectionApproveSuccess(contractType, existingToken=null) {
+    mintCollectionCreate(contractType, existingToken)
   }
 
-  function mintCollectionCreate(contractType) {
+  function mintCollectionCreate(contractType, existingToken=null) {
     $('.allProgress').addClass('hide')
     $('.allDone').addClass('hide')
     $('.allRetry').addClass('hide')
@@ -271,14 +297,23 @@ $(document).ready(function () {
     $('.approveDone').removeClass('hide').removeClass('grey').addClass('disabledLink')
     $('.mintProgress').removeClass('hide')
     $('.signFixPriceStart').removeClass('hide').addClass('grey')
-    // TODO: WHILE CHANGE NFT TO SHARED/OWNER THS HAS TO BE CHANGED
-    var sharedCollection = ($("input[name=chooseCollection]").filter(":checked").val() === 'nft')
-    if (contractType === 'nft721') {
-      createCollectible721($('#collection_contract_address').val(), $('#collection_token_uri').val(),
-        $('#collection_royalty_fee').val(), $('#collection_id').val(), sharedCollection)
-    } else if (contractType === 'nft1155') {
-      createCollectible1155($('#collection_contract_address').val(), $('#collection_supply').val(),
-        $('#collection_token_uri').val(), $('#collection_royalty_fee').val(), $('#collection_id').val(), sharedCollection)
+    if (existingToken) {
+      if ($('#collection_instant_sale_enabled').is(":checked")) {
+        initsignFixedPriceProcess()
+      } else {
+        toastr.success('Collection created succcessfully.')
+        window.location.href = '/collections/' + $('#collection_id').val()
+      }
+    } else {
+      // TODO: WHILE CHANGE NFT TO SHARED/OWNER THS HAS TO BE CHANGED
+      var sharedCollection = ($("input[name=chooseCollection]").filter(":checked").val() === 'nft')
+      if (contractType === 'nft721') {
+        createCollectible721($('#collection_contract_address').val(), $('#collection_token_uri').val(),
+          $('#collection_royalty_fee').val(), $('#collection_id').val(), sharedCollection)
+      } else if (contractType === 'nft1155') {
+        createCollectible1155($('#collection_contract_address').val(), $('#collection_supply').val(),
+          $('#collection_token_uri').val(), $('#collection_royalty_fee').val(), $('#collection_id').val(), sharedCollection)
+      }
     }
   }
 
@@ -325,7 +360,7 @@ $(document).ready(function () {
     $('.mintRetry').removeClass('hide')
   }
 
-  window.initsignFixedPriceProcess = function initsignFixedPriceProcess() {
+  window.initsignFixedPriceProcess = function initsignFixedPriceProcess(is_lazy_minting=false) {
     hideAll()
     $('.convertDone').removeClass('hide')
     $('.approveDone').removeClass('hide')
@@ -334,8 +369,12 @@ $(document).ready(function () {
     var pay_token_address = $('#collection_erc20_token_id option:selected, this').attr('address')
     var details = fetchCollectionDetails(null, pay_token_address)
     if (details) {
-      signSellOrder(details['unit_price'], details['pay_token_decimal'], details['pay_token_address'],
+      // tokenID is 0 for Lazy-minting blocks
+      const tokenId = is_lazy_minting ? 0 : details['token_id']  
+      console.log(details['unit_price'], details['pay_token_decimal'], details['pay_token_address'],
         details['token_id'], details['asset_address'], details['collection_id'])
+      signSellOrder(details['unit_price'], details['pay_token_decimal'], details['pay_token_address'],
+      tokenId, details['asset_address'], details['collection_id'])
     } else {
       bidSignFixedFailed('Unable to fetch tokan details. Please try again later')
     }
@@ -359,7 +398,7 @@ $(document).ready(function () {
     if($('#priceChange').length){
       initsignFixedPriceUpdate()
     }else{
-      initsignFixedPriceProcess()
+      initsignFixedPriceProcess($("input[name=chooseMintType]").filter(":checked").val() === 'lazy')
     }
   })
 
@@ -384,11 +423,15 @@ $(document).ready(function () {
   })
 
   // TODO: WHILE ADDING NEW CUREENCIES HAVE TO MAKE LOGIC TO FETCH DECIMALS HERE
-  window.initBidProcess = function initBidProcess(contractAddress, contractDecimal) {
+  window.initBidProcess = async function isApprovedNFT(contractAddress, contractDecimal) {
     var curErc20Balance = $('#erc20_balance').text()
-    var ethBalance = $('#eth_balance').text()
+    var ethBalance = await window.ethBalance();
     var totalAmt = $("#bid-total-amt-dp").attr('bidAmt')
     var symbol = $('#bid_currency :selected').text();
+    console.log(curErc20Balance)
+    console.log(totalAmt)
+    console.log((isGreaterThanOrEqualTo(curErc20Balance, totalAmt)))
+    console.log(symbol)
     if (isGreaterThanOrEqualTo(curErc20Balance, totalAmt)) {
       $('.convertEth').addClass("hide")
       initApproveBidProcess(contractAddress)
@@ -464,6 +507,8 @@ $(document).ready(function () {
     $('.signbidProgress').removeClass('hide')
     var details = fetchCollectionDetails(null, contractAddress)
     if (details) {
+      console.log(details['asset_address'], details['token_id'], $("#bid_qty").val(), $("#bid-total-amt-dp").attr('bidAmt'),
+        details['pay_token_address'], details['pay_token_decimal'], details['collection_id'], $("#bid-total-amt-dp").attr('bidPayAmt'))
       bidAsset(details['asset_address'], details['token_id'], $("#bid_qty").val(), $("#bid-total-amt-dp").attr('bidAmt'),
         details['pay_token_address'], details['pay_token_decimal'], details['collection_id'], $("#bid-total-amt-dp").attr('bidPayAmt'))
     } else {
@@ -492,6 +537,7 @@ $(document).ready(function () {
 
   // BUYING MODEL STARTS HERE
   $(document).on("click", ".triggerBuyValidation", function (e) {
+    console.log("Collection1: " + gon.collection_data)
     clearToastr();
     e.preventDefault()
     if (!validNum($('#buy_qty').val())) {
@@ -504,9 +550,9 @@ $(document).ready(function () {
     }
   })
 
-  window.initBuyProcess = function initBuyProcess() {
+  window.initBuyProcess = async function initBuyProcess() {
     var curErc20Balance = $('#erc20_balance').text()
-    var ethBalance = $('#eth_balance').text()
+    var ethBalance = await window.ethBalance();
     var totalAmt = $("#buy-total-amt-dp").attr('buyAmt')
     if (isGreaterThanOrEqualTo(curErc20Balance, totalAmt)) {
       $('.convertEth').addClass("hide")
@@ -553,10 +599,15 @@ $(document).ready(function () {
         }
       }
     });
+    $('.purchaseAndMintStart').removeClass('hide')
+    $("#Buy-modal").modal("hide")
+    $("#placeBuy").modal("show")
     approveERC20(contractAddress, 'erc20', $("#buy-total-amt-dp").attr('buyAmt'), contractDecimals, 'Buy')
   }
 
   window.buyApproveSuccess = function buyApproveSuccess(transactionHash, contractAddress) {
+    console.log("buyApproveSuccess")
+    console.log(contractAddress)
     $('.approvebuyProgress').addClass('hide')
     $('.approvebuyDone').removeClass('hide')
     initPurchaseProcess(contractAddress)
@@ -568,6 +619,7 @@ $(document).ready(function () {
     $('.convertDone').removeClass('hide')
     $('.approvebuyRetry').removeClass('hide')
     $('.purchaseStart').removeClass('hide')
+    $('.purchaseAndMintStart').removeClass('hide')
   }
 
   $(document).on("click", ".approvebuyRetry", function () {
@@ -579,20 +631,44 @@ $(document).ready(function () {
     $('.convertDone').removeClass('hide')
     $('.approvebuyDone').removeClass('hide')
     $('.purchaseProgress').removeClass('hide')
+    $('.purchaseAndMintProgress').removeClass('hide')
+    console.log("initPurchaseProcess")
+    console.log(contractAddress)
     var paymentDetails = fetchCollectionDetails(null, contractAddress)
-    buyAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+    console.log(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
       paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy-total-amt-dp").attr('buyAmt')),
       paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
       paymentDetails['seller_sign'], paymentDetails['collection_id'])
+    if($('#is_collection_lazy_minted').val()=="true"){
+      MintAndBuyAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+        paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy-total-amt-dp").attr('buyAmt')),
+        paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
+        paymentDetails['seller_sign'], paymentDetails['collection_id'], paymentDetails['token_uri'], paymentDetails['royalty'],paymentDetails['shared'],paymentDetails['total'])
+    }else{
+      buyAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+      paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy-total-amt-dp").attr('buyAmt')),
+      paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
+      paymentDetails['seller_sign'], paymentDetails['collection_id'])
+    }
   }
 
   window.buyPurchaseSuccess = function buyPurchaseSuccess(collectionId) {
     $('.convertDone').removeClass('hide')
     $('.approvebuyDone').removeClass('hide')
     $('.purchaseProgress').addClass('hide')
+    $('.purchaseMintAndProgress').addClass('hide')
     $('.purchaseDone').removeClass('hide')
+    $('.purchaseAndMintDone').removeClass('hide')
     toastr.success('Purchase succces.')
     window.location.href = '/collections/' + collectionId
+  }
+
+  window.buyMintAndPurchaseFailed = function buyMintAndPurchaseFailed(errorMsg) {
+    toastr.error(errorMsg)
+    hideAll()
+    $('.convertDone').removeClass('hide')
+    $('.approvebuyDone').removeClass('hide')
+    $('.purchaseRetry').removeClass('hide')
   }
 
   window.buyPurchaseFailed = function buyPurchaseFailed(errorMsg) {
@@ -637,7 +713,7 @@ $(document).ready(function () {
     approveNFT(contractType, contractAddress, gon.collection_data['contract_shared'], 'executeBid')
   }
 
-  window.approveBidSuccess = function approveBidSuccess(collectionId) {
+  window.approveBidSuccess = function approveBidSuccess() {
     hideAll()
     $('.approveExecbidDone').removeClass('hide')
     $('.acceptBidProgress').removeClass('hide')
@@ -658,10 +734,23 @@ $(document).ready(function () {
   window.initAcceptBidProcess = function initAcceptBidProcess() {
     var contractAddress = $('#erc20ContractAddress').text();
     var paymentDetails = fetchCollectionDetails($('#bidId').val(), contractAddress);
-    executeBid(paymentDetails['buyer_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+    console.log(paymentDetails['buyer_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+      paymentDetails['token_id'], toNum(paymentDetails['amount']), toNum(paymentDetails['quantity']),
+      paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
+      paymentDetails['buyer_sign'], paymentDetails['collection_id'])
+      var lazyMint = $('#is_collection_lazy_minted').val()
+    if(lazyMint=="true"){
+      $('.MintAndacceptBidProgress').removeClass('hide')
+      MintAndAcceptBid(paymentDetails['buyer_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+        paymentDetails['token_id'], toNum(paymentDetails['amount_with_fee']), toNum(paymentDetails['quantity']),
+        paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
+        paymentDetails['buyer_sign'], paymentDetails['collection_id'], paymentDetails['bid_id'],paymentDetails['token_uri'],paymentDetails['royalty'],paymentDetails['shared'],paymentDetails['total'])
+    } else {  
+      executeBid(paymentDetails['buyer_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
       paymentDetails['token_id'], toNum(paymentDetails['amount_with_fee']), toNum(paymentDetails['quantity']),
       paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
       paymentDetails['buyer_sign'], paymentDetails['collection_id'], paymentDetails['bid_id'])
+    }
   }
 
   window.acceptBidSuccess = function acceptBidSuccess(collectionId) {
@@ -679,6 +768,9 @@ $(document).ready(function () {
   }
 
   $(document).on("click", ".acceptBidRetry", function () {
+    hideAll()
+    $('.approveExecbidDone').removeClass('hide')
+    $('.acceptBidProgress').removeClass('hide')
     initAcceptBidProcess()
   })
 
@@ -786,6 +878,9 @@ $(document).ready(function () {
 
   window.initTransferProcess = function initTransferProcess(recipientAddress, transferQty) {
     var paymentDetails = fetchCollectionDetails()
+    console.log(paymentDetails['contract_type'], paymentDetails['asset_address'], recipientAddress,
+      paymentDetails['token_id'], transferQty, paymentDetails['collection_id'])
+    console.log(gon.collection_data['contract_shared'])
     if (recipientAddress.toLowerCase() == paymentDetails['owner_address']) {
       toastr.error("You can't transfer your own tokens to you. Please try to transfer to another user.");
       $.magnificPopup.close();
@@ -828,19 +923,9 @@ $(document).ready(function () {
         } else if ($('#instant-price').val() !== $('#instant-price').attr('prevVal')) {
           $('.signFixedPrice').removeClass('hide')
         }
-      }
-      // $("#change-price").modal("hide");
-      // $("#priceChange").modal("show");
-      $.magnificPopup.close();
-      $.magnificPopup.open({
-        closeOnBgClick: false ,
-		    enableEscapeKey: false,
-        items: {
-          src: '#priceChange'
-        },
-        type: 'inline'
-      });
-      if ($('#collection-put-on-sale').is(":checked")) {
+      } 
+      show_modal('#priceChange')
+      if ($('#collection-put-on-sale').is(":checked") && $('#is_collection_lazy_minted').val() != 'true') {
         $('.approveRetry').addClass('hide')
         $('.approveProgress').removeClass('hide')
         var details = fetchCollectionDetails()
@@ -941,6 +1026,7 @@ $(document).ready(function () {
   })
 
   $(document).on("click", ".buy-now", function () {
+    console.log($('#buyContractAddress').text())
     loadTokenBalance($('#buyContractAddress').text(), $('#buyContractDecimals').text());
   })
 
@@ -1030,5 +1116,17 @@ $(document).ready(function () {
   $(document).on("click", ".show-login-message", function (e) {
     toastr.error('Please connect your wallet to proceed.')
     e.preventDefault();
+  });
+
+  $(document).on("click", ".createContractClose", function (e) {
+    $("#collectionCreateForm :input").prop("disabled", false);
+  });
+  $(document).on('click', '.chooseCollectionType', function (e) {
+    if($(this).val() == 'create') {
+      $('#lazy_minting').hide()
+      $('#chooseMintType_mint').prop('checked', true)
+    }else {
+      $('#lazy_minting').show()
+    }
   });
 })
