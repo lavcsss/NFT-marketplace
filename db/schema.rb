@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_11_155927) do
+ActiveRecord::Schema.define(version: 2022_05_05_171958) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 2022_04_11_155927) do
     t.boolean "instant_sale_enabled", default: false
     t.string "transaction_hash"
     t.boolean "imported", default: false
+    t.integer "likes_count", default: 0, null: false
     t.index ["creator_id"], name: "index_collections_on_creator_id"
     t.index ["erc20_token_id"], name: "index_collections_on_erc20_token_id"
     t.index ["nft_contract_id"], name: "index_collections_on_nft_contract_id"

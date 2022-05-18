@@ -1,7 +1,7 @@
 # Admin User
 CHAIN_ID = Rails.env.development? ? 4 : 1
-AdminUser.find_or_create_by(email: "ADMIN_EMAIL_HERE")
-  .update(password: "ADMIN_PASSWORD_HERE", first_name: "ADMIN_FIRST_NAME_HERE", last_name: "ADMIN_LAST_NAME_HERE", password_confirmation: "ADMIN_PASSWORD_CONFIRMATION_HERE")
+AdminUser.find_or_create_by(email: "admin@crosstowernft.com")
+  .update(password: "4a1ec2de-3513-4d19-8077-767c4a6c5129", first_name: "Admin", last_name: "User", password_confirmation: "4a1ec2de-3513-4d19-8077-767c4a6c5129")
 
 Fee.find_or_create_by(fee_type: 'buyer').update(name: 'Service Charge', percentage: '2.5')
 Fee.find_or_create_by(fee_type: 'seller').update(name: 'Service Charge', percentage: '2.5')
@@ -11,10 +11,10 @@ Fee.find_or_create_by(fee_type: 'seller').update(name: 'Service Charge', percent
 
 #Creating ERC20 Token List
 Erc20Token.find_or_create_by(chain_id: CHAIN_ID, symbol: 'WETH')
-  .update(address: 'WETH_TOKEN_ADDRESS_HERE', name: 'Wrapped Ether', decimals: 18)
+  .update(address: '0xc778417E063141139Fce010982780140Aa0cD5Ab', name: 'Wrapped Ether', decimals: 18)
 
 ### CREATING SHARED NFT CONTRACT ADDRESSES
 NftContract.find_or_create_by(contract_type: 'nft721', symbol: 'Shared')
-  .update(name: 'NFT', address: 'NFT_721_CONTRACT_ADDRESS_HERE')
+  .update(name: 'NFT', address: '0x6BD9E90a704F91fb813Fdf756e6141d08fc7172C')
 NftContract.find_or_create_by(contract_type: 'nft1155', symbol: 'Shared')
-  .update(name: 'NFT', address: 'NFT_1155_CONTRACT_ADDRESS_HERE')
+  .update(name: 'NFT', address: '0x0Ee3CCcCDcDBE432D2B623f326BB93CD5358d153')
