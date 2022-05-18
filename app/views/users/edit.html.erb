@@ -93,8 +93,9 @@
                     <div class="sign__group lik_hold t_link">
                       <label class="sign__label" for="twitter_username"><%= t('users.edit.twitter_username') %></label>
                       <%= text_field_tag 'user[twitter_link]', current_user.twitter_link, class: 'sign__input', id: "twitter-username" %>
-                      <span>@</span>
-                      <p><%= t('users.edit.twitter_link_text') %></p>
+                          <span>@</span>
+<!--                          <span id="twitt_link"><%#= t('users.edit.link') %></span>-->
+                          <p><%= t('users.edit.twitter_link_text') %></p>
                     </div>
                   </div>
 
@@ -102,17 +103,36 @@
                     <div class="sign__group lik_hold">
                       <label class="sign__label" for="portfolio_url"><%= t('users.edit.personal_site') %></label>
                       <%= text_field_tag 'user[personal_url]', current_user.personal_url, class: 'sign__input', id: "personal-site-or-portfolio", placeholder: t('users.form.personal_url') %>
-                      <span>https://</span>
+                          <span>https://</span>
                     </div>
                   </div>
 
                   <div class="col-12">
                     <div class="sign__group">
                       <label class="sign__label" for="bio"><%= t('users.edit.bio') %></label>
-                      <%= text_area_tag 'user[bio]', current_user.bio, class: 'sign__input', placeholder: t('users.form.bio'), rows: 4 %>
+                      <%= text_area_tag 'user[bio]', current_user.bio, class: 'sign__input', placeholder: t('users.form.bio'), rows: 4, required: true %>
                     </div>
                   </div>
-              
+                  
+                  <!--<div class="row">-->
+                  <!--<div class="col-12">
+                    <div class="verify-box">
+                      <div class="sign__group vr_box">
+                        <label class="sign__label">Verification</label>
+                        <p>Proceed with verification process to get more visibility and gain trush on Trap Marketplace. Please allow up to several weeks for the process.</p>
+                      </div>
+                      <div class="sign__group btn_box">
+                        <button class="sign__btn ver_btn create-clr" type="button">Get Verified <i class="fa fa-check"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>-->
+                  <!--<div class="col-12 col-md-6 col-lg-6 col-xl-6 text-center">-->
+                  <!--<button class="sign__btn ver_btn create-clr" type="button">Get Verified <i class="fa fa-check"></i>-->
+                  <!--</button>-->
+                  <!--</div>-->
+                  <!--</div>-->
+
                   <div class="col-12 text-center">
                     <button type="submit" type="button" class="sign__btn"><%= t('users.form.update') %></button>
                   </div>

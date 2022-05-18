@@ -10,7 +10,8 @@
           <%= link_to user_path(activity.item.creator.address), class:"user_img" do %>
               <%= image_tag url_for(activity.item.creator.profile_image) %>
           <% end %>
-          <p class="content_details">Minted <%= time_ago_in_words(activity.created_at) %> ago <br>by @<%= link_to activity.item.creator.full_name, user_path(activity.item.creator.address)%> </p>
+          <p class="content_details">  <%= activity.item.imported? ? 'Listed' : 'Minted' %>
+          <%= time_ago_in_words(activity.created_at) %> ago <br>by @<%= link_to activity.item.creator.full_name, user_path(activity.item.creator.address)%> </p>
 
       <% else %>
           <% owner_name = activity.next ? activity.next.reify.owner.full_name : activity.item.owner.full_name %>

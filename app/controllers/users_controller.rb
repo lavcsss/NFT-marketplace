@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     @reportees = @user.reports.pluck(:created_by_id)
     @page_no = params[:page_no] || 1
     @tab = params[:tab]
-    @data = @user.get_collections(@tab, params[:filters], @page_no)
+    @data = @user.get_collections(@tab, params[:filters], @page_no, current_user.address)
     @followers_count = @user.followers.count
     @followees_count = @user.followees.count
     @liked = @user.likes
@@ -78,7 +78,7 @@ class UsersController < ApplicationController
   def load_tabs
     @page_no = params[:page_no] || 1
     @tab = params[:tab]
-    @data = @user.get_collections(@tab, params[:filters], @page_no)
+    @data = @user.get_collections(@tab, params[:filters], @page_no, current_user.address)
     @followers_count = @user.followers.count
     @followees_count = @user.followees.count
     @liked = @user.likes

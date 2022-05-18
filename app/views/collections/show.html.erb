@@ -1,5 +1,6 @@
 <% is_collection_owner = @collection.is_owner?(current_user) %>
 <%= hidden_field_tag 'collection_id', @collection.address %>
+<%= hidden_field_tag 'is_collection_lazy_minted', @collection.is_lazy_minted? %>
 <span id="eth_balance" class="curEthBalance hide">0.0</span>
 <span id="erc20_balance" class="curErc20Balance hide">0.0</span>
 <span id="BuyerserviceFee" class="hide"><%= buyer_service_fee %></span>
@@ -71,7 +72,7 @@
             <% if @collection.royalty && @collection.royalty > 0 %>
               <span id="royaltyFee" class="discount_prize" royaltyPercentage="<%= @collection.royalty %>"><i class="fa fa-tags" aria-hidden="true"></i> <%= @collection.royalty %> % of resale royalty</span>
             <% end %>
-
+            <% if @collection.valid_import? %>
             <% if current_user && @collection.is_owner?(current_user) %>
               <div class="more_action_block">
                 <a class="more_action_btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -86,8 +87,10 @@
                       <li><a href="javascript:void(0)" class="change-price" onclick="window.show_modal('#change-price')"><%= t('shared.put_on_sale')%></a></li>
                     <% end %>
                     <li><a href="javascript:void(0)" class="change-price" onclick="window.show_modal('#change-price')" ><%= t('collections.show.change_price')%></a></li>
-                    <li><a href="javascript:void(0)"  class="transfer-token" onclick="window.show_modal('#transferTokenForm')" ><%= t('collections.show.transfer_token')%></a></li>
-                    <li><%= link_to "Burn token", 'javascript:void(0)', 'onclick': "window.show_modal('#burnModal')" %></li>
+                    <%if !@collection.is_lazy_minted? %> 
+                      <li><a href="javascript:void(0)"  class="transfer-token" onclick="window.show_modal('#transferTokenForm')" ><%= t('collections.show.transfer_token')%></a></li>
+                      <li><%= link_to "Burn token", 'javascript:void(0)', 'onclick': "window.show_modal('#burnModal')" %></li>
+                    <%end%>
                   <% else %>
                     <% if @collection.put_on_sale? %>
                       <li><a href="" class="show-login-message"><%= t('collections.show.remove_from_sale')%></a></li>
@@ -95,8 +98,10 @@
                       <li><a href="javascript:void(0)" class="show-login-message change-price"><%= t('shared.put_on_sale')%></a></li>
                     <% end %>
                     <li><a href="javascript:void(0)" class="show-login-message change-price" ><%= t('collections.show.change_price')%></a></li>
-                    <li><a href="javascript:void(0)"  class="show-login-message transfer-token" ><%= t('collections.show.transfer_token')%></a></li>
-                    <li><a href="javascript:void(0)"  class="show-login-message" ><%= t('collections.show.burn_token')%></a></li>
+                    <%if !@collection.is_lazy_minted? %> 
+                      <li><a href="javascript:void(0)"  class="show-login-message transfer-token" ><%= t('collections.show.transfer_token')%></a></li>
+                      <li><a href="javascript:void(0)"  class="show-login-message" ><%= t('collections.show.burn_token')%></a></li>
+                    <%end%>
                   <% end %>
                 </ul>
                 <%= render partial: 'collections/share_media' %>
@@ -106,12 +111,11 @@
                 <%= render partial: 'collections/share_media' %>
               </div>
             <%end%>
+            <%end%>
           </div>
           <div class="asset__desc">
-            <!-- <h2><%#= t('collections.show.descriptions')%></h2> -->
             <p><%= @collection.title_desc %></p>
-            <!--<p><pre><%= @collection.description %></pre></p>-->
-
+ 
             <pre class="inner-token-content-han coll_description short_content"><%= truncate(@collection.description, :length => 150, :separator => ' ') %></pre>
             <pre class="inner-token-content-han coll_description full_content"><%= @collection.description %></pre>
             <% if @collection.description.length >= 150 %>
@@ -127,17 +131,7 @@
             <% end %>
           </div>
 
-          <!--<div class="dropdown_btnbox">
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                View proof of authenticity
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                
-                
-              </div>
-            </div>
-          </div>-->
+    
           <div class="dropdown proof_auth">
             <a data-toggle="dropdown" class="proof_auth_btn" href="javascript:void(0);">
                 View proof of authenticity <i class="fa fa-angle-down" aria-hidden="true"></i>
@@ -170,9 +164,10 @@
               </div>
             </li>
           </ul>
-
+          
           <!-- tabs -->
           <ul class="nav nav-tabs asset__tabs" role="tablist">
+            <% if @collection.valid_import? %>
             <li class="nav-item">
               <a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">History</a>
             </li>
@@ -180,14 +175,18 @@
             <li class="nav-item">
               <a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Bids</a>
             </li>
+            <% end %>
 
 
             <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Details</a>
+              <a class="nav-link <%= 'active' unless @collection.valid_import? %>" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">
+              <%= 'Details' if @collection.valid_import? %>
+              </a>
             </li>
           </ul>
 
           <div class="tab-content">
+            <% if @collection.valid_import? %>
             <div class="tab-pane fade show active" id="tab-1" role="tabpanel">
               <div class="asset__actions" id="asset__actions--scroll" data-scrollbar="true" tabindex="-1" style="overflow: hidden; outline: none;">
                 <div class="scroll-content">
@@ -200,14 +199,13 @@
                   <% end %>
 
                 </div>
-                <!-- <div class="scrollbar-track scrollbar-track-x show" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-x" style="width: 524px; transform: translate3d(0px, 0px, 0px);"></div></div><div class="scrollbar-track scrollbar-track-y show" style="display: block;"><div class="scrollbar-thumb scrollbar-thumb-y" style="height: 101.407px; transform: translate3d(0px, 0px, 0px);"></div></div>-->
               </div>
             </div>
 
             <div class="tab-pane fade" id="tab-2" role="tabpanel">
 
               <div class="asset__actions">
-                <%@collection.bids.by_desc.pending.each do|bid|%>
+                <%@collection.bids.pending.each do|bid|%>
                   <div class="asset__action asset__action--verified">
                     <%= image_tag url_for(bid.user.profile_image)%>
                     <p>Bid placed for <b><%=bid.crypto_currency%> <%=bid.crypto_currency_type%></b> <%= time_ago_in_words(bid.created_at) %> ago <br>by <%= link_to bid.user.full_name, user_path(bid.user.address)%> </p>
@@ -221,8 +219,9 @@
                 <% end %>
               </div>
             </div>
+            <% end %>
 
-            <div class="tab-pane fade" id="tab-3" role="tabpanel">
+            <div class="tab-pane fade <%= 'active' unless @collection.valid_import? %>" id="tab-3" role="tabpanel">
 
               <ul class="asset__authors asset__authors--tab">
                 <li>
@@ -241,7 +240,7 @@
           </div>
           <!-- end tabs -->
 
-          <% if @collection.put_on_sale? %>
+          <% if @collection.valid_import? && @collection.put_on_sale? %>
             <% if @max_bid%>
               <div class="asset__wrap">
                 <div class="asset__timer asset__price">

@@ -1,9 +1,29 @@
-import Web3 from "web3";
+import { ethers } from "ethers";
 
 $(document).ready(function(){
 
-	if (window.web3 && window.web3.eth) {
-		checkNetwork();
+	window.ethers = ethers;
+  setProvider();
+
+  if (window.ethers && window.ethers.providers.Web3Provider) {
+     checkNetwork();
+  }
+
+ function setProvider() {
+    window.provider = new ethers.providers.Web3Provider(window.ethereum);
+  }
+
+	async function checkNetwork() {
+    if (window.ethers && window.ethers.providers.Web3Provider) {
+        const network = await provider.getNetwork();
+        console.log("network name  " + network["name"])
+        if (network["name"] === 'rinkeby'){
+           $(".loading-gif-network").hide();
+            loadBalance();
+        } else {
+           $(".loading-gif-network").show();
+        }
+    }
 	}
 
 	window.addEventListener("ajax:before", (e) => {
@@ -41,6 +61,46 @@ $(document).ready(function(){
 		}
 	});
 
+	// toastr.options = {
+	// 	newestOnTop: true,
+	// 	progressBar: true
+	// }
+
+	// $( ".cross" ).hide();
+	// //$( ".menu" ).hide();
+	// $( ".hamburger" ).click(function() {
+	// 	$( ".menu" ).slideToggle( "slow", function() {
+	// 		$( ".hamburger" ).hide();
+	// 		$( ".cross" ).show();
+	// 	});
+	// });
+
+	// $( ".cross" ).click(function() {
+	// 	$( ".menu" ).slideToggle( "slow", function() {
+	// 		$( ".cross" ).hide();
+	// 		$( ".hamburger" ).show();
+	// 	});
+	// });
+
+	// // header carousel 
+
+	// $('.filters ul li').click(function(){
+	//   $('.filters ul li').removeClass('active');
+	//   $(this).addClass('active');
+	  
+	//   var data = $(this).attr('data-filter');
+	//   $grid.isotope({
+	//     filter: data
+	//   })
+	// });
+
+	// var $grid = $(".grid").isotope({
+	//   itemSelector: ".all",
+	//   percentPosition: true,
+	//   masonry: {
+	//     columnWidth: ".all"
+	//   }
+	// });
 
 	function readURL(input, previewId) {
 	    if (input.files && input.files[0]) {
@@ -281,22 +341,134 @@ $(document).ready(function(){
 		$('.image_get_attachment').removeClass('height-auto-token');
 	});
 
+	// search input field
 
-	async function checkNetwork(){
-		if (window.web3 && window.web3.eth) {
-			var chainId = await web3.eth.getChainId();
-			if (chainId == 1){
-				$(".loading-gif-network").hide();
-				loadBalance()
-			} else {
-				$(".loading-gif-network").show();
-			}
-		}
-	}
+	// $("#searchInput").focus(function () {
+  
+	//     $("#searchInput").css({
+	//       "display": "inline",
+	//       "width": "90%",
+	//       "border": "1px solid #40585d",
+	//       "opacity": "1",
+	//       "padding": "8px 20px 8px 20px",
+	//       "background-image": "none",
+	//       "box-shadow": "0 0 1px black"
+	//     });
+	//     $("#submitsearch").css("display", "inline");
+	   
+	//     $("#searchInput").prop("placeholder", "");
+ //    });
+
+
+ 	// menu 
+
+ 	// $('.testValActivity').click(function(){
+ 	// 	setTimeout(function(){
+ 	// 		var testActivityHeight = $('.force-overflow-activity.testActivityHeight').height();
+ 	// 		if (testActivityHeight > 450) {
+	// 			$(".scrollbar-activity.parentActivityHeight").addClass("introFollowing");
+	// 		}
+ 	// 	}, 500);
+ 	// });
+
+ 	// $('.testValFollowing').click(function(){
+ 	// 	setTimeout(function(){
+    //   		var testFollow = $('.force-overflow.following').height();
+	// 		if (testFollow > 450) {
+	// 			$(".scrollbar.custom-display-scrollbar.following").addClass("introFollowing");
+	// 		}
+    // 	}, 500);
+ 	// });
+
+ 	// $('.testValFollower').click(function(){
+ 	// 	setTimeout(function(){
+    //   		var testFollowOne = $('.force-overflow.followers').height();
+	// 		if (testFollowOne > 450) {
+	// 			$(".scrollbar.custom-display-scrollbar.followers").addClass("introFollowing");
+	// 		}
+    // 	}, 500);
+ 	// });
+
+ 	// $(".chosen-select").chosen();
+ 	// var randomCustom = $('#randomCustom').height();
+ 	// $('#sticky-collection').css('height',randomCustom);
+  //   if (testFollow > 450) {
+  //    $(".scrollbar.custom-display-scrollbar.following").addClass("introFollowing");
+  //   }
+
+    // const img = new Image();
+	// img.onload = function() {
+	//   //alert(this.width + 'x' + this.height);
+	//   var imgWidth = this.width;
+	//   var imgHeight = this.height;
+	//   if (imgWidth > 450) {
+	//     $('img.img-responsive.inTermImage').css({
+	//       'width' : '51%',
+	//     });
+	//   }
+	//   // $('.token-image').css({
+	//   // });
+	// }
+	// var inTermImage = $('.inTermImage').attr('src');
+	// img.src = inTermImage;
+
+	// var tokenImage = $('.token-image').height();
+
+	// if (tokenImage > 450) {
+	// 	$('img.img-responsive.inTermImage').css({
+	// 	  'width' : '60%',
+	// 	});
+	// }
+
+	// $(document).on('change', '.topUsers',function(){
+	// 	$.ajax({
+	// 		url: '/top_buy_sell',
+	// 		dataType: 'script',
+	// 		data: {user_type: this.id, days: $(this).val()},
+	// 		type: 'GET'
+	// 	})
+	// });
+
+	// // Hot bids carousel
+	// $('#hot-bids-carousel').owlCarousel({
+	// 	loop: true,
+	// 	dots: false,
+	// 	nav: true,
+	// 	margin: 10,
+	// 	responsive: {
+	// 		0: {
+	// 			items: 1
+	// 		},
+	// 		600: {
+	// 			items: 2
+	// 		},
+	// 		767: {
+	// 			items: 3
+	// 		},
+	// 		991: {
+	// 			items: 4
+	// 		},
+	// 		1330: {
+	// 			items: 5
+	// 		}
+	// 	}
+	// });
+
+	// async function checkNetwork(){
+	// 	if (window.web3 && window.web3.eth && window.ethereum) {
+	// 		var network = await web3.eth.net.getNetworkType()
+	// 		if (network === 'rinkeby'){
+	// 			$(".loading-gif-network").hide();
+	// 			loadBalance()
+	// 		} else {
+	// 			$(".loading-gif-network").show();
+	// 		}
+	// 	}
+	// }
 
 	function loadBalance() {
-		if (window.web3 && window.web3.eth) {
-			window.updateEthBalance()
+	if (window.ethers && window.ethers.providers.Web3Provider) {
+			window.updateEthBalance();
 		}
 	}
 

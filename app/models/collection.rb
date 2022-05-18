@@ -4,7 +4,7 @@ class Collection < ApplicationRecord
 
   # enum category: [:art, :animation, :audio, :video]
   enum collection_type: [:single, :multiple]
-  enum state: {pending: 1, approved: 2, burned: 3}
+  enum state: {pending: 1, approved: 2, burned: 3, import_invalid: 4 }
 
   self.per_page = 20
 
@@ -29,9 +29,11 @@ class Collection < ApplicationRecord
 
   default_scope { where(is_active: true) }
   default_scope { where(state: :approved) }
-  default_scope -> { order('created_at desc') }
+  default_scope -> { order(created_at: :desc) }
   scope :by_creator, lambda { |user| where(creator: user) }
   scope :on_sale, -> { where(put_on_sale: true) }
+  scope :lazy_minted, -> {where.not(nft_contract_id: nil).where(token: nil)}
+  scope :minted, -> {where.not(token: nil)}
   scope :top_bids, lambda{|days| joins(:bids).order('count(bids.collection_id) DESC').group('bids.collection_id').where('bids.created_at > ?', Time.now-(days.to_i.days)).where("bids.state"=>:pending)}
 
   store :config, accessors: [:size, :width]
@@ -55,6 +57,7 @@ class Collection < ApplicationRecord
     state :pending, initial: true
     state :approved
     state :burned
+    state :import_invalid
 
     event :approve do
       transitions from: :pending, to: :approved
@@ -88,6 +91,10 @@ class Collection < ApplicationRecord
   
   def send_burn_notification
     Notification.notify_burn_token(self)
+  end
+
+  def is_lazy_minted?
+    return is_active? && nft_contract_id!=nil && token==nil
   end
 
   def title
@@ -153,18 +160,18 @@ class Collection < ApplicationRecord
                      user_id: bidding_params[:user_id], erc20_token_id: erc20_token&.id, quantity: details[:quantity])
   end
 
-  def execute_bid(buyer_address, bid_id, receipt)
+  def execute_bid(buyer_address, bid_id, receipt, lazy_minted)
     user = User.where(address: buyer_address).first
     bid = bids.where(id: bid_id, user_id: user.id).first
     if self.put_on_sale && bid.execute_bidding && bid.save!
       hash = {seller_id: self.owner_id, buyer_id: bid.user_id, currency: bid.crypto_currency, currency_type: bid.crypto_currency_type, channel: :bid}
-      self.hand_over_to_owner(bid.user_id, receipt, bid.quantity)
+      self.hand_over_to_owner(bid.user_id, receipt, bid.quantity, lazy_minted)
       self.add_transaction(hash)
     end
   end
 
   #TODO: FOR CASES LIKE 1155, BID APPROVED FOR ONLY 10, THE REAL COLLECTION SHOULD BE CLOSED FOR SELLING TOO. NEED TO CHCK FOR MULTIPLE CASES
-  def hand_over_to_owner(new_owner_id, transaction_hash, quantity=1, burn_transfer=false)
+  def hand_over_to_owner(new_owner_id, transaction_hash, quantity=1, lazy_minted = nil, burn_transfer=false)
     redirect_address = address
     if multiple? && owned_tokens > 1
       final_qty = owned_tokens - quantity
@@ -182,13 +189,19 @@ class Collection < ApplicationRecord
           collection.assign_attributes({owner_id: new_owner_id, address: self.class.generate_uniq_token, put_on_sale: false, owned_tokens: quantity, instant_sale_price: nil, instant_sale_enabled: false})
         end
         collection.save
-        quantity_remains = {owned_tokens: final_qty, put_on_sale: false, instant_sale_price: nil, instant_sale_enabled: false}
+        quantity_remains = {
+          owned_tokens: final_qty, 
+          put_on_sale: false, 
+          instant_sale_price: nil, 
+          instant_sale_enabled: false,
+          transaction_hash: transaction_hash
+        }
         quantity_remains.merge!({no_of_copies: no_of_copies - quantity}) if burn_transfer
         self.update(quantity_remains)
         redirect_address = collection.address
       end
     else
-      self.update({owner_id: new_owner_id, put_on_sale: false, instant_sale_price: nil, instant_sale_enabled: false})
+      self.update({owner_id: new_owner_id, put_on_sale: false, instant_sale_price: nil, instant_sale_enabled: false, transaction_hash: transaction_hash })
     end
     self.cancel_bids
     return redirect_address
@@ -212,10 +225,11 @@ class Collection < ApplicationRecord
     self.bids.where(state: :pending).each { |bid| bid.expire_bidding && bid.save! }
   end
 
-  def direct_buy(buyer, quantity, transaction_hash)
-    self.add_transaction({seller_id: self.owner_id, buyer_id: buyer.id, currency: self.instant_sale_price,
-                          currency_type: instant_currency_symbol, channel: :direct})
-    redirect_address = self.hand_over_to_owner(buyer.id, transaction_hash, quantity)
+  def direct_buy(buyer, quantity, transaction_hash, lazy_minted)
+    hash = {seller_id: self.owner_id, buyer_id: buyer.id, currency: self.instant_sale_price,
+      currency_type: instant_currency_symbol, channel: :direct}
+    redirect_address = self.hand_over_to_owner(buyer.id, transaction_hash, quantity, lazy_minted)
+    self.add_transaction(hash)
     return redirect_address
   end
 
@@ -288,7 +302,12 @@ class Collection < ApplicationRecord
     bid_detail = bids.where(id: bid_id).first if bid_id.present?
     details = { collection_id: self.address, owner_address: owner.address, token_id: token, unit_price: instant_sale_price,
                 asset_type: nft_contract&.contract_asset_type, asset_address: nft_contract&.address, shared: shared?,
-                seller_sign: sign_instant_sale_price, contract_type: contract_type, owned_tokens: owned_tokens }
+                seller_sign: sign_instant_sale_price, contract_type: contract_type, owned_tokens: owned_tokens, total: no_of_copies }
+    if is_lazy_minted?
+      details = details.merge(token_id: 0, type: collection_type, token_uri: metadata_hash, royalty: royalty)
+    else 
+      details = details.merge(token_id: token)
+    end 
     details = details.merge(pay_token_address: pay_token.address, pay_token_decimal: pay_token.decimals) if pay_token
     details = details.merge(buyer_address: bid_detail.user.address, amount: bid_detail.amount, amount_with_fee: bid_detail.amount_with_fee,
                             quantity: bid_detail.quantity, buyer_sign: bid_detail.sign, bid_id: bid_detail.id) if bid_detail
@@ -304,7 +323,8 @@ class Collection < ApplicationRecord
       contract_type: nft_contract&.contract_type,
       contract_shared: shared?,
       instant_sale_price: instant_sale_price,
-      put_on_sale: put_on_sale
+      put_on_sale: put_on_sale,
+      imported: imported
     }
   end
 
@@ -314,6 +334,10 @@ class Collection < ApplicationRecord
 
   def executed_price
     bids.executed.present? ? bids.executed.last.amount : instant_sale_price
+  end
+
+  def valid_import?
+    !burned? && !import_invalid?
   end
 
   private

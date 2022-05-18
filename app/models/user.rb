@@ -6,6 +6,7 @@ class User < ApplicationRecord
   self.per_page = 5
 
   has_many :collections, foreign_key: "owner_id"
+  has_many :imported_collections, -> { where(imported: true) }, foreign_key: "owner_id", class_name: "Collection"
   has_many :created_collections, foreign_key: "creator_id", class_name: "Collection"
   has_many :follows, dependent: :destroy
   has_many :followed_users, foreign_key: :follower_id, class_name: 'Follow'
@@ -267,7 +268,7 @@ class User < ApplicationRecord
     "#{address[0..first_char]}...#{address.split(//).last(last_char).join("").to_s}"
   end
 
-  def get_collections(tab, filters, page_no)
+  def get_collections(tab, filters, page_no, owner_address)
     case tab
     when "collectibles"
       Collection.where("owner_id=?", id).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: page_no)
@@ -283,6 +284,8 @@ class User < ApplicationRecord
       followees.includes(attachment_attachment: :blob).paginate(page: page_no)
     when "followers"
       followers.includes(attachment_attachment: :blob).paginate(page: page_no)
+    when "nft_collections"
+      Api::NftCollections::nft_collections(owner_address, page_no)
     else
       Collection.where("owner_id=? and put_on_sale=?", id, true).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: page_no)
     end

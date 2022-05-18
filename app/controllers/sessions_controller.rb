@@ -5,9 +5,13 @@ class SessionsController < ApplicationController
   def create
     destroy_session if ActiveModel::Type::Boolean.new.cast(params[:destroy_session])
     user = User.find_or_create_by(address: params[:address])
-    session[:user_id] = user.id if user.present?
-    session[:wallet] = params[:wallet]
-    session[:balance] = params[:balance]
+    if user.present?
+      session[:user_id] = user.id
+      session[:wallet] = params[:wallet]
+      session[:address] = user.address
+      session[:balance] = params[:balance]
+    end
+
     render json: user.as_json, message: "Successfully Logged in"
   end
 
@@ -24,6 +28,8 @@ class SessionsController < ApplicationController
 
   def valid_user
     user = User.find_by_address(params[:address])
-    render json: {user_exists: user.present?}, message: "Successfully validated"
+    status = user.present?
+    session[:wallet] = params[:wallet] if status && current_user.present?
+    render json: { user_exists: status }, message: 'Successfully validated'
   end
 end

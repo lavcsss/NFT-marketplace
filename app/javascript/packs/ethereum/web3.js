@@ -1,20 +1,79 @@
 import Web3 from 'web3';
 import axios from "axios";
-
+import { ethers } from 'ethers';
+import WalletConnectProvider from '@walletconnect/web3-provider';
 const tokenURIPrefix = gon.tokenURIPrefix
 const transferProxyContractAddress = gon.transferProxyContractAddress
 const wethAddress = gon.wethAddress
 const tradeContractAddress = gon.tradeContractAddress
+//const sessionWallet = gon.wallet
+const sessionAddress = gon.address
+//const chainId = gon.chainId
+let walletConnect;
+//const rpcUrl = gon.ethereum_provider
+
+const sessionWallet = gon.wallet;
+const chainId = gon.chainId;
+const rpcUrl = gon.ethereum_provider;
+const rpc = gon.rpc
+let signer;
+let provider;
+let tprovider;
+
 
 async function loadWeb3() {
-  if (window.ethereum) {
-    window.web3 = new Web3(window.ethereum);
-    window.ethereum.enable();
-    await ethereum.request({method: 'eth_accounts'})
+  window.web3 = new Web3(window.ethereum);
+  if (window.ethereum && window.wallet == 'metamask' || typeof window.wallet == "undefined") {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    signer = provider.getSigner();
+    await ethereum.request({ method: 'eth_requestAccounts' })
+    gon.provider = provider
+    return signer.getAddress();
+  }
+  else if (window.wallet == 'walletConnect') {
+   tprovider = new WalletConnectProvider({
+      rpc: {
+        [chainId]: rpc,
+      }
+    });
+   const address = await tprovider.enable();
+   window.provider = new ethers.providers.Web3Provider(tprovider);
+   window.signer = window.provider.getSigner();
+   //const address = await walletConnect.enable();
+   return address[0] ?? '';
+  }
+  // if(window.ethereum) {
+  //   window.provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   window.signer = provider.getSigner();
+  // }
+
+}
+
+
+
+
+async function getaccounts() {
+  try {
+  if (window.wallet == 'walletConnect') {
+    const signer = window.provider.getSigner();
+    var accounts = await signer.getAddress();
+  }else{
+    const signer = provider.getSigner();
+    var accounts = await signer.getAddress();
+    }
+    return accounts;
+  } catch (e) {
+    console.log(e)
   }
 }
 
-async function createUserSession(address, balance, destroySession) {
+function getInfuraId(){
+  const url = new URL(rpcUrl);
+  const path = url.pathname.split('/');
+  return path[path.length-1] ?? '';
+}
+
+async function createUserSession(address, balance, destroySession, wallet = window.wallet) {
   const config = {
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -25,12 +84,14 @@ async function createUserSession(address, balance, destroySession) {
   const resp = await axios.post(`/sessions`, {
     address: address,
     balance: balance,
-    destroy_session: destroySession
+    destroy_session: destroySession,
+    wallet
   }, config)
     .then((response) => {
       return resp
     })
     .catch(err => {
+      console.log("User Session Create Error", err)
     })
   return resp;
 }
@@ -46,7 +107,7 @@ async function destroyUserSession(address) {
   }
   const resp = axios.delete(`/sessions/${address}`, config)
     .then(response => response)
-    .catch(err => {})
+    .catch(err => console.log("Session Error: ", err))
   return resp
 }
 
@@ -59,8 +120,10 @@ function updateTokenId(tokenId, collectionId, txId) {
     dataType: "script"
   });
   request.done(function (msg) {
+    console.log("Token Id updated.");
   });
   request.fail(function (jqXHR, textStatus) {
+    console.log("Failed to update token id");
   });
 }
 
@@ -73,8 +136,10 @@ function saveContractNonceValue(collectionId, sign) {
     dataType: "script"
   });
   request.done(function (msg) {
+    console.log("Contract Nonce Value updated.");
   });
   request.fail(function (jqXHR, textStatus) {
+    console.log("Failed to update nonce value");
   });
 }
 
@@ -91,33 +156,56 @@ function createContract(formData) {
     cache: false,
   });
   request.done(function (msg) {
+    console.log("Token Id updated.");
   });
   request.fail(function (jqXHR, textStatus) {
+    console.log("Failed to update token id");
   });
 }
 
-function updateCollectionBuy(collectionId, quantity, transactionHash) {
+function updateCollectionBuy(collectionId, quantity, transactionHash, tokenId=0) {
   var request = $.ajax({
     url: '/collections/' + collectionId + '/buy',
     type: 'POST',
     async: false,
-    data: {quantity: quantity, transaction_hash: transactionHash},
+    data: {quantity: quantity, transaction_hash: transactionHash, tokenId},
     dataType: "script",
     success: function (respVal) {
+      console.trace("updateCollectionBuy" + respVal)
     }
   });
 }
 
-function updateCollectionSell(collectionId, buyerAddress, bidId, transactionHash) {
+function updateCollectionSell(collectionId, buyerAddress, bidId, transactionHash, tokenId=0) {
   var request = $.ajax({
     url: '/collections/' + collectionId + '/sell',
     type: 'POST',
     async: false,
-    data: {address: buyerAddress, bid_id: bidId, transaction_hash: transactionHash},
+    data: {address: buyerAddress, bid_id: bidId, transaction_hash: transactionHash, tokenId},
     dataType: "script",
     success: function (respVal) {
+      console.log(respVal)
     }
   });
+}
+
+function sign_metadata_with_creator(creator_address, tokenURI, collectionId) {
+  var sign;
+  $.ajax({
+    url: `/collections/${collectionId}/sign_metadata_with_creator`,
+    type: "POST",
+    async: false,
+    data: {address: creator_address, tokenURI: tokenURI},
+    dataType: "json"
+  })
+  .done(function(msg) {
+    console.log("sign_metadata_with_creator" + msg);
+    sign = msg
+  })
+  .fail(function(jqXHR, textStatus) {
+    console.log("Bidding failed. Please contact support");
+  });
+  return sign;
 }
 
 function updateOwnerTransfer(collectionId, recipientAddress, transactionHash, transferQuantity) {
@@ -128,6 +216,7 @@ function updateOwnerTransfer(collectionId, recipientAddress, transactionHash, tr
     data: {recipient_address: recipientAddress, transaction_hash: transactionHash, transaction_quantity: transferQuantity},
     dataType: "script",
     success: function (respVal) {
+      console.log(respVal)
     }
   });
 }
@@ -140,11 +229,12 @@ function updateBurn(collectionId, transactionHash, burnQuantity) {
     data: {transaction_hash: transactionHash, transaction_quantity: burnQuantity},
     dataType: "script",
     success: function (respVal) {
+      console.log(respVal)
     }
   });
 }
 
-async function isValidUser(address, token) {
+async function isValidUser(address, token, wallet) {
   const config = {
     headers: {
       'X-CSRF-TOKEN': token,
@@ -152,11 +242,13 @@ async function isValidUser(address, token) {
       'Content-Type': 'application/json',
     }
   }
-  const resp = await axios.get(`/sessions/valid_user`, {params: {address: address, authenticity_token: token}}, config)
+  const resp = await axios.get(`/sessions/valid_user`, {params: {address: address, authenticity_token: token, wallet}}, config)
     .then((response) => {
+      console.log("validate user", response)
       return response.data
     })
     .catch(err => {
+      console.log("User Session Validate Error", err)
     })
   return resp;
 }
@@ -170,8 +262,10 @@ function placeBid(collectionId, sign, quantity, bidDetails) {
     dataType: "script"
   });
   request.done(function (msg) {
+    console.log("Bidding success.");
   });
   request.fail(function (jqXHR, textStatus) {
+    console.log("Bidding failed. Please contact support");
   });
 }
 
@@ -185,9 +279,11 @@ function signMetadataHash(collectionId, contractAddress) {
     dataType: "json"
   });
   request.done(function (msg) {
+    console.log(msg);
     sign = {sign: msg['signature'], nonce: msg['nonce']}
   });
   request.fail(function (jqXHR, textStatus) {
+    console.log("Bidding failed. Please contact support");
   });
   return sign
 }
@@ -200,8 +296,24 @@ function updateSignature(collectionId, sign) {
     data: {sign: sign},
     dataType: "script"
   });
-  request.done(function (msg) {  });
+  request.done(function (msg) {
+    console.log("Signature updated.");
+  });
   request.fail(function (jqXHR, textStatus) {
+    console.log("Signature update failed. Please contact support");
+  });
+}
+
+window.approveCollection = function approveCollection(collectionId){
+  $.ajax({
+    url: `/collections/${collectionId}/approve`,
+    type: "POST",
+    async: false,
+    dataType: "script"
+  }).done(function(msg) {
+    console.log("Collection updated.");
+  }).fail(function(jqXHR, textStatus) {
+    console.log("Collection update failed. Please contact support");
   });
 }
 
@@ -218,6 +330,7 @@ function getNonceValue(collectionId) {
     nonce = data['nonce']
   });
   request.fail(function (jqXHR, textStatus) {
+    console.log("Nonce failed. Please contact support");
   });
   return nonce
 }
@@ -231,8 +344,10 @@ function save_NonceValue(collectionId, sign, nonce) {
     dataType: "script"
   });
   request.done(function (msg) {
+    console.log("Nonce updated.");
   });
   request.fail(function (jqXHR, textStatus) {
+    console.log("Nonce update failed. Please contact support");
   });
 }
 
@@ -249,6 +364,7 @@ function getContractSignNonce(collectionId, sign) {
     nonce = data['nonce']
   });
   request.fail(function (jqXHR, textStatus) {
+    console.log("Nonce failed. Please contact support");
   });
   return nonce
 }
@@ -268,16 +384,19 @@ window.getContractABIAndBytecode = function getContractABIAndBytecode(contractAd
   });
 
   request.fail(function (jqXHR, textStatus) {
+    console.log(textStatus);
   });
   return res;
 }
 
 function splitSign(sign, nonce) {
-  sign = sign.slice(2)
-  var r = `0x${sign.slice(0, 64)}`
-  var s = `0x${sign.slice(64, 128)}`
-  var v = web3.utils.toDecimal(`0x${sign.slice(128, 130)}`)
-  return [v, r, s, nonce]
+  // sign = sign.slice(2)
+  // var r = `0x${sign.slice(0, 64)}`
+  // var s = `0x${sign.slice(64, 128)}`
+  // var v = web3.utils.toDecimal(`0x${sign.slice(128, 130)}`)
+  // return [v, r, s, nonce]
+  let sig = ethers.utils.splitSignature(sign);
+  return [sig.v,sig.r,sig.s, nonce];
 }
 
 
@@ -294,33 +413,40 @@ async function loadTransferProxyContract() {
 }
 
 window.getContract = async function getContract(contractAddress, type, shared = true) {
+  console.log(contractAddress, type, shared)
   var res = getContractABIAndBytecode(contractAddress, type, shared);
-  var contractObj = await new window.web3.eth.Contract(res['compiled_contract_details']['abi'], contractAddress);
+  var proname = window.wallet == 'walletConnect' ? window.provider : provider
+  var contractObj = new ethers.Contract(contractAddress,res['compiled_contract_details']['abi'],proname);
+  console.log(contractObj)
   return contractObj
 }
 
 window.createCollectible721 = async function createCollectible721(contractAddress, tokenURI, royaltyFee, collectionId, sharedCollection) {
   try {
-    var account = window.ethereum.selectedAddress
-    window.contract721 = await getContract(contractAddress, 'nft721', sharedCollection);
+      console.log("enter createCollectible721")
+    var account = getCurrentAccount()
+    console.log(account, contractAddress, 'nft721', sharedCollection)
+    const contract721 = await fetchContract(contractAddress, 'nft721', sharedCollection);
     var gasPrices = await gasPrice();
+    var txn;
     if (sharedCollection) {
       var sign = await signMetadataHash(collectionId, contractAddress);
       await saveContractNonceValue(collectionId, sign)
       var signStruct = splitSign(sign['sign'], sign['nonce']);
-      var txn = await window.contract721.methods.createCollectible(tokenURI, royaltyFee, signStruct).send({
-        from: account,
-        gas: 516883,
+      txn = await contract721.createCollectible(tokenURI, royaltyFee, signStruct,{
+        gasLimit: 516883,
         gasPrice: String(gasPrices)
       });
     } else {
-      var txn = await window.contract721.methods.createCollectible(tokenURI, royaltyFee).send({
-        from: account,
-        gas: 516883,
+      txn = await contract721.createCollectible(tokenURI, royaltyFee,{
+        gasLimit: 516883,
         gasPrice: String(gasPrices)
       });
     }
-    var tokenId = txn.events.Transfer.returnValues['tokenId'];
+    var tx = await txn.wait();
+    //var tokenId = parseInt(txn.logs[1].topics[1]);
+    var tokenId = parseInt(tx.events[0].topics[tx.events[0].topics.length-1])
+    console.log(tokenId)
     await updateTokenId(tokenId, collectionId, txn.transactionHash)
     return window.collectionMintSuccess(collectionId)
   } catch (err) {
@@ -331,26 +457,29 @@ window.createCollectible721 = async function createCollectible721(contractAddres
 
 window.createCollectible1155 = async function createCollectible1155(contractAddress, supply, tokenURI, royaltyFee, collectionId, sharedCollection) {
   try {
-    var account = window.ethereum.selectedAddress
-    window.contract1155 = await getContract(contractAddress, 'nft1155', sharedCollection);
+    console.log("enter createCollectible1155")
+    var account = getCurrentAccount()
+    console.log(account, contractAddress, 'nft1155', sharedCollection)
+    const contract1155 = await fetchContract(contractAddress, 'nft1155', sharedCollection);
     var gasPrices = await gasPrice();
+    var txn;
     if (sharedCollection) {
       var sign = await signMetadataHash(collectionId, contractAddress);
       await saveContractNonceValue(collectionId, sign)
       var signStruct = splitSign(sign['sign'], sign['nonce']);
-      var txn = await window.contract1155.methods.mint(tokenURI, supply, royaltyFee, signStruct).send({
-        from: account,
-        gas: 516883,
+       txn = await contract1155.mint(tokenURI, supply, royaltyFee, signStruct,{
+        gasLimit: 516883,
         gasPrice: String(gasPrices)
       });
     } else {
-      var txn = await window.contract1155.methods.mint(tokenURI, supply, royaltyFee).send({
-        from: account,
-        gas: 516883,
+       txn = await contract1155.mint(tokenURI, supply, royaltyFee,{
+        gasLimit: 516883,
         gasPrice: String(gasPrices)
       });
     }
-    var tokenId = txn.events.TransferSingle.returnValues['id'];
+	  console.log(txn)
+    var tx = await txn.wait();
+    var tokenId = parseInt(tx.events[0].data.slice(0,66))
     await updateTokenId(tokenId, collectionId, txn.transactionHash)
     return window.collectionMintSuccess(collectionId)
   } catch (err) {
@@ -360,46 +489,60 @@ window.createCollectible1155 = async function createCollectible1155(contractAddr
 }
 
 window.deployContract = async function deployContract(abi, bytecode, name, symbol, contractType, collectionId, attachment, description, cover) {
-  const contractDeploy = new window.web3.eth.Contract(abi);
-  var contractAddress;
-  var account = getCurrentAccount()
-  contractDeploy.deploy({
-    data: bytecode,
-    arguments: [name, symbol, tokenURIPrefix]
-  }).send({
-    from: account,
-  }).then((deployment) => {
-    contractAddress = deployment.options.address;
-    $('#nft_contract_address').val(contractAddress);
-    let formData = new FormData()
-    formData.append('file', attachment)
-    formData.append('name', name)
-    formData.append('symbol', symbol)
-    formData.append('contract_address', contractAddress)
-    formData.append('contract_type', contractType)
-    formData.append('collection_id', collectionId)
-    formData.append('description', description)
-    formData.append('cover', cover)
-    createContract(formData);
+  //const contractDeploy = new ethers.Contract(abi,provider);
+   try {
+     console.log("enter deployContract")
+       if (window.wallet == 'walletConnect') {
+          var sign = window.provider.getSigner();
+        }else{
+           var sign = provider.getSigner();
+        }
+      const contractDeploy = await new ethers.ContractFactory(abi, bytecode, sign);
+    //const contract = contractDeploy.connect(signer);
+      let contract = await contractDeploy.deploy(name, symbol, tokenURIPrefix);
+      await contract.deployTransaction.wait();
+      var contractAddress;
+      var account =  await getaccounts();
+      console.log('Contract was deployed at the following address:');
+      console.log(contract.address);
+      contractAddress = contract.address;
+      $('#nft_contract_address').val(contractAddress);
+      let formData = new FormData()
+      formData.append('file', attachment)
+      formData.append('name', name)
+      formData.append('symbol', symbol)
+      formData.append('contract_address', contractAddress)
+      formData.append('contract_type', contractType)
+      formData.append('collection_id', collectionId)
+      formData.append('description', description)
+      formData.append('cover', cover)
+      createContract(formData);
     window.contractDeploySuccess(contractAddress, contractType)
-  }).catch((err) => {
+  }catch (err){
     console.error(err);
     window.contractDeployFailed(err['message'])
-  });
+  };
 }
 
-window.approveNFT = async function approveNFT(contractType, contractAddress, sharedCollection, sendBackTo = 'collection') {
+window.approveNFT = async function approveNFT(contractType, contractAddress, sharedCollection, sendBackTo = 'collection', existingToken=null) {
   try {
-    var account = window.ethereum.selectedAddress
-    window.contract = await getContract(contractAddress, contractType, sharedCollection);
-    var isApproved = await window.contract.methods.isApprovedForAll(account, transferProxyContractAddress).call();
+    console.log("Enter approveNFT")
+    console.log(contractAddress, contractType, sharedCollection)
+    var account = getCurrentAccount()
+    const contractapp = await fetchContract(contractAddress, contractType, sharedCollection);
+    var isApproved = await contractapp.isApprovedForAll(account, transferProxyContractAddress);
     if (!isApproved) {
-      var receipt = await window.contract.methods.setApprovalForAll(transferProxyContractAddress, true).send({from: account});
+      var receipt = await contractapp.setApprovalForAll(transferProxyContractAddress, true, {from: account});
+       receipt = await receipt.wait();
     }
+    console.log("--step-1")
     if (sendBackTo == 'executeBid') {
+       console.log("--step-2")
+
       return window.approveBidSuccess()
     } else {
-      return window.collectionApproveSuccess(contractType);
+       console.log("--step-3")
+      return window.collectionApproveSuccess(contractType, existingToken);
     }
   } catch (err) {
     console.error(err);
@@ -409,15 +552,19 @@ window.approveNFT = async function approveNFT(contractType, contractAddress, sha
       return window.collectionApproveFailed(err['message'])
     }
   }
+   console.log("--step-2")
 }
 
 window.approveResaleNFT = async function approveResaleNFT(contractType, contractAddress, sharedCollection) {
   try {
-    var account = window.ethereum.selectedAddress
-    window.contract = await getContract(contractAddress, contractType, sharedCollection);
-    var isApproved = await window.contract.methods.isApprovedForAll(account, transferProxyContractAddress).call();
+     console.log("Enter approveResaleNFT")
+    console.log(contractAddress, contractType, sharedCollection)
+    var account = getCurrentAccount()
+    const resalenft = await fetchContract(contractAddress, contractType, sharedCollection);
+    var isApproved = await resalenft.isApprovedForAll(account, transferProxyContractAddress);
     if (!isApproved) {
-      var receipt = await window.contract.methods.setApprovalForAll(transferProxyContractAddress, true).send({from: account});
+      var receipt = await resalenft.setApprovalForAll(transferProxyContractAddress, true, {from: account});
+      receipt = await receipt.wait();
     }
     return window.approveResaleSuccess(contractType);
   } catch (err) {
@@ -426,12 +573,28 @@ window.approveResaleNFT = async function approveResaleNFT(contractType, contract
   }
 }
 
+
+window.fetchContract = async function fetchContract(contractAddress, type, shared = true) {
+  console.log(contractAddress, type, shared)
+  var compiledContractDetails = getContractABIAndBytecode(contractAddress, type, shared);
+  var abi = compiledContractDetails['compiled_contract_details']['abi'];
+  if (window.wallet == 'walletConnect'){
+    var obj = new ethers.Contract(contractAddress,abi,window.provider);
+    var connection = obj.connect(window.signer);
+  }else{
+    var obj = new ethers.Contract(contractAddress,abi, provider);
+    var connection = obj.connect(signer);
+   }
+    return connection
+}
+
 //TODO: OPTIMIZE
 window.isApprovedNFT = async function isApprovedNFT(contractType, contractAddress) {
   try {
-    var contract = await getContract(contractAddress, contractType);
-    var account = window.ethereum.selectedAddress
-    var isApproved = await contract.methods.isApprovedForAll(account, transferProxyContractAddress).call();
+     console.log("enter isApprovedNFT")
+    const approvednft = await fetchContract(contractAddress, contractType, sharedCollection);
+    var account = await getaccounts();
+    var isApproved = await approvednft.isApprovedForAll(account, transferProxyContractAddress);
     return isApproved;
   } catch (err) {
     console.error(err);
@@ -440,13 +603,15 @@ window.isApprovedNFT = async function isApprovedNFT(contractType, contractAddres
 
 window.burnNFT = async function burnNFT(contractType, contractAddress, tokenId, supply = 1, collectionId, sharedCollection) {
   try {
-    var contract = await getContract(contractAddress, contractType, sharedCollection);
-    var account = window.ethereum.selectedAddress
+    const burnnft = await fetchContract(contractAddress, contractType, sharedCollection);
+    var account = await getaccounts();
+    var receipt;
     if (contractType == 'nft721') {
-      var receipt = await contract.methods.burn(tokenId).send({from: account});
+       receipt = await burnnft.burn(tokenId, {from: account});
     } else if (contractType == 'nft1155') {
-      var receipt = await contract.methods.burn(tokenId, supply).send({from: account});
+       receipt = await burnnft.burn(tokenId, supply, {from: account});
     }
+    receipt = await receipt.wait();
     await updateBurn(collectionId, receipt.transactionHash, supply)
     return window.burnSuccess(receipt.transactionHash);
   } catch (err) {
@@ -457,15 +622,20 @@ window.burnNFT = async function burnNFT(contractType, contractAddress, tokenId, 
 
 window.directTransferNFT = async function directTransferNFT(contractType, contractAddress, recipientAddress, tokenId, supply = 1, shared, collectionId) {
   try {
-    var contract = await getContract(contractAddress, contractType, shared);
-    var account = window.ethereum.selectedAddress
+    console.log("Enter directTransferNFT =>" + contractType, contractAddress, recipientAddress, tokenId, supply, shared, collectionId)
+    const transfernft = await fetchContract(contractAddress, contractType, "true");
+    var account = getCurrentAccount()
+    var receipt;
     if (contractType == 'nft721') {
-      var receipt = await contract.methods.safeTransferFrom(account, recipientAddress, tokenId).send({from: account});
+       receipt = await transfernft["safeTransferFrom(address,address,uint256)"](account, recipientAddress, tokenId);
     } else if (contractType == 'nft1155') {
       // TODO: Analyse and use proper one in future
       var tempData = "0x6d6168616d000000000000000000000000000000000000000000000000000000"
-      var receipt = await contract.methods.safeTransferFrom(account, recipientAddress, tokenId, supply, tempData).send({from: account});
+       receipt = await transfernft["safeTransferFrom(address,address,uint256,uint256,bytes)"](account, recipientAddress, tokenId, supply, tempData);
+    } else if (contractType == 'nft1155') {
+
     }
+    receipt = await receipt.wait();
     await updateOwnerTransfer(collectionId, recipientAddress, receipt.transactionHash, supply)
     return window.directTransferSuccess(receipt.transactionHash, collectionId);
   } catch (err) {
@@ -476,14 +646,15 @@ window.directTransferNFT = async function directTransferNFT(contractType, contra
 
 window.approveERC20 = async function approveERC20(contractAddress, contractType, amount, decimals = 18, sendBackTo = 'Bid') {
   try {
+    console.log("Enter approveERC20:" + contractAddress, contractType, gon.collection_data['contract_shared'])
     amount = roundNumber(mulBy(amount, 10 ** decimals), 0);
-    var compiledContractDetails = getContractABIAndBytecode(contractAddress, contractType, gon.collection_data['contract_shared']);
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, contractAddress);
-    var account = window.ethereum.selectedAddress
-    const balance = await contract.methods.allowance(account, transferProxyContractAddress).call();
+    const approveERC2 =  await fetchContract(contractAddress, contractType, gon.collection_data['contract_shared']);
+    //var contract = await new window.web3.eth.Contract(abi, contractAddress);
+    var account = getCurrentAccount()
+    const balance = await approveERC2.allowance(account, transferProxyContractAddress);
     amount = BigInt(parseInt(balance) + parseInt(amount)).toString()
-    var receipt = await contract.methods.approve(transferProxyContractAddress, amount).send({from: account});
+    var receipt = await approveERC2.approve(transferProxyContractAddress, amount, {from: account});
+    receipt = await receipt.wait();
     if (sendBackTo == 'Buy') {
       return window.buyApproveSuccess(receipt.transactionHash, contractAddress)
     } else {
@@ -500,20 +671,21 @@ window.approveERC20 = async function approveERC20(contractAddress, contractType,
 }
 
 window.approvedTokenBalance = async function approvedTokenBalance(contractAddress) {
-  var contract = await getContract(contractAddress, 'erc20', false);
-  var account = window.ethereum.selectedAddress
-  var balance = await contract.methods.allowance(account, transferProxyContractAddress).call();
+  console.log("enter approvedTokenBalance")
+  var contract =  await fetchContract(contractAddress, 'erc20', false);
+  var account = await getaccounts();
+  var balance = await contract.allowance(account, transferProxyContractAddress);
   return balance;
 }
 
 window.convertWETH = async function convertWETH(amount, sendBackTo = 'Bid', decimals = 18) {
+  console.log("Enter convertWETH")
   try {
     amount = roundNumber(mulBy(amount, 10 ** decimals), 0);
-    var compiledContractDetails = getContractABIAndBytecode(wethAddress, 'erc20');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, wethAddress);
-    var account = window.ethereum.selectedAddress
-    var receipt = await contract.methods.deposit().send({from: account, value: amount});
+    var contract = await fetchContract(wethAddress, 'erc20')
+    var account = getCurrentAccount()
+    var receipt = await contract.deposit({from: account, value: amount});
+    receipt = await receipt.wait();
     if (sendBackTo == 'Buy') {
       return window.buyConvertSuccess(receipt.transactionHash)
     } else {
@@ -532,11 +704,11 @@ window.convertWETH = async function convertWETH(amount, sendBackTo = 'Bid', deci
 
 window.updateBuyerServiceFee = async function updateBuyerServiceFee(buyerFeePermille) {
   try {
-    var compiledContractDetails = getContractABIAndBytecode(tradeContractAddress, 'trade');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, tradeContractAddress);
-    var account = window.ethereum.selectedAddress
-    var receipt = await contract.methods.setBuyerServiceFee(buyerFeePermille).send({from: account});
+    console.log("enter updateBuyerServiceFee")
+    const contract = await fetchContract(tradeContractAddress, 'trade');
+    var account = getCurrentAccount()
+    var receipt = await contract.setBuyerServiceFee(buyerFeePermille, {from: account});
+    receipt = await receipt.wait();
     return window.bidConvertSuccess(receipt.transactionHash)
   } catch (err) {
     console.error(err);
@@ -546,11 +718,11 @@ window.updateBuyerServiceFee = async function updateBuyerServiceFee(buyerFeePerm
 
 window.updateSellerServiceFee = async function updateSellerServiceFee(sellerFeePermille) {
   try {
-    var compiledContractDetails = getContractABIAndBytecode(tradeContractAddress, 'trade');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, tradeContractAddress);
-    var account = window.ethereum.selectedAddress
-    var receipt = await contract.methods.setSellerServiceFee(sellerFeePermille).send({from: account});
+    console.log("enter updateSellerServiceFee")
+    const contract = await fetchContract(tradeContractAddress, 'trade')
+    var account = getCurrentAccount();
+    var receipt = await contract.setSellerServiceFee(sellerFeePermille, {from: account});
+    receipt = await receipt.wait();
     return window.bidConvertSuccess(receipt.transactionHash)
   } catch (err) {
     console.error(err);
@@ -560,11 +732,21 @@ window.updateSellerServiceFee = async function updateSellerServiceFee(sellerFeeP
 
 window.bidAsset = async function bidAsset(assetAddress, tokenId, qty = 1, amount, payingTokenAddress, decimals = 18, collectionId, bidPayAmt) {
   try {
+    console.log("enter bidAsset")
     var amountInDec = roundNumber(mulBy(amount, 10 ** decimals), 0);
+    console.log(amountInDec)
     var nonce_value = await getNonceValue(collectionId);
-    var messageHash = window.web3.utils.soliditySha3(assetAddress, tokenId, payingTokenAddress, amountInDec, qty, nonce_value);
-    var account = window.ethereum.selectedAddress
-    const signature = await window.web3.eth.personal.sign(messageHash, account);
+    //var messageHash = window.web3.utils.soliditySha3(assetAddress, tokenId, payingTokenAddress, amountInDec, qty, nonce_value);
+    var messageHash = ethers.utils.solidityKeccak256(['address', 'uint256', 'address', 'uint256', 'uint256', 'uint256'], [assetAddress, tokenId, payingTokenAddress, amountInDec, qty, nonce_value]);
+    var account = getCurrentAccount()
+    messageHash = ethers.utils.arrayify(messageHash);
+     if (window.wallet == 'walletConnect') {
+       const signer = window.provider.getSigner();
+        var signature = await signer.signMessage(messageHash);
+     }else {
+       var signature = await signer.signMessage(messageHash);
+     }
+    //const signature = await window.web3.eth.personal.sign(messageHash, account);
     await placeBid(collectionId, signature, qty, {
       asset_address: assetAddress,
       token_id: tokenId,
@@ -584,21 +766,38 @@ window.bidAsset = async function bidAsset(assetAddress, tokenId, qty = 1, amount
 
 window.signMessage = async function signMessage(msg) {
   try {
-    var account = window.ethereum.selectedAddress
-    var sign = await window.web3.eth.personal.sign(msg, account);
+    console.log("enter signMessage")
+    var account = getCurrentAccount()
+    if (window.wallet == 'walletConnect') {
+       const signer = window.provider.getSigner();
+       var sign = signer.signMessage(msg);
+    }else{
+       var sign = signer.signMessage(msg);
+    }
     return sign;
   } catch (err) {
+    console.log(err);
     return ""
   }
 }
 
 window.signSellOrder = async function signSellOrder(amount, decimals, paymentAssetAddress, tokenId, assetAddress, collectionId, sendBackTo='') {
   try {
+    console.log("enter signSellOrder")
     amount = roundNumber(mulBy(amount, 10 ** decimals), 0);
+    console.log(assetAddress, tokenId, paymentAssetAddress, amount)
     var nonce_value = await getNonceValue(collectionId);
-    var messageHash = window.web3.utils.soliditySha3(assetAddress, tokenId, paymentAssetAddress, amount, nonce_value);
-    var account = window.ethereum.selectedAddress
-    const fixedPriceSignature = await window.web3.eth.personal.sign(messageHash, account);
+    //var messageHash = window.web3.utils.soliditySha3(assetAddress, tokenId, paymentAssetAddress, amount, nonce_value);
+    var messageHash = ethers.utils.solidityKeccak256(["address","uint256","address","uint256","uint256"],[assetAddress, tokenId, paymentAssetAddress, amount, nonce_value]);
+    console.log([assetAddress, tokenId, paymentAssetAddress, amount, nonce_value]);
+    messageHash = ethers.utils.arrayify(messageHash);
+    var account = getCurrentAccount()
+     if (window.wallet == 'walletConnect') {
+       const signer = window.provider.getSigner();
+       var fixedPriceSignature = await signer.signMessage(messageHash, account);
+      }else{
+       var fixedPriceSignature = await signer.signMessage(messageHash, account);
+      }
     await updateSignature(collectionId, fixedPriceSignature)
     await save_NonceValue(collectionId, fixedPriceSignature, nonce_value)
     if (sendBackTo == 'update') {
@@ -621,13 +820,16 @@ window.signSellOrder = async function signSellOrder(amount, decimals, paymentAss
 window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
                                           paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId) {
   try {
+    console.log("Enter buyAsset")
     paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
     unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
-    var compiledContractDetails = getContractABIAndBytecode(tradeContractAddress, 'trade');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, tradeContractAddress);
+    var contract = await fetchContract(tradeContractAddress, 'trade');
     var nonce_value = await getContractSignNonce(collectionId, sellerSign);
-    var account = window.ethereum.selectedAddress
+    var account = getCurrentAccount()
+    // supply, tokenURI, royalty needs to be passed but WILL NOT be used by the Contract
+    var supply = 0;
+    var tokenURI = "abcde";
+    var royaltyFee = 0;
     var orderStruct = [
       assetOwner,
       account,
@@ -637,31 +839,86 @@ window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAss
       unitPrice,
       paymentAmt,
       tokenId,
+      // supply,
+      // tokenURI,
+      // royaltyFee,
       buyingAssetQty
     ]
     var gasPrices = await gasPrice();
-    var receipt = await contract.methods.buyAsset(
-      orderStruct,
-      splitSign(sellerSign, nonce_value)
-    ).send({from: account, gas: 516883, gasPrice: String(gasPrices)});
+     console.log("--------step -1-----")
+    var receipt = await contract.buyAsset(orderStruct,gon.collection_data["imported"],splitSign(sellerSign, nonce_value),{from: account, gasLimit: 516883, gasPrice: String(gasPrices)});
+    receipt = await receipt.wait();
+     console.log("--------step -2-----")
     await updateCollectionBuy(collectionId, buyingAssetQty, receipt.transactionHash)
+     console.log("--------step -3-----")
     return window.buyPurchaseSuccess(collectionId)
+     console.log("--------step -4-----")
   } catch (err) {
-    console.error(err);
+    console.log(err);
     return window.buyPurchaseFailed(err['message'])
   }
 }
 
-window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAssetAddress, tokenId, paymentAmt, buyingAssetQty, paymentAssetAddress, decimals, buyerSign, collectionId, bidId) {
+window.MintAndBuyAsset = async function MintAndBuyAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
+                                          paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId, tokenURI, royaltyFee, sharedCollection, supply) {
   try {
+    console.log("Enter MintAndBuyAsset")
     paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
-    var unitPrice = 1;
-    var compiledContractDetails = getContractABIAndBytecode(tradeContractAddress, 'trade');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, tradeContractAddress);
-    var nonce_value = await getContractSignNonce(collectionId, buyerSign);
-    var account = window.ethereum.selectedAddress
+    unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
+    var buyingAssetType = buyingAssetType + 2; // BuyAssetType -> 3: Lazy721 , 2: Lazy1155, 1:721, 0: 1155
+    var contract = await fetchContract(tradeContractAddress, 'trade');
+    var nonce_value = await getContractSignNonce(collectionId, sellerSign);
+    var account = getCurrentAccount();
+    var orderStruct = [
+      assetOwner,
+      account,
+      paymentAssetAddress,
+      buyingAssetAddress,
+      buyingAssetType,
+      unitPrice,
+      paymentAmt,
+      tokenId,
+      supply,
+      tokenURI,
+      royaltyFee,
+      buyingAssetQty
+    ]
+    // ownerSign -> selleraddress & URI
     var gasPrices = await gasPrice();
+    var ownerSign = await sign_metadata_with_creator(assetOwner, tokenURI, collectionId);
+    console.log("ownerSign" + ownerSign)
+    console.log("orderStruct" + orderStruct)
+    var receipt = await contract.mintAndBuyAsset(orderStruct,splitSign(ownerSign['signature'], ownerSign['nonce']),splitSign(sellerSign, nonce_value),{from: account, gasLimit: 616883, gasPrice: String(gasPrices)});
+    receipt = await receipt.wait();
+    console.log("--------step -1-----")
+    if (buyingAssetType == 3){
+       var tokenId = parseInt(receipt.logs[7].topics[2])
+    }else{
+       var tokenId = parseInt(receipt.logs[6].topics[2])
+    }
+     console.log("--------step -2-----tokenId" + tokenId)
+    await updateCollectionBuy(collectionId, buyingAssetQty, receipt.transactionHash, tokenId)
+     console.log("--------step -3-----")
+    return window.buyPurchaseSuccess(collectionId)
+  } catch (err) {
+    console.error(err);
+    return window.buyMintAndPurchaseFailed(err['message'])
+  }
+}
+
+
+window.MintAndAcceptBid = async function MintAndAcceptBid(buyer, buyingAssetType, buyingAssetAddress, tokenId, paymentAmt, buyingAssetQty, paymentAssetAddress, decimals, buyerSign, collectionId, bidId, tokenURI, royaltyFee, sharedCollection,supply) {
+  try {
+    console.log("Enter MintAndAcceptBid")
+    console.log(tokenURI, royaltyFee, sharedCollection)
+    paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
+    var unitPrice = 1; 
+    var buyingAssetType = buyingAssetType + 2; // BuyAssetType -> 3: Lazy721 , 2: Lazy1155, 1:721, 0: 1155
+    const contract = await fetchContract(tradeContractAddress, 'trade');
+    var nonce_value = await getContractSignNonce(collectionId, buyerSign);
+    var account = getCurrentAccount();
+    //token ID calculating 
+    window.contract721 = await getContract(buyingAssetAddress, 'nft721', sharedCollection);
     var orderStruct = [
       account,
       buyer,
@@ -671,12 +928,68 @@ window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAsse
       unitPrice,
       paymentAmt,
       tokenId,
+      supply,
+      tokenURI,
+      royaltyFee,
       buyingAssetQty
     ]
-    var receipt = await contract.methods.executeBid(
-      orderStruct,
-      splitSign(buyerSign, nonce_value)
-    ).send({from: account, gas: 516883, gasPrice: String(gasPrices)});
+    var gasPrices = await gasPrice();
+    // ownerSign -> selleraddress & URI
+    var ownerSign = await sign_metadata_with_creator(account, tokenURI, collectionId);
+    await saveContractNonceValue(collectionId, ownerSign)
+    console.log(ownerSign)
+    var receipt = await contract.mintAndExecuteBid(orderStruct,splitSign(ownerSign['signature'], ownerSign['nonce']),splitSign(buyerSign, nonce_value),{from: account,gasLimit: 516883,gasPrice: String(gasPrices)});
+    var tx = await receipt.wait();
+    console.log("ttt" + tx)
+    var tokenId = parseInt(tx.logs[0].topics[3])
+
+    await updateCollectionSell(collectionId, buyer, bidId, receipt.transactionHash, tokenId)
+    return window.acceptBidSuccess(collectionId)
+  } catch (err) {
+    console.error(err);
+    return window.acceptBidFailed(err['message'])
+  }
+}
+
+// // common method for fetching trade contract 
+// window.fetchTradeContract = async fetchContract(tradeContractAddress,'trade'){
+//     var compiledContractDetails = getContractABIAndBytecode(tradeContractAddress, 'trade');
+//     var abi = compiledContractDetails['compiled_contract_details']['abi'];
+//     var contractNFT = await new ethers.Contract( tradeContractAddress, abi, provider);
+//     var contract = contractNFT.connect(signer);
+//     return contract
+
+// }
+
+window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAssetAddress, tokenId, paymentAmt, buyingAssetQty, paymentAssetAddress, decimals, buyerSign, collectionId, bidId) {
+  try {
+    paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
+    var unitPrice = 1;
+    const contract = await fetchContract(tradeContractAddress, 'trade');
+    var nonce_value = await getContractSignNonce(collectionId, buyerSign);
+    var account = getCurrentAccount()
+    var gasPrices = await gasPrice();
+    // supply, tokenURI, royalty needs to be passed but WILL NOT be used by the Contract
+    var supply = 0;
+    var tokenURI = "abcde";
+    var royaltyFee = 0;
+    var orderStruct = [
+      account,
+      buyer,
+      paymentAssetAddress,
+      buyingAssetAddress,
+      buyingAssetType,
+      unitPrice,
+      paymentAmt,
+      tokenId,
+      // supply,
+      // tokenURI,
+      // royaltyFee,
+      buyingAssetQty
+    ]
+    console.log(orderStruct, nonce_value)
+    var receipt = await contract.executeBid(orderStruct,gon.collection_data["imported"],splitSign(buyerSign, nonce_value),{from: account, gasLimit: 516883, gasPrice: String(gasPrices)});
+    receipt = await receipt.wait();
     await updateCollectionSell(collectionId, buyer, bidId, receipt.transactionHash)
     return window.acceptBidSuccess(collectionId)
   } catch (err) {
@@ -686,14 +999,23 @@ window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAsse
 }
 
 function getCurrentAccount() {
-  return window.ethereum.selectedAddress
+  if(window.wallet == 'metamask' && window.ethereum.selectedAddress) {
+    return window.ethereum.selectedAddress
+  }
+  return window.currentAddress ?? sessionAddress;
 }
 
-window.ethBalance = async function ethBalance() {
-  var account = window.ethereum.selectedAddress
-  var bal = await window.web3.eth.getBalance(account);
-  var ethBal = roundNumber(web3.utils.fromWei(bal, 'ether'), 4);
-  return ethBal;
+window.ethBalance = async function ethBalance(account = '') {
+  var account = await getaccounts();
+  if(window.wallet == 'metamask'){
+     var bal = await signer.getBalance();
+  }else{
+    const signer = window.provider.getSigner();
+    var bal = await signer.getBalance();
+  }
+  var ethBal = roundNumber(ethers.utils.formatEther(bal), 4);
+  console.log(ethBal)
+  return ethBal
 }
 
 window.updateEthBalance = async function updateEthBalance() {
@@ -709,22 +1031,38 @@ window.tokenBalance = async function tokenBalance(contractAddress, decimals) {
     "name": "balanceOf",
     "outputs": [{"name": "balance", "type": "uint256"}],
     "payable": false,
+    "stateMutability":"view",
     "type": "function"
   }]
-  var contract = await new window.web3.eth.Contract(abi, contractAddress);
-  var account = window.ethereum.selectedAddress
-  var balance = await contract.methods.balanceOf(account).call();
-  balance = roundNumber(divBy(balance, (10 ** decimals)), 4)
+  var contract;
+  if (window.wallet == 'walletConnect') {
+     contract = new ethers.Contract( contractAddress, abi, window.provider);
+  }
+  else if(window.wallet == 'metamask'){
+    contract = new ethers.Contract( contractAddress, abi, provider);
+  }
+  var account = await getaccounts();
+  //var contract = await new window.web3.eth.Contract(abi, contractAddress);
+  // var account = getCurrentAccount()
+  var balance = await contract.balanceOf(account);
+  var bal = parseInt(balance);
+  balance = roundNumber(divBy(bal, (10 ** decimals)), 4)
   return balance
 }
 
 window.getNetworkType = async function getNetworkType() {
-  var type = await web3.eth.net.getNetworkType();
-  return type;
+  if(window.wallet == 'metamask'){
+    var type = await provider.getNetwork();
+   }else{
+    var type = await window.provider.getNetwork();
+   }
+  return type["name"];
 }
 
+
 function showTermsCondition(account, ethBal, networkType) {
-  var account = account || window.ethereum.selectedAddress
+  var account = account || getCurrentAccount()
+  console.log("showTermsCondition: ", account)
   $.magnificPopup.open({
     closeOnBgClick: false ,
 		enableEscapeKey: false,
@@ -738,16 +1076,19 @@ function showTermsCondition(account, ethBal, networkType) {
   $("#network_type").val(networkType)
 }
 
-async function load(shoulDestroySession = false) {
-  if (window.ethereum) {
-    await loadWeb3();
-    var account = window.ethereum.selectedAddress
-    var networkType = await getNetworkType();
-    var ethBal = await ethBalance();
-    const isValidUserResp = await isValidUser(account, '')
+async function load(shouldDestroySession = false) {
+  const account = await loadWeb3();
+  window.currentAddress = account;
+  const ethBal = await ethBalance(account);
+  return createDeleteSession(account, ethBal, shouldDestroySession, window.wallet);
+}
+
+async function createDeleteSession(account, balance, shouldDestroySession, wallet) {
+  const networkType = await getNetworkType();
+  const isValidUserResp = await isValidUser(account, '', wallet)
     if (isValidUserResp.user_exists) {
-      await createUserSession(account, ethBal, shoulDestroySession)
-      if (shoulDestroySession) {
+      await createUserSession(account, balance, shouldDestroySession, wallet)
+      if (shouldDestroySession) {
         window.location.href = '/'
       } else {
         return true
@@ -759,11 +1100,10 @@ async function load(shoulDestroySession = false) {
         }
         window.location.href = '/'
       } else {
-        showTermsCondition(account, ethBal, networkType)
+        showTermsCondition(account, balance, networkType)
         return false
       }
     }
-  }
 }
 
 window.disconnect = async function disconnect(address) {
@@ -773,21 +1113,37 @@ window.disconnect = async function disconnect(address) {
 
 async function destroySession() {
   if (gon.session) {
-    await destroyUserSession(window.ethereum.selectedAddress)
+    console.log("IN DESTROY: ", gon.session)
+    await destroyUserSession(getCurrentAccount())
+    if(window.wallet === 'walletConnect') {
+      tprovider.disconnect()
+    }
   }
 }
 
-window.connect = async function connect(address) {
-  if(typeof web3 === 'undefined' && mobileCheck()) {
-    window.open(`https://metamask.app.link/dapp/` + location.hostname, '_blank').focus();
+window.connect = async function connect(wallet = '') {
+  if (!wallet) {
+    toastr.error('Wallet Required')
     return
-  }else if (typeof web3 !== 'undefined') { 
-    const status = await load();
-    if (status) {
-      window.location.href = '/'
+  }
+  window.wallet = wallet;
+    if(typeof web3 === 'undefined' && mobileCheck() && wallet == 'metamask') {
+      window.open(`https://metamask.app.link/dapp/` + location.hostname, '_blank').focus();
+      return
+    }else if (typeof web3 !== 'undefined') {
+      const status = await load();
+      if (status) {
+        window.location.href = '/'
+      }
+    } else {
+            if (typeof web3 == 'undefined' && wallet == 'walletConnect'){
+            const status = await load();
+            if (status) {
+              window.location.href = '/'
+            }
+    }else{
+      toastr.error('Please install Metamask Extension to your browser. <a target="_blank" href="https://metamask.io/download.html">Download Here</a>')
     }
-  } else {
-    toastr.error('Please install Metamask Extension to your browser. <a target="_blank" href="https://metamask.io/download.html">Download Here</a>')
   }
 }
 
@@ -796,7 +1152,7 @@ window.proceedWithLoad = async function proceedWithLoad() {
   const ethBal = $("#eth_balance").text()
   const networkType = $("#network_type").val()
   if ($("#condition1").is(":checked") && $("#condition2").is(":checked")) {
-    await createUserSession(account, ethBal, networkType)
+    await createUserSession(account, ethBal, networkType, window.wallet)
     window.location.href = '/'
   } else {
     toastr.error('Please accept the conditions to proceed')
@@ -804,12 +1160,22 @@ window.proceedWithLoad = async function proceedWithLoad() {
 }
 
 window.loadUser = async function loadUser() {
-  if (window.ethereum && gon.session) {
+  let address = '';
+  if (gon.session) {
+    if(window.wallet == 'walletConnect' && window.web3.currentProvider.connected === false) {
+      address = getCurrentAccount();
+    }
+    if(address) {
+      return disconnect();
+    }
     load();
   }
 }
 
 async function loadAddress() {
+  if(sessionWallet) {
+    window.wallet = sessionWallet
+  }
   await loadWeb3();
 }
 
@@ -819,8 +1185,17 @@ $(function () {
 
 if (window.ethereum){
   window.ethereum.on('accountsChanged', function (acc) {
+    if (gon.session) {
+      load(true);
+    } else {
+      window.location.reload();
+    }
+  })
+  window.ethereum.on('chainChanged', function (chainId) {
     if (window.ethereum && gon.session) {
       load(true);
+    } else {
+      window.location.reload();
     }
   })
 }
@@ -834,16 +1209,20 @@ function gasPrice(){
     type: "GET"
   });
   request.done(function (msg) {
+    console.log(msg)
+    console.log("Get Fastest Value from the API");
     if (msg['gas_price'] != '')
     {
       init_gasPrice = msg['gas_price']['fastest'] * 10**8;
     }
   });
   request.fail(function (jqXHR, textStatus) {
+    console.log("Failed to get fastest value");
    });
 } catch (err) {
   console.error(err);
 }
+console.log(init_gasPrice)
  return init_gasPrice;
 }
 
