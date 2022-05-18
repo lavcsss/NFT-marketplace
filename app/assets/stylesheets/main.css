@@ -19,6 +19,73 @@ body {
   background-color: #fff;
   -webkit-font-smoothing: antialiased;
 }
+
+/* NFT Fonts start*/
+
+@font-face {
+  font-family: CircularStd_Normal;
+  src: url("../fonts/NFT/Circular-Std-Font/CircularStd-Book.otf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: CircularStd_Medium;
+  src: url("../fonts/NFT/Circular-Std-Font/CircularStd-Medium.otf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: CircularStd_Bold;
+  src: url("../fonts/NFT/Circular-Std-Font/CircularStd-Bold.otf");
+  font-weight: 600;
+}
+
+/* Hehmlet start */
+
+@font-face {
+  font-family: Hahmlet_Light;
+  src: url("../fonts/NFT/Hahmlet/Hahmlet-Light.ttf");
+  font-weight: 300;
+}
+@font-face {
+  font-family: Hahmlet_Normal;
+  src: url("../fonts/NFT/Hahmlet/Hahmlet-Regular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Hahmlet_Medium;
+  src: url("../fonts/NFT/Hahmlet/Hahmlet-Medium.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Hahmlet_Bold;
+  src: url("../fonts/NFT/Hahmlet/Hahmlet-SemiBold.ttf");
+  font-weight: 600;
+}
+/* Hehmlet end */
+
+/* play-fairDisplay */
+
+@font-face {
+  font-family: PlayDisplay_Normal;
+  src: url("../fonts/NFT/play-fairDisplay/PlayfairDisplay-Regular.ttf");
+}
+
+@font-face {
+  font-family: PlayDisplay_Medium;
+  src: url("../fonts/NFT/play-fairDisplay/PlayfairDisplay-Medium.ttf");
+}
+
+@font-face {
+  font-family: PlayDisplay_Bold;
+  src: url("../fonts/NFT/play-fairDisplay/PlayfairDisplay-SemiBold.ttf");
+}
+/* play-fairDisplay */
+/* NFT Fonts end*/
+
+
 button {
   padding: 0;
   border: none;
@@ -349,10 +416,9 @@ ul {
 }
 .header__search {
   position: absolute;
-  left: 0;
   top: -145px;
-  width: 100%;
-  max-width: 220px;
+  width: 250px;
+  max-width: 260px;
   height: 60px;
   display: flex;
   flex-direction: row;
@@ -363,7 +429,7 @@ ul {
   padding: 0 15px;
   border-bottom: 1px solid var(--black);
   transition: top 0.5s ease;
-  right: 0;
+  right: 66px;
   margin: 0 auto;
   border-radius: 10px;
 }
@@ -428,7 +494,7 @@ ul {
   fill: var(--white);
 }
 .header__search button.close {
-  right: 15px;
+  right: 5px;
 }
 .header__search--active {
   top: 100%;
@@ -1059,8 +1125,8 @@ main.main.m_home {
 
   .header__search button {
     position: absolute;
-    right: 60px;
-    top: 15px;
+    right: 41px;
+    top: 8px;
     height: 27px;
   }
   .vide_1 video {
@@ -3234,9 +3300,10 @@ button.can_btn.asset__btn--clr {
   align-items: center;
 }
 .more_action_block .header__profile-menu {
-  top: 0 !important;
-  bottom: initial;
-  left: 0 !important;
+top: 0 !important;
+    bottom: initial;
+    right: 0 !important;
+    left: auto!important;
 }
 .more-icon-ell {
   color: var(--black);
@@ -5414,22 +5481,22 @@ input.sign__input:-internal-autofill-selected {
     border-radius: 50%;
     right: 0;
     top: 0; */
-  background: var(--theme-color);
-  opacity: 1;
-  color: #fff;
-  width: 25px;
-  height: 25px;
-  line-height: 26px;
-  border-radius: 50%;
-  right: 0;
-  top: 0;
-  font-size: 11px;
+    opacity: 1;
+    color: #3C97F2;
+    width: 30px;
+    height: 30px;
+    line-height: 32px;
+    right: 0;
+    top: 0;
+    font-size: 14px;
+    background: #EFEFF0 0% 0% no-repeat padding-box;
+    border-radius: 11px 41px 11px 11px;
 }
 
 .sm_modal button.modal__close.md_cls {
-  right: -15px;
-  top: -11px;
-  z-index: 111;
+    right: 10px;
+    top: 10px;
+    z-index: 111;
 }
 button.sign__btn.modal__close.md_cls {
   position: static;
@@ -6128,6 +6195,20 @@ button.sign__btn.ver_btn i {
   opacity: 1;
   fill: var(--theme-color);
 }
+button.modal__close.close-icon {
+    background: #EFEFF0 0% 0% no-repeat padding-box;
+    border-radius: 11px 41px 11px 11px;
+    width: 32px;
+    height: 32px;
+}
+
+button.modal__close.close-icon i {
+    color: #3C97F2;
+}
+div#Inr-modal .mfp-close-btn-in .mfp-close {
+    display: none;
+}
+
 .sm_modal {
   background: #fff;
   max-width: 520px;

@@ -1,7 +1,8 @@
 <div class="my-explore-div">
   <div class="box-explore-bids">
       <% if current_user %>
-        <%= react_component("collections/like", address: @user.address, likes: @liked.pluck(:collection_id), collectionId: collection.id) %>
+        <%= react_component("collections/like", address: @user.address, likes: @liked.pluck(:collection_id), 
+                            collectionId: collection.id, liked: collection.is_liked_by_me(current_user&.id)) %>
       <% else %>
         <div class="explore-bids-icon-heart no-wishlist">
           <i class="fa fa-heart"></i>

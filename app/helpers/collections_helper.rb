@@ -16,7 +16,7 @@ module CollectionsHelper
       video_tag url_for(attachment), class: "video-responsive", controls: true
     else
       # image_tag pinata_url(collection), class: "img-responsive"
-      image_tag url_for(attachment), class: "img-responsive"
+      image_tag url_for(attachment), class: "img-responsive modal-img"
     end
   end
 
@@ -40,6 +40,10 @@ module CollectionsHelper
     return 'javascript:void(0)'if collection.nft_contract.shared? 
     
     nft_contract_path(:id => collection.nft_contract.address)
+  end
+
+  def is_liked_by_me(collection, user)
+    return collection
   end
   
 end

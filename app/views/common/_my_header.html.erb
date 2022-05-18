@@ -1,74 +1,198 @@
-<header class="header">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="header__content">
-          <%= render "common/nav_header" %>
-          
-          <%= render "common/search" %>
-          <%= render "common/static_nav" %>
 
-          <div class="header__actions">
-            <div class="header__action header__action--search">
-              <button class="header__action-btn" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.71,20.29,18,16.61A9,9,0,1,0,16.61,18l3.68,3.68a1,1,0,0,0,1.42,0A1,1,0,0,0,21.71,20.29ZM11,18a7,7,0,1,1,7-7A7,7,0,0,1,11,18Z"/></svg></button>
+<div  class="NFT_SCREEN_Header close-nav" >
+<!--   <div class="header-notify">
+    <a> It’s our 4th Birthday! The first 200 people to make a purchase on CrossTower this month receive 100$!
+      <a class="link-nav">Details here.</a>
+    </a>
+    <img class="close-top-notify" src="/assets/nft/white-Close.svg" alt="Close" />
+</div> -->
+<div   class="nft-header">
+
+    <ul  class="color-black">
+        <li>
+       <a class="logo-nav-design" href="<%= root_path %>"> 
+        <img src="/assets/nft/logo symbol.svg" class="crosstower-icon" />
+        <img src="/assets/nft/text_logo(black)" class="crosstower-text mobile-visible-none" />
+         <img src="/assets/nft/text_logo.svg" class="crosstower-text visible-none" />
+        </a>
+
+            <div class="mobile-menu-item">
+                <div id="menuToggle" 
+                class=" togg show">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <%= render "common/search" %>
+               <div class="header__actions nft-menus search-menu ">
+                    <div class="header__action header__action--search">
+                       <button class="header__action-btn" type="button">
+                         <img src="assets/nft/search.svg" alt="Search" class=" mobile-visible-none" />
+                         <img src="assets/nft/search-white.svg" alt="Search" class="visible-none" />
+                      </button>
+                    </div>
+                </div>
             </div>
 
-            <div class="dropdown desktop-notification">
-              <a data-toggle="dropdown" class="view-notification" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-bell"></i>
-                <p class="notification_count"><%= Notification.unread(current_user).count %></p>
-              </a>
-              <div class="dropdown-menu header__profile-menu ">
-              <h4 class="heading">
-                <!-- <i class="fa fa-bell"></i>&nbsp; -->
-                <%= t('header.notifications') %>
-              </h4>
-                <ul class="user-notification-list"></ul>
-              </div>
-            </div>
+        </li>
+        <li>
+            <div class="dropdown-lists">
+                <div class="nft-menus">
+                    <img src="/assets/nft/Create.svg" alt="NFT_Create"  class="visible-none" /> 
+                    <img src="/assets/nft/Create-bg-fill.svg" alt="NFT_Create" class=" mobile-visible-none" />
+                    <a href="/collections/new">Create NFT</a>
+                </div>
+                <div class="nft-menus">
+                    <img  src="/assets/nft/Discover.svg" alt="NFT_Discover"  class="visible-none"  />
+                     <img src="/assets/nft/Discover-bg-fill.svg" alt="NFT_Create" class=" mobile-visible-none" />
+                    <a href="/search">Discover</a>
+                </div>
+                <div class="nft-menus open-menu">
+                      <img src="/assets/nft/communicative.svg" alt="NFT_COMMU"  class="visible-none"  />
+                     <img src="/assets/nft/communicative-bg-fill.svg" alt="NFT_Create" class=" mobile-visible-none" />
+                    <a>Community</a>
 
-            <div class="header__action header__action--profile">
-              <a class="header__profile-btn" href="javascript:void(0);" role="button" id="dropdownMenuProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <%= image_tag url_for(current_user.profile_image), class: "img-responsive" %>
-                    <% if current_user.is_verified %>
-                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    <div class="drop-list" id="open-menu">
+                        <a target="_blank" href="https://crosstower.com/_nft/blogs.html">Blog</a>
+                        <a href="">Help Center</a>
+                        <a target="_blank" href="https://crosstower.com/_nft/contactus.html">Contact Us</a>
+                    </div>
+                </div>
+
+               <%= render "common/search" %>
+
+                <div class="nft-menus open-right-menu-detail open-menu-profile">
+                    <img src="/assets/nft/wallet.svg" alt="NFT_Wallet" />
+                    <% if current_user.attachment.present? %>
+                        <%= image_tag url_for(current_user.profile_image), class: "profile-img current-user-profile" %>
+                    <% else %>
+                        <img src="/assets/nft/profile-grey.svg"  alt="NFT_Profile"
+                        class="profile-img before-login" />
                     <% end %>
-                    <div><p><%= current_user.full_name %></p>
-                      <span><%= current_balance %> <%= Rails.application.credentials.config[:base_coin] %></span></div>
-                    <i class="fas fa-chevron-down"></i>
-              </a>
-
-              <ul class="dropdown-menu header__profile-menu" aria-labelledby="dropdownMenuProfile">
-                <li><a href="<%=my_items_path%>"><i class="far fa-user"></i><span><%= t('header.profile') %></span></a></li>
-                <li><a href="<%=edit_user_path(current_user)%>"><i class="fas fa-cog"></i><span><%= t('header.settings') %></span></a></li>
-                <li><a href="<%= activities_path(activity_type: "activity") %>"><i class="fas fa-list"></i> <span><%= t('header.activity') %></span></a></li>
-<!--    <li><a href="<%= Rails.application.credentials.config[:support_url] %>"><i class="far fa-medkit" target="_blank"></i><span><%= t('header.help_center') %></span></a></li>
-        <li><a href="<%= Rails.application.credentials.config[:discussion_url] %>"><i class="far fa-comments" target="_blank"></i><span><%= t('header.discussion') %></span></a></li>
--->
-                <li><a href="javascript:void(0);" onclick="window.disconnect(<%= current_user.address %>)"><i class="fas fa-sign-out-alt"></i> <span><%= t('header.sign_out') %></span></a></li>
-              </ul>
+                    
+                     <div class="drop-list" id="open-menu-profile">
+                        <a href="<%=my_items_path%>">Profile</a>
+                        <a href="<%=edit_user_path(current_user)%>">Settings</a>
+                        <a href="<%= activities_path(activity_type: "activity") %>">Activity</a>
+                        <a href="javascript:void(0);" onclick="window.disconnect(<%= current_user.address %>)">Sign out</a>
+                    </div>
+                </div>
+                <!-- <div class="nft-menus connect-wallet">
+                   Connect to Wallet
+                </div> -->
+               <!--  <a class="open-modal header__action-btn header__action-btn--signin" href="#connect_to_wallet">
+                <span><%= t('header.title') %></span>
+              </a> -->
             </div>
+        </li>
+    </ul>
+</div>
 
-            <%#= render partial: 'common/language_select' %>
+<div class="nft-header mobile-menu" >
 
-            <button class="header__btn" type="button">
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-          </div>
+    <ul>
+      
+        <li>
+            <div class="dropdown-lists">
+                <div class="nft-menus">
+                    <img src="/assets/nft/Create-bg-fill.svg" alt="NFT_Create" />
+                    <a href="/collections/new">Create NFT</a>
+                </div>
+                <div class="nft-menus">
+                    <img  src="/assets/nft/Discover-bg-fill.svg" alt="NFT_Discover" />
+                    <a href="/search">Discover</a>
+                </div>
+                <div class="nft-menus">
+                    <img src="/assets/nft/communicative-bg-fill.svg" alt="NFT_COMMU" />
+                    <a>Community</a>
+                    <div class="inline-menus">
+                        <a href="https://crosstower.com/_nft/blogs.html">Blog</a>
+                        <a href="">Help Center</a>
+                        <a href="https://crosstower.com/_nft/contactus.html">Contact Us</a>
+                    </div>
+                </div>
+                <div class="nft-menus">
+                    <span class="profile"> <img src="/assets/nft/wallet.svg" alt="NFT_Profile"  /></span>
+                    <a> User </a>
+                    <div class="inline-menus">
+                        <a href="<%=my_items_path%>">Profile</a>
+                        <a href="<%=edit_user_path(current_user)%>">Settings</a>
+                        <a href="<%= activities_path(activity_type: "activity") %>">Activity</a>
+                        <a href="javascript:void(0);" onclick="window.disconnect(<%= current_user.address %>)">Sign out</a>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+</div>
 
 
-        </div>
-      </div>
-    </div>
-  </div>
-</header>
+<script>
 
-<script type="text/javascript">
-    var address = "<%= current_user.address %>"
 
-    $(document).ready(function () {
-        window.loadUser(address)
-    })
+$(document).ready(function() {
+  $(document).mouseup(function(e) {
+    $("#open-menu-profile").removeClass("active");
+    $("#open-menu").removeClass("active");
+    });
+  });
+
+$(document).ready(function() {
+  $(window).scroll(function(){
+      if ($(this).scrollTop() > 50) {
+         $('.nft-header').addClass('color-white');
+      } else {
+         $('.nft-header').removeClass('color-white');
+      }
+  });
+});
+
+
+$(document).ready(function(){
+  $("#menuToggle").click(function(){
+    $("#menuToggle").toggleClass("hiden-list");
+  });
+});
+
+
+$(document).ready(function(){
+  $("#menuToggle").click(function(){
+    $(".NFT_SCREEN_Header").toggleClass("hiden-list");
+  });
+});
+
+$(document).ready(function(){
+  $(".open-menu").click(function(){
+    $("#open-menu").toggleClass("active");
+  });
+});
+
+$(document).ready(function(){
+  $(".open-menu-profile").click(function(){
+    $("#open-menu-profile").toggleClass("active");
+  });
+});
+$(document).ready(function(){
+  $(".close-top-notify").click(function(){
+    $(".NFT_SCREEN").addClass("close-nav");
+  });
+});
+$(document).ready(function(){
+  $(".close-top-notify").click(function(){
+    $(".NFT_SCREEN_Header").addClass("close-nav");
+  });
+});
+
+
+//  $(document).ready(function(){
+//   $("#mobile-search").click(function(){
+//     $(".search-menu-action").removeClass("active");
+//   });
+// });
+
+
 </script>
+
+<%= render partial: 'common/wallet_connect' %>

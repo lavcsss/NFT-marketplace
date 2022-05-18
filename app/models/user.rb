@@ -77,7 +77,7 @@ class User < ApplicationRecord
     if banner.attached?
       banner
     else
-      'banner-bg.jpeg'
+      '/assets/banner-bg.jpeg'
     end
   end
 
