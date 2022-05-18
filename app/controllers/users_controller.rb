@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user, except: [:show]
+  before_action :authenticate_user
   before_action :set_user, only: [:show, :follow, :unfollow, :like, :unlike, :report, :load_tabs]
   skip_before_action :is_approved
   skip_before_action :verify_authenticity_token, only: [:report]

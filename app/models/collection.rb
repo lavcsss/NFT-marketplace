@@ -340,6 +340,10 @@ class Collection < ApplicationRecord
     !burned? && !import_invalid?
   end
 
+  def is_liked_by_me(user)
+    likes.where(user_id: user).exists?
+  end
+
   private
 
   def common_validation

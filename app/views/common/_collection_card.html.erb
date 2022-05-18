@@ -1,5 +1,6 @@
 <% if current_user %>
-  <%= react_component("collections/like", address: current_user.address, likes: @likes, collectionId: collection.id) %>
+  <%= react_component("collections/like", address: current_user.address, likes: @likes, collectionId: collection.id, 
+                      liked: collection.is_liked_by_me(current_user&.id)) %>
 <% else %>
   <div class="explore-bids-icon-heart no-wishlist">
     <i class="fa fa-heart"></i>

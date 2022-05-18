@@ -1,0 +1,1652 @@
+.NFT-detail {
+    padding-top: 160px;
+    background: #E3F1FF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 10px #00000062;
+    backdrop-filter: blur(30px);
+    overflow: hidden;
+}
+.bg-effect{
+    position: relative;
+}
+    .bg-effect:before{
+    content: '';
+    width: 1300px;
+    height: 1300px;
+    position: absolute;
+    top: -190px;
+    border-radius: 210%;
+    right: -610px;
+    background: #3C97F2;
+    opacity: .2;
+    z-index: -1;
+    }
+.bg-effect:after {
+    content: '';
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top: 220px;
+    border-radius: 210%;
+    background: #3C97F2;
+    opacity: 0.1;
+    z-index: -1;
+    left: -260px;
+}
+.madeling-heading {
+    margin-bottom: 20px;
+}
+.madeling-heading h5 {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #3C97F2;
+    font-size: 40px;
+    font-weight: 400;
+    font-family: Hahmlet_Normal;
+
+}
+
+.madeling-heading h5 span {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #162C5B;
+    font-size: 30px;
+}
+.madeling-heading p{
+    margin: 0;
+    margin-top: -10px;
+    font-size: 20px;
+    font-weight: 400;
+    font-family: Hahmlet_Normal;
+}
+.modeling-details img.modal-img{
+    width: 100%;
+    height: 500px;
+    box-shadow: 0px 0px 20px #00000019;
+    border-radius: 20px;
+    margin: 0px 0 30px 0;
+    object-fit: cover;
+    background: #fff;
+}
+.tabs-panel .tabcontent .member-detail .user_img img ,
+.tabs-panel .tabcontent .member-detail .asset__author img,
+.tabs-panel .tabcontent .asset__action.asset__action--verified img{
+    border-radius: 100px;
+}
+
+.tabs-panel .tabcontent .member-detail .asset__author--verified:after,
+.tabs-panel .tabcontent .member-detail .asset__action--verified:after {
+    display: none;
+}
+.tabs-panel .tabcontent .member-detail .asset__authors li span{
+    color: #162C5B;
+}
+.asset__action.asset__action--verified {
+    flex-flow: row wrap;
+    flex-direction: unset;
+}
+.tabs-panel .tabcontent .member-detail  .content_details a
+,.tabs-panel .tabcontent .member-detail  .content_details,
+.tabs-panel .tabcontent .member-detail .asset__author,
+.tabs-panel .tabcontent .member-detail .asset__author.asset__author--verified a{
+    color: #162C5B;
+    font-weight: 600;
+    display: inline-grid;
+    font: normal normal bold 20px/29px Hahmlet;
+}
+.tabs-panel .tabcontent .member-detail .asset__action {
+    margin: 0;
+    align-items: flex-start;
+}
+.tabs-panel .tabcontent .member-detail .asset__authors li span {
+    font-size: 18px;
+}
+.tabs-panel .tabcontent .member-detail .content_details a i,
+.tabs-panel .tabcontent .member-detail .asset__action.asset__action--verified i,
+ .tabs-panel .tabcontent .member-detail .content_details i, .tabs-panel .tabcontent .member-detail .asset__author i {
+    display: block;
+    color: #3C97F2;
+    font: normal normal normal 15px/18px Hahmlet;
+}
+.tabs-panel .tabcontent .member-detail  .asset__authors li p {
+    color: #3C97F2;
+}
+
+
+.modeling-details ul {
+    display: flex;
+    flex-flow: row wrap;
+}
+.modal-sub-heading {
+    width: 100%;
+    text-align: left;
+    font: normal normal bold 26px/37px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    margin-bottom: 20px;
+}
+.modeling-details ul li {
+     width: 33.3%;
+    margin: 0px 0 30px 0;
+    padding-right: 15px;
+}
+
+.modeling-details ul li label {
+    text-align: left;
+    font: normal normal normal 18px/29px Hahmlet;
+    letter-spacing: 0px;
+    margin-bottom: 0;
+    color: #162C5B;
+    width: 100%;
+}
+
+.modeling-details ul li a {
+    display: flex;
+    align-items: center;
+}
+
+.modeling-details ul li a span {
+    width: 35px;
+    height: 35px;
+    min-width: 35px;
+    display: block;
+    margin-right: 10px;
+    min-width: 35px;
+}
+
+.modeling-details ul li a span img {
+ 
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 100px;
+
+}
+.modeling-details ul li a strong{
+    text-align: left;
+    font: normal normal bold 20px/41px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    max-width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.modeling-details ul li.wd-100 {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+}
+.modeling-details ul li.wd-100 a span img {
+    width: unset;
+    height: unset;
+    border-radius: unset;
+    margin: 0;
+    box-shadow: none;
+    cursor: pointer;
+    object-fit: unset;
+}
+.modeling-details ul li.wd-100 a span {
+    width: auto;
+    height: auto;
+    margin: 0;
+}
+.modeling-details ul li.wd-100 a strong {
+    margin: 0 10px 0 0px;
+}   
+.modeling-details ul li.wd-100 a span img.nft-coin {
+    width: 28px;
+    cursor: unset;
+}
+
+.modal-more-options {
+    padding: 6px 12px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    background: #fafafab5 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 10px #00000029;
+    border-radius: 35px;
+    backdrop-filter: blur(30px);
+    width: 110px;
+    justify-content: space-evenly;
+    z-index: 2;
+}
+.modal-more-options img {
+max-width: initial;
+    cursor: pointer;
+    margin: 0 4px;
+}
+.modal-more-options img {
+    width: 14px;
+}
+
+.modal-more-options button.card__likes.heart, .modal-more-options button.heart.is-active{
+    width: 20px;
+    height: 20px;
+    display: block;
+    background: transparent;
+}
+
+.modal-more-options button.card__likes.heart i {
+    position: unset;
+    font-size: 18px;
+}
+img.share-img {
+    width: 13px;
+}
+
+img.like-img {
+    width: 18px;
+}
+.modal-more-options button.card__likes.heart.is-active i.far ,
+.modal-more-options button.card__likes.heart i.fas,
+.modal-more-options button.card__likes.heart span, .modal-more-options button.heart.is-active span {
+    display: none;
+}
+
+
+.modal-more-options button.card__likes.heart i.far ,
+.modal-more-options button.card__likes.heart.is-active i.fas{
+    display: block;
+}
+.option-btn span {
+    display: block;
+    width: 4px;
+    height: 4px;
+    background: #080808;
+    margin: 2px 0;
+    border-radius: 100px;
+}
+
+.option-btn {
+    text-align: center;
+    padding: 0 0px 0 8px;
+    cursor: pointer;
+}
+.desction-detail p {text-align: left;font: normal normal normal 16px/28px Hahmlet;letter-spacing: 0px;color: #162C5B;}
+
+.modal-description {
+    position: relative;
+    padding-top: 40px;
+    padding-left: 40px;
+}
+
+.desction-detail h6 {
+    text-align: left;
+    font: normal normal bold 20px/32px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+}
+
+.description-panels {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.member-detail {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 10px 0;
+}
+
+.member-detail label {
+    width: 100%;
+    margin-bottom: 0;
+    color: #162C5B;
+}
+
+.member-detail a span {
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    border-radius: 100px;
+}
+
+.member-detail a {
+    display: flex;
+    align-items: center;
+}
+
+.member-detail a span img {
+    border-radius: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.member-detail a strong {
+    text-align: left;
+    font: normal normal normal 18px/39px Hahmlet;
+    letter-spacing: 0px;
+    color: #000000;
+    margin-left: 6px;
+    font-weight: 600;
+}
+.member-detail a strong i {
+    font: normal normal normal 16px/24px Hahmlet;
+    letter-spacing: 0px;
+    display: block;
+    font-style: normal;
+    color: #3C97F2;
+    margin: 0;
+    margin-top: -5px;
+}
+.place-buy-details {
+    background: #162C5B0F 0% 0% no-repeat padding-box;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    margin-bottom: 20px;
+    z-index: 0;
+    position: relative;
+}
+span.royalty-span {
+    position: absolute;
+    right: 4px;
+    top: -18px;
+    color: #FE9B29;
+    padding: 4px 7px;
+    font-size: 12px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #fe9b294b;
+    border: 0.5px solid #FE9B29;
+    border-radius: 17px;
+}
+
+span.royalty-span img {
+width: 14px;
+    margin-right: 5px;
+}
+.place-buy-details .highest-bid {
+    width: 50%;
+}
+.highest-bid.hide-text h6,.highest-bid.hide-text h5 {
+    visibility: hidden;
+}
+.place-buy-details .highest-bid h6,.place-buy-details .highest-bid h5 {
+    text-align: left;
+    font: normal normal normal 18px/18px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+}
+.place-buy-details .highest-bid h5{
+    font-weight: 600;
+}
+.place-buy-details .highest-bid p {
+    text-align: left;
+    font: normal normal bold 20px/41px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    margin: 0;
+}
+
+.place-buy-details .highest-bid button {
+    background: #162C5B 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    padding: 10px;
+    width: 90%;
+    text-align: center;
+    font: normal normal normal 20px/32px Hahmlet;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+}
+
+.tabs-panel .tab {
+    overflow: hidden;
+    border-bottom: 1px solid #3c97f25c;
+}
+
+/* Style the buttons inside the tab */
+.tabs-panel .tab button {
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 7px 20px;
+    transition: 0.3s;
+    font-size: 17px;
+    border-bottom: 2px solid transparent;
+    text-align: left;
+    font: normal normal bold 20px/29px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    opacity: 0.5;
+}
+.tabs-panel .tab button:nth-child(1){
+    padding-left: 0;
+}
+
+/* Create an active/current tablink class */
+.tabs-panel .tab button.active {
+    border-bottom: 2px solid #3C97F2;
+    background: transparent;
+    opacity: 1;
+}
+
+/* Style the tab content */
+.tabs-panel  .tabcontent {
+  display: none;
+    padding: 6px 0;
+    border-top: none;
+}
+.tabs-panel .tabcontent .member-detail a span {
+    width: 55px;
+    height: 55px;
+}
+.tabs-panel .tabcontent .member-detail {
+    margin-bottom: 20px;
+}
+.modeling-details.responsive-modeling {
+    display: none;
+}
+/*Profile css start*/
+main.NFT-detail.modeling-NFT {
+    padding-top: 100px;
+}
+
+main.main.mt-0.NFT-detail {
+    padding-top: 170px!important;
+    margin: 0!important;
+}
+.profile-bg {
+    height: 330px;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 50px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+.profile-details img.background_banner_image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    z-index: 3;
+    border-radius: 8px;
+    max-width: 100%;
+    margin: 0;
+    object-fit: cover;
+}
+
+.profile-bg:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 500px;
+    height: 500px;
+    background: #595959;
+    top: -58%;
+    border-radius: 100%;
+    z-index: 1;
+}
+span.edit-profile {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: #0000008f 0% 0% no-repeat padding-box;
+    border-radius: 29px;
+    opacity: 1;
+    backdrop-filter: blur(50px);
+    text-align: left;
+    font: normal normal normal 15px Circular Std;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+padding: 6px 14px;
+}
+
+span.edit-profile img {
+    margin-right: 8px;
+    width: 30px;
+}
+.prfile_name_details {
+    z-index: 18;
+}
+.profile-details {
+    display: flex;
+    align-items: center;
+/*     box-shadow: 0px 0px 20px #00000029; 
+*/}
+    .profile-details:before, .profile-details:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: #7a7a7a;
+    z-index: -1;
+    top: 0;
+}
+.profile-details:after {
+    background: #00000042;
+    z-index: 3;
+}
+.profile-details img {
+    box-shadow: 0px 0px 20px #00000029;
+    border-radius: 100px;
+    width: 160px;
+    height: 160px;
+    z-index: 10;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading button.card__likes.heart.profile_likes_icon.is-active .far {
+    display: none;
+}
+.profile-image-tag{
+        margin: -20px 30px 0 30px;
+
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading button.card__likes.heart i.far,.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading button.card__likes.heart.is-active i.fas {
+    position: unset;
+    font-size: 18px;
+}
+.NFT_SCREEN .section.section_3 ul li .img-panel .image-fit button.card__likes.heart i {
+    font-size: 18px;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading button.card__likes {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading button.card__likes span {
+    display: none;
+}
+
+
+.prfile_name_details h5 {
+    text-align: left;
+    font: normal normal normal 28px/55px Hahmlet;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+}
+
+.prfile_name_details h4 {
+    text-align: left;
+    font: normal normal normal 40px/28px Hahmlet;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.prfile_name_details h5 span img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.prfile_name_details a {
+    color: inherit;
+}
+
+.prfile_name_details ul {
+    display: flex;
+    align-items: center;
+}
+
+.prfile_name_details ul li a img {
+    width: 32px;
+    cursor: pointer;
+    height: 32px;
+}
+
+.prfile_name_details ul li {
+    margin-right: 12px;
+}
+.profile-tabs.tabs-panel .tab {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000010;
+    border: 1px solid #E2E2E2;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.profile-tabs.tabs-panel {
+    position: relative;
+    border-top: 1px solid #162c5b38;
+    margin-top: 30px;
+}
+
+.profile-tabs.tabs-panel .tab button:nth-child(1) {
+    padding-left: 20px;
+}
+
+.profile-tabs.tabs-panel .tab button {
+    font-size: 16px;
+}
+
+.profile-tabs.tabs-panel .tabcontent {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 20px;
+}
+.profile-tabs.tabs-panel .tabcontent .panel-detail-heading,
+.discover_menus .panel-heading {
+    text-align: left;
+    font: normal normal bold 20px/29px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    position: relative;
+    padding-bottom: 20px;
+}
+.discover_menus .panel-heading {
+    position: relative;
+}
+.discover_menus .panel-heading span{
+        position: absolute;
+    right: 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.profile-tabs.tabs-panel .tabcontent .panel-detail-heading:before,
+.discover_menus .panel-heading:before
+ {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    width: 100px;
+    height: 3px;
+    background: #E5ECF2;
+    border-radius: 5px;
+}
+
+.profile-tabs.tabs-panel .tabcontent .panel-detail-heading:after,
+.discover_menus .panel-heading:after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    width: 50px;
+    height: 3px;
+    background: #3C97F2;
+    border-radius: 5px;
+    left: 0;
+}
+
+.profile-tabs.tabs-panel .tabcontent p {
+    text-align: left;
+    font: normal normal normal 17px/26px Hahmlet;
+    letter-spacing: 0px;
+    color: #707070;
+}
+
+
+.profile-tabs.tabs-panel .tabcontent ul {
+    list-style: none;
+    padding: 0;
+    margin: 0px 0 0 0;
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
+}
+.profile-tabs.tabs-panel .tabcontent ul li{
+    margin: 0 20px 20px 0px;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel {
+  width: 380px;
+  position: relative;
+  z-index: 9;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .image-fit {
+    width: 100%;
+    height: 350px;
+  display: block;
+      background: #ddd;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel a img {
+    object-fit: cover;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel a span {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+  background: #00000057 0% 0% no-repeat padding-box;
+  border-radius: 5px;
+  opacity: 1;
+  backdrop-filter: blur(30px);
+  padding: 5px;
+  width: 150px;
+  color: #fff;
+  font-size: 13px;
+  font-family: CircularStd_Bold ;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading {
+  color: #3C97F2;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading strong {
+  font-family: CircularStd_Normal ;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 83%;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading span {
+  margin-left: auto;
+  display: flex;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading span img {
+  margin-right: 7px;
+  width: 16px;
+  cursor: pointer;
+}
+
+.auction-heading a {
+    color: inherit;
+}
+
+.profile_likes_icon {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.profile_likes_icon i{
+    color: #3C97F2;
+}
+
+
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc h5 {
+  font-size: 13px;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail {
+  width: 46%;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail img {
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail h6 {
+  color: #707070;
+  font-size: 12px;
+  font-family: CircularStd_Normal ;
+  width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail a {
+  color: #000000;
+  font-size: 12px;
+  font-family: CircularStd_Normal ;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn {
+  border-bottom: 0;
+  padding: 0;
+  margin: 0;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail .name-detail a {
+  font-family: CircularStd_Bold ;
+  font-weight: 600;
+}
+
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail button {
+  background: #F4F9FF 0% 0% no-repeat padding-box !important;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 30px;
+  color: #162C5B;
+  font-size: 12px;
+  min-width: 100px;
+  padding: 10px;
+}
+
+.profile-tabs a{
+    color: inherit;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail:last-child {
+  justify-content: flex-end;
+}
+
+.activity-dropdown {
+    position: absolute;
+    width: 100%;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: -10px 0px 20px #00000029;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 10px;
+    display: none;
+}
+.activity-dropdown.active {
+    display: block;
+}
+
+
+.activity-dropdown .member-detail {
+    margin: 0 0 30px 0;
+}
+.activity-dropdown:before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    border-top: none;
+    border-right: 12px solid transparent;
+    border-left: 12px solid transparent;
+    border-bottom: 12px solid white;
+    left: 60px;
+}
+.activity-dropdown.Following.active:before {
+    left: 170px;
+}
+.activity-dropdown.Followers.active:before {
+    right: 100px;
+    left: auto;
+}
+.member-detail a strong em,.member-detail a strong i {
+    display: block;
+    margin: 0;
+    margin-bottom: 10px;
+    text-align: left;
+    font: normal normal normal 14px/9px Hahmlet;
+    letter-spacing: 0px;
+    color: #707070;
+    line-height: normal;
+}
+.activity-dropdown  .member-detail a strong i {
+    color: #3C97F2;
+}
+.activity-dropdown  .member-detail a span{
+    width: 55px;
+    height: 55px;
+}
+/*Profile css end*/
+/*Discover tab start*/
+
+.discover_menus .tab {
+    overflow: hidden;
+    position: absolute;
+    top: -106px;
+    width: 100%;
+    background: #F8F8F8 0% 0% no-repeat padding-box;
+    padding-top: 30px;
+    border-bottom: 1px solid #ddd;
+
+}
+
+/* Style the buttons inside the tab */
+.discover-container {
+    margin-top: 30px;
+}
+.discover_menus{
+    position: relative;
+}
+.discover_menus .tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+    cursor: pointer;
+    padding: 8px 10px;
+    transition: 0.3s;
+    font-size: 17px;
+    border-bottom: 2px solid transparent;
+    text-align: center;
+    font: normal normal 500 26px/37px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    margin-right: 30px;
+}
+
+/* Create an active/current tablink class */
+.discover_menus .tab button.active {
+    border-bottom: 2px solid #3C97F2;
+    font: normal normal 600 26px/37px Hahmlet;
+
+}
+
+/* Style the tab content */
+.discover_menus .tabcontent ,
+.discover_menus .innertabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+.filter-Items {
+    background: #F8F8F8 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    padding: 24px;
+}
+.filter-Items {
+    background: #F8F8F8 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+
+
+.discover_menus ul.nav.nav-tabs li a{
+    box-shadow: 0px 0px 10px #00000017;
+    padding: 8px 15px;
+    border-radius: 8px;
+    background: #FAFAFA 0% 0% no-repeat padding-box;
+    border: 1px solid #E5ECF2;
+    font: normal normal normal 18px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    display: flex;
+    transition: 0.4s;
+    align-items: center;
+}
+.discover_menus ul.nav.nav-tabs li{
+        margin: 10px 8px 10px 0;
+}
+
+.discover_menus ul.nav.nav-tabs li a.active img.black, .discover_menus ul.nav.nav-tabs li a:hover img.black,
+.discover_menus ul.nav.nav-tabs li a img.blue, .discover_menus ul.nav.nav-tabs li a img.blue
+{
+    display: none;
+}
+
+.discover_menus ul.nav.nav-tabs li a img.black, .discover_menus ul.nav.nav-tabs li a img.black,
+.discover_menus ul.nav.nav-tabs li a.active img.blue, .discover_menus ul.nav.nav-tabs li a:hover img.blue{
+    display: block;    
+}
+
+
+.discover_menus ul.nav.nav-tabs li{
+        margin: 10px 8px 10px 0;
+}
+.discover_menus ul.nav.nav-tabs {
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
+}
+.tab-content.inner-tab-content-sec {
+    border-top: 1px solid #ddd;
+    padding-top: 25px;
+    margin-top: 15px;
+}
+
+.discover_menus ul.nav.nav-tabs li a img {
+    width: 18px;
+    margin-right: 10px;
+}
+.discover_menus ul.nav.nav-tabs li a.active,
+.discover_menus ul.nav.nav-tabs li a:hover {
+    box-shadow: 0px 0px 10px #00000017;
+    border: 1px solid #3C97F2;
+        color: #3C97F2;
+}
+.Category-Lists label {
+    background: #FAFAFA 0% 0% no-repeat padding-box;
+    border: 1px solid #3C97F2;
+    text-align: center;
+    font: normal normal normal 16px Hahmlet;
+    letter-spacing: 0px;
+    color: #3C97F2;
+    line-height: 20px;
+    padding: 7px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 5px 14px 0;
+    transition: 0.5s;
+}
+.Category-Lists label a{
+        font: normal normal normal 16px Hahmlet;
+    letter-spacing: 0px;
+    color: #3C97F2;
+}
+
+.Category-Lists label.active ,
+.Category-Lists label:hover,.Category-Lists label.active a{
+    background: #3C97F2 0% 0% no-repeat padding-box;
+    color: #FFFFFF;
+}
+.Category-Lists label:hover a{
+    color: #fff;
+}
+.Category-Lists .member-detail {
+    margin-top: 0;
+    background: #FAFAFA 0% 0% no-repeat padding-box;
+    border: 1px solid #E5ECF2;
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+.Category-Lists .member-detail a span {
+    width: 28px;
+    height: 28px;
+}
+
+.Category-Lists .member-detail a strong {
+    font: normal normal normal 18px Circular Std;
+    letter-spacing: 0px;
+    color: #162C5B;
+}
+.min-to-max button {
+    background: #FAFAFA 0% 0% no-repeat padding-box;
+    border: 1px solid #E5ECF2;
+    width: 45%;
+    padding: 0;
+    height: 42px;
+    border-radius: 8px;
+}
+
+.min-to-max button input {
+    width: 100%;
+    outline: none;
+    padding: 10px;
+    border-radius: 8px;
+    border: 0;
+    text-align: left;
+    font: normal normal normal 17px Circular Std;
+    letter-spacing: 0px;
+    color: #162C5B;
+}
+
+.min-to-max {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.min-to-max.next-proceed-btn button {
+    width: 100%;
+    background: #3C97F2 0% 0% no-repeat padding-box;
+    margin-bottom: 10px;
+    color: #fff;
+    text-align: center;
+    font: normal normal normal 20px Circular Std;
+    letter-spacing: 0px;
+}
+
+.min-to-max.next-proceed-btn {
+    flex-flow: row wrap;
+}
+
+.min-to-max.next-proceed-btn button:last-child {
+    background: transparent;
+    border: 0;
+    color: #162C5B;
+}
+.clear-filter-heading h5 {
+    text-align: left;
+    font: normal normal bold 22px/32px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+}
+ul.current-filters li span {
+    text-align: left;
+    font: normal normal normal 18px/22px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    margin-right: 7px;
+}ul.current-filters {
+    display: flex;
+    align-items: center;
+}
+
+ul.current-filters li {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+.clear-filter-heading .selected-menus {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #162C5B;
+    margin-right: 15px;
+}
+.modeling-artist-list ul {
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
+}
+.modeling-artist-list ul li {
+    width: 250px;
+    border-radius: 10px;
+    margin: 0 20px 20px 0;
+}
+
+
+.modeling-artist-list_detail img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.modeling-artist-list_detail {
+    position: relative;
+    height: 220px;
+    border-radius: 10px;
+}
+.modeling-artist-list_detail:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent linear-gradient(180deg, #00000000 0%, #000000 100%) 0% 0% no-repeat padding-box;
+    z-index: 6;
+        border-radius: 10px;
+}
+.modeling-artist-list_detail_pincode {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    z-index: 7;
+}
+
+.modeling-artist-list_detail .modeling-artist-list_detail_pincode img {
+    width: 17px;
+    position: unset;
+    display: block;
+    text-align: center;
+    margin: 5px auto 0 auto;
+    border-radius: 0;
+}
+
+.modeling-artist-list_detail_pincode h6 a{
+    text-align: center;
+    font: normal normal bold 20px Roboto Slab;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.modeling-artist-list_detail_pincode a {
+    text-align: center;
+    font: normal normal normal 16px Roboto Slab;
+    letter-spacing: 0px;
+    color: #FFFFFF!important;
+    line-height: 26px;
+}
+.sort-items select {
+    width: 280px;
+    background: #FAFAFA 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 10px #00000017;
+    border: 0;
+    padding: 10px 10px;
+    border-radius: 8px;
+    text-align: left;
+    letter-spacing: 0px;
+    color: #162C5B;
+    font: normal normal normal 16px Hahmlet;
+    cursor: pointer;
+}
+.sort-items select option:first-child {
+    display: none;
+}
+.clear-filter-heading {
+    position: relative;
+}
+
+.sort-items {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.discover-profile.profile-tabs.tabs-panel .tabcontent {
+    display: block;
+}
+.discover_menus .container,main.main.mt-0.NFT-detail .container.bg-effect {
+    max-width: 92%;
+}
+.discover-profile.profile-tabs.tabs-panel .tabcontent ul li {
+    width: 32%;
+    margin: 0 10px 15px 0;
+}
+
+.discover-profile.profile-tabs.tabs-panel .tabcontent ul li .img-panel {
+    width: 100%;
+}
+
+.discover-profile.profile-tabs.tabs-panel .tabcontent ul li .img-panel a.image-fit {
+    height: 260px;
+}
+.mobile-menu-discover .filter-Items h5.panel-heading i{
+    display: none;
+}
+.tab-content.inner-tab-content-sec .discover_menus .panel-heading {
+    display: none;
+}
+a.mob-apply-btn {
+    display: none;
+    background: #162C5B;
+    color: #fff!important;
+    text-align: center;
+    width: 100px;
+    border-radius: 6px;
+    margin: 10px auto 0 auto;
+}
+
+a.mob-apply-btn button {
+    color: #fff;
+    text-align: left;
+    font: normal normal bold 16px/32px Hahmlet;
+    letter-spacing: 0px;
+}
+
+/*Discover tab end*/
+@media only screen and (max-width:1526px) and (min-width: 991px){
+.discover_menus ul.nav.nav-tabs li a{
+          font: normal normal normal 15px Hahmlet;
+    padding: 8px 7px;
+}
+.discover_menus ul.nav.nav-tabs li{
+        margin: 0px 5px 5px 0;  
+
+}
+}
+@media only screen and (max-width:1240px) and (min-width: 1201px){
+     .place-buy-details .highest-bid button{
+  font-size: 15px;
+    width: auto;
+    line-height: 18px;
+    min-width: 160px;
+}
+}
+@media only screen and (max-width:1200px) and (min-width: 280px){
+    .place-buy-details .highest-bid h6,.place-buy-details .highest-bid button,
+    .modeling-details ul li a strong,
+    .desction-detail h6{
+        font-size: 16px;
+         line-height: 28px;
+    }
+    .place-buy-details .highest-bid p,
+    .desction-detail p,
+    .modeling-details ul li label{
+          font-size: 14px;
+         line-height: 24px;
+    }
+    .bg-effect:before{
+        right: -690px;
+    }
+    .discover-profile.profile-tabs.tabs-panel .tabcontent ul li{
+        width: 40%;
+    }
+     .discover_menus ul.nav.nav-tabs li a{
+        font: normal normal normal 15px Hahmlet;
+    padding: 8px 7px;
+    }
+    .discover_menus ul.nav.nav-tabs li{
+        margin: 0px 5px 5px 0;  
+
+}
+    .filter-Items{
+        padding: 14px;
+    }
+    .Category-Lists label{
+        padding: 5px 18px;
+    }
+    .discover_menus .tab button{
+    font: normal normal 600 22px/37px Hahmlet;
+    }
+    .place-buy-details .highest-bid button{
+    font-size: 14px;
+    width: auto;
+    line-height: 18px;
+    min-width: 120px;
+}
+}  
+@media only screen and (max-width:1024px) and (min-width: 280px){
+      .bg-effect:before{
+            right: -770px;
+     top: -260px;
+    }
+    .discover-profile.profile-tabs.tabs-panel .tabcontent ul li{
+            width: 48%;
+    margin-right: 10px;
+    }
+
+.modal-description{
+    padding-left: 0;
+}
+}
+
+@media only screen and (max-width:991px) and (min-width: 280px){
+    .modeling-details ul li {
+    width: 50%;
+}
+.bg-effect:before {
+    right: -40%;
+    top: 0;
+    width: 500px;
+    height: 500px;
+}
+.mobile-row-riverse {
+    flex-direction: column-reverse;
+}
+
+.profile-tabs.tabs-panel .tab {
+
+     margin-top: 10px; 
+    overflow: auto;
+    justify-content: flex-start;
+
+}
+
+.profile-tabs.tabs-panel .tab button {
+    min-width: 150px;
+}
+.profile-tabs.tabs-panel .tab::-webkit-scrollbar{
+    height: 5px;
+}
+.profile-tabs.tabs-panel .tab::-webkit-scrollbar-thumb {
+
+    background-color: #afaaaa;
+    outline: 0;
+    border-radius: 8px;
+
+}
+.profile-tabs.tabs-panel .tab::-webkit-scrollbar-track {
+    background: #ddd;
+}
+.activity-dropdown{
+    width: 90%;
+    z-index: 11;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel {
+    width: 100%;
+}
+.profile-tabs.tabs-panel .tabcontent ul li {
+    width: 47%;
+    margin: 0 0 20px 0;
+}
+
+.profile-tabs.tabs-panel .tabcontent ul {
+    justify-content: space-between;
+}
+.mobile-menu-discover {
+
+    position: fixed;
+    width: 100%;
+    background: #F8F8F8;
+    z-index: 999999;
+    bottom: 0%;
+    left: 0;
+    right: 0;
+    max-width: 100%;
+    padding: 0;
+}
+
+.mobile-menu-discover .tab-content.inner-tab-content-sec {
+    position: fixed;
+    bottom: -50%;
+    z-index: -1;
+    background: #F8F8F8;
+    width: 100%;
+    left: 0;
+    padding: 20px;
+    transition: 0.4s;
+    padding-top: 14px;
+}
+
+.mobile-menu-discover.open-inner-tab .inner-tab-content-sec.tab-content {
+    bottom: 110px;
+}
+.mobile-menu-discover .filter-Items {
+    padding: 10px;
+    border-radius: 0;
+    border-top: 1px solid #ddd;
+    padding-top: 0;
+}
+.mobile-menu-discover .filter-Items h5.panel-heading i {
+    position: absolute;
+    right: 0;
+    color: #3C97F2;
+    font: normal normal bold 14px Hahmlet;
+    top: 0;
+    display: block;
+}
+.discover_menus .panel-heading span {
+    right: auto;
+    margin-left: 8px;
+}
+.mobile-menu-discover.open-inner-tab:before {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #00000070;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+.mobile-menu-discover .filter-Items h5.panel-heading {
+    font-size: 14px;
+    line-height: 20px;
+    padding-bottom: 5px;
+}
+
+.mobile-menu-discover .filter-Items h5.panel-heading:before,.mobile-menu-discover .filter-Items h5.panel-heading:after {
+    display: none;
+}
+.mobile-menu-discover .discover_menus {
+    padding: 13px;
+}
+.tab-content.inner-tab-content-sec .discover_menus .panel-heading {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+.tab-content.inner-tab-content-sec .discover_menus {
+    padding: 0 0 10px 0;
+}
+.discover_menus .tab {
+    padding-top: 0;
+    top: -112px;
+}
+
+.discover_menus .tab button,.discover_menus .tab button.active {
+    font-size: 18px;
+    line-height: 25px;
+}
+a.mob-apply-btn {
+    display: block;
+}
+.profile-tabs.tabs-panel{
+    margin-top: 0;
+}
+.place-buy-details .highest-bid button{
+    font-size: 14px;
+    width: auto;
+    line-height: 18px;
+    min-width: 120px;
+}
+
+}
+@media only screen and (max-width:928px) and (min-width: 280px){
+.discover-profile.profile-tabs.tabs-panel .tabcontent ul li{
+    width: 95%;
+    margin: 0 auto 20px auto;
+}
+.discover_menus .tab button, .discover_menus .tab button.active {
+    font-size: 18px;
+    line-height: 25px;
+}
+
+}
+@media only screen and (max-width:768px) and (min-width: 280px){
+/*
+    main.main.mt-0.NFT-detail{
+        height: 100vh;
+    }*/
+
+main.main.mt-0.NFT-detail .container.bg-effect {
+    overflow: hidden;
+    max-width: 100%;
+    padding: 0 5%;
+}
+
+main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
+
+.discover-container {
+    margin: 0 0 0px 0;
+}
+.profile-tabs.tabs-panel.discover-profile {
+    margin-bottom: 170px;
+}
+.discover_menus .tab {
+    top: -62px;
+}
+.discover-profile.profile-tabs.tabs-panel .tabcontent ul li .img-panel a.image-fit{
+    height: auto;
+}
+}
+@media only screen and (max-width:767px) and (min-width: 280px){
+    .modeling-details img.modal-img{
+        height: auto;
+        margin-bottom: 0;
+    }
+    .profile-tabs.tabs-panel .tabcontent ul li {
+    width: 100%;
+}
+
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .image-fit {
+    height: auto;
+}
+main.NFT-detail.modeling-NFT {
+    padding-top: 70px;
+}
+
+.modeling-details.responsive-modeling {
+    display: block;
+    margin-bottom: 200px;
+}
+
+.modeling-details ul.web-modeling-detail-menus {
+    display: none;
+}
+.pos-unset{
+    position: unset;
+}
+.modal-description {
+    position: unset;
+        padding-left: 0;
+    padding-top: 20px;
+
+}
+.modal-more-options{
+    background: #fff;
+    right: 15px;
+    top: 4px;
+    padding: 7px 12px;
+}
+.modal-sub-heading{
+    font: normal normal bold 22px/37px Hahmlet;
+    margin-bottom: 10px;
+}
+span.royalty-span {
+    top: -42px;
+    right: 15px;
+    font-size: 14px;
+}
+.place-buy-details {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    border-radius: 0;
+    background: #162c5bc2;
+    padding: 30px 40px;
+    margin: 0;
+}
+
+.place-buy-details:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #fff;
+    z-index: -27;
+    width: 95%;
+    height: 80%;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    border-radius: 12px;
+}
+}
+@media only screen and (max-width:425px) and (min-width: 280px){
+.modeling-details ul li{
+      width: 100%;
+    margin-bottom: 15px;
+    padding: 0;
+}
+.modeling-artist-list ul li{
+    width: 90%;
+    margin: 0 auto 20px auto;
+}
+.discover_menus .tab button, .discover_menus .tab button.active{
+    font-size: 14px;
+    margin-right: 20px;
+}
+.clear-filter-heading h5{
+    font-size: 18px;
+}
+.madeling-heading h5 {
+    font-size: 30px;
+}
+.madeling-heading p {
+    font-size: 16px;
+}
+}
+
+@media only screen and (max-width:375px) and (min-width: 280px){
+
+
+.place-buy-details .highest-bid h6,.place-buy-details .highest-bid p {
+/*    visibility: visible;
+*/}
+
+.modeling-artist-list_detail_pincode h6{
+    font: normal normal bold 16px Roboto Slab;
+}
+.modeling-artist-list_detail_pincode a{
+    font: normal normal normal 14px Roboto Slab;
+}
+.place-buy-details .highest-bid button{
+    font-size: 12px;
+}
+.place-buy-details{
+        padding: 25px 20px;
+}
+.description-panels {
+    flex-flow: row wrap;
+}
+}
+@media only screen and (max-width:337px) and (min-width: 280px){
+.discover_menus .tab button, .discover_menus .tab button.active{
+        margin-right: 10px;
+        padding: 8px 5px;
+}
+
+.place-buy-details .highest-bid button{
+    min-width: 110px;
+}
+}

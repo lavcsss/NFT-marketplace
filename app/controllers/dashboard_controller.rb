@@ -21,6 +21,7 @@ class DashboardController < ApplicationController
     @category_collections = @category_collections.get_with_sort_option(params[:sort_by]) if params[:sort_by]
     @category_collections = @category_collections.where("category like ?", "%#{params[:category]}%") if params[:category].present?
     @category_collections = @category_collections.on_sale.with_attached_attachment.paginate(page: params[:page_no] || 1)
+    @category_collections = @category_collections.reorder(likes_count: 'desc').limit(18)
   end
 
   def top_buyers_and_sellers

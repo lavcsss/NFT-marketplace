@@ -9,8 +9,10 @@
         </span>
     </a>
     <%# if current_user %>
-        <%= react_component("collections/like", address: current_user&.address, likes: collection.likes, collectionId: collection.id,likes_count: collection.likes.count) %>
-    <%# else %>
+                <%= react_component("collections/like", address: current_user&.address, 
+                likes: collection.likes, collectionId: collection.id, addClass: "profile_likes_icon", 
+                liked: collection.is_liked_by_me(current_user&.id)
+                ) %>
         <!-- <button class="card__likes heart">
           <i class="far fa-heart"></i>
           <i class="fas fa-heart"></i>
