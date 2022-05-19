@@ -100,7 +100,7 @@ NFT landing page css start */
 .NFT_SCREEN_Header .nft-header ul li:last-child .dropdown-lists .nft-menus.search-menu input::placeholder,
 .NFT_SCREEN_Header .nft-header ul li .mobile-menu-item form.header__search .nft-menus.search-menu input {
     font-size: 20px;
-        position: relative;
+    position: relative;
     top: 3px;
 
 }
