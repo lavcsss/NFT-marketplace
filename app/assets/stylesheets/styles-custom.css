@@ -7027,6 +7027,7 @@ a.readmore_link i {
 
 .main__title h1 {
   word-wrap: break-word;
+  word-break: break-all;
 }
 
 .author__meta .author__name {
