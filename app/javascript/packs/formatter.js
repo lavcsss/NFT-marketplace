@@ -10,8 +10,6 @@ window.roundNumberOne = function roundNumberOne(num, roundNum=4) {
 }
 
 window.mergeAmountSymbol = function mergeAmount(num, symbol) {
-  // var finalNum = roundNumber(num)
-  // return finalNum + ' ' + symbol
   return num + ' ' + symbol
 }
 
@@ -27,20 +25,16 @@ window.numToString = function numToString(num) {
 
 window.percentageOf = function percentageOf(ofPercent, inNum, roundNum=4) {
   var numOne = BigNumber(inNum)
-  // return numOne.multipliedBy(ofPercent).dividedBy(100).toFixed(roundNum)
-  // return numOne.multipliedBy(ofPercent).dividedBy(100)
   return (numOne.multipliedBy(BigNumber(ofPercent)))/100
 }
 
 window.multipliedBy = function multipliedBy(one, two, roundNum=4) {
   var numOne = BigNumber(one)
-  // return numOne.multipliedBy(two).toFixed(roundNum)
   return numOne.multipliedBy(two)
 }
 
 window.plusNum = function plusNum(one, two, roundNum=4) {
   var numOne = BigNumber(one)
-  // return numOne.plus(two).toFixed(roundNum)
   return numOne.plus(two)
 }
 
