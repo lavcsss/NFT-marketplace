@@ -199,7 +199,7 @@
 }
 
 .modal-more-options {
-    padding: 6px 12px;
+    padding: 0px 12px;
     position: absolute;
     right: 0;
     top: 0;
@@ -212,6 +212,13 @@
     width: 110px;
     justify-content: space-evenly;
     z-index: 2;
+}
+.tabs-panel .tabcontent .member-detail .execute-btn{
+padding: 0px 18px !important;
+border-radius: 8px;
+}
+.tabs-panel .tabcontent .member-detail .asset__action{
+    flex-flow: nowrap;
 }
 .modal-more-options img {
 max-width: initial;
@@ -1039,6 +1046,11 @@ main.main.mt-0.NFT-detail.discover_Page {
 .Category-Lists label:hover,.Category-Lists label.active a{
     background: #3C97F2 0% 0% no-repeat padding-box;
     color: #FFFFFF;
+}
+.Category-Lists label.active button ,
+.Category-Lists label:hover button,.Category-Lists label.active button{
+    color: #FFFFFF;
+
 }
 .Category-Lists label:hover a{
     color: #fff;
