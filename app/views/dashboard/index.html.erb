@@ -309,95 +309,95 @@
                   </div>
                   <ul>
                      <% if @category_collections.present? %>
-                     <% @category_collections.each do |collection| %> 
-                     <% collection_attachment = collection.get_attachment(current_user)%>
-                     <li>
-                        <div class="img-panel">
-                           <div class="image-fit">
-                              <a href="<%= collection_path(collection.address)%>" class="img-fit-user">
-                                 <%= image_tag cover_url(collection), class:"img-fixed-wd"%>
-                                 <h6 class="auction-heading">
-                                    <strong><%= collection.title %></strong>
-                                    <strong><%= collection.description %></strong>
-                                 </h6>
-                              </a>
-                              <h5 class="share-icon t_c">
-                                 <a class="more_action_btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                 <img src="../../assets/nft/share.svg" class="share-menu-icon" />
-                                 </a>
-                                 <ul class="dropdown-menu header__profile-menu" aria-labelledby="dropdownMenuProfile">
-                                    <li><a target=_blank href="https://www.facebook.com/sharer/sharer.php?u=<%= current_url %>&caption=<%= collection.name %>&description=<%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
-                                       <i class="fa fa-facebook"></i><span>Facebook</span>
+                        <% @category_collections.each do |collection| %> 
+                           <% collection_attachment = collection.get_attachment(current_user)%>
+                           <li>
+                              <div class="img-panel">
+                                 <div class="image-fit">
+                                    <a href="<%= collection_path(collection.address)%>" class="img-fit-user">
+                                       <%= image_tag cover_url(collection), class:"img-fixed-wd"%>
+                                       <h6 class="auction-heading">
+                                          <strong><%= collection.title %></strong>
+                                          <strong><%= collection.description %></strong>
+                                       </h6>
+                                    </a>
+                                    <h5 class="share-icon t_c">
+                                       <a class="more_action_btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                       <img src="../../assets/nft/share.svg" class="share-menu-icon" />
                                        </a>
-                                    </li>
-                                    <li><a target=_blank href="https://twitter.com/share?url=<%= current_url %>&text=<%= collection.name %>, <%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
-                                       <i class="fa fa-twitter"></i><span>Twitter</span>
-                                       </a>
-                                    </li>
-                                    <li><a target=_blank href="https://telegram.me/share/url?url=<%= current_url %>&text=<%= collection.name %>, <%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
-                                       <i class="fa fa-telegram"></i><span>Telegram</span>
-                                       </a>
-                                    </li>
-                                    <li><a target=_blank href="mailto:?subject=<%= collection.name %>&body=<%= collection.description %> Link here:<%= current_url %>">
-                                       <i class="fa fa-envelope"></i><span>Envelope</span>
-                                       </a>
-                                    </li>
-                                 </ul>
-                                 <%= react_component("collections/like", address: current_user&.address, likes: collection.likes, collectionId: collection.id, 
-                                    liked: collection.is_liked_by_me(current_user&.id), 
-                                    ) %>
-                              </h5>
-                              </a>
-                              <div class="desc">
-                                 <div class="caption">
-                                    <div class="profile-detail">
-                                       <%= image_tag collection.creator.profile_image %>
-                                       <div class="name-detail">
-                                          <h6>Creator</h6>
-                                          <%= link_to collection.creator.full_name, user_path(collection.creator.address)%>
+                                       <ul class="dropdown-menu header__profile-menu" aria-labelledby="dropdownMenuProfile">
+                                          <li><a target=_blank href="https://www.facebook.com/sharer/sharer.php?u=<%= current_url %>&caption=<%= collection.name %>&description=<%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                                             <i class="fa fa-facebook"></i><span>Facebook</span>
+                                             </a>
+                                          </li>
+                                          <li><a target=_blank href="https://twitter.com/share?url=<%= current_url %>&text=<%= collection.name %>, <%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                                             <i class="fa fa-twitter"></i><span>Twitter</span>
+                                             </a>
+                                          </li>
+                                          <li><a target=_blank href="https://telegram.me/share/url?url=<%= current_url %>&text=<%= collection.name %>, <%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                                             <i class="fa fa-telegram"></i><span>Telegram</span>
+                                             </a>
+                                          </li>
+                                          <li><a target=_blank href="mailto:?subject=<%= collection.name %>&body=<%= collection.description %> Link here:<%= current_url %>">
+                                             <i class="fa fa-envelope"></i><span>Envelope</span>
+                                             </a>
+                                          </li>
+                                       </ul>
+                                       <%= react_component("collections/like", address: current_user&.address, likes: collection.likes, collectionId: collection.id, 
+                                          liked: collection.is_liked_by_me(current_user&.id), 
+                                          ) %>
+                                    </h5>
+                                    </a>
+                                    <div class="desc">
+                                       <div class="caption">
+                                          <div class="profile-detail">
+                                             <%= image_tag collection.creator.profile_image %>
+                                             <div class="name-detail">
+                                                <h6>Creator</h6>
+                                                <%= link_to collection.creator.full_name, user_path(collection.creator.address)%>
+                                             </div>
+                                          </div>
+                                          <div class="profile-detail">
+                                             <%= image_tag collection.owner.profile_image %>
+                                             <div class="name-detail">
+                                                <h6>Owner</h6>
+                                                <%= link_to collection.owner.full_name, user_path(collection.owner.address)%>
+                                             </div>
+                                          </div>
                                        </div>
-                                    </div>
-                                    <div class="profile-detail">
-                                       <%= image_tag collection.owner.profile_image %>
-                                       <div class="name-detail">
-                                          <h6>Owner</h6>
-                                          <%= link_to collection.owner.full_name, user_path(collection.owner.address)%>
+                                       <div class="caption add-btn">
+                                          <div class="profile-detail">
+                                             <div class="name-detail">
+                                                <h6>Price</h6>
+                                                <% if collection.instant_sale_price%>
+                                                   <span><%=collection.instant_sale_price%> WETH</span>  
+                                                <% else %>
+                                                   <% if collection.max_bid %>
+                                                      <p class="bid_status">Highest bid <b><%= collection.max_bid.value %></b></p>
+                                                   <%else%>
+                                                      <span>No active Bids</span> 
+                                                   <% end %>
+                                                <%end%>
+                                             </div>
+                                          </div>
+                                          <div class="profile-detail">
+                                             <a href="<%= collection_path(collection.address)%>">
+                                             <button>Buy</button>
+                                             </a>
+                                          </div>
                                        </div>
-                                    </div>
-                                 </div>
-                                 <div class="caption add-btn">
-                                    <div class="profile-detail">
-                                       <div class="name-detail">
-                                          <h6>Price</h6>
-                                          <% if collection.instant_sale_price%>
-                                          <span><%=collection.instant_sale_price%> WETH</span>  
-                                          <% else %>
-                                          <% if collection.max_bid %>
-                                          <p class="bid_status">Highest bid <b><%= collection.max_bid.value %></b></p>
-                                          <%else%>
-                                          <span>No active Bids</span> 
-                                          <% end %>
-                                          <%end%>
-                                       </div>
-                                    </div>
-                                    <div class="profile-detail">
-                                       <a href="<%= collection_path(collection.address)%>">
-                                       <button>Buy</button>
-                                       </a>
                                     </div>
                                  </div>
                               </div>
-                           </div>
-                           <% end %>
-                           <% else %>
+                           </li>
+                        <% end %>
+                        <% else %>
                            <% 1.times do %>
                            <div class="col-12">
                               <%= render partial: 'common/empty' %>
                            </div>
                            <% end %>
-                           <% end %>
-                        </div>
-                     </li>
+                        <% end %>
                   </ul>
                   <div class="sell-NFT">
                      <h3>Steps to buy NFTs on Auction Day</h3>
