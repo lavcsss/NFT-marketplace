@@ -213,6 +213,7 @@
     backdrop-filter: blur(30px);
     width: 110px;
     justify-content: space-evenly;
+    height: 40px;
     z-index: 2;
 }
 .tabs-panel .tabcontent .member-detail .execute-btn{
@@ -729,7 +730,7 @@ span.edit-profile img {
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading {
   color: #3C97F2;
-  font-size: 16px;
+  font-size: 18px;
   display: flex;
   align-items: center;
   position: relative;
@@ -767,7 +768,7 @@ span.edit-profile img {
 
 
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc h5 {
-font-size: 13px;
+font-size: 14px;
     width: 96%;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -791,17 +792,20 @@ font-size: 13px;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail h6 {
   color: #707070;
-  font-size: 12px;
+  font-size: 13px;
   font-family: CircularStd_Normal ;
-  width: 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail a {
   color: #000000;
-  font-size: 12px;
+  font-size: 14px;
   font-family: CircularStd_Normal ;
+  white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 90%;
+    display: inline-block;
+}
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn {
   border-bottom: 0;
@@ -822,7 +826,11 @@ font-size: 13px;
   min-width: 100px;
   padding: 10px;
 }
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail button a{
+font-family: 'Hahmlet', serif;
+font-weight: 600;
 
+}
 .profile-tabs a{
     color: inherit;
 }
@@ -911,7 +919,27 @@ font-size: 13px;
 .profile-tabs.tabs-panel.tabs-lists .activity-dropdown .member-detail {
     margin-bottom: 10px;
 }
+.profile-bg.view-mob-detail .profile-details.profile-name-details h5 {line-height: 30px;}
 
+.profile-bg.view-mob-detail .profile-details.profile-name-details h5 span.highlight-address {background: #fff;border-radius: 100px;font-size: 12px;padding: 0px 10px;line-height: 24px;}
+
+.profile-bg.view-mob-detail .profile-details.profile-name-details h4 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    }
+    .profile-bg.view-mob-detail .profile-details.profile-name-details h4 span {
+    display: flex;
+    align-items: center;
+}
+.profile-bg.view-mob-detail .profile-details.profile-name-details h4 a {
+    max-width: 77%;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
 .profile-tabs.tabs-panel.tabs-lists .activity-dropdown .member-detail a span {
     width: 40px;
     height: 40px;
@@ -1080,7 +1108,7 @@ main.main.mt-0.NFT-detail.discover_Page {
 .Category-Lists label a{
         font: normal normal normal 16px Hahmlet;
     letter-spacing: 0px;
-    color: #3C97F2;
+    color: #162C5B;
 }
 
 .Category-Lists label.active ,
@@ -1183,6 +1211,17 @@ ul.current-filters li {
     display: flex;
     align-items: center;
     margin-right: 15px;
+    overflow: auto;
+    padding-bottom: 6px
+}
+ul.current-filters li::-webkit-scrollbar{
+    height: 4px;
+}
+ul.current-filters li::-webkit-scrollbar-thumb{
+    border-radius: 100px;
+}
+ul.current-filters li a {
+    margin-right: 10px;
 }
 .clear-filter-heading .selected-menus {
     text-align: left;
@@ -1246,7 +1285,7 @@ ul.current-filters li {
     border-radius: 0;
 }
 
-.modeling-artist-list_detail_pincode h6 {
+.modeling-artist-list_detail_pincode h6, .modeling-artist-list_detail_pincode h6 a {
     text-align: center;
     font: normal normal bold 20px Roboto Slab;
     letter-spacing: 0px;
@@ -1294,7 +1333,7 @@ main.main.mt-0.NFT-detail .container {
     max-width: 92%;
 }
 .discover-profile.profile-tabs.tabs-panel .tabcontent ul li {
-    width: 30%;
+    width: 32%;
     margin: 0 10px 15px 0;
 }
 
@@ -1389,6 +1428,21 @@ a.mob-apply-btn button {
 }
 
 /*Discover tab end*/
+@media screen and (max-width: 9999px) and (min-width: 1550px) {
+
+/*  .discover_menus ul.nav.nav-tabs li a{
+    font-size: 22px;
+  }
+  .Category-Lists label a,ul.current-filters li span,
+  .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading,
+  .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail h6{
+    font-size: 20px;
+  }
+  .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc h5{
+    font-size: 18px;
+  }*/
+}
+
 @media only screen and (max-width:1526px) and (min-width: 991px){
 .discover_menus ul.nav.nav-tabs li a{
           font: normal normal normal 15px Hahmlet;
@@ -1417,7 +1471,11 @@ a.mob-apply-btn button {
         padding: 7px 0 ;
     }
     .discover-profile.profile-tabs.tabs-panel .tabcontent ul li{
-        width: 45%;
+        width: 48%;
+        margin: 0 10px 20px 0;
+    }
+    .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail a{
+        width: 60px;
     }
     .profile-tabs.tabs-panel .tab button:nth-child(1){
         padding-left: 0;
@@ -1456,6 +1514,9 @@ a.mob-apply-btn button {
     .Category-Lists label{
         padding: 5px 18px;
     }
+    .Category-Lists label button {
+    color: #162c5b;
+}
     .discover_menus .tab button{
     font: normal normal 600 22px/37px Hahmlet;
     }
@@ -1669,6 +1730,7 @@ a.mob-apply-btn button {
     display: block;
     height: auto;
     padding: 0;
+    margin-bottom: 0;
 }
 .profile-details.profile-name-details {
     position: unset;
@@ -1686,6 +1748,10 @@ a.mob-apply-btn button {
     color: #162C5B;
     font-size: 14px;
     margin: 0;
+}
+.profile-bg.view-mob-detail .prfile_name_details ul{
+    margin: 20px 0 10px 0;
+    justify-content: center;
 }
 main.main.mt-0.NFT-detail.profile-Page {
     padding-top: 100px!important;
@@ -1707,8 +1773,15 @@ main.main.mt-0.NFT-detail.profile-Page {
         width: 23px;
     height: 23px;
 }
+
+.prfile_name_details h4 span img{
+    width: 23px;
+    height: 23px;
+}
+
 .profile-details.profile-name-details h5 span {
     justify-content: center;
+    display: inline-block;
 }
 .profile-details.profile-name-details .prfile_name_details {
     text-align: center;
@@ -1855,7 +1928,7 @@ main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
     margin: 0 0 0px 0;
 }
 .profile-tabs.tabs-panel.discover-profile {
-    margin-bottom: 170px;
+    margin-bottom: 40px;
 }
 .discover_menus .tab {
     top: -62px;
@@ -1897,7 +1970,7 @@ main.NFT-detail.modeling-NFT {
 
 .modeling-details.responsive-modeling {
     display: block;
-    margin-bottom: 200px;
+    margin-bottom: 20px;
     border-top: 1px solid #3c97f25c;
     padding-top: 17px;
 }
@@ -1966,7 +2039,13 @@ span.royalty-span {
 .profile-tabs.tabs-panel .tabcontent{
     padding: 0;
 }
-
+.description-panels .member-detail strong a, .description-panels .member-detail strong{
+        font-size: 16px;
+    word-break: break-word;
+}
+.description-panels .member-detail strong a, .description-panels .member-detail strong{
+    max-width: 110px;
+}
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail img{
     width: 25px;
     height: 25px;
@@ -2010,6 +2089,7 @@ span.royalty-span {
     main.main.mt-0.NFT-detail.profile-Page {
     padding-top: 80px!important;
 }
+
 /*.modeling-details ul li{
       width: 100%;
     margin-bottom: 15px;
@@ -2062,13 +2142,19 @@ span.royalty-span {
 }
 }
 @media only screen and (max-width:337px) and (min-width: 280px){
+    .description-panels .member-detail strong a, .description-panels .member-detail strong{
+        max-width: 100%;
+    }
 .discover_menus .tab button, .discover_menus .tab button.active{
         margin-right: 10px;
         padding: 8px 5px;
 }
 .profile-tabs.tabs-panel .tab.about-profile-information button{
-      font-size: 14px;
+      font-size: 12px;
     padding: 5px 0;   
+}
+.profile-tabs.tabs-panel .tabs-panel.following-details .tab button{
+    font-size: 13px;
 }
 .place-buy-details .highest-bid button{
     min-width: 110px;
