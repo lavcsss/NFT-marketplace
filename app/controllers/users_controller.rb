@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user
+  before_action :authenticate_user, except: [:show]
   before_action :set_user, only: [:show, :follow, :unfollow, :like, :unlike, :report, :load_tabs]
   skip_before_action :is_approved
   skip_before_action :verify_authenticity_token, only: [:report]
@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     @reportees = @user.reports.pluck(:created_by_id)
     @page_no = params[:page_no] || 1
     @tab = params[:tab]
-    @data = @user.get_collections(@tab, params[:filters], @page_no, current_user.address)
+    @data = @user.get_collections(@tab, params[:filters], @page_no, @user.address)
     @followers_count = @user.followers.count
     @followees_count = @user.followees.count
     @liked = @user.likes
