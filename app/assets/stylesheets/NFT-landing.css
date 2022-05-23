@@ -1615,7 +1615,7 @@ padding: 0 5px;
     height: 50px;
     margin-right: 20px;
    object-fit: contain;
-    margin-top: -11px;
+    margin-top: 10px;
 }
 .NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .profile-detail .name-detail h6 {
   text-align: left;
@@ -2087,7 +2087,7 @@ font-size: 32px;
 }
 .NFT_SCREEN .section.section_4 {
   position: relative;
-  padding-top: 12%;
+  padding-top: 13%;
   background-image: url("/assets/nft/about_nft/bg.png");
   background-repeat: no-repeat;
   background-size: cover;
@@ -2097,7 +2097,7 @@ font-size: 32px;
 .NFT_SCREEN .section.section_4 h3 {
   text-align: left;
   position: relative;
-  top: 100px;
+  top: 130px;
 }
 .NFT_SCREEN .section.section_4 .collapsed-section {
 /*  background-image: url("/assets/nft/about_nft/All_About_NFTs.svg");  
@@ -2246,16 +2246,18 @@ footer.footer.section-footer.wide-window .container {
 }
 
 footer.footer.section-footer .footer__tagline{
-      font-size: 13px;
+    font-size: 13px;
     color: #66696C;
     margin-top: 30px;
     width: 300px;
     text-align: justify;
     line-height: 28px;
+    max-width: 100%;
+    width: 100%;
 }
 footer.footer.section-footer  .footer_nav li a{
       color: #3c97f2;
-    font-size: 14px;
+    font-size: 18px;
     font-family: Hahmlet_Bold;
     cursor: pointer;
     font-weight: 600;
@@ -3721,6 +3723,12 @@ left: auto;
   }
 }
 @media screen and (max-width: 425px) and (min-width: 280px) {
+  .NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .profile-detail .name-detail h6{
+    font-size: 20px;
+  }
+  .NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .profile-detail .name-detail a{
+    font-size: 16px;
+  }
 .NFT_SCREEN .section.section_1 .right-images:before {
     width: 470px;
     height: 470px;
@@ -3986,6 +3994,9 @@ left: auto;
   }
   .NFT_SCREEN .section.section_2 ul li .carousal-menus {
     height: 295px;
+  }
+  footer.footer.section-footer .footer_nav li a{
+    font-size: 15px;
   }
 }
 @media screen and (max-width: 395px) and (min-width: 360px) {
@@ -4337,7 +4348,7 @@ left: auto;
     right: -97px;
     transform: scale(0.8);
   }
-
+}
 
 .browse-txt {
   color: #2c406a;
