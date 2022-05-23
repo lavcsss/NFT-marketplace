@@ -21,7 +21,7 @@ body {
 }
 
 /* NFT Fonts start*/
-
+/*
 @font-face {
   font-family: CircularStd_Normal;
   src: url("../fonts/NFT/Circular-Std-Font/CircularStd-Book.otf");
@@ -38,10 +38,10 @@ body {
   font-family: CircularStd_Bold;
   src: url("../fonts/NFT/Circular-Std-Font/CircularStd-Bold.otf");
   font-weight: 600;
-}
+}*/
 
 /* Hehmlet start */
-
+/*
 @font-face {
   font-family: Hahmlet_Light;
   src: url("../fonts/NFT/Hahmlet/Hahmlet-Light.ttf");
@@ -63,11 +63,11 @@ body {
   font-family: Hahmlet_Bold;
   src: url("../fonts/NFT/Hahmlet/Hahmlet-SemiBold.ttf");
   font-weight: 600;
-}
+}*/
 /* Hehmlet end */
 
 /* play-fairDisplay */
-
+/*
 @font-face {
   font-family: PlayDisplay_Normal;
   src: url("../fonts/NFT/play-fairDisplay/PlayfairDisplay-Regular.ttf");
@@ -81,7 +81,7 @@ body {
 @font-face {
   font-family: PlayDisplay_Bold;
   src: url("../fonts/NFT/play-fairDisplay/PlayfairDisplay-SemiBold.ttf");
-}
+}*/
 /* play-fairDisplay */
 /* NFT Fonts end*/
 

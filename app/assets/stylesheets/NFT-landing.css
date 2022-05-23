@@ -519,8 +519,8 @@ section.create-collectible-section ,
 }
 .NFT_SCREEN_Header .nft-header.header-all ul li:last-child .dropdown-lists .nft-menus a{
   color: #000;
-  font-size: 17px;
-}
+/*  font-size: 22px;
+*/}
 
 .NFT_SCREEN .section.section_3 img.img-responsive {margin-bottom: 50px;}
 section.blog-section {
@@ -546,7 +546,7 @@ section.faq-section.close-nav {
     background: transparent linear-gradient(309deg, #00189d 0%, #3c97f2c9 100%) 0% 0% no-repeat padding-box;
 }*/
 .sec_1_common_bg{
-    background: transparent linear-gradient(309deg, #00189d 0%, #3c97f2c9 100%) 0% 0% no-repeat padding-box;
+    background: transparent linear-gradient(309deg, #00189D 0%, #3C97F2 100%) 0% 0% no-repeat padding-box;
 
 }
 .sec_1_common_bg .sec_wd_standared {
@@ -574,10 +574,13 @@ section.faq-section.close-nav {
 .sec_5_bg {
     background: #fff;
 }
-.sec_wd_standared {
+.sec_wd_standared{
       width: 1600px;
     margin: 0 auto;
     overflow: hidden
+}
+footer.footer.section-footer.wide-window .container {
+  max-width: 100%;
 }
 .NFT_SCREEN_Header .nft-header ul li .dropdown-lists form.header__search,
 .NFT_SCREEN .section.section_1 form.header__search {
@@ -610,6 +613,7 @@ section.faq-section.close-nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-size: 22px;
 }
 
 .NFT_SCREEN .section.section_3 ul li .img-panel .image-fit button.card__likes.heart.is-active, 
@@ -624,6 +628,7 @@ section.faq-section.close-nav {
 }
 .NFT_SCREEN .section.section_3 ul li .img-panel .image-fit .auction-heading strong:first-child {
     font-weight: 600;
+    font-size: 18px;
 }
 .NFT_SCREEN_Header .nft-header ul li img.crosstower-icon {
     width: 30px;
@@ -1230,10 +1235,14 @@ body.open-modal:before {
     color: #162C5B!important;
     display: flex;
     align-items: center;
+    font-size: 22px;
+padding: 0 5px;
+    line-height: normal;
 }
 .NFT_SCREEN .section .browse-btn button img {
-    width: 20px;
-    padding-left: 8px;
+    width: 14px;
+    margin-left: 8px;
+    max-width: 14px;
   }
 .NFT_SCREEN .section .browse-btn.learn-more button {
   background-color: #3C97F2 ;
@@ -1384,7 +1393,8 @@ body.open-modal:before {
 }
 .NFT_SCREEN .section.section_1 .welcome-text {
   width: 55%;
-  padding-top: 3%;
+  padding-top: 5%;
+  z-index: 9;
 }
 .NFT_SCREEN .section.section_1 .welcome-text label {
   background: #ffffff5e 0% 0% no-repeat padding-box;
@@ -1397,7 +1407,7 @@ body.open-modal:before {
   margin: 0 0 30px 0;
 }
 .NFT_SCREEN .section.section_1 .welcome-text .cricle-round {
-    z-index: -9;
+    z-index: -1;
     position: absolute;
     left: 40px;
     top: -140px;
@@ -1412,7 +1422,7 @@ body.open-modal:before {
     background: transparent linear-gradient(319deg, #00189D 0%, #3C97F2 100%) 0% 0% no-repeat padding-box;
     border-radius: 100%;
     top: 348px;
-    z-index: 19;
+    z-index: -99999;
 }
 
 .NFT_SCREEN .section.section_1 .welcome-text h2 {
@@ -1421,8 +1431,13 @@ body.open-modal:before {
   color: #fff;
   font-size: 68px;
   line-height: 36px;
-  font-family: PlayDisplay_Bold;
-  margin: 0 0 40px 0;
+  margin: 30px 0 40px 0;
+    font: normal normal bold 65px/86px Playfair Display;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    font-weight: 600;
+
+
 }
 .NFT_SCREEN .section.section_1 .welcome-text h2 a {
   display: block;
@@ -1436,9 +1451,11 @@ body.open-modal:before {
   margin: 20px 0 30px 0;
 }
 .NFT_SCREEN .section.section_1 .welcome-text .nft-welcome-btn {
-  text-align: center;
+/*  text-align: center;
   margin: 80px 0 0 0;
-  margin-left: -80px;
+  margin-left: -80px;*/
+    text-align: left;
+  margin: 60px 0 0 0;
 }
 /* .NFT_SCREEN .section.section_1 .welcome-text .nft-welcome-btn .input-wrap {
 } */
@@ -1524,7 +1541,7 @@ body.open-modal:before {
 
 .NFT_SCREEN .section.section_1 .right-images.video-here .banner_sec {
  
-    top: 40px;
+    top: 60px;
     width: 90%;
     margin: 0 auto;
 
@@ -1573,12 +1590,25 @@ body.open-modal:before {
 }
 .NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+/*  align-items: flex-start;
+*/  justify-content: space-between;
+}
+.NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .add-learn-more-btn.profile-detail .browse-btn.learn-more {
+    position: unset;
+    display: inline-grid;
+    align-items: center;
+}
+
+.NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .add-learn-more-btn.profile-detail .browse-btn.learn-more a img {
+    width: 14px;
+    height: auto;
+    margin: unset;
+    margin-left: 8px;
+    max-width: 14px;
 }
 .NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .profile-detail {
   display: flex;
-  width: 29%;
+  width: 32%;
 }
 .NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .profile-detail img {
     width: 50px;
@@ -1591,22 +1621,16 @@ body.open-modal:before {
   text-align: left;
   letter-spacing: 0px;
   color: #FFFFFF;
-  font-size: 24px;
-  font-family: Hahmlet_Bold;
-  font-weight: 600;
+  font: normal normal bold 24px/35px Hahmlet;
   margin-bottom: 12px;
- line-height: 24px;
 
 }
 .NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .profile-detail .name-detail a {
-  text-align: left;
-  letter-spacing: 0px;
-  color: #FFFFFF;
-  font-size: 20px;
-  font-family: Hahmlet_Normal;
-  font-weight: 400;
-  line-height: 28px;
-  margin-top: 15px;
+    text-align: left;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    margin-top: 15px;
+    font: normal normal normal 20px/29px Hahmlet;
 }
 .NFT_SCREEN .section.section_2 {
   position: relative;
@@ -1681,15 +1705,15 @@ body.open-modal:before {
 }
 .NFT_SCREEN .section.section_2 ul li .carousal-menus .desc h6 {
   color: #fff;
-  font-size: 15px;
+  font: normal normal bold 17px/34px Hahmlet;
   margin: 0;
   font-weight: 600;
 }
 .NFT_SCREEN .section.section_2 ul li .carousal-menus .desc a {
-  font-size: 12px;
   font-weight: 400;
+  font: normal normal normal 15px/20px Josefin Sans;
   color: #fff;
-  margin-top: -4px;
+  margin-top: 0;
   display: block;
 }
 .NFT_SCREEN .section.section_2 ul li .exclusive-row {
@@ -1864,7 +1888,7 @@ body.open-modal:before {
 }
 .NFT_SCREEN .section.section_3 ul li .img-panel .desc .caption .profile-detail .name-detail h6 {
   color: #707070;
-  font-size: 16px;
+  font-size: 13px;
   font-family: Hahmlet_Normal ;
   font-weight: 400;
   text-align: left;
@@ -1873,7 +1897,7 @@ body.open-modal:before {
 }
 .NFT_SCREEN .section.section_3 ul li .img-panel .desc .caption .profile-detail .name-detail a {
   color: #000000;
-  font-size: 12px;
+  font-size: 14px;
   font-family: Hahmlet_Normal ;
   display: block;
   width: 100%;
@@ -1898,6 +1922,8 @@ body.open-modal:before {
     font-weight: 600;
       font-family: Hahmlet_Bold ;
       color: #000000;
+      font-size: 18px;
+      text-align: left;
 
 }
 .NFT_SCREEN .section.section_3 ul li .img-panel .desc .caption.add-btn .profile-detail {
@@ -1909,7 +1935,7 @@ body.open-modal:before {
   border-radius: 30px;
   color: #162C5B;
   font-family: Hahmlet_Bold;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   min-width: 100px;
   padding: 8px 10px;
@@ -1947,7 +1973,7 @@ body.open-modal:before {
   font-size: 15px;
 }
 .NFT_SCREEN .section.section_3 ul li .img-panel .image-fit .auction-heading strong:last-child {
-  font-size: 12px;
+  font-size: 14px;
 }
 .NFT_SCREEN .section.section_3 ul li .img-panel .image-fit .share-icon {
   top: 6px;
@@ -2214,9 +2240,9 @@ font-size: 32px;
 }
 
 
-footer.footer.section-footer {
-    padding-left: 3%;
-    padding-right: 3%;
+footer.footer.section-footer.wide-window .container {
+    padding-left: 4%;
+    padding-right: 4%;
 }
 
 footer.footer.section-footer .footer__tagline{
@@ -2368,6 +2394,19 @@ footer.footer.section-footer  .footer_nav li a{
     background: #162C5B;
     border-radius: 30px;
 }
+@media screen and (max-width: 9999px) and (min-width: 1550px) {
+  .NFT_SCREEN .section.section_2 ul li .carousal-menus .desc h6,
+  .profile-tabs.tabs-panel .tabcontent .panel-detail-heading, .discover_menus .panel-heading,
+  .clear-filter-heading h5{
+    font-size: 26px;
+  }
+  .NFT_SCREEN .section.section_2 ul li .carousal-menus .desc a,
+  .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail a,
+  .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail button{
+    font-size: 16px;
+  }
+
+}
 @media screen and (max-width: 9999px) and (min-width: 2501px) {
     main.main.m_home.new_NFT_screen {
     overflow: hidden;
@@ -2375,6 +2414,21 @@ footer.footer.section-footer  .footer_nav li a{
 .NFT_SCREEN .section.section_1.art-sec::before{
     width: 1050%;
     left: -300%;
+}
+.NFT_SCREEN .section.section_1 .welcome-text h2 br{
+display: none;
+}
+.NFT_SCREEN .section.section_1 .welcome-text h2{
+  font: normal normal bold 65px/86px Playfair Display;
+    letter-spacing: 0px;
+   font-family: PlayFair_400;
+}
+.NFT_SCREEN .section.section_1 .welcome-text{
+  padding-top: 2%;
+}
+.discover_menus .container, main.main.mt-0.NFT-detail .container.bg-effect, main.main.mt-0.NFT-detail .container,
+footer.footer.section-footer.wide-window .container{
+      width: 1600px;
 }
 }
 @media screen and (max-width: 2500px) and (min-width: 1534px) {
@@ -2385,6 +2439,10 @@ footer.footer.section-footer  .footer_nav li a{
   }
   .sec_wd_standared{
     width: 100%!important;
+  }
+  footer.footer.section-footer.wide-window .container{
+    max-width: 100%;
+    width: 100%;
   }
      .NFT_SCREEN .section.section_1.art-sec::after{
            background: #1b4ba3;
@@ -2397,10 +2455,24 @@ footer.footer.section-footer  .footer_nav li a{
     left: -220%;
 }
 
+.NFT_SCREEN .section.section_1 .welcome-text h2{
+  font: normal normal bold 65px/86px Playfair Display;
+    letter-spacing: 0px;
+}
+.NFT_SCREEN .section.section_1 .welcome-text{
+  padding-top: 2%;
+}
 }
 @media screen and (max-width: 1900px) and (min-width: 1534px) {
   .NFT_SCREEN .section.section_1.art-sec::after {
     background: #1a4fab;
+}
+.NFT_SCREEN .section.section_1 .welcome-text h2{
+  font: normal normal bold 60px/86px Playfair Display;
+    letter-spacing: 0px;
+}
+  .NFT_SCREEN .section.section_1 .welcome-text h2 br{
+display: none;
 }
 }
 @media screen and (max-width: 1533px) and (min-width: 280px) {
@@ -2409,10 +2481,16 @@ footer.footer.section-footer  .footer_nav li a{
   .NFT_SCREEN {
     width: 100%!important;
   }
+  .NFT_SCREEN .section.section_1 .welcome-text h2 br{
+display: none;
+}
   .sec_wd_standared{
     width: 100%!important;
   }
-
+.NFT_SCREEN .section.section_1 .welcome-text h2{
+  font: normal normal bold 52px/67px Playfair Display;
+    letter-spacing: 0px;
+}
   .NFT_SCREEN .section.section_1 .right-images.video-here .banner_sec{
     margin-left: 20px;
   }
@@ -2440,11 +2518,8 @@ footer.footer.section-footer  .footer_nav li a{
   .NFT_SCREEN_Header .nft-header ul li:last-child .dropdown-lists .nft-menus a ,
   .NFT_SCREEN_Header .nft-header.header-all ul li:last-child .dropdown-lists .nft-menus a{
     margin-right: 0;
-    font-size: 15px;
   }
-  .NFT_SCREEN .section.section_1 .welcome-text h2 {
-    font-size: 60px;
-  }
+
   .NFT_SCREEN .section.section_1 .welcome-text p {
     font-size: 23px;
   }
@@ -2480,7 +2555,7 @@ footer.footer.section-footer  .footer_nav li a{
   .NFT_SCREEN_Header .nft-header ul li:last-child .dropdown-lists .nft-menus a ,
   .NFT_SCREEN_Header .nft-header.header-all ul li:last-child .dropdown-lists .nft-menus a{
     margin-right: 0;
-    font-size: 15px;
+    font-size: 20px;
   }
   .NFT_SCREEN_Header .nft-header ul li:last-child .dropdown-lists .nft-menus.search-menu {
     width: 220px;
@@ -2493,9 +2568,10 @@ footer.footer.section-footer  .footer_nav li a{
     display: none;
   }
   .NFT_SCREEN .section.section_1 .welcome-text h2 {
-    font-size: 37px;
-    margin: 0 0 20px 0;
-    line-height: 46px;
+ /*   font-size: 34px;
+    margin: 10px 0 20px 0;
+    line-height: 46px;*/
+    font:  normal normal bold 40px/56px Playfair Display;
       }
   .NFT_SCREEN .section.section_1 .welcome-text p {
  font-size: 22px;
@@ -2591,7 +2667,7 @@ footer.footer.section-footer  .footer_nav li a{
   .NFT_SCREEN_Header .nft-header ul li:last-child .dropdown-lists .nft-menus a ,
   .NFT_SCREEN_Header .nft-header.header-all ul li:last-child .dropdown-lists .nft-menus a{
     margin-right: 0;
-    font-size: 12px;
+    font-size: 20px;
   }
   .NFT_SCREEN .section.section_1 .right-images .MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiMobileStepper-root.MuiMobileStepper-positionStatic {
     margin: 0px 0;
@@ -2611,19 +2687,28 @@ footer.footer.section-footer  .footer_nav li a{
 @media screen and (max-width: 1149px) and (min-width: 1025px) {
   .NFT_SCREEN .section.section_1 .right-images.video-here .banner_sec .youtube-video{
     height: 310px;
-    margin-top: 70px;
+    margin-top: 10px;
+  }
+  .NFT_SCREEN .section.section_1 .welcome-text h2{
+    margin-top: 0;
+  }
+  .NFT_SCREEN_Header .nft-header ul li:last-child .dropdown-lists .nft-menus a, .NFT_SCREEN_Header .nft-header.header-all ul li:last-child .dropdown-lists .nft-menus a{
+    font-size: 16px;
   }
 }
 @media screen and (max-width: 1024px) and (min-width: 280px) {
   .NFT_SCREEN .section.section_1 .right-images:before{
     left: 0;
   }
+  .NFT_SCREEN .section.section_1 .welcome-text h2{
+    margin-top: 0;
+  }
   .NFT_SCREEN .section.section_3 ul li .img-panel .desc .caption .profile-detail .name-detail a{
     width: 60px;
   }
   .NFT_SCREEN .section.section_1 .right-images.video-here .banner_sec .youtube-video{
     height: 290px;
-    margin-top: 50px;
+    margin-top: 0px;
 }
   .NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .profile-detail .name-detail h6 br{
     display: none;
@@ -2650,7 +2735,7 @@ footer.footer.section-footer  .footer_nav li a{
   .NFT_SCREEN_Header .nft-header ul li:last-child .dropdown-lists .nft-menus a,
   .NFT_SCREEN_Header .nft-header.header-all ul li:last-child .dropdown-lists .nft-menus a {
     margin-right: 0;
-    font-size: 14px;
+    font-size: 15px;
   }
   .NFT_SCREEN .section.section_3 {
     padding-bottom: 28%;
@@ -2660,12 +2745,26 @@ footer.footer.section-footer  .footer_nav li a{
   }
 }
 @media screen and (max-width: 991px) and (min-width: 280px) {
+  .NFT_SCREEN .section.section_1 .welcome-text h2{
+  font: normal normal bold 38px/46px Playfair Display;
+}
+.NFT_SCREEN .section.section_2 ul li .carousal-menus .desc h6{
+    font-size: 15px;
+    line-height: 17px;
+    margin-bottom: 5px;
+
+}
+.NFT_SCREEN .section.section_2 ul li .carousal-menus .desc a{
+  font-size: 12px;
+  line-height: 15px;
+}
    .NFT_SCREEN_Header .nft-header {
     top: 40px;
   }
   .NFT_SCREEN .section.section_1 .right-images.video-here .banner_sec{
       left: 60px;
     width: 90%;
+    top: 0;
   }
   section.create-collectible-section, .main {
     margin-top: 110px!important;
@@ -2906,8 +3005,11 @@ top: 12px;
   }
   .NFT_SCREEN .section.section_1 .welcome-text .nft-welcome-btn button {
     font-size: 16px;
-    min-width: 220px;
-  }
+    min-width: 130px;
+    padding: 6px 10px;
+    padding-right: 40px;
+    background-size: 11px;
+    background-position: 78% 45%;  }
 }
 @media screen and (max-width: 1280px) and (min-width: 1025px) {
   .NFT_SCREEN .section.section_1 .right-images .slider-pointer{
@@ -2935,7 +3037,7 @@ top: 12px;
   .NFT_SCREEN .section.section_1 .right-images.video-here .banner_sec .youtube-video{
 
     height: 300px;
-    margin-top: 100px;
+    margin-top: 30px;
 
 }
   .inline-header {
@@ -2949,7 +3051,7 @@ top: 12px;
   }
   .NFT_SCREEN_Header .nft-header ul li:last-child .dropdown-lists .nft-menus a ,
   .NFT_SCREEN_Header .nft-header.header-all ul li:last-child .dropdown-lists .nft-menus a{
-    font-size: 13px;
+    font-size: 16px;
   }
   .NFT_SCREEN .section {
     padding: 5% 4%;
@@ -3166,6 +3268,7 @@ top: 12px;
   }
   .NFT_SCREEN .section.section_1 .welcome-text .nft-welcome-btn {
     margin: 30px auto;
+    text-align: center;
   }
   .NFT_SCREEN .section.section_1 .welcome-text .nft-welcome-btn 
    button {
@@ -3175,6 +3278,7 @@ top: 12px;
     padding: 6px 10px;
     background-size: 10px;
     padding-right: 30px;
+    background-position: 81% 52%;
   }
   .NFT_SCREEN .section.section_1 .right-images {
     width: 90%;
@@ -3294,7 +3398,9 @@ top: 12px;
 }
 }
 @media screen and (max-width: 767px) and (min-width: 280px) {
-
+.NFT_SCREEN .section.section_1.art-sec .art-collection .browse-btn button a{
+  font-size: 18px;
+}
   .NFT_SCREEN .section.section_3 ul li .img-panel .image-fit a.img-fit-user{
     height: auto;
   }
@@ -3393,11 +3499,11 @@ left: auto;
     width: 100%;
   }
   .NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .profile-detail .name-detail h6 {
-    font-size: 17px;
+    font-size: 22px;
     text-align: center;
   }
   .NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .profile-detail .name-detail a {
-    font-size: 13px;
+    font-size: 18px;
     text-align: center;
     display: block;
   }
@@ -3621,6 +3727,14 @@ left: auto;
     top: auto;
     bottom: 0;
 }
+.NFT_SCREEN .section .browse-btn button a,
+.NFT_SCREEN .section.section_1.art-sec .art-collection .browse-btn button a{
+  font-size: 15px;
+}
+.NFT_SCREEN .section.section_1.art-sec .art-collection .art-collection-lists .add-learn-more-btn.profile-detail .browse-btn.learn-more a img,
+.NFT_SCREEN .section .browse-btn button img{
+  width: 20px;
+}
 .NFT_SCREEN .section.section_1 .welcome-text .cricle-round{
   top: 20px;
 }
@@ -3722,13 +3836,13 @@ left: auto;
     background-size: 14px;
     min-width: unset;
     max-width: initial;
-    padding: 5px 10px;
+    padding: 8px 10px;
   }
   .NFT_SCREEN .section .browse-btn  button {
     min-width: auto;
     max-width: initial;
     font-size: 12px;
-    padding: 5px 10px;
+    padding: 8px 10px;
     text-align: left;
     background-position: 85% 54%;
     background-size: 13px;
