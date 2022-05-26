@@ -128,6 +128,10 @@ class Collection < ApplicationRecord
     "<p class='para-color'>Collection (#{nft_contract&.contract_type&.upcase})</p><h4 data-toggle='tooltip' data-placement='top' title=\"#{nft_contract&.address}\">#{nft_contract&.masked_address}</h4>".html_safe
   end
 
+  def collection_info_name
+    "#{nft_contract&.contract_type&.upcase}".html_safe
+  end
+
   def total_editions
     "#{owned_tokens.to_i} of #{no_of_copies}"
   end
@@ -152,6 +156,15 @@ class Collection < ApplicationRecord
     # WHEN CONTARCT IS NOT YET CREATED FOR OWN NFT
     self.nft_contract ? self.nft_contract.address : nil
   end
+
+  def contract_name 
+    self.nft_contract ? self.nft_contract.name : nil
+  end 
+
+  def own_collection 
+    self.nft_contract.owner_id
+  end
+
 
   def place_bid(bidding_params)
     details = bidding_params[:details]
