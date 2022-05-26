@@ -41,7 +41,7 @@
     color: #3C97F2;
     font-size: 40px;
     font-weight: 400;
-    font-family: Hahmlet_Normal;
+    font-family: 'Hahmlet', serif;
 
 }
 
@@ -56,7 +56,7 @@
     margin-top: -10px;
     font-size: 20px;
     font-weight: 400;
-    font-family: Hahmlet_Normal;
+    font-family: 'Hahmlet', serif;
 }
 .modeling-details img.modal-img{
     width: 100%;
@@ -303,6 +303,8 @@ img.like-img {
 
 .member-detail label {
     width: 100%;
+    font-family: 'Hahmlet', serif;
+    font-weight: 400;
     margin-bottom: 0;
     color: #162C5B;
 }
@@ -397,7 +399,7 @@ width: 14px;
     padding: 10px;
     width: 90%;
     text-align: center;
-    font: normal normal normal 17px/32px Hahmlet;
+    font: normal normal normal 14px/28px Hahmlet;
     letter-spacing: 0px;
     color: #FFFFFF;
 }
@@ -536,6 +538,7 @@ span.edit-profile img {
     width: 160px;
     height: 160px;
     z-index: 10;
+    object-fit: cover;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading button.card__likes.heart.profile_likes_icon.is-active .far {
     display: none;
@@ -567,6 +570,26 @@ span.edit-profile img {
     font: normal normal normal 28px/55px Hahmlet;
     letter-spacing: 0px;
     color: #FFFFFF;
+}
+.prfile_name_details h5 span.twitter-id img,.prfile_name_details h5 span.insta-id img {
+    margin: 0;
+    max-width: 25px;
+    margin-left: 10px;
+    width: 25px;
+    height: 25px;
+}
+
+.prfile_name_details h5 span.twitter-id, .prfile_name_details h5 span.insta-id {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
+    
+}
+
+.prfile_name_details h5 {
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
 }
 .profile-details.profile-name-details h5 span {
     display: flex;
@@ -733,6 +756,7 @@ span.edit-profile img {
   font-size: 18px;
   display: flex;
   align-items: center;
+  margin: 0;
   position: relative;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading strong {
@@ -744,8 +768,10 @@ span.edit-profile img {
   width: 83%;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading span {
-  margin-left: auto;
-  display: flex;
+    margin-left: auto;
+    display: flex;
+    position: relative;
+    top: 5px;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading span img {
   margin-right: 7px;
@@ -778,9 +804,9 @@ font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 10px;
+  padding-bottom: 3px;
   border-bottom: 1px solid #ddd;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail {
   width: 46%;
@@ -948,6 +974,7 @@ font-weight: 600;
 
 .profile-tabs.tabs-panel.tabs-lists .activity-dropdown {
     max-height: 280px;
+    z-index: 9999;
     overflow: auto;
 }
 .profile-tabs.tabs-panel.tabs-lists .activity-dropdown .member-detail a strong {
@@ -1108,7 +1135,7 @@ main.main.mt-0.NFT-detail.discover_Page {
 .Category-Lists label a{
         font: normal normal normal 16px Hahmlet;
     letter-spacing: 0px;
-    color: #162C5B;
+    color: #3C97F2;
 }
 
 .Category-Lists label.active ,
@@ -1190,7 +1217,7 @@ main.main.mt-0.NFT-detail.discover_Page {
     border: 0;
     color: #162C5B;
 }
-.clear-filter-heading h5 {
+.clear-filter-heading h5 button {
     text-align: left;
     font: normal normal bold 22px/32px Hahmlet;
     letter-spacing: 0px;
@@ -1426,8 +1453,137 @@ a.mob-apply-btn button {
     max-height: 290px;
     overflow: auto;
 }
-
+.tabs-panel .tabcontent.profile-mob-details.mob-view-profile-tab{
+    display: none!important;
+}
 /*Discover tab end*/
+
+/* common modal start */
+.change-price-popup h4,.sm_modal h4{
+    font-family: 'Hahmlet', serif;
+    font-weight: 500;
+}
+.modal-body label,.modal-body p,
+.bidding-element-btn,.sign__input{
+       font-family: 'Hahmlet', serif;
+    font-weight: 400; 
+}
+.change-price-popup {max-width: 580px;}
+
+.change-price-popup p.para-color {
+    text-align: left;
+    letter-spacing: 0px;
+    color: #162C5B;
+    opacity: 0.6;font-size: 15px;
+}
+
+.change-price-popup label {
+    margin-bottom: 0;
+}
+.change-price-popup .form-group.bidBuyInputs.bordered {
+    border: 0!important;
+    height: auto;
+}
+
+.change-price-popup .form-group.bidBuyInputs.bordered input {
+border-radius: 8px;
+height: 38px;
+font-family: 'Hahmlet', serif;
+}
+.change-price-popup .sign__input{
+    font-family: 'Hahmlet', serif;
+    border-radius: 8px;
+}
+.change-price-popup .form-group.bidBuyInputs.bordered .user-entered-value {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #E2E2E2;
+    border-radius: 8px;
+    width: calc(100% - 180px);
+}
+
+.change-price-popup .form-group.bidBuyInputs.bordered .user-select-filed {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #E2E2E2;
+    border-radius: 8px;
+    margin-left: auto;
+    width: 170px;
+}
+
+.change-price-popup .form-group.bidBuyInputs div:last-child .input-custom {
+    border-left: 0!important;
+    border-radius: 8px;
+    height: 38px;
+    background: url(/assets/down-arrow-blue.svg) no-repeat center right 10px #ffffff;
+    font-family: 'Hahmlet', serif;
+    font-weight: 500;
+}
+.change-price-popup .modal-footer {
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.change-price-popup .modal-footer .bidding-element-btn {
+    min-width: 180px;
+    border-radius: 8px;
+}
+
+.change-price-popup .modal-footer .bidding-element-btn {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+    border: 1px solid #3C97F2;
+    border-radius: 10px;font-size: 15px;
+}
+
+.change-price-popup .modal-footer .bidding-element-btn.theme-btn {
+    background: #3C97F2 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 10px;
+    opacity: 1;
+}
+.change-price-popup .unlock-description-section {
+    margin-top: -15px;
+}
+.transfer-token .modal-footer.text-center {
+    margin-top: 30px;
+}
+.burn-Token p.greeting-head {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #162C5B;width: 70%;margin: 0 auto;
+    font-size: 17px;
+    line-height: 22px;
+}
+
+.burn-Token p.buynow-content span.innertitle {
+    text-align: center;
+    letter-spacing: 0px;
+    font-size: 16px;
+    line-height: 24px;
+    font-style: italic;
+    color: #162C5B;
+    opacity: 0.5;
+}
+.burn-Token .modal-footer {justify-content: space-between;}
+/* common modal end */
+
+@media screen and (max-width: 9999px) and (min-width: 2501px) {
+    main.NFT-detail.modeling-NFT .container{
+         width: 1600px;
+    max-width: 1600px;
+    padding-left: 0%;
+    padding-right: 0%;
+    }
+    .NFT_SCREEN_Header .nft-header ul{
+        padding-left: 0;
+        padding-right: 0;
+    }
+      .place-buy-details .highest-bid button{
+        font: normal normal normal 16px/32px Hahmlet;
+    }
+    
+  }
+
+
 @media screen and (max-width: 9999px) and (min-width: 1550px) {
 
 /*  .discover_menus ul.nav.nav-tabs li a{
@@ -1441,6 +1597,16 @@ a.mob-apply-btn button {
   .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc h5{
     font-size: 18px;
   }*/
+  .place-buy-details .highest-bid button{
+    font: normal normal normal 17px/32px Hahmlet;
+
+  }
+}
+@media only screen and (max-width:2500px) and (min-width: 280px){
+    main.NFT-detail.modeling-NFT .container {
+    max-width: 94%;
+    width: 94%;
+}
 }
 
 @media only screen and (max-width:1526px) and (min-width: 991px){
@@ -1456,7 +1622,7 @@ a.mob-apply-btn button {
 }
 @media only screen and (max-width:1240px) and (min-width: 1201px){
      .place-buy-details .highest-bid button{
-  font-size: 15px;
+  font-size: 13px;
     width: auto;
     line-height: 18px;
     min-width: 160px;
@@ -1521,7 +1687,7 @@ a.mob-apply-btn button {
     font: normal normal 600 22px/37px Hahmlet;
     }
     .place-buy-details .highest-bid button{
-    font-size: 14px;
+    font-size: 12px;
     width: auto;
     line-height: 18px;
     min-width: 120px;
@@ -1536,7 +1702,9 @@ a.mob-apply-btn button {
             right: -770px;
      top: -260px;
     }
-
+.profile-tabs.tabs-panel.tabs-lists .tab button{
+    font-size: 15px;
+}
 
 .modal-description{
     padding-left: 0;
@@ -1553,12 +1721,31 @@ a.mob-apply-btn button {
     .User_following-list{
     display: block;
 }
+.member-detail a strong, .member-detail a, .member-detail .a_tag strong {font-size: 15px;line-height: 20px;}
+
+.profile-tabs.tabs-panel.tabs-lists .tabcontent.profile-mob-details .member-detail a strong {margin-left: 8px;}
+
+.profile-tabs.tabs-panel.tabs-lists .tabcontent.profile-mob-details .member-detail a strong em,.profile-tabs.tabs-panel.tabs-lists .tabcontent.profile-mob-details .member-detail a strong i {margin: 0;font-size: 13px;}
+
+.profile-tabs.tabs-panel.tabs-lists .tabcontent.profile-mob-details.tabcontent .member-detail a span {width: 38px;height: 38px;min-width: 38px;}
+
+.tabs-panel .tabcontent.profile-mob-details.hide-activity-btn{
+    display: none!important;
+}
+.tabs-panel .tabcontent.profile-mob-details.mob-view-profile-tab{
+    display: block!important;
+}
 .NFT-detail {
     box-shadow: none;
 }
-
+.tabs-panel .tabcontent.profile-mob-details.mob-view-profile-tab.inactive {
+    display: none!important;
+}
 .discover-container.discover-footer-section {
     margin-top: 0;
+}
+.profile-bg.view-mob-detail .profile-details.profile-name-details h5 span.highlight-address {
+    padding: 4px 10px;
 }
 .bg-effect:after{
         width: 250px;
@@ -1578,7 +1765,7 @@ a.mob-apply-btn button {
 }
 
 .User_following-list .activity-dropdown-lists {
-    max-height: 300px;
+    height: 300px;
     position: fixed;
     bottom: -100%;
     width: 100%;
@@ -1591,7 +1778,7 @@ a.mob-apply-btn button {
 .User_following-list.active .close-icon {
     position: fixed;
     right: 20px;
-    top: calc(100vh - 57%);
+    bottom: 340px;
     background: #484848;
     width: 27px;
     height: 27px;
@@ -1618,6 +1805,10 @@ a.mob-apply-btn button {
 .User_following-list h5 {color: #162C5B;font: normal normal normal 22px/39px Hahmlet;font-weight: 600;padding: 10px 10px;position: sticky;top: 0;background: #fff;left: 0;width: 100%;margin: 0;padding-bottom: 0;}
 .profile-tabs.tabs-panel .tabcontent{
     background: transparent;
+}
+.profile-tabs.tabs-panel.tabs-lists .tabcontent.profile-mob-details {
+    margin: 0;
+    padding: 20px 0;
 }
 .profile-tabs.tabs-panel.discover-profile .tabcontent.all_nfts {
     background: #fff;
@@ -1697,6 +1888,11 @@ a.mob-apply-btn button {
 .profile-tabs.tabs-panel .tab button.mob-follow-btn{
     display: block;
 }
+
+.profile-tabs.tabs-panel .tab button.web-follow-btn{
+    display: none;
+}
+
 .profile-tabs.tabs-panel .tab button em {
     font-style: normal;
     background: #3C97F2;
@@ -1726,6 +1922,7 @@ a.mob-apply-btn button {
 .hide-activity-btn,.profile-bg.hide-mob-detail{
     display: none;
 }
+
 .profile-bg.view-mob-detail {
     display: block;
     height: auto;
@@ -1760,6 +1957,9 @@ main.main.mt-0.NFT-detail.profile-Page {
     justify-content: flex-start;
     padding: 20px;
 }
+.profile-details.profile-name-details h5 span{
+    margin-left: 5px;
+}
 .profile-details.profile-pic-shown img.profile-image-tag {
     margin: 70px 0 0 0;
 }
@@ -1770,18 +1970,23 @@ main.main.mt-0.NFT-detail.profile-Page {
     text-align: center;
 }
 .prfile_name_details h5 span img{
-        width: 23px;
+    width: 23px;
     height: 23px;
 }
 
 .prfile_name_details h4 span img{
     width: 23px;
     height: 23px;
+    margin-left: 5px;
+
 }
 
 .profile-details.profile-name-details h5 span {
     justify-content: center;
     display: inline-block;
+}
+.prfile_name_details h5{
+    justify-content: center;
 }
 .profile-details.profile-name-details .prfile_name_details {
     text-align: center;
@@ -1895,7 +2100,7 @@ a.mob-apply-btn {
     margin-top: 0;
 }
 .place-buy-details .highest-bid button{
-    font-size: 14px;
+    font-size: 12px;
     width: auto;
     line-height: 18px;
     min-width: 120px;
@@ -2035,7 +2240,13 @@ span.royalty-span {
 }
 }
 @media only screen and (max-width:425px) and (min-width: 280px){
-
+.change-price-popup .modal-footer,.burn-Token .modal-footer{
+    flex-flow: row wrap;
+    justify-content: center;
+}
+.change-price-popup .modal-footer .bidding-element-btn,.burn-Token .modal-footer .bidding-element-btn{
+    margin: 10px 0 0 0;
+}
 .profile-tabs.tabs-panel .tabcontent{
     padding: 0;
 }
@@ -2084,10 +2295,44 @@ span.royalty-span {
     background: transparent;
     padding: 0;
 }
+.change-price-popup .unlock-description-section{
+    margin-top: 0;
+}
+.change-price-popup h4{
+    font-size: 22px;
+}
 }
 @media only screen and (max-width:375px) and (min-width: 280px){
     main.main.mt-0.NFT-detail.profile-Page {
     padding-top: 80px!important;
+}
+.burn-Token p.greeting-head{
+    width: 100%;
+    font-size: 15px;
+}
+.burn-Token p.buynow-content span.innertitle{
+        font-size: 14px;
+    line-height: 22px;
+    padding: 0;
+}
+.change-price-popup .form-group.bidBuyInputs.bordered{
+    flex-flow: row wrap;
+}
+.change-price-popup .form-group.bidBuyInputs.bordered .user-entered-value,
+.change-price-popup .form-group.bidBuyInputs.bordered .user-select-filed{
+    width: 100%;
+    margin-top: 10px;
+}
+
+.profile-bg.view-mob-detail .profile-details.profile-name-details h4{
+    margin-bottom: 0;
+}
+.prfile_name_details h5{
+    flex-flow: row wrap;
+}
+.profile-bg.view-mob-detail .profile-details.profile-name-details h5 span.highlight-address {
+    margin-top: 6px;
+    padding: 4px 10px;
 }
 
 /*.modeling-details ul li{
