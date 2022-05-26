@@ -218,11 +218,11 @@
                                  <a>Curated quality. Select art and experiences. A community to create, collect and explore with.</a>
                               </div> -->
                                    <div class="browse-btn learn-more">
-                                       <button>
-                                       <a href="/faq" class="browse-txt"> Learn More
+                                       <a href="/faq" class="browse-txt">
+                                       <button> Learn More
                                        <img src="../../assets/nft/white-right.svg" />
-                                       </a>
                                        </button>
+                                       </a>
                                     </div>
 
                            </div>
@@ -245,10 +245,12 @@
                <div class="section section_2">
                   <h3>Curated Creations</h3>
                   <div class="browse-btn  brwse-more">   
-                     <button>
-                     <a href="/collections" class="browse-txt"> Browse 
-                     <img src="../../assets/nft/right.svg" /></a>
-                     </button>                        
+                     <a href="/collections" class="browse-txt">
+                        <button>
+                        Browse 
+                        <img src="../../assets/nft/right.svg" />
+                        </button>                        
+                     </a>
                   </div>
                   <ul>
                      <span class="bg-transition"></span>
@@ -298,11 +300,11 @@
                            </div>
                            <div class="exclusive-row w-50">
                               <div class="carousal-menus">
-                                 <img src="../../assets/nft/exclusive-celebrity/dummy.png" alt="NFT_IMG_1" />
+                                 <a href="https://nft.crosstower.com/users/0x98502f2831b2f7be79fe4e14db1ce536b576294e" target="_blank" class="navigate-to-Link"></a>
+                                 <img src="../../assets/nft/exclusive-celebrity/Alejandro Glatt.png" alt="NFT_IMG_1" />
                                  <div class="desc">
-                                    <!-- <h6>Arjun Rampal</h6>
-                                       <a>@arjunrampal</a>
-                                       -->
+                                    <h6>Alejandro Glatt</h6>
+                                    <a>Tulum Based Multidisciplinary Artist</a>
                                  </div>
                               </div>
                            </div>
@@ -318,10 +320,11 @@
                <div class="section section_3">
                   <h3>Trending NFTs</h3>
                   <div class="browse-btn  brwse-more">   
-                     <button>
-                     <a href="/collections" class="browse-txt"> Browse 
-                     <img src="../../assets/nft/right.svg" /></a> 
+                     <a href="/collections" class="browse-txt">
+                     <button> Browse 
+                     <img src="../../assets/nft/right.svg" />
                      </button>                        
+                     </a> 
                   </div>
                   <ul>
                      <% if @category_collections.present? %>
@@ -334,7 +337,11 @@
                                        <%= image_tag cover_url(collection), class:"img-fixed-wd"%>
                                        <h6 class="auction-heading">
                                           <strong><%= collection.title %></strong>
-                                          <strong><%= collection.description %></strong>
+                                          <% if collection.own_collection.present? %>
+                                             <strong> <%= collection.contract_name %> </strong> 
+                                          <% else %>                    
+                                             <strong> <%= collection.collection_info_name %> </strong> 
+                                          <% end %>
                                        </h6>
                                     </a>
                                     <h5 class="share-icon t_c">

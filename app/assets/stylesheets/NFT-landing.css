@@ -448,10 +448,22 @@ NFT landing page css start */
     position: absolute;
     right: 0;
     width: 170px;
-    background: #fff;
     top: 40px;
     border-radius: 4px;
+    background: #fff 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 10px #00000029;
     padding: 10px;
+}
+.drop-list:before {
+    content: '';
+    position: absolute;
+    top: -7px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #ffffff;
+    right: 30px;
 }
 .drop-list.active {
   display: block;
@@ -594,6 +606,7 @@ footer.footer.section-footer.wide-window .container {
     display: unset;
     background: transparent;
     border: 0;
+    z-index: 0;
 }
 .NFT_SCREEN_Header .nft-header ul li .dropdown-lists form.header__search input{
   color: #000;
@@ -1570,14 +1583,13 @@ padding: 0 5px;
 }
 
 .NFT_SCREEN .section.section_1.art-sec .art-collection {
-  background: #000 0% 0% no-repeat padding-box;
-  box-shadow: 0px 0px 40px #00000029;
-  border-radius: 30px;
-  padding: 40px 55px;
-  padding-bottom: 50px;
-  margin: auto;
-  width: 83%;
-  z-index: 9;
+    background: #000 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 40px #00000029;
+    border-radius: 30px;
+    padding: 20px 55px;
+    margin: auto;
+    width: 80%;
+    z-index: 9;
 }
 .NFT_SCREEN .section.section_1.art-sec .art-collection .browse-btn {
   position: absolute;
@@ -1789,36 +1801,43 @@ padding: 0 5px;
   overflow: hidden;
 }
 .NFT_SCREEN .section.section_3  ul.dropdown-menu.header__profile-menu {
-    width: 200px;
+    width: 170px;
     top: 0!important;
     margin: 0;
     box-shadow: 0px 3px 20px #00000015;
+    max-width: 170px;
+    min-width: 170px;
+    padding: 5px 0;
 }
 .NFT_SCREEN .section.section_3 ul.dropdown-menu.header__profile-menu li:hover a i {
-    color: #fff;
+    color: #213362;
 }
 
 .NFT_SCREEN .section.section_3 ul.dropdown-menu.header__profile-menu li a i {
     font-size: 18px;
+    color: #162C5B;
 }
 .NFT_SCREEN .section.section_3 ul.dropdown-menu.header__profile-menu li {
     background: transparent;
     width: 100%;
-    padding: 10px;
+    padding: 0;
     margin: 0;
     box-shadow: none;
 }
 
 .NFT_SCREEN .section.section_3 ul.dropdown-menu.header__profile-menu li a {
-    color: #fff;
-    display: unset;
+    display: flex;
     border: 0;
-    padding: 0;
+    padding: 10px 15px;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .NFT_SCREEN .section.section_3 ul.dropdown-menu.header__profile-menu li a span {
     position: unset;
     background: transparent;
+    text-align: left;
+    padding: 0;
 }
 .NFT_SCREEN .section.section_3 ul li .img-panel .image-fit h5.share-icon.t_c .more_action_btn {
     display: block;
@@ -1845,7 +1864,7 @@ padding: 0 5px;
   backdrop-filter: blur(30px);
   padding: 5px;
   width: 150px;
-  color: #fff;
+  color: #162C5B;
   font-size: 13px;
   font-family: CircularStd_Bold ;
 }

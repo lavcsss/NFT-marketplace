@@ -3563,7 +3563,7 @@ input:checked + .dark-theme-slider.slider:before {
     border: 1px solid #3C97F2;
     min-width: 180px;
     font-family: 'Hahmlet', serif;
-    font-weight: 400;
+    font-weight: bold;
 }
 
 #landing_head .nav > li > a:focus,
