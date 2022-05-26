@@ -21,7 +21,7 @@ body {
 }
 
 /* NFT Fonts start*/
-/*
+
 @font-face {
   font-family: CircularStd_Normal;
   src: url("../fonts/NFT/Circular-Std-Font/CircularStd-Book.otf");
@@ -38,7 +38,7 @@ body {
   font-family: CircularStd_Bold;
   src: url("../fonts/NFT/Circular-Std-Font/CircularStd-Bold.otf");
   font-weight: 600;
-}*/
+}
 
 /* Hehmlet start */
 /*
@@ -5429,7 +5429,8 @@ input::-ms-input-placeholder {
   font-size: 16px;
   width: 100%;
   padding: 0 20px;
-  font-family: "DM Sans", sans-serif;
+/*  font-family: "DM Sans", sans-serif;*/
+  font-family: 'Hahmlet', serif;
   border: 1px solid #ddd;
 }
 .sign__input:focus {
