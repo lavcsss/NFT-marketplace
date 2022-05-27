@@ -675,7 +675,7 @@ footer.footer.section-footer.wide-window .container {
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: 9999999;
+    z-index: 10;
 }
 /* NFT header end */
 /*NFT Modal start*/
@@ -1945,6 +1945,7 @@ padding: 0 5px;
 .NFT_SCREEN .section.section_3 ul li .img-panel .desc .caption.add-btn .profile-detail .name-detail {
     margin: 0;
     text-align: left;
+    width: 100%;
 }
 .NFT_SCREEN .section.section_3 ul li .img-panel .desc .caption.add-btn {
     padding: 0px 0px;
@@ -2390,7 +2391,7 @@ footer.footer.section-footer  .footer_nav li a{
   padding: 15px 5px 5px 5px;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc {
-    padding: 5px 0;
+    padding: 5px 0 0 0;
 }
 .img-panel .desc .profile-detail {
   display: flex;
@@ -2404,7 +2405,8 @@ footer.footer.section-footer  .footer_nav li a{
   box-shadow: 0px 3px 6px #00000029;
 }
 .img-panel .desc .profile-detail .name-detail {
-  margin-left: 10px;
+    margin-left: 10px;
+    width: 80%;
 }
 .img-panel .desc .profile-detail .name-detail h6 {
   font-size: 14px;
