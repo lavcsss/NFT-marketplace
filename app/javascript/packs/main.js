@@ -22,18 +22,16 @@ $(document).ready(function () {
 		}
 	});
 
-	$('.header__search .close, .header__action--search button').on('click', function() {
+	$('.header__action--search button').on('click', function() {
 		$('.header__search').toggleClass('header__search--active');
 	});
 
-	$(document).ready(function(){
-		$(document).mouseup(e => {
-		   if ( !$('.header__search').is(e.target))
-		   {  
-			  $(".header__search").removeClass("header__search--active");
-		   }
-		});
-	 });
+	$(document).mouseup(e => {
+		if ( !$('.header__search').is(e.target) || $('.header__search .close').is(e.target))
+		{  
+			$(".header__search").removeClass("header__search--active");
+		}
+	});
 
 	/*==============================
 	Multi level dropdowns
