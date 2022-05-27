@@ -7,8 +7,8 @@
   --submit-search: #8a8686;
   --input-border: #e0e0e0;
   --top-sell-buy-box: #ccc;
-/*  --theme-color: #3d00b7;
-*/  --theme-color: #3C97F2;
+  --theme-color: #3d00b7;
+/* --theme-color: #3C97F2; */
   --box-default-color: #464646;
   --no-wishlist-bg: #9c9c9c96;
   --ordinary-theme: #f1f5fe;
@@ -4535,7 +4535,7 @@ video.video-responsive {
   background: var(--ordinary-theme) !important;
   /* border: 1px solid var(--theme-color); */
 /*  color: var(--black) !important;*/
-/*}*/*/
+/*}*/
 
 .secondary-btn {
   background: #fff;
@@ -4562,13 +4562,15 @@ video.video-responsive {
   color: var(--black) !important;
   font-weight: 600;
 }
+
 /*.theme-btn:hover,
 .theme-btn:focus,
 .theme-btn:active {
   background: transparent !important;
-  /* border: 1px solid var(--theme-color); */
+  /* border: 1px solid var(--theme-color);
   color: var(--theme-color) !important;
 }*/
+
 .form-control {
   color: var(--black);
   background-image: none;

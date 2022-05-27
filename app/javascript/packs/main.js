@@ -27,7 +27,7 @@ $(document).ready(function () {
 	});
 
 	$(document).mouseup(e => {
-		if ( !$('.header__search').is(e.target) || $('.header__search .close').is(e.target))
+		if ((!$('.header__search').is(e.target) && !$('input.search-input').is(e.target)) || $('svg.search-close-button-1').is(e.target) || $('path.search-close-button-2').is(e.target) || $('button.close').is(e.target))
 		{  
 			$(".header__search").removeClass("header__search--active");
 		}
