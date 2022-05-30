@@ -58,7 +58,7 @@
     font-weight: 400;
     font-family: 'Hahmlet', serif;
 }
-.modeling-details img.modal-img{
+.modeling-details .add-expand-btn{
     width: 100%;
     height: 500px;
     box-shadow: 0px 0px 20px #00000019;
@@ -66,6 +66,11 @@
     margin: 0px 0 30px 0;
     object-fit: cover;
     background: #fff;
+}
+.modeling-details .add-expand-btn .img-responsive {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 .tabs-panel .tabcontent .member-detail .user_img img ,
 .tabs-panel .tabcontent .member-detail .asset__author img,
@@ -320,13 +325,22 @@ color: #3C97F2;display: block;width: 100%;}
     height: 35px;
     display: inline-flex;
     border-radius: 100px;
+    min-width: 35px;
 }
 
 .member-detail a ,.member-detail .a_tag{
     display: flex;
     align-items: center;
 }
+.member-detail_profile_detail {width: 100%;display: flex;align-items: center;max-width: 100%;}
 
+.member-detail_profile_detail i {display: block;width: 75%;}
+
+.member-detail_profile_detail i a {display: block;white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;max-width: 100%;}
+
+.description-panels .member-detail {width: 50%;}
 .member-detail a span img,.member-detail .a_tag span img {
     border-radius: 100%;
     width: 100%;
@@ -408,8 +422,19 @@ width: 14px;
     font: normal normal normal 14px/28px Hahmlet;
     letter-spacing: 0px;
     color: #FFFFFF;
+        display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
+.place-buy-details .highest-bid button i {
+    font-style: normal;
+    max-width: 90px;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0 3px;
+}
 .tabs-panel .tab {
     overflow: hidden;
     border-bottom: 1px solid #3c97f25c;
@@ -451,6 +476,7 @@ width: 14px;
 .tabs-panel .tabcontent .member-detail a span {
     width: 55px;
     height: 55px;
+    min-width: 55px;
 }
 .tabs-panel .tabcontent .member-detail {
     margin-bottom: 20px;
@@ -608,7 +634,9 @@ span.edit-profile img {
     color: #FFFFFF;
     margin: 0;
 }
-
+.member-detail i {
+    font-style: normal;
+}
 .prfile_name_details h5 span img {
     width: 30px;
     height: 30px;
@@ -646,7 +674,7 @@ span.edit-profile img {
 
 .profile-tabs.tabs-panel {
     position: relative;
-    margin-top: 30px;
+
 }
 
 .profile-tabs.tabs-panel .tab button:nth-child(1) {
@@ -711,6 +739,7 @@ span.edit-profile img {
     font: normal normal normal 17px/26px Hahmlet;
     letter-spacing: 0px;
     color: #707070;
+        word-break: break-word;
 }
 
 
@@ -723,7 +752,9 @@ span.edit-profile img {
     flex-flow: row wrap;
     padding: 20px 0 20px 15px;
 }
-
+.profile-tabs.tabs-panel.tabs-lists .tabcontent ul {
+    padding: 0;
+}
 .profile-tabs.tabs-panel .tabcontent ul li{
     margin: 0 20px 20px 0px;
 }
@@ -830,7 +861,6 @@ span.edit-profile img {
   font-family: CircularStd_Normal ;
 
 }
-
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail a{
     color: #000000;
     font-size: 14px;
@@ -843,14 +873,30 @@ span.edit-profile img {
 }
 
 
-.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail .user_address{
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail .user_address,
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail a {
   color: #000000;
   font-size: 14px;
   font-family: CircularStd_Normal ;
   white-space: nowrap;
-  overflow: hidden;
-  width: 100%;
-  display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 72px;
+    width: auto;
+    padding-right: 3px;
+    display: block;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail a.now-wrap-ellipse,
+.NFT_SCREEN .section.section_3 ul li .img-panel .desc .caption.add-btn .profile-detail .name-detail a.now-wrap-ellipse {
+    white-space: unset;
+    text-overflow: unset;
+    overflow: unset;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    font: normal normal bold 15px/20px Hahmlet;
+ 
 }
 
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail .user_name{
@@ -874,7 +920,16 @@ span.edit-profile img {
   font-weight: 600;
 }
 
-.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail button {
+
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail .name-detail i {
+    display: flex;
+    align-items: center;
+    font-family: CircularStd_Bold;
+    font-weight: 600;
+    font-size: 14px;
+    font-style: normal;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail a button{
   background: #F4F9FF 0% 0% no-repeat padding-box !important;
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 30px;
@@ -883,7 +938,7 @@ span.edit-profile img {
 padding: 7px 16px;
 min-width: 90px;
 }
-.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail button a{
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail a button{
 font-family: 'Hahmlet', serif;
 font-weight: 600;
 
@@ -950,6 +1005,7 @@ font-weight: 600;
 .activity-dropdown  .member-detail a span,.activity-dropdown  .member-detail .a_tag span{
     width: 55px;
     height: 55px;
+    min-width: 55px;
 }
 .profile-tabs.tabs-panel.tabs-lists {
     margin-top: 0;
@@ -978,7 +1034,14 @@ font-weight: 600;
 }
 .profile-bg.view-mob-detail .profile-details.profile-name-details h5 {line-height: 30px;}
 
-.profile-bg.view-mob-detail .profile-details.profile-name-details h5 span.highlight-address {background: #fff;border-radius: 100px;font-size: 12px;padding: 0px 10px;line-height: 24px;}
+.profile-bg.view-mob-detail .profile-details.profile-name-details h5 span.highlight-address {
+    background: #fff;
+    border-radius: 100px;
+    font-size: 12px;
+    padding: 0px 10px;
+    line-height: 24px;
+    font: normal normal normal 12px/18px Hahmlet;
+}
 
 .profile-bg.view-mob-detail .profile-details.profile-name-details h4 {
     display: flex;
@@ -1000,7 +1063,7 @@ font-weight: 600;
 .profile-tabs.tabs-panel.tabs-lists .activity-dropdown .member-detail a span {
     width: 40px;
     height: 40px;
-    min-width: 35px;
+    min-width: 40px;
 }
 
 .profile-tabs.tabs-panel.tabs-lists .activity-dropdown {
@@ -1037,6 +1100,31 @@ span.bg-shadow {
     background: #00000069;
     z-index: 8;
 }
+.expand-btn {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    background: #00000052 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    }
+.add-expand-btn {
+    position: relative;
+}
+img.active-minimise-img {display: none;}
+
+
+.active-minimize-btn.expand-btn {position: fixed;top: 7%;bottom: auto;right: 2%;background: #fff;}
+
+.active-minimize-btn.expand-btn img.active-minimise-img {display: block;}
+
+.active-minimize-btn.expand-btn img.inactive-maximize-btn {display: none;}
+.expand-btn img {max-width: unset;width: 20px;}
 /*Profile css end*/
 /*Discover tab start*/
 main.main.mt-0.NFT-detail.discover_Page {
@@ -1204,6 +1292,7 @@ main.main.mt-0.NFT-detail.discover_Page {
 .Category-Lists .member-detail .a_tag span {
     width: 28px;
     height: 28px;
+    min-width: 28px;
 }
 
 .Category-Lists .member-detail a strong,
@@ -1386,9 +1475,13 @@ ul.current-filters li a {
     display: none;
 }
 .clear-filter-heading {
-    position: relative;
+ position: relative;
+    border-top: 1px solid #162c5b38;
+    margin-bottom: 30px;
 }
-
+.discover-container .profile-tabs.tabs-panel .tabcontent {
+    margin-top: 0;
+}
 .sort-items {
     position: absolute;
     top: 0;
@@ -1441,7 +1534,7 @@ a.mob-apply-btn button {
     height: 15px;
     border-radius: 0;
     object-fit: contain;
-    margin-top: -8px;
+    margin-top: -12px;
 }
 
 
@@ -1664,7 +1757,14 @@ font-family: 'Hahmlet', serif;
         margin: 0px 5px 5px 0;  
 
 }
-
+.place-buy-details .highest-bid button i{
+        max-width: 70px;
+}
+}
+@media only screen and (max-width:1366px) and (min-width: 280px){
+.place-buy-details .highest-bid button i{
+    max-width: 47px;
+}
 }
 @media only screen and (max-width:1240px) and (min-width: 1201px){
      .place-buy-details .highest-bid button{
@@ -1681,6 +1781,9 @@ font-family: 'Hahmlet', serif;
 @media only screen and (max-width:1200px) and (min-width: 280px){
     .profile-tabs.tabs-panel.tabs-lists .tab button{
         padding: 7px 0 ;
+    }
+    .Category-Lists label{
+            padding: 5px 15px;
     }
     .discover-profile.profile-tabs.tabs-panel .tabcontent ul li{
         width: 48%;
@@ -1766,6 +1869,11 @@ font-family: 'Hahmlet', serif;
     .discover-container.discover-footer-section,.mob-view-profile-tab,
     .User_following-list{
     display: block;
+}
+.place-buy-details .highest-bid button{
+        font:  normal normal normal 11px/18px Hahmlet;
+        padding: 10px 5px;
+        width: 98%;
 }
 .member-detail a strong, .member-detail a, .member-detail .a_tag strong {font-size: 15px;line-height: 20px;}
 
@@ -1990,8 +2098,14 @@ font-family: 'Hahmlet', serif;
 .profile-details.profile-name-details p {
     color: #162C5B;
     font-size: 14px;
+    font: normal normal normal 14px/20px Hahmlet;
     margin: 0;
 }
+a.textControl {display: inline-block;max-width: 90%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+
+a.morelink.less {display: block;width: 100%;color: #162c5b;}
+
+
 .profile-bg.view-mob-detail .prfile_name_details ul{
     margin: 20px 0 10px 0;
     justify-content: center;
@@ -2185,13 +2299,16 @@ main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
     top: -62px;
 }
 .discover-profile.profile-tabs.tabs-panel .tabcontent ul li .img-panel a.image-fit{
-    height: auto;
+    height: 220px;
 }
 }
 @media only screen and (max-width:767px) and (min-width: 280px){
 .bg-effect:before{
         right: -330px;
     }
+    .prfile_name_details h5{
+    flex-flow: row wrap;
+}
 .discover-profile.profile-tabs.tabs-panel .tabcontent ul li{
     width: 100%;
     margin: 0 0 20px 0;
@@ -2204,7 +2321,7 @@ main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
 .place-buy-details.nft-detail_hide_Web {
     display: none;
 }
-    .modeling-details img.modal-img{
+    .modeling-details .add-expand-btn{
         height: auto;
         margin-bottom: 0;
     }
@@ -2213,7 +2330,7 @@ main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
 }
 
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .image-fit {
-    height: auto;
+    height:250px;
 }
 main.NFT-detail.modeling-NFT {
     padding-top: 70px;
@@ -2293,6 +2410,9 @@ span.royalty-span {
 .change-price-popup .modal-footer .bidding-element-btn,.burn-Token .modal-footer .bidding-element-btn{
     margin: 10px 0 0 0;
 }
+.profile-details.profile-name-details h5 span{
+    margin-left: 0;
+}
 .profile-tabs.tabs-panel .tabcontent{
     padding: 0;
 }
@@ -2347,6 +2467,10 @@ span.royalty-span {
 .change-price-popup h4{
     font-size: 22px;
 }
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail a.now-wrap-ellipse, .NFT_SCREEN .section.section_3 ul li .img-panel .desc .caption.add-btn .profile-detail .name-detail a.now-wrap-ellipse{
+    font-size: 13px;
+}
+
 }
 @media only screen and (max-width:375px) and (min-width: 280px){
     main.main.mt-0.NFT-detail.profile-Page {
@@ -2376,9 +2500,7 @@ span.royalty-span {
 .profile-bg.view-mob-detail .profile-details.profile-name-details h4{
     margin-bottom: 0;
 }
-.prfile_name_details h5{
-    flex-flow: row wrap;
-}
+
 .profile-bg.view-mob-detail .profile-details.profile-name-details h5 span.highlight-address {
     margin-top: 6px;
     padding: 4px 10px;
@@ -2389,12 +2511,12 @@ span.royalty-span {
     margin-bottom: 15px;
     padding: 0;
 }*/
-.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail button{
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail a button{
     padding: 6px 15px;
     min-width: auto;
 }
 .profile-tabs.tabs-panel .tab.about-profile-information button{
-      font-size: 16px;
+      font-size: 15px;
     padding: 5px;   
 }
 .place-buy-details .highest-bid h6,.place-buy-details .highest-bid p {
@@ -2430,9 +2552,10 @@ span.royalty-span {
     font-size: 16px;
 }
 .tabs-panel .tabcontent .member-detail .user_img img, .tabs-panel .tabcontent .member-detail .asset__author img, .tabs-panel .tabcontent .asset__action.asset__action--verified img{
-        min-width: 35px;
-    max-width: 35px;
-    width: 35px;
+    min-width: 35px!important;
+    max-width: 35px!important;
+    width: 35px!important;
+    height: 35px;
 }
 }
 @media only screen and (max-width:337px) and (min-width: 280px){
@@ -2441,7 +2564,7 @@ span.royalty-span {
     }
 .discover_menus .tab button, .discover_menus .tab button.active{
         margin-right: 10px;
-        padding: 8px 5px;
+        padding: 8px 0px;
 }
 .profile-tabs.tabs-panel .tab.about-profile-information button{
       font-size: 12px;
@@ -2467,7 +2590,25 @@ span.royalty-span {
 }
 .description-panels .member-detail,
 .modeling-details ul li{
-    width: 100%;
+    width: 100%!important;
     margin: 0 0 15px 0;
+}
+.place-buy-details .highest-bid button i{
+        max-width: 28px;
+}
+.tabs-panel .tab button{
+    font-size: 18px;
+}
+.tabs-panel .tabcontent .asset__action.asset__action--verified .content_details{
+    font-size: 16px;
+}
+.place-buy-details .highest-bid h6 .modeling-details ul li a strong, .modeling-details ul li .a_tag strong, .desction-detail h6,
+.modeling-details ul li.wd-100 a strong,
+.modeling-details ul li a strong, .modeling-details ul li .a_tag strong, .modeling-details ul li a strong a, .modeling-details ul li .a_tag strong a{
+    font-size: 14px ;
+}
+.discover_menus .tab .container {
+    width: 100%;
+    max-width: 100%!important;
 }
 }

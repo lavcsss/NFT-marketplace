@@ -326,14 +326,15 @@
                            <li>
                               <div class="img-panel">
                                  <div class="image-fit">
+                                    <div class="image_top_section">
                                     <a href="<%= collection_path(collection.address)%>" class="img-fit-user">
                                        <%= image_tag cover_url(collection), class:"img-fixed-wd"%>
                                        <h6 class="auction-heading">
                                           <strong><%= collection.title %></strong>
                                           <% if collection.own_collection.present? %>
-                                             <strong>  <%= collection.contract_name %> </strong> 
+                                             <a  class="auction_navigation"><strong>  <%= collection.contract_name %> </strong> </a>
                                           <% else %>                    
-                                             <strong>  <%= collection.collection_info_name %> </strong> 
+                                              <a class="auction_navigation"><strong>  <%= collection.collection_info_name %> </strong> </a>
                                           <% end %>
                                        </h6>
                                     </a>
@@ -364,6 +365,7 @@
                                           ) %>
                                     </h5>
                                     </a>
+                                 </div>
                                     <div class="desc">
                                        <div class="caption">
                                           <div class="profile-detail">
@@ -386,7 +388,7 @@
                                              <div class="name-detail">
                                                 <h6>Price</h6>
                                                 <% if collection.instant_sale_price%>
-                                                   <span><%=collection.instant_sale_price%> WETH</span>  
+                                                   <i><span><%=collection.instant_sale_price%></span>  WETH</i>
                                                 <% else %>
                                                    <% if collection.max_bid %>
                                                       <p class="bid_status">Highest bid <b><%= collection.max_bid.value %></b></p>
