@@ -1190,7 +1190,22 @@ font-weight: 600;
     margin: 0;
 }
 .profile-tabs.tabs-panel.tabs-lists .activity-dropdown.active p{
-    font: normal normal bold 20px/29px Hahmlet;
+    font: normal normal bold 16px/24px Hahmlet;
+    margin: 0;
+    color: #162C5B;
+}
+.profile-tabs.tabs-panel.tabs-lists .scrollbar ,
+.activity-dropdown-lists .scrollbar {height: auto;background: transparent;overflow: unset;padding: 0;}
+
+.profile-tabs.tabs-panel.tabs-lists .activity-dropdown .activity__cover,
+.activity-dropdown-lists  .activity__cover{width: 40px;height: 40px;min-width: 40px;}
+
+.profile-tabs.tabs-panel.tabs-lists  .activity,
+.activity-dropdown-lists  .activity{align-items: center;box-shadow: none;margin: 0 0 20px 0;padding: 0;}
+
+.profile-tabs.tabs-panel.tabs-lists  .force-overflow.followers,
+.activity-dropdown-lists .force-overflow.followers {min-height: unset;margin: 0;}
+.activity-dropdown-lists .activity__text {
     margin: 0;
 }
 .description-panels .member-detail strong a, .description-panels .member-detail strong {
@@ -2066,7 +2081,7 @@ box.My_modal.congratulation-modal.open-modal {
     border: 2px solid #3C97F2;
 }
 .sign__radio label:before{
-    /* border: 2px solid #3C97F2; */
+    border: 2px solid #162C5B;
 }
 .nft-details-list .sign__radio label:after {
     content: '';
@@ -2717,6 +2732,9 @@ main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
 .bg-effect:before{
         right: -330px;
     }
+    .place-buy-details .highest-bid button{
+        padding: 10px;
+    }
     footer.footer.nft-detail-bottom-footer.section-footer.wide-window {
     padding-bottom: 170px;
 }
@@ -2833,6 +2851,7 @@ box.My_modal.congratulation-modal.open-modal {
 span.royalty-span{
         top: 4px;
     right: 25px;
+    font-size: 12px;
 }
 
 .change-price-popup .modal-footer .bidding-element-btn,.burn-Token .modal-footer .bidding-element-btn{
@@ -2883,7 +2902,8 @@ span.royalty-span{
     line-height: initial;
 }
 .profile-tabs.tabs-panel .tab button em{
-    padding: 10px 35px;
+      padding: 9px 22px;
+    margin-right: 15px;
 }
 .profile-tabs.tabs-panel.discover-profile ul {padding: 0;}
 
@@ -3048,7 +3068,7 @@ font-size: 20px;
     font-size: 13px;
 }
 .place-buy-details .highest-bid button{
-    min-width: 110px;
+    min-width: 115px;
 }
 .profile-tabs.tabs-panel .tab button em{
     padding: 10px 20px;

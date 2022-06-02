@@ -1,35 +1,60 @@
-import Web3 from 'web3';
 import axios from "axios";
 import { ethers } from 'ethers';
-import WalletConnectProvider from '@walletconnect/web3-provider'
-import { func } from 'prop-types';
-
+import WalletConnectProvider from '@walletconnect/web3-provider';
 const tokenURIPrefix = gon.tokenURIPrefix
 const transferProxyContractAddress = gon.transferProxyContractAddress
 const wethAddress = gon.wethAddress
 const tradeContractAddress = gon.tradeContractAddress
-const sessionWallet = gon.wallet
+//const sessionWallet = gon.wallet
 const sessionAddress = gon.address
-const chainId = gon.chainId
+//const chainId = gon.chainId
 let walletConnect;
-const rpcUrl = gon.ethereum_provider
+//const rpcUrl = gon.ethereum_provider
+
+const sessionWallet = gon.wallet;
+const chainId = gon.chainId;
+const rpcUrl = gon.ethereum_provider;
+const rpc = gon.rpc
+let signer;
+let provider;
+let tprovider;
+
 
 async function loadWeb3() {
-  if (window.ethereum && window.wallet == 'metamask') {
-    window.web3 = new Web3(window.ethereum);
-    const address = await web3.currentProvider.enable();
-    window.provider = new ethers.providers.Web3Provider(window.ethereum);
-    window.signer = provider.getSigner();
-    return window.ethereum.selectedAddress = address[0] ?? '';
-  }else if (window.wallet == 'walletConnect') { 
-    walletConnect = new WalletConnectProvider({
-      infuraId: getInfuraId(),
-    });
-    window.web3 = new Web3(walletConnect);
-    const address = await walletConnect.enable();
-    return address[0] ?? '';
+  if (window.ethereum && window.wallet == 'metamask' || typeof window.wallet == "undefined") {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    signer = provider.getSigner();
+    await ethereum.request({ method: 'eth_requestAccounts' })
+    gon.provider = provider
+    window.provider = provider
+    return signer.getAddress();
   }
+  else if (window.wallet == 'walletConnect') {
+   tprovider = new WalletConnectProvider({
+      rpc: {
+        [chainId]: rpc,
+      }
+    });
+   const address = await tprovider.enable();
+   window.provider = new ethers.providers.Web3Provider(tprovider);
+   gon.provider = window.provider;
+   window.signer = window.provider.getSigner();
+   return address[0] ?? '';
+  }
+}
 
+async function getaccounts() {
+  try {
+  if (window.wallet == 'walletConnect') {
+    const signer = window.provider.getSigner();
+    var accounts = await signer.getAddress();
+  }else{
+    const signer = provider.getSigner();
+    var accounts = await signer.getAddress();
+    }
+    return accounts;
+  } catch (e) {
+   }
 }
 
 function getInfuraId(){
@@ -56,8 +81,7 @@ async function createUserSession(address, balance, destroySession, wallet = wind
       return resp
     })
     .catch(err => {
-      console.log("User Session Create Error", err)
-    })
+     })
   return resp;
 }
 
@@ -77,40 +101,28 @@ async function destroyUserSession(address) {
 }
 
 function updateTokenId(tokenId, collectionId, txId) {
-  var request = $.ajax({
+  $.ajax({
     url: `/collections/${collectionId}/update_token_id`,
     async: false,
     type: "POST",
     data: {tokenId : tokenId, collectionId: collectionId, tx_id: txId},
     dataType: "script"
   });
-  request.done(function (msg) {
-    console.log("Token Id updated.");
-  });
-  request.fail(function (jqXHR, textStatus) {
-    console.log("Failed to update token id");
-  });
 }
 
 function saveContractNonceValue(collectionId, sign) {
-  var request = $.ajax({
+  $.ajax({
     url: `/collections/${collectionId}/save_contract_nonce_value`,
     async: false,
     type: "POST",
     data: {signature : sign},
     dataType: "script"
   });
-  request.done(function (msg) {
-    console.log("Contract Nonce Value updated.");
-  });
-  request.fail(function (jqXHR, textStatus) {
-    console.log("Failed to update nonce value");
-  });
 }
 
 
 function createContract(formData) {
-  var request = $.ajax({
+  $.ajax({
     url: '/users/create_contract',
     async: false,
     type: "POST",
@@ -120,25 +132,15 @@ function createContract(formData) {
     contentType: false,
     cache: false,
   });
-  request.done(function (msg) {
-    console.log("Token Id updated.");
-  });
-  request.fail(function (jqXHR, textStatus) {
-    console.log("Failed to update token id");
-  });
 }
 
 function updateCollectionBuy(collectionId, quantity, transactionHash, tokenId=0) {
-  console.log("In the API bitch", collectionId)
-  var request = $.ajax({
+  $.ajax({
     url: '/collections/' + collectionId + '/buy',
     type: 'POST',
     async: false,
     data: {quantity: quantity, transaction_hash: transactionHash, tokenId},
     dataType: "script",
-    success: function (respVal) {
-      console.log(respVal)
-    }
   });
 }
 
@@ -149,9 +151,6 @@ function updateCollectionSell(collectionId, buyerAddress, bidId, transactionHash
     async: false,
     data: {address: buyerAddress, bid_id: bidId, transaction_hash: transactionHash, tokenId},
     dataType: "script",
-    success: function (respVal) {
-      console.log(respVal)
-    }
   });
 }
 
@@ -165,12 +164,8 @@ function sign_metadata_with_creator(creator_address, tokenURI, collectionId) {
     dataType: "json"
   })
   .done(function(msg) {
-    console.log(msg);
     sign = msg
   })
-  .fail(function(jqXHR, textStatus) {
-    console.log("Bidding failed. Please contact support");
-  });
   return sign;
 }
 
@@ -181,9 +176,6 @@ function updateOwnerTransfer(collectionId, recipientAddress, transactionHash, tr
     async: false,
     data: {recipient_address: recipientAddress, transaction_hash: transactionHash, transaction_quantity: transferQuantity},
     dataType: "script",
-    success: function (respVal) {
-      console.log(respVal)
-    }
   });
 }
 
@@ -194,9 +186,6 @@ function updateBurn(collectionId, transactionHash, burnQuantity) {
     async: false,
     data: {transaction_hash: transactionHash, transaction_quantity: burnQuantity},
     dataType: "script",
-    success: function (respVal) {
-      console.log(respVal)
-    }
   });
 }
 
@@ -210,28 +199,20 @@ async function isValidUser(address, token, wallet) {
   }
   const resp = await axios.get(`/sessions/valid_user`, {params: {address: address, authenticity_token: token, wallet}}, config)
     .then((response) => {
-      console.log("validate user", response)
-      return response.data
+       return response.data
     })
     .catch(err => {
-      console.log("User Session Validate Error", err)
-    })
+     })
   return resp;
 }
 
 function placeBid(collectionId, sign, quantity, bidDetails) {
-  var request = $.ajax({
+  $.ajax({
     url: `/collections/${collectionId}/bid`,
     type: "POST",
     async: false,
     data: {sign: sign, quantity: quantity, details: bidDetails},
     dataType: "script"
-  });
-  request.done(function (msg) {
-    console.log("Bidding success.");
-  });
-  request.fail(function (jqXHR, textStatus) {
-    console.log("Bidding failed. Please contact support");
   });
 }
 
@@ -245,28 +226,18 @@ function signMetadataHash(collectionId, contractAddress) {
     dataType: "json"
   });
   request.done(function (msg) {
-    console.log(msg);
     sign = {sign: msg['signature'], nonce: msg['nonce']}
-  });
-  request.fail(function (jqXHR, textStatus) {
-    console.log("Bidding failed. Please contact support");
   });
   return sign
 }
 
 function updateSignature(collectionId, sign) {
-  var request = $.ajax({
+  $.ajax({
     url: `/collections/${collectionId}/sign_fixed_price`,
     type: "POST",
     async: false,
     data: {sign: sign},
     dataType: "script"
-  });
-  request.done(function (msg) {
-    console.log("Signature updated.");
-  });
-  request.fail(function (jqXHR, textStatus) {
-    console.log("Signature update failed. Please contact support");
   });
 }
 
@@ -276,11 +247,7 @@ window.approveCollection = function approveCollection(collectionId){
     type: "POST",
     async: false,
     dataType: "script"
-  }).done(function(msg) {
-    console.log("Collection updated.");
-  }).fail(function(jqXHR, textStatus) {
-    console.log("Collection update failed. Please contact support");
-  });
+  })
 }
 
 function getNonceValue(collectionId) {
@@ -295,9 +262,6 @@ function getNonceValue(collectionId) {
   request.done(function (data) {
     nonce = data['nonce']
   });
-  request.fail(function (jqXHR, textStatus) {
-    console.log("Nonce failed. Please contact support");
-  });
   return nonce
 }
 
@@ -308,12 +272,6 @@ function save_NonceValue(collectionId, sign, nonce) {
     async: false,
     data: {sign: sign, nonce: nonce},
     dataType: "script"
-  });
-  request.done(function (msg) {
-    console.log("Nonce updated.");
-  });
-  request.fail(function (jqXHR, textStatus) {
-    console.log("Nonce update failed. Please contact support");
   });
 }
 
@@ -328,9 +286,6 @@ function getContractSignNonce(collectionId, sign) {
   });
   request.done(function (data) {
     nonce = data['nonce']
-  });
-  request.fail(function (jqXHR, textStatus) {
-    console.log("Nonce failed. Please contact support");
   });
   return nonce
 }
@@ -348,50 +303,25 @@ window.getContractABIAndBytecode = function getContractABIAndBytecode(contractAd
   request.done(function (msg) {
     res = msg;
   });
-
-  request.fail(function (jqXHR, textStatus) {
-    console.log(textStatus);
-  });
   return res;
 }
 
 function splitSign(sign, nonce) {
-  sign = sign.slice(2)
-  var r = `0x${sign.slice(0, 64)}`
-  var s = `0x${sign.slice(64, 128)}`
-  var v = web3.utils.toDecimal(`0x${sign.slice(128, 130)}`)
-  return [v, r, s, nonce]
-}
-
-
-async function load721Contract(contractAddress) {
-  return await new window.web3.eth.Contract([ { "inputs": [ { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "symbol", "type": "string" } ], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "approved", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "operator", "type": "address" }, { "indexed": false, "internalType": "bool", "name": "approved", "type": "bool" } ], "name": "ApprovalForAll", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "approve", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "baseURI", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "tokenURI", "type": "string" }, { "internalType": "uint256", "name": "fee", "type": "uint256" } ], "name": "createCollectible", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "getApproved", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "getFee", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "getOwner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "operator", "type": "address" } ], "name": "isApprovedForAll", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "ownerOf", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "bytes", "name": "_data", "type": "bytes" } ], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "bool", "name": "approved", "type": "bool" } ], "name": "setApprovalForAll", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "baseURI_", "type": "string" } ], "name": "setBaseURI", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" } ], "name": "supportsInterface", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "index", "type": "uint256" } ], "name": "tokenByIndex", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "tokenCounter", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "uint256", "name": "index", "type": "uint256" } ], "name": "tokenOfOwnerByIndex", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "tokenURI", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "transferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" } ], contractAddress);
-}
-
-async function load1155Contract(contractAddress){
-  return await new window.web3.eth.Contract([ { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "string", "name": "uri", "type": "string" } ], "name": "_setTokenURI", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "_tokenURIPrefix", "type": "string" } ], "name": "_setTokenURIPrefix", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "symbol", "type": "string" } ], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "operator", "type": "address" }, { "indexed": false, "internalType": "bool", "name": "approved", "type": "bool" } ], "name": "ApprovalForAll", "type": "event" }, { "inputs": [ { "internalType": "string", "name": "uri", "type": "string" }, { "internalType": "uint256", "name": "supply", "type": "uint256" }, { "internalType": "uint256", "name": "fee", "type": "uint256" } ], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256[]", "name": "ids", "type": "uint256[]" }, { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }, { "internalType": "bytes", "name": "data", "type": "bytes" } ], "name": "safeBatchTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "id", "type": "uint256" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }, { "internalType": "bytes", "name": "data", "type": "bytes" } ], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "bool", "name": "approved", "type": "bool" } ], "name": "setApprovalForAll", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "operator", "type": "address" }, { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256[]", "name": "ids", "type": "uint256[]" }, { "indexed": false, "internalType": "uint256[]", "name": "values", "type": "uint256[]" } ], "name": "TransferBatch", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "operator", "type": "address" }, { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "id", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "TransferSingle", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": false, "internalType": "string", "name": "value", "type": "string" }, { "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" } ], "name": "URI", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "id", "type": "uint256" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address[]", "name": "accounts", "type": "address[]" }, { "internalType": "uint256[]", "name": "ids", "type": "uint256[]" } ], "name": "balanceOfBatch", "outputs": [ { "internalType": "uint256[]", "name": "", "type": "uint256[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "creators", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "getFee", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "getOwner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "address", "name": "operator", "type": "address" } ], "name": "isApprovedForAll", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "royalties", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" } ], "name": "supportsInterface", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "tokenURI", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "tokenURIPrefix", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" } ], contractAddress);
-}
-
-async function loadTransferProxyContract() {
-  return await new window.web3.eth.Contract([{"inputs":[{"internalType":"contract IERC1155","name":"token","type":"address"},{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"erc1155safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"contract IERC20","name":"token","type":"address"},{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"erc20safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"contract IERC721","name":"token","type":"address"},{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"erc721safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"}], "0x2B09AE15A88F3a93F73034a36BEc2C8583B294f2");
+  let sig = ethers.utils.splitSignature(sign);
+  return [sig.v,sig.r,sig.s, nonce];
 }
 
 window.getContract = async function getContract(contractAddress, type, shared = true) {
-  console.log(contractAddress, type, shared)
   var res = getContractABIAndBytecode(contractAddress, type, shared);
-  var contractObj = await new window.web3.eth.Contract(res['compiled_contract_details']['abi'], contractAddress);
-  console.log(contractObj)
+  var proname = window.wallet == 'walletConnect' ? window.provider : provider
+  var contractObj = new ethers.Contract(contractAddress,res['compiled_contract_details']['abi'],proname);
   return contractObj
 }
 
 window.createCollectible721 = async function createCollectible721(contractAddress, tokenURI, royaltyFee, collectionId, sharedCollection) {
   try {
     var account = getCurrentAccount()
-    console.log(account, contractAddress, 'nft721', sharedCollection)
-    var compiledContractDetails = getContractABIAndBytecode(contractAddress, 'nft721', sharedCollection);
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract721NFT = new ethers.Contract(contractAddress,abi,provider);
-    const contract721 = contract721NFT.connect(signer);
+    const contract721 = await fetchContract(contractAddress, 'nft721', sharedCollection);
     var gasPrices = await gasPrice();
     var txn;
     if (sharedCollection) {
@@ -409,8 +339,7 @@ window.createCollectible721 = async function createCollectible721(contractAddres
       });
     }
     var tx = await txn.wait();
-    var tokenId = web3.utils.toNumber(tx.events[0].topics[tx.events[0].topics.length-1])
-    console.log(tokenId)
+    var tokenId = parseInt(tx.events[0].topics[tx.events[0].topics.length-1])
     await updateTokenId(tokenId, collectionId, txn.transactionHash)
     return window.collectionMintSuccess(collectionId)
   } catch (err) {
@@ -422,11 +351,7 @@ window.createCollectible721 = async function createCollectible721(contractAddres
 window.createCollectible1155 = async function createCollectible1155(contractAddress, supply, tokenURI, royaltyFee, collectionId, sharedCollection) {
   try {
     var account = getCurrentAccount()
-    console.log(account, contractAddress, 'nft1155', sharedCollection)
-    var compiledContractDetails = getContractABIAndBytecode(contractAddress, 'nft1155', sharedCollection);
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract1155NFT = new ethers.Contract(contractAddress,abi,provider);
-    const contract1155 = contract1155NFT.connect(signer);
+    const contract1155 = await fetchContract(contractAddress, 'nft1155', sharedCollection);
     var gasPrices = await gasPrice();
     var txn;
     if (sharedCollection) {
@@ -443,9 +368,8 @@ window.createCollectible1155 = async function createCollectible1155(contractAddr
         gasPrice: String(gasPrices)
       });
     }
-	  console.log(txn)
     var tx = await txn.wait();
-    var tokenId = web3.utils.toNumber(tx.events[0].data.slice(0,66))
+    var tokenId = parseInt(tx.events[0].data.slice(0,66))
     await updateTokenId(tokenId, collectionId, txn.transactionHash)
     return window.collectionMintSuccess(collectionId)
   } catch (err) {
@@ -455,46 +379,46 @@ window.createCollectible1155 = async function createCollectible1155(contractAddr
 }
 
 window.deployContract = async function deployContract(abi, bytecode, name, symbol, contractType, collectionId, attachment, description, cover) {
-  const contractDeploy = new window.web3.eth.Contract(abi);
-  var contractAddress;
-  var account = getCurrentAccount()
-  contractDeploy.deploy({
-    data: bytecode,
-    arguments: [name, symbol, tokenURIPrefix]
-  }).send({
-    from: account,
-  }).then((deployment) => {
-    console.log('Contract was deployed at the following address:');
-    console.log(deployment.options.address);
-    contractAddress = deployment.options.address;
-    $('#nft_contract_address').val(contractAddress);
-    let formData = new FormData()
-    formData.append('file', attachment)
-    formData.append('name', name)
-    formData.append('symbol', symbol)
-    formData.append('contract_address', contractAddress)
-    formData.append('contract_type', contractType)
-    formData.append('collection_id', collectionId)
-    formData.append('description', description)
-    formData.append('cover', cover)
-    createContract(formData);
+   try {
+       if (window.wallet == 'walletConnect') {
+          var sign = window.provider.getSigner();
+        }else{
+           var sign = provider.getSigner();
+        }
+      const contractDeploy = await new ethers.ContractFactory(abi, bytecode, sign);
+      let contract = await contractDeploy.deploy(name, symbol, tokenURIPrefix);
+      await contract.deployTransaction.wait();
+      var contractAddress;
+      var account =  await getaccounts();
+      contractAddress = contract.address;
+      $('#nft_contract_address').val(contractAddress);
+      let formData = new FormData()
+      formData.append('file', attachment)
+      formData.append('name', name)
+      formData.append('symbol', symbol)
+      formData.append('contract_address', contractAddress)
+      formData.append('contract_type', contractType)
+      formData.append('collection_id', collectionId)
+      formData.append('description', description)
+      formData.append('cover', cover)
+      createContract(formData);
     window.contractDeploySuccess(contractAddress, contractType)
-  }).catch((err) => {
+  }catch (err){
     console.error(err);
     window.contractDeployFailed(err['message'])
-  });
+  };
 }
 
 window.approveNFT = async function approveNFT(contractType, contractAddress, sharedCollection, sendBackTo = 'collection', existingToken=null) {
   try {
-    console.log(contractAddress, contractType, sharedCollection)
     var account = getCurrentAccount()
-    window.contract = await getContract(contractAddress, contractType, sharedCollection);
-    var isApproved = await window.contract.methods.isApprovedForAll(account, transferProxyContractAddress).call();
+    const contractapp = await fetchContract(contractAddress, contractType, sharedCollection);
+    var isApproved = await contractapp.isApprovedForAll(account, transferProxyContractAddress);
     if (!isApproved) {
-      var receipt = await window.contract.methods.setApprovalForAll(transferProxyContractAddress, true).send({from: account});
+      var receipt = await contractapp.setApprovalForAll(transferProxyContractAddress, true, {from: account});
+       receipt = await receipt.wait();
     }
-    if (sendBackTo == 'executeBid') {
+     if (sendBackTo == 'executeBid') {
       return window.approveBidSuccess()
     } else {
       return window.collectionApproveSuccess(contractType, existingToken);
@@ -511,12 +435,12 @@ window.approveNFT = async function approveNFT(contractType, contractAddress, sha
 
 window.approveResaleNFT = async function approveResaleNFT(contractType, contractAddress, sharedCollection) {
   try {
-    console.log(contractAddress, contractType, sharedCollection)
     var account = getCurrentAccount()
-    window.contract = await getContract(contractAddress, contractType, sharedCollection);
-    var isApproved = await window.contract.methods.isApprovedForAll(account, transferProxyContractAddress).call();
+    const resalenft = await fetchContract(contractAddress, contractType, sharedCollection);
+    var isApproved = await resalenft.isApprovedForAll(account, transferProxyContractAddress);
     if (!isApproved) {
-      var receipt = await window.contract.methods.setApprovalForAll(transferProxyContractAddress, true).send({from: account});
+      var receipt = await resalenft.setApprovalForAll(transferProxyContractAddress, true, {from: account});
+      receipt = await receipt.wait();
     }
     return window.approveResaleSuccess(contractType);
   } catch (err) {
@@ -525,12 +449,26 @@ window.approveResaleNFT = async function approveResaleNFT(contractType, contract
   }
 }
 
+
+window.fetchContract = async function fetchContract(contractAddress, type, shared = true) {
+  var compiledContractDetails = getContractABIAndBytecode(contractAddress, type, shared);
+  var abi = compiledContractDetails['compiled_contract_details']['abi'];
+  if (window.wallet == 'walletConnect'){
+    var obj = new ethers.Contract(contractAddress,abi,window.provider);
+    var connection = obj.connect(window.signer);
+  }else{
+    var obj = new ethers.Contract(contractAddress,abi, provider);
+    var connection = obj.connect(signer);
+   }
+    return connection
+}
+
 //TODO: OPTIMIZE
 window.isApprovedNFT = async function isApprovedNFT(contractType, contractAddress) {
   try {
-    var contract = await getContract(contractAddress, contractType);
-    var account = getCurrentAccount()
-    var isApproved = await contract.methods.isApprovedForAll(account, transferProxyContractAddress).call();
+    const approvednft = await fetchContract(contractAddress, contractType, sharedCollection);
+    var account = await getaccounts();
+    var isApproved = await approvednft.isApprovedForAll(account, transferProxyContractAddress);
     return isApproved;
   } catch (err) {
     console.error(err);
@@ -539,13 +477,15 @@ window.isApprovedNFT = async function isApprovedNFT(contractType, contractAddres
 
 window.burnNFT = async function burnNFT(contractType, contractAddress, tokenId, supply = 1, collectionId, sharedCollection) {
   try {
-    var contract = await getContract(contractAddress, contractType, sharedCollection);
-    var account = getCurrentAccount()
+    const burnnft = await fetchContract(contractAddress, contractType, sharedCollection);
+    var account = await getaccounts();
+    var receipt;
     if (contractType == 'nft721') {
-      var receipt = await contract.methods.burn(tokenId).send({from: account});
+       receipt = await burnnft.burn(tokenId, {from: account});
     } else if (contractType == 'nft1155') {
-      var receipt = await contract.methods.burn(tokenId, supply).send({from: account});
+       receipt = await burnnft.burn(tokenId, supply, {from: account});
     }
+    receipt = await receipt.wait();
     await updateBurn(collectionId, receipt.transactionHash, supply)
     return window.burnSuccess(receipt.transactionHash);
   } catch (err) {
@@ -556,16 +496,19 @@ window.burnNFT = async function burnNFT(contractType, contractAddress, tokenId, 
 
 window.directTransferNFT = async function directTransferNFT(contractType, contractAddress, recipientAddress, tokenId, supply = 1, shared, collectionId) {
   try {
-    console.log(contractType, contractAddress, recipientAddress, tokenId, supply, shared, collectionId)
-    var contract = await getContract(contractAddress, contractType, shared);
+    const transfernft = await fetchContract(contractAddress, contractType, "true");
     var account = getCurrentAccount()
+    var receipt;
     if (contractType == 'nft721') {
-      var receipt = await contract.methods.safeTransferFrom(account, recipientAddress, tokenId).send({from: account});
+       receipt = await transfernft["safeTransferFrom(address,address,uint256)"](account, recipientAddress, tokenId);
     } else if (contractType == 'nft1155') {
       // TODO: Analyse and use proper one in future
       var tempData = "0x6d6168616d000000000000000000000000000000000000000000000000000000"
-      var receipt = await contract.methods.safeTransferFrom(account, recipientAddress, tokenId, supply, tempData).send({from: account});
+       receipt = await transfernft["safeTransferFrom(address,address,uint256,uint256,bytes)"](account, recipientAddress, tokenId, supply, tempData);
+    } else if (contractType == 'nft1155') {
+
     }
+    receipt = await receipt.wait();
     await updateOwnerTransfer(collectionId, recipientAddress, receipt.transactionHash, supply)
     return window.directTransferSuccess(receipt.transactionHash, collectionId);
   } catch (err) {
@@ -576,16 +519,13 @@ window.directTransferNFT = async function directTransferNFT(contractType, contra
 
 window.approveERC20 = async function approveERC20(contractAddress, contractType, amount, decimals = 18, sendBackTo = 'Bid') {
   try {
-    console.log(contractAddress, contractType, gon.collection_data['contract_shared'])
     amount = roundNumber(mulBy(amount, 10 ** decimals), 0);
-    var compiledContractDetails = getContractABIAndBytecode(contractAddress, contractType, gon.collection_data['contract_shared']);
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, contractAddress);
+    const approveERC2 =  await fetchContract(contractAddress, contractType, gon.collection_data['contract_shared']);
     var account = getCurrentAccount()
-    console.log(compiledContractDetails)
-    const balance = await contract.methods.allowance(account, transferProxyContractAddress).call();
+    const balance = await approveERC2.allowance(account, transferProxyContractAddress);
     amount = BigInt(parseInt(balance) + parseInt(amount)).toString()
-    var receipt = await contract.methods.approve(transferProxyContractAddress, amount).send({from: account});
+    var receipt = await approveERC2.approve(transferProxyContractAddress, amount, {from: account});
+    receipt = await receipt.wait();
     if (sendBackTo == 'Buy') {
       return window.buyApproveSuccess(receipt.transactionHash, contractAddress)
     } else {
@@ -602,20 +542,19 @@ window.approveERC20 = async function approveERC20(contractAddress, contractType,
 }
 
 window.approvedTokenBalance = async function approvedTokenBalance(contractAddress) {
-  var contract = await getContract(contractAddress, 'erc20', false);
-  var account = getCurrentAccount()
-  var balance = await contract.methods.allowance(account, transferProxyContractAddress).call();
+  var contract =  await fetchContract(contractAddress, 'erc20', false);
+  var account = await getaccounts();
+  var balance = await contract.allowance(account, transferProxyContractAddress);
   return balance;
 }
 
 window.convertWETH = async function convertWETH(amount, sendBackTo = 'Bid', decimals = 18) {
   try {
     amount = roundNumber(mulBy(amount, 10 ** decimals), 0);
-    var compiledContractDetails = getContractABIAndBytecode(wethAddress, 'erc20');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, wethAddress);
+    var contract = await fetchContract(wethAddress, 'erc20')
     var account = getCurrentAccount()
-    var receipt = await contract.methods.deposit().send({from: account, value: amount});
+    var receipt = await contract.deposit({from: account, value: amount});
+    receipt = await receipt.wait();
     if (sendBackTo == 'Buy') {
       return window.buyConvertSuccess(receipt.transactionHash)
     } else {
@@ -634,11 +573,10 @@ window.convertWETH = async function convertWETH(amount, sendBackTo = 'Bid', deci
 
 window.updateBuyerServiceFee = async function updateBuyerServiceFee(buyerFeePermille) {
   try {
-    var compiledContractDetails = getContractABIAndBytecode(tradeContractAddress, 'trade');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, tradeContractAddress);
+    const contract = await fetchContract(tradeContractAddress, 'trade');
     var account = getCurrentAccount()
-    var receipt = await contract.methods.setBuyerServiceFee(buyerFeePermille).send({from: account});
+    var receipt = await contract.setBuyerServiceFee(buyerFeePermille, {from: account});
+    receipt = await receipt.wait();
     return window.bidConvertSuccess(receipt.transactionHash)
   } catch (err) {
     console.error(err);
@@ -648,11 +586,10 @@ window.updateBuyerServiceFee = async function updateBuyerServiceFee(buyerFeePerm
 
 window.updateSellerServiceFee = async function updateSellerServiceFee(sellerFeePermille) {
   try {
-    var compiledContractDetails = getContractABIAndBytecode(tradeContractAddress, 'trade');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, tradeContractAddress);
-    var account = getCurrentAccount()
-    var receipt = await contract.methods.setSellerServiceFee(sellerFeePermille).send({from: account});
+    const contract = await fetchContract(tradeContractAddress, 'trade')
+    var account = getCurrentAccount();
+    var receipt = await contract.setSellerServiceFee(sellerFeePermille, {from: account});
+    receipt = await receipt.wait();
     return window.bidConvertSuccess(receipt.transactionHash)
   } catch (err) {
     console.error(err);
@@ -662,15 +599,17 @@ window.updateSellerServiceFee = async function updateSellerServiceFee(sellerFeeP
 
 window.bidAsset = async function bidAsset(assetAddress, tokenId, qty = 1, amount, payingTokenAddress, decimals = 18, collectionId, bidPayAmt) {
   try {
-    console.log(assetAddress, tokenId, qty, amount, payingTokenAddress, decimals, collectionId, bidPayAmt)
     var amountInDec = roundNumber(mulBy(amount, 10 ** decimals), 0);
-    console.log(amountInDec)
     var nonce_value = await getNonceValue(collectionId);
-    console.log(assetAddress, tokenId, payingTokenAddress, amountInDec, qty, nonce_value)
-    var messageHash = window.web3.utils.soliditySha3(assetAddress, tokenId, payingTokenAddress, amountInDec, qty, nonce_value);
-    console.log(messageHash)
+    var messageHash = ethers.utils.solidityKeccak256(['address', 'uint256', 'address', 'uint256', 'uint256', 'uint256'], [assetAddress, tokenId, payingTokenAddress, amountInDec, qty, nonce_value]);
     var account = getCurrentAccount()
-    const signature = await window.web3.eth.personal.sign(messageHash, account);
+    messageHash = ethers.utils.arrayify(messageHash);
+     if (window.wallet == 'walletConnect') {
+       const signer = window.provider.getSigner();
+        var signature = await signer.signMessage(messageHash);
+     }else {
+       var signature = await signer.signMessage(messageHash);
+     }
     await placeBid(collectionId, signature, qty, {
       asset_address: assetAddress,
       token_id: tokenId,
@@ -691,7 +630,12 @@ window.bidAsset = async function bidAsset(assetAddress, tokenId, qty = 1, amount
 window.signMessage = async function signMessage(msg) {
   try {
     var account = getCurrentAccount()
-    var sign = await window.web3.eth.personal.sign(msg, account);
+    if (window.wallet == 'walletConnect') {
+       const signer = window.provider.getSigner();
+       var sign = signer.signMessage(msg);
+    }else{
+       var sign = signer.signMessage(msg);
+    }
     return sign;
   } catch (err) {
     console.log(err);
@@ -702,11 +646,16 @@ window.signMessage = async function signMessage(msg) {
 window.signSellOrder = async function signSellOrder(amount, decimals, paymentAssetAddress, tokenId, assetAddress, collectionId, sendBackTo='') {
   try {
     amount = roundNumber(mulBy(amount, 10 ** decimals), 0);
-    console.log(assetAddress, tokenId, paymentAssetAddress, amount)
     var nonce_value = await getNonceValue(collectionId);
-    var messageHash = window.web3.utils.soliditySha3(assetAddress, tokenId, paymentAssetAddress, amount, nonce_value);
+    var messageHash = ethers.utils.solidityKeccak256(["address","uint256","address","uint256","uint256"],[assetAddress, tokenId, paymentAssetAddress, amount, nonce_value]);
+    messageHash = ethers.utils.arrayify(messageHash);
     var account = getCurrentAccount()
-    const fixedPriceSignature = await window.web3.eth.personal.sign(messageHash, account);
+     if (window.wallet == 'walletConnect') {
+       const signer = window.provider.getSigner();
+       var fixedPriceSignature = await signer.signMessage(messageHash, account);
+      }else{
+       var fixedPriceSignature = await signer.signMessage(messageHash, account);
+      }
     await updateSignature(collectionId, fixedPriceSignature)
     await save_NonceValue(collectionId, fixedPriceSignature, nonce_value)
     if (sendBackTo == 'update') {
@@ -731,9 +680,7 @@ window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAss
   try {
     paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
     unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
-    var compiledContractDetails = getContractABIAndBytecode(tradeContractAddress, 'trade');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, tradeContractAddress);
+    var contract = await fetchContract(tradeContractAddress, 'trade');
     var nonce_value = await getContractSignNonce(collectionId, sellerSign);
     var account = getCurrentAccount()
     // supply, tokenURI, royalty needs to be passed but WILL NOT be used by the Contract
@@ -749,122 +696,20 @@ window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAss
       unitPrice,
       paymentAmt,
       tokenId,
-      supply,
-      tokenURI,
-      royaltyFee,
+      // supply,
+      // tokenURI,
+      // royaltyFee,
       buyingAssetQty
     ]
     var gasPrices = await gasPrice();
-    var receipt = await contract.methods.buyAsset(
-      orderStruct,
-      gon.collection_data["imported"],
-      splitSign(sellerSign, nonce_value)
-    ).send({from: account, gas: 516883, gasPrice: String(gasPrices)});
+    var receipt = await contract.buyAsset(orderStruct,gon.collection_data["imported"],splitSign(sellerSign, nonce_value),{from: account, gasLimit: 516883, gasPrice: String(gasPrices)});
+    receipt = await receipt.wait();
     await updateCollectionBuy(collectionId, buyingAssetQty, receipt.transactionHash)
     return window.buyPurchaseSuccess(collectionId)
-} catch (err) {
-console.error(err);
-return window.buyPurchaseFailed(err['message'])
+  } catch (err) {
+    return window.buyPurchaseFailed(err['message'])
+  }
 }
-}
-
-
-window.buyAndTransferAsset = async function buyAndTransferAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
-  paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId) {
-    try {
-        var abi = [{"inputs":[{"internalType":"uint8","name":"_buyerFee","type":"uint8"},{"internalType":"uint8","name":"_sellerFee","type":"uint8"},{"internalType":"contract TransferProxy","name":"_transferProxy","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"assetOwner","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"quantity","type":"uint256"},{"indexed":true,"internalType":"address","name":"buyer","type":"address"}],"name":"BuyAndTransferAsset","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"assetOwner","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"quantity","type":"uint256"},{"indexed":true,"internalType":"address","name":"buyer","type":"address"}],"name":"BuyAsset","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint8","name":"buyerFee","type":"uint8"}],"name":"BuyerFee","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"assetOwner","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"quantity","type":"uint256"},{"indexed":true,"internalType":"address","name":"buyer","type":"address"}],"name":"ExecuteBid","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint8","name":"sellerFee","type":"uint8"}],"name":"SellerFee","type":"event"},{"inputs":[{"components":[{"internalType":"address","name":"seller","type":"address"},{"internalType":"address","name":"buyer","type":"address"},{"internalType":"address","name":"erc20Address","type":"address"},{"internalType":"address","name":"nftAddress","type":"address"},{"internalType":"enum Trade.BuyingAssetType","name":"nftType","type":"uint8"},{"internalType":"uint256","name":"unitPrice","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"uint256","name":"supply","type":"uint256"},{"internalType":"string","name":"tokenURI","type":"string"},{"internalType":"uint256","name":"fee","type":"uint256"},{"internalType":"uint256","name":"qty","type":"uint256"}],"internalType":"struct Trade.Order","name":"order","type":"tuple"},{"internalType":"bool","name":"_import","type":"bool"},{"components":[{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"internalType":"struct Trade.Sign","name":"sign","type":"tuple"}],"name":"buyAndTransferAsset","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"seller","type":"address"},{"internalType":"address","name":"buyer","type":"address"},{"internalType":"address","name":"erc20Address","type":"address"},{"internalType":"address","name":"nftAddress","type":"address"},{"internalType":"enum Trade.BuyingAssetType","name":"nftType","type":"uint8"},{"internalType":"uint256","name":"unitPrice","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"uint256","name":"supply","type":"uint256"},{"internalType":"string","name":"tokenURI","type":"string"},{"internalType":"uint256","name":"fee","type":"uint256"},{"internalType":"uint256","name":"qty","type":"uint256"}],"internalType":"struct Trade.Order","name":"order","type":"tuple"},{"internalType":"bool","name":"_import","type":"bool"},{"components":[{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"internalType":"struct Trade.Sign","name":"sign","type":"tuple"}],"name":"buyAsset","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"buyerServiceFee","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"seller","type":"address"},{"internalType":"address","name":"buyer","type":"address"},{"internalType":"address","name":"erc20Address","type":"address"},{"internalType":"address","name":"nftAddress","type":"address"},{"internalType":"enum Trade.BuyingAssetType","name":"nftType","type":"uint8"},{"internalType":"uint256","name":"unitPrice","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"uint256","name":"supply","type":"uint256"},{"internalType":"string","name":"tokenURI","type":"string"},{"internalType":"uint256","name":"fee","type":"uint256"},{"internalType":"uint256","name":"qty","type":"uint256"}],"internalType":"struct Trade.Order","name":"order","type":"tuple"},{"internalType":"bool","name":"_import","type":"bool"},{"components":[{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"internalType":"struct Trade.Sign","name":"sign","type":"tuple"}],"name":"executeBid","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"seller","type":"address"},{"internalType":"address","name":"buyer","type":"address"},{"internalType":"address","name":"erc20Address","type":"address"},{"internalType":"address","name":"nftAddress","type":"address"},{"internalType":"enum Trade.BuyingAssetType","name":"nftType","type":"uint8"},{"internalType":"uint256","name":"unitPrice","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"uint256","name":"supply","type":"uint256"},{"internalType":"string","name":"tokenURI","type":"string"},{"internalType":"uint256","name":"fee","type":"uint256"},{"internalType":"uint256","name":"qty","type":"uint256"}],"internalType":"struct Trade.Order","name":"order","type":"tuple"},{"internalType":"bool","name":"_import","type":"bool"}],"name":"getFees","outputs":[{"components":[{"internalType":"uint256","name":"platformFee","type":"uint256"},{"internalType":"uint256","name":"assetFee","type":"uint256"},{"internalType":"uint256","name":"royaltyFee","type":"uint256"},{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"address","name":"tokenCreator","type":"address"}],"internalType":"struct Trade.Fee","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"seller","type":"address"},{"internalType":"address","name":"buyer","type":"address"},{"internalType":"address","name":"erc20Address","type":"address"},{"internalType":"address","name":"nftAddress","type":"address"},{"internalType":"enum Trade.BuyingAssetType","name":"nftType","type":"uint8"},{"internalType":"uint256","name":"unitPrice","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"uint256","name":"supply","type":"uint256"},{"internalType":"string","name":"tokenURI","type":"string"},{"internalType":"uint256","name":"fee","type":"uint256"},{"internalType":"uint256","name":"qty","type":"uint256"}],"internalType":"struct Trade.Order","name":"order","type":"tuple"},{"components":[{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"internalType":"struct Trade.Sign","name":"ownerSign","type":"tuple"},{"components":[{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"internalType":"struct Trade.Sign","name":"sign","type":"tuple"}],"name":"mintAndBuyAsset","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"seller","type":"address"},{"internalType":"address","name":"buyer","type":"address"},{"internalType":"address","name":"erc20Address","type":"address"},{"internalType":"address","name":"nftAddress","type":"address"},{"internalType":"enum Trade.BuyingAssetType","name":"nftType","type":"uint8"},{"internalType":"uint256","name":"unitPrice","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"uint256","name":"supply","type":"uint256"},{"internalType":"string","name":"tokenURI","type":"string"},{"internalType":"uint256","name":"fee","type":"uint256"},{"internalType":"uint256","name":"qty","type":"uint256"}],"internalType":"struct Trade.Order","name":"order","type":"tuple"},{"components":[{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"internalType":"struct Trade.Sign","name":"ownerSign","type":"tuple"},{"components":[{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"internalType":"struct Trade.Sign","name":"sign","type":"tuple"}],"name":"mintAndExecuteBid","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"sellerServiceFee","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint8","name":"_buyerFee","type":"uint8"}],"name":"setBuyerServiceFee","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint8","name":"_sellerFee","type":"uint8"}],"name":"setSellerServiceFee","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"transferProxy","outputs":[{"internalType":"contract TransferProxy","name":"","type":"address"}],"stateMutability":"view","type":"function"}]
-        const rpcURL = "https://rinkeby.infura.io/v3/3e19c57faceb42c5a67bd39c08258898"
-        console.log(collectionId)
-        const web3 = new Web3(rpcURL)
-        const tradeContractAddress = "0xab46E252e510483b360ec0579BfB1C644E3EDaDa";
-        const contract = new web3.eth.Contract(abi, tradeContractAddress)
-        const account = '0x13AeB3c8D30fb1a69F32736688af68D49582E3CF'; 
-        const privateKey = '6afa484c19a0c13d3d1a7881056fd44231e94224f3c893c619419b9a4016ee20';
-        const buyer = await getCurrentAccount()
-        paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** 18), 0)
-        unitPrice = roundNumber(mulBy(unitPrice, 10 ** 18), 0)
-        console.log(paymentAmt, unitPrice)
-        var nonce_value = await getContractSignNonce(collectionId, sellerSign);
-        var supply = 0;
-        var tokenURI = "abcde";
-        var royaltyFee = 0;
-        var paymentAssetAddress = "0xc778417E063141139Fce010982780140Aa0cD5Ab";
-        var orderStruct = [
-          assetOwner,
-          buyer,
-          paymentAssetAddress,
-          buyingAssetAddress,
-          buyingAssetType,
-          unitPrice,
-          paymentAmt,
-          tokenId,
-          supply,
-          tokenURI,
-          royaltyFee,
-          buyingAssetQty
-        ]
-        var signStruct = splitSign(sellerSign, nonce_value)
-        var imported = gon.collection_data["imported"]
-        const nonce = await web3.eth.getTransactionCount(account, 'latest')
-        var gasPrices = await gasPrice();
-        const tx = {
-          'from': account,
-          'to': tradeContractAddress,
-          'nonce': nonce,
-          'gas': 516883,
-          'gasPrice': String(gasPrices),
-          'data': contract.methods.buyAndTransferAsset(orderStruct, imported, signStruct).encodeABI()
-        };
-        const signPromise = web3.eth.accounts.signTransaction(tx, privateKey);
-        await signPromise.then((signedTx) => {
-            web3.eth.sendSignedTransaction(signedTx.rawTransaction, function(err, hash) {
-            if (!err) {
-              console.log("The hash of your transaction is: ", hash)
-              buyINRCollectionstatus(hash, collectionId, buyingAssetQty);
-            } else {
-              console.log("Something went wrong when submitting your transaction:", err)
-              return window.buyPurchaseFailed(err['message'])
-            }
-          });
-        });
-    } catch (err) {
-        console.error(err);
-        return window.buyPurchaseFailed(err['message'])
-    }
-    }
-
-async function buyINRCollectionstatus(txHash, collectionId, buyingAssetQty, )
-{     
-      console.log("TX HASH", txHash);
-      const interval = setInterval(function() {
-        console.log("Attempting to get transaction receipt...");
-        web3.eth.getTransactionReceipt(txHash, function(err, txReceipt) {
-          if (txReceipt) {
-            console.log(txReceipt);
-            clearInterval(interval);
-            if (txReceipt && txReceipt['status']) 
-            {
-              console.log(txReceipt['status'])
-              console.log("Updating the collection")
-              buyINRupdateCollection(collectionId, buyingAssetQty, txHash)
-            }
-            else
-            {
-              const message = "Transaction failed " + txHash;
-              return window.buyPurchaseFailed(message)
-            }
-          }
-        });
-      }, 1000);      
-}
-
-async function buyINRupdateCollection(collectionId,  buyingAssetQty, txHash)
-{
-  console.log("In function: ", collectionId)
-  await updateCollectionBuy(collectionId, buyingAssetQty, txHash)
-  return window.buyPurchaseSuccess(collectionId)
-}
-
 
 window.MintAndBuyAsset = async function MintAndBuyAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
                                           paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId, tokenURI, royaltyFee, sharedCollection, supply) {
@@ -872,9 +717,7 @@ window.MintAndBuyAsset = async function MintAndBuyAsset(assetOwner, buyingAssetT
     paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
     unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
     var buyingAssetType = buyingAssetType + 2; // BuyAssetType -> 3: Lazy721 , 2: Lazy1155, 1:721, 0: 1155
-    var compiledContractDetails = getContractABIAndBytecode(tradeContractAddress, 'trade');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, tradeContractAddress);
+    var contract = await fetchContract(tradeContractAddress, 'trade');
     var nonce_value = await getContractSignNonce(collectionId, sellerSign);
     var account = getCurrentAccount();
     var orderStruct = [
@@ -894,12 +737,13 @@ window.MintAndBuyAsset = async function MintAndBuyAsset(assetOwner, buyingAssetT
     // ownerSign -> selleraddress & URI
     var gasPrices = await gasPrice();
     var ownerSign = await sign_metadata_with_creator(assetOwner, tokenURI, collectionId);
-    var receipt = await contract.methods.mintAndBuyAsset(
-      orderStruct,
-      splitSign(ownerSign['signature'], ownerSign['nonce']),
-      splitSign(sellerSign, nonce_value)
-    ).send({from: account, gas: 616883, gasPrice: String(gasPrices)});
-    var tokenId = parseInt(receipt.events.BuyAsset.returnValues['tokenId'])
+    var receipt = await contract.mintAndBuyAsset(orderStruct,splitSign(ownerSign['signature'], ownerSign['nonce']),splitSign(sellerSign, nonce_value),{from: account, gasLimit: 616883, gasPrice: String(gasPrices)});
+    receipt = await receipt.wait();
+    if (buyingAssetType == 3){
+       var tokenId = parseInt(receipt.logs[7].topics[2])
+    }else{
+       var tokenId = parseInt(receipt.logs[6].topics[2])
+    }
     await updateCollectionBuy(collectionId, buyingAssetQty, receipt.transactionHash, tokenId)
     return window.buyPurchaseSuccess(collectionId)
   } catch (err) {
@@ -911,13 +755,10 @@ window.MintAndBuyAsset = async function MintAndBuyAsset(assetOwner, buyingAssetT
 
 window.MintAndAcceptBid = async function MintAndAcceptBid(buyer, buyingAssetType, buyingAssetAddress, tokenId, paymentAmt, buyingAssetQty, paymentAssetAddress, decimals, buyerSign, collectionId, bidId, tokenURI, royaltyFee, sharedCollection,supply) {
   try {
-    console.log(tokenURI, royaltyFee, sharedCollection)
     paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
     var unitPrice = 1; 
     var buyingAssetType = buyingAssetType + 2; // BuyAssetType -> 3: Lazy721 , 2: Lazy1155, 1:721, 0: 1155
-    var compiledContractDetails = getContractABIAndBytecode(tradeContractAddress, 'trade');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, tradeContractAddress);
+    const contract = await fetchContract(tradeContractAddress, 'trade');
     var nonce_value = await getContractSignNonce(collectionId, buyerSign);
     var account = getCurrentAccount();
     //token ID calculating 
@@ -940,13 +781,9 @@ window.MintAndAcceptBid = async function MintAndAcceptBid(buyer, buyingAssetType
     // ownerSign -> selleraddress & URI
     var ownerSign = await sign_metadata_with_creator(account, tokenURI, collectionId);
     await saveContractNonceValue(collectionId, ownerSign)
-    console.log(ownerSign)
-    var receipt = await contract.methods.mintAndExecuteBid(
-      orderStruct,
-      splitSign(ownerSign['signature'], ownerSign['nonce']),
-      splitSign(buyerSign, nonce_value)
-    ).send({from: account, gas: 516883, gasPrice: String(gasPrices)});
-    var tokenId = parseInt(receipt.events.ExecuteBid.returnValues['tokenId'])
+    var receipt = await contract.mintAndExecuteBid(orderStruct,splitSign(ownerSign['signature'], ownerSign['nonce']),splitSign(buyerSign, nonce_value),{from: account,gasLimit: 516883,gasPrice: String(gasPrices)});
+    var tx = await receipt.wait();
+    var tokenId = parseInt(tx.logs[0].topics[3])
 
     await updateCollectionSell(collectionId, buyer, bidId, receipt.transactionHash, tokenId)
     return window.acceptBidSuccess(collectionId)
@@ -956,14 +793,11 @@ window.MintAndAcceptBid = async function MintAndAcceptBid(buyer, buyingAssetType
   }
 }
 
-
 window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAssetAddress, tokenId, paymentAmt, buyingAssetQty, paymentAssetAddress, decimals, buyerSign, collectionId, bidId) {
   try {
     paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
     var unitPrice = 1;
-    var compiledContractDetails = getContractABIAndBytecode(tradeContractAddress, 'trade');
-    var abi = compiledContractDetails['compiled_contract_details']['abi'];
-    var contract = await new window.web3.eth.Contract(abi, tradeContractAddress);
+    const contract = await fetchContract(tradeContractAddress, 'trade');
     var nonce_value = await getContractSignNonce(collectionId, buyerSign);
     var account = getCurrentAccount()
     var gasPrices = await gasPrice();
@@ -980,17 +814,13 @@ window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAsse
       unitPrice,
       paymentAmt,
       tokenId,
-      supply,
-      tokenURI,
-      royaltyFee,
+      // supply,
+      // tokenURI,
+      // royaltyFee,
       buyingAssetQty
     ]
-    console.log(orderStruct, nonce_value)
-    var receipt = await contract.methods.executeBid(
-      orderStruct,
-      gon.collection_data["imported"],
-      splitSign(buyerSign, nonce_value)
-    ).send({from: account, gas: 516883, gasPrice: String(gasPrices)});
+    var receipt = await contract.executeBid(orderStruct,gon.collection_data["imported"],splitSign(buyerSign, nonce_value),{from: account, gasLimit: 516883, gasPrice: String(gasPrices)});
+    receipt = await receipt.wait();
     await updateCollectionSell(collectionId, buyer, bidId, receipt.transactionHash)
     return window.acceptBidSuccess(collectionId)
   } catch (err) {
@@ -1007,10 +837,15 @@ function getCurrentAccount() {
 }
 
 window.ethBalance = async function ethBalance(account = '') {
-  account = account ? account : getCurrentAccount();
-  var bal = await window.web3.eth.getBalance(account);
-  var ethBal = roundNumber(web3.utils.fromWei(bal, 'ether'), 4);
-  return ethBal;
+  var account = await getaccounts();
+  if(window.wallet == 'metamask'){
+     var bal = await signer.getBalance();
+  }else{
+    const signer = window.provider.getSigner();
+    var bal = await signer.getBalance();
+  }
+  var ethBal = roundNumber(ethers.utils.formatEther(bal), 4);
+  return ethBal
 }
 
 window.updateEthBalance = async function updateEthBalance() {
@@ -1026,23 +861,35 @@ window.tokenBalance = async function tokenBalance(contractAddress, decimals) {
     "name": "balanceOf",
     "outputs": [{"name": "balance", "type": "uint256"}],
     "payable": false,
+    "stateMutability":"view",
     "type": "function"
   }]
-  var contract = await new window.web3.eth.Contract(abi, contractAddress);
-  var account = getCurrentAccount()
-  var balance = await contract.methods.balanceOf(account).call();
-  balance = roundNumber(divBy(balance, (10 ** decimals)), 4)
+  var contract;
+  if (window.wallet == 'walletConnect') {
+     contract = new ethers.Contract( contractAddress, abi, window.provider);
+  }
+  else if(window.wallet == 'metamask'){
+    contract = new ethers.Contract( contractAddress, abi, provider);
+  }
+  var account = await getaccounts();
+  var balance = await contract.balanceOf(account);
+  var bal = parseInt(balance);
+  balance = roundNumber(divBy(bal, (10 ** decimals)), 4)
   return balance
 }
 
 window.getNetworkType = async function getNetworkType() {
-  var type = await web3.eth.net.getNetworkType();
-  return type;
+  if(window.wallet == 'metamask'){
+    var type = await provider.getNetwork();
+   }else{
+    var type = await window.provider.getNetwork();
+   }
+  return type["name"];
 }
+
 
 function showTermsCondition(account, ethBal, networkType) {
   var account = account || getCurrentAccount()
-  console.log("showTermsCondition: ", account)
   $.magnificPopup.open({
     closeOnBgClick: false ,
 		enableEscapeKey: false,
@@ -1093,10 +940,9 @@ window.disconnect = async function disconnect(address) {
 
 async function destroySession() {
   if (gon.session) {
-    console.log("IN DESTROY: ", gon.session)
     await destroyUserSession(getCurrentAccount())
     if(window.wallet === 'walletConnect') {
-      walletConnect.disconnect()
+      tprovider.disconnect()
     }
   }
 }
@@ -1107,16 +953,23 @@ window.connect = async function connect(wallet = '') {
     return
   }
   window.wallet = wallet;
-  if(typeof web3 === 'undefined' && mobileCheck()) {
-    window.open(`https://metamask.app.link/dapp/` + location.hostname, '_blank').focus();
-    return
-  }else if (typeof web3 !== 'undefined') { 
-    const status = await load();
-    if (status) {
-      window.location.href = '/'
+    if(typeof web3 === 'undefined' && mobileCheck() && wallet == 'metamask') {
+      window.open(`https://metamask.app.link/dapp/` + location.hostname, '_blank').focus();
+      return
+    }else if (typeof web3 !== 'undefined') {
+      const status = await load();
+      if (status) {
+        window.location.href = '/'
+      }
+    } else {
+            if (typeof web3 == 'undefined' && wallet == 'walletConnect'){
+            const status = await load();
+            if (status) {
+              window.location.href = '/'
+            }
+    }else{
+      toastr.error('Please install Metamask Extension to your browser. <a target="_blank" href="https://metamask.io/download.html">Download Here</a>')
     }
-  } else {
-    toastr.error('Please install Metamask Extension to your browser. <a target="_blank" href="https://metamask.io/download.html">Download Here</a>')
   }
 }
 
@@ -1158,8 +1011,17 @@ $(function () {
 
 if (window.ethereum){
   window.ethereum.on('accountsChanged', function (acc) {
+    if (gon.session) {
+      load(true);
+    } else {
+      window.location.reload();
+    }
+  })
+  window.ethereum.on('chainChanged', function (chainId) {
     if (window.ethereum && gon.session) {
       load(true);
+    } else {
+      window.location.reload();
     }
   })
 }
@@ -1173,20 +1035,14 @@ function gasPrice(){
     type: "GET"
   });
   request.done(function (msg) {
-    console.log(msg)
-    console.log("Get Fastest Value from the API");
     if (msg['gas_price'] != '')
     {
       init_gasPrice = msg['gas_price']['fastest'] * 10**8;
     }
   });
-  request.fail(function (jqXHR, textStatus) {
-    console.log("Failed to get fastest value");
-   });
 } catch (err) {
   console.error(err);
 }
-console.log(init_gasPrice)
  return init_gasPrice;
 }
 

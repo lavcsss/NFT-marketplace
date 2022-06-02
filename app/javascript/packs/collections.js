@@ -536,7 +536,7 @@ $(document).ready(function () {
   window.initBuyProcess = async function initBuyProcess() {
     var curErc20Balance = $('#erc20_balance').text()
     var ethBalance = await window.ethBalance();
-    var totalAmt = $("#buy-total-amt-dp").attr('buyAmt')
+    var totalAmt = $("#buy_price").attr('price')
     if (isGreaterThanOrEqualTo(curErc20Balance, totalAmt)) {
       $('.convertEth').addClass("hide")
       initApproveBuyProcess($("#buyContractAddress").text(), $("#buyContractDecimals").text())
@@ -585,7 +585,7 @@ $(document).ready(function () {
     $('.purchaseAndMintStart').removeClass('hide')
     $("#Buy-modal").modal("hide")
     $("#placeBuy").modal("show")
-    approveERC20(contractAddress, 'erc20', $("#buy-total-amt-dp").attr('buyAmt'), contractDecimals, 'Buy')
+    approveERC20(contractAddress, 'erc20', $("#buy_price").attr('price'), contractDecimals, 'Buy')
   }
 
   window.buyApproveSuccess = function buyApproveSuccess(transactionHash, contractAddress) {
@@ -616,12 +616,12 @@ $(document).ready(function () {
     var paymentDetails = fetchCollectionDetails(null, contractAddress)
     if($('#is_collection_lazy_minted').val()=="true"){
       MintAndBuyAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
-        paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy-total-amt-dp").attr('buyAmt')),
+        paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy_price").attr('price')),
         paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
         paymentDetails['seller_sign'], paymentDetails['collection_id'], paymentDetails['token_uri'], paymentDetails['royalty'],paymentDetails['shared'],paymentDetails['total'])
     }else{
       buyAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
-      paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy-total-amt-dp").attr('buyAmt')),
+      paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy_price").attr('price')),
       paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
       paymentDetails['seller_sign'], paymentDetails['collection_id'])
     }

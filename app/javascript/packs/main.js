@@ -122,7 +122,7 @@ $(document).ready(function () {
 		mouseDrag: true,
 		touchDrag: true,
 		dots: true,
-		loop: true,
+		loop: false,
 		autoplay: true,
 		autoplayHoverPause: true,
 		autoplayTimeout: 5000,
@@ -158,7 +158,7 @@ $(document).ready(function () {
 		mouseDrag: true,
 		touchDrag: true,
 		dots: true,
-		loop: true,
+		loop: false,
 		autoplay: true,
 		autoplayHoverPause: true,
 		autoplayTimeout: 5000,
@@ -257,7 +257,7 @@ $(document).ready(function () {
 		mouseDrag: false,
 		touchDrag: false,
 		dots: false,
-		loop: true,
+		loop: false,
 		autoplay: true,
 		autoplayTimeout: 5000,
 		autoplayHoverPause: true,
@@ -452,7 +452,6 @@ $(document).ready(function () {
             var reader = new FileReader();
             reader.onload = function(e) {
 
-//                $('#my-preview-section').css('background-image', 'url(/assets/video-file-icon.png)');
                 $('#my-preview-section').hide();
                 $('#my-preview-section').fadeIn(650);
 
@@ -481,18 +480,6 @@ $(document).ready(function () {
         }
     }
 
-    // $("#file-1").change(function(e) {
-    //     var file = e.currentTarget.files[0];
-    //     if (file.type == "audio/mpeg") {
-    //         readURLSingleAudio(this,'audio');
-    //     }if (file.type == "video/mp4") {
-    //         readURLSingleVideo(this,'audio');
-    //     }else{
-    //         readURLSingle(this);
-    //     }
-
-    // });
-
     /*==============================
      Number field restriction
      ==============================*/
@@ -512,8 +499,6 @@ $(document).ready(function () {
 	    infinite: false,
 	    speed: 1000,
 	    variableWidth: true,
-	    // centerMode: true,
-	    // centerPadding: "1",
 	    speed: 500,
 	    slidesToShow: 1,
         arrows: false,
