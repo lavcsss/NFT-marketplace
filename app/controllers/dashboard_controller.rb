@@ -32,11 +32,37 @@ class DashboardController < ApplicationController
   def search
     @users = User.search("*#{build_elastic_search_str(params[:query])}*").records
     params[:page_no] ||= 1
+    filter_query = ""
+    session[:category] = [] if session[:category] .nil?
+
+      for category in session[:category]
+        if session[:category].find_index(category) == 0
+          filter_query = filter_query + "category like '%#{category}%'"
+        else
+          filter_query = filter_query + " OR category like '%#{category}%'"
+        end
+      end
+    
+      
     @collections = params[:query].present? ? Collection.search("*#{build_elastic_search_str(params[:query].strip)}*").records.on_sale : Collection.on_sale
     @collections = @collections.where("category like ?", "%#{params[:category]}%") if params[:category].present?
-    @collections= @collections.on_sale.with_attached_attachment.paginate(page: params[:page_no] || 1)
+    @collections = @collections.on_sale.with_attached_attachment.paginate(page: params[:page_no] || 1)
+    @collections= @collections.where(filter_query)
+    @collections = @collections.reorder(likes_count: 'desc')
+    #@artists =  User.joins(:created_collections).with_attached_attachment.group('collections.creator_id').order('name DESC') 
+    @artists =  User.joins(:created_collections).with_attached_attachment.group('collections.creator_id').order('COUNT(collections.creator_id) DESC')
+    @own_contract = NftContract.where.not(owner_id: nil)
+
   end
 
+  def filter_by
+    filter_query = ""
+    params[:category] = [] if params[:category].nil?
+    session[:category]  =params[:category]
+    
+    render json: {filter_data: "success"}
+  end   
+   
   def notifications
     Notification.unread(current_user).update_all(is_read: true) if Notification.unread(current_user).present?
     @notifications = current_user.notifications
@@ -82,8 +108,7 @@ class DashboardController < ApplicationController
     params[:page] ||= 1
     @own_contract = NftContract.where.not(owner_id: nil).paginate(page: params[:page] || 1, per_page: 20)
   end
-
-
+  
   private
 
   def build_elastic_search_str(string)

@@ -1,18 +1,13 @@
 <%hidden_field_tag "contract_address", contract.address%>
-
-<div class="featured-creators-box cluster-box" style="margin-top: 20px">
-    <a href="<%= nft_contract_path(contract.address)%>">
-        <div class="featured-creators-box-img">
-            <div class="featured-creators-box-img-bg" style="background-image:url('<%=contract.cover_url%>')">
-            <img src="<%=contract.cover_url%>;" class="img-responsive">
-            </div>
-            <div class="featured-creators-box-img-profile">
-            <img src="<%=contract.attachment_url%>" class="img-responsive">
-            </div>
+<li>
+    <div class="modeling-artist-list_detail">
+        <img src="<%=contract.attachment_url%>">
+        <div class="modeling-artist-list_detail_pincode">
+            <h6> <a> <%=contract.name%> </a> </h6>
+            <!-- <a><%=contract.description%></a> -->
+            <a href="<%= nft_contract_path(contract.address)%>">
+            <img src="../../assets/nft/modeling/link.svg" class="edit-icon">
+            </a>
         </div>
-        <div class="featured-creators-box-content">
-            <h4><%=contract.name%></h4>
-            <p><%=contract.description%></p>
-        </div>
-    </a>
-</div>
+    </div>
+</li>

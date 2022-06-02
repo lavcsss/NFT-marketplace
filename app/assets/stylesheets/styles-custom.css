@@ -7,8 +7,8 @@
   --submit-search: #8a8686;
   --input-border: #e0e0e0;
   --top-sell-buy-box: #ccc;
-  --theme-color: #3d00b7;
-/* --theme-color: #3C97F2; */
+ /* --theme-color: #3d00b7; */
+  --theme-color: #3C97F2; 
   --box-default-color: #464646;
   --no-wishlist-bg: #9c9c9c96;
   --ordinary-theme: #f1f5fe;
@@ -1547,7 +1547,7 @@ section.create-collectible-section .single-multiple-create p {
 }
 
 input:checked + .slider {
-  background-color: var(--theme-color);
+  background-color: #3C97F2;
 }
 
 input:checked + .slider:before {
@@ -1592,7 +1592,7 @@ input:checked + .slider:before {
   border: 1px solid var(--input-border);
 }
 .radio-img > input:checked + .image {
-  border: 2px solid var(--theme-color);
+  border: 2px solid #3C97F2;
   background: var(--ordinary-theme);
 }
 
@@ -1601,7 +1601,7 @@ input:checked + .slider:before {
 }
 
 .icon-style-choose-collection span {
-  background: var(--theme-color);
+  background: #3C97F2;
   color: var(--white);
   font-size: 22px;
   display: block;
@@ -3564,6 +3564,7 @@ input:checked + .dark-theme-slider.slider:before {
     min-width: 180px;
     font-family: 'Hahmlet', serif;
     font-weight: bold;
+    color: #3C97F2;
 }
 
 #landing_head .nav > li > a:focus,
@@ -4511,18 +4512,18 @@ video.video-responsive {
 /* Theme btn */
 
 .theme-btn {
-  background: var(--theme-color);
+  background: #3C97F2;
   border-radius: 10px;
   padding: 10px 25px !important;
   color: var(--white) !important;
   font-weight: bold;
   letter-spacing: 0px;
-  border: 1px solid var(--theme-color);
+  border: 1px solid #3C97F2;
   outline: 0 !important;
   margin: 0 5px;
   box-shadow: 0px 3px 6px #00000029;
   min-width: 180px;
-  border:1px solid var(--theme-color);
+  border:1px solid #3C97F2;
 }
 .theme-btn span,
 .theme-btn i {
@@ -4562,15 +4563,13 @@ video.video-responsive {
   color: var(--black) !important;
   font-weight: 600;
 }
-
 /*.theme-btn:hover,
 .theme-btn:focus,
 .theme-btn:active {
   background: transparent !important;
-  /* border: 1px solid var(--theme-color); */
+  border: 1px solid var(--theme-color);
   color: var(--theme-color) !important;
 }*/
-
 .form-control {
   color: var(--black);
   background-image: none;
@@ -7332,7 +7331,7 @@ ul.slick-dots li.slick-active button:before {
 }
 
 a.place-bid-card {
-  background: #3d01b6;
+  background: #3C97F2;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
   border-radius: 3px;
   color: #fff;
@@ -7747,7 +7746,7 @@ h3.cluster_name_heading {
 
 .banner_sec .youtube-video iframe {
   width: 100%;
-  height: 100%;
+  height: 85%;
 }
 
 

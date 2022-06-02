@@ -1,0 +1,18 @@
+<%hidden_field_tag "artist", artist%>
+<li>
+    <div class="modeling-artist-list_detail">
+    <% if artist.attachment.present? %>
+        <%= image_tag url_for(artist.profile_image) %>   
+    <% else %>     
+        <img src="/assets/default_user.png">
+    <% end %>
+    <div class="modeling-artist-list_detail_pincode">
+        <!-- <h6> <%= link_to artist.full_name, user_path(artist.address)%> </h6> -->
+        <h6> <%= artist.full_name %> </h6>
+        <!-- <% if artist.twitter_link %>
+            <%= link_to_twitter(artist) %>
+        <% end %> -->
+        <a href="/users/<%= artist.address %>"><img src="../../assets/nft/modeling/link.svg" class="edit-icon"></a>
+    </div>
+    </div>
+</li>

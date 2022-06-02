@@ -1,395 +1,506 @@
-<main class="main mt-0">
-  <!--<% if @user.banner.present? %>
-    <div class="main__author" style="background: url(<%= url_for(@user.banner) %>) center center / cover no-repeat;;"></div>
-  <% else %>
-    <div class="main__author" data-bg="/assets/dummy-image.jpg" style="background: url(&quot;/assets/dummy-image.jpg&quot;) center center / cover no-repeat;"></div>
-  <% end %>-->
-
-  <div class="container">
-    <div class="row row--grid">
-      <div class="col-12 col-xl-3">
-        <div class="author author--page">
-          <div class="author__meta">
-            <%= link_to_image(@user) %>
-            <%= link_to_name(@user) %>
-            <%= link_to_twitter(@user) %>
-            <%= link_to_bio(@user) %>
-            <%= link_to_personal_url(@user) %>
-
-            <div class="author__wrap">
-              <div class="author__followers">
-                <p><%= @user.followers.count %></p>
-                <span><%= t('users.show.followers') %></span>
-              </div>
-              <% if current_user.present? && current_user != @user && !current_user.followees.include?(@user) %>
-                <%= link_to follow_users_path(id: @user.address), class: "author__follow" do %>
-                  <i class="fa fa-user-plus color-white"></i>
-                  <span class="color-white" style="margin-left: 2px;"><%= t('users.show.follow') %></span>
-                <% end %>
-              <% end %>
-
-              <% if current_user.present? && current_user != @user && current_user.followees.include?(@user) %>
-                <%= link_to unfollow_users_path(id: @user.address), class: "author__follow" do %>
-                  <i class="fa fa-user-plus color-white"></i>
-                  <span class="color-white" style="margin-left: 2px;"><%= t('users.show.unfollow') %></span>
-                <% end %>
-              <% end %>
-            </div>
-
-            <div class="verified-section">
-              <%# if current_user&.is_approved %>
-                <!-- <a href="javascript:void(0);" class="verify-btn verifier">Verified</a> -->
-              <%# else %>
-                <!-- <a href="https://faq.afronifty.com/topics/new" class="verify-btn un-verifier">Get Verified</a> -->
-
-              <% if current_user.present? && @user.address != current_user.address %>
-                <% if @user.already_reported(current_user.id) %>
-                  <a href="javascript:void(0);" class="verify-btn verifier">Reported</a>
-                <% else %>
-                  <a  href="javascript:void(0)" onclick="window.show_modal('#Reportuser-modal')" class="verify-btn un-verifier">Report User</a>
-                <% end %>
-              <% end %>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-xl-9">
-        <div class="profile">
-          <!-- tabs nav -->
-
-          <ul class="nav nav-tabs profile__tabs" id="profile__tabs" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link <%= 'active' if @tab.nil? %>" href="<%= user_path(id: @user.address) %>"><%= t('users.show.on_sale') %></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link <%= 'active' if @tab == 'created' %>" href="<%= user_path(id: @user.address, tab: "created", page_no: @page_no) %>"><%= t('users.show.created') %></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link <%= 'active' if @tab == 'collectibles' %>" href="<%= user_path(id: @user.address, tab: "collectibles", page_no: @page_no) %>"><%= t('users.show.collectibles') %></a>
-            </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link <%= 'active' if @tab == 'my_collections' %>" href="<%= user_path(id: @user.address, tab: "my_collections", page_no: @page_no) %>" >My Collections</a>
-            </li> -->
-            <li class="nav-item">
-              <a class="nav-link <%= 'active' if @tab == 'liked' %>" href="<%= user_path(id: @user.address, tab: "liked") %>"><%= t('users.show.liked') %></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link <%= 'active' if @tab == 'activity' %>" href="<%= user_path(id: @user.address, tab: "activity") %>"><%= t('users.show.activity') %></a>
-            </li>
-
-            <li class="nav-item">
-              <%= link_to user_path(id: @user.address, tab: "following"), :class => "nav-link #{'active' if @tab == 'following'}" do %>
-                Following
-                <span class="notify"><%= @followees_count %></span>
-              <% end %>
-            </li>
-            <li class="nav-item">
-              <%= link_to user_path(id: @user.address, tab: "followers"), class: "testValFollower nav-link #{'active' if @tab == 'followers'}" do %>
-                Followers
-                <span class="notify"><%= @followers_count %></span>
-              <% end %>
-            </li>
-            <li class="nav-item">
-              <%= link_to user_path(id: @user.address, tab: "nft_collections"), class: "nav-link #{'active' if @tab == 'nft_collections'}" do %>
-                <%= t('users.show.nft_collection') %>
-              <% end %>
-            </li>
-          </ul>
-          <!-- end tabs nav -->
-        </div>
-
-
-        <% if @tab == "following" %>
-          <div id="following" class="tab-pane fade <%= 'show active' if @tab == 'following' %>">
-            <% if @data.present? %>
-              <%= render "follow", follows: @data, id: "following" %>
-            <% else %>
-              <%= render partial: 'common/empty' %>
-            <% end %>
-          </div>
-        <% end %>
-
-        <% if @tab == "followers" %>
-          <div id="followers" class="tab-pane fade <%= 'show active' if @tab == 'followers' %>">
-            <% if @data.present? %>
-              <%= render "follow", follows: @data, id: "followers", followees: @data %>
-            <% else %>
-              <%= render partial: 'common/empty' %>
-            <% end %>
-          </div>
-        <% end %>
-
-        <!-- content tabs -->
-        <div class="tab-content user-collection-section">
-          <div class="tab-pane fade <%= 'active show' if !['liked', 'activity', 'following', 'followers'].include?(@tab) %>" id="tab-1" role="tabpanel">
-            <div class="row row--grid">
-              <% if !['liked', 'activity','following','followers', 'nft_collections'].include?(@tab) and @data.present? %>
-                <% if @tab=="my_collections"%>
-                  <% @data.each do |single_contract| %>
-                    <div class="col-12 col-md-6 col-lg-4">
-                      <%= render 'dashboard/own_contract', contract: single_contract %>
-                    </div>
+<main class="main mt-0 NFT-detail profile-Page">
+   <div class="" >
+      <div class="container bg-effect">
+         <div class="row">
+            <div class="col-12">
+               <div class="profile-bg  hide-mob-detail">
+                  <% if current_user.nil? %>
+                     <a class="follow-no-user">
+                        <span class="edit-profile follow-btn">
+                           Follow
+                        </span>
+                     </a>
+                  <% elsif current_user == @user %>
+                     <a href="<%=edit_user_path(current_user)%>">
+                        <span class="edit-profile">
+                           <img src="../../assets/nft/Edit-Profile.svg"> Edit Profile
+                        </span>
+                     </a>
+                  <% elsif current_user.present? && current_user != @user %>
+                     <% if !current_user.followees.include?(@user) %>
+                        <a href="<%=follow_users_path(id: @user.address)%>">
+                           <span class="edit-profile follow-btn">
+                              Follow
+                           </span>
+                        </a>
+                     <% else %>
+                        <a href="<%=unfollow_users_path(id: @user.address)%>">
+                           <span class="edit-profile follow-btn unfollow-btn">
+                              Unfollow
+                           </span>
+                        </a>
+                     <% end %>
                   <% end %>
-                <% else %>
-                  <% @data.each do |collection| %>
-                    <div class="col-12 col-md-6 col-lg-4">
-                      <%= render "/dashboard/collection_card", collection: collection %>
-                    </div>
-                  <% end %>
-                <% end %>
-              <% elsif ['nft_collections'].include?(@tab) and @data.present? %>
-                <div class="row collection-section">
-                  <div class="row col-12" style="float: right !important;">
-                    <% if @page_no.to_i > 1 %>
-                      <p class="text-right"><a href="<%= user_path(id: @user.address, tab: "nft_collections", page_no: @page_no.to_i - 1) %>"><span class="pull-right">Previous</span></a></p>
-                    <% end %>
-                    <% if @data[:next_page]%>
-                      <p class="text-right"><a href="<%= user_path(id: @user.address, tab: "nft_collections", page_no: @page_no.to_i + 1) %>"><span class="pull-right">Next</span></a></p>
-                    <% end %>
-                  </div>
-                  <% @data[:collections].each do |collection| %>
-                    <div class="col-12 col-md-6 col-lg-4">
-                      <%= render "my_collection_card", collection: collection %>
-                    </div>
-                  <% end %>
-                </div>
-              <% else %>
-                <% 3.times do %>
-                  <div class="col-12 col-md-6 col-lg-4">
-                    <%= render partial: 'common/empty_card_collection' %>
-                  </div>
-                <% end %>
-              <% end %>
-              <!-- end collapse -->
-            </div>
-          </div>
-
-            <!-- Like Section -->
-            <div class="tab-pane fade <%= 'active show' if @tab == 'liked' %>" id="tab-2" role="tabpanel">
-              <div class="row row--grid">
-                <% if !['activity', 'following', 'followers'].include?(@tab) and @liked.present? %>
-                  <div class="row collection-section" style="">
-                    <% @liked.each do |like| %>
-                      <% next unless like.collection.present? %>
-                      <div class="col-12 col-md-6 col-lg-4 ">
-                        <%= render "/dashboard/collection_card", collection: like.collection %>
-                      </div>
-                    <% end %>
-                  </div>
-                <% else %>
-                  <% 1.times do %>
-                    <div class="col-12">
-                      <%= render partial: 'common/empty' %>
-                    </div>
-                  <% end %>
-                <% end %>
-              </div>
-            </div>
-            <!-- Like Section End -->
-
-            <div class="tab-pane fade <%= 'active show' if @tab == 'activity' %>" id="tab-3" role="tabpanel">
-              <div class="row">
-                <!-- sidebar -->
-                <div class="col-12 col-xl-4 order-xl-2">
-                  <div class="filter-wrap">
-                    <button class="filter-wrap__btn" type="button" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter"><%= t('users.show.open_filter') %></button>
-
-
-                    <div class="collapse filter-wrap__content" id="collapseFilter">
-                      <!-- filter -->
-                      <div class="filter filter--sticky">
-                        <h4 class="filter__title"><%= t('users.show.filters') %>
-                          <a href="<%= my_items_path(:tab => "activity") %>" style="font-size: 12px;"><%= t('users.show.clear_all') %></a>
-                        </h4>
-
-                        <div class="filter__group">
-                          <ul class="filter__checkboxes">
-                            <% options = {user_id: @user.address, tab: "activity"} %>
-                            <li>
-                              <input id="type5" type="checkbox" name="type5" <%= (is_filter_active(params[:filters], 'minted') == 'active') ? "checked='true'" : '' %> onclick="window.location.href ='<%= build_filter_path("my_activity", params[:filters], "minted", options) %>'">
-                              <label for="type5"><%= t('users.show.minted') %></label>
-                            </li>
-                            <li>
-                              <input id="type9" type="checkbox" name="type9"  <%= (is_filter_active(params[:filters], 'bid') == 'active') ? "checked='true'" : '' %> onclick="window.location.href ='<%= build_filter_path("my_activity", params[:filters], "bid", options) %>'">
-                              <label for="type9"><%= t('users.show.bids') %></label>
-                            </li>
-                            <li>
-                              <input id="type10" type="checkbox" name="type10"  <%= (is_filter_active(params[:filters], 'like') == 'active') ? "checked='true'" : '' %> onclick="window.location.href ='<%= build_filter_path("my_activity", params[:filters], "like", options) %>'">
-                              <label for="type10"><%= t('users.show.likes') %></label>
-                            </li>
-                            <li>
-                              <input id="type11" type="checkbox" name="type11"  <%= (is_filter_active(params[:filters], 'following') == 'active') ? "checked='true'" : '' %> onclick="window.location.href ='<%= build_filter_path("my_activity", params[:filters], "following", options) %>'">
-                              <label for="type11"><%= t('users.show.followings') %></label>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- end filter -->
-                    </div>
-                  </div>
-                </div>
-                <!-- end sidebar -->
-
-                <!-- content -->
-                <div class="col-12 col-xl-8 order-xl-1">
-                  <div class="row row--grid">
-
-                    <% if @tab == "activity" and @data.present? %>
-                      <div class="col-12 col-lg-6 col-xl-12">
-                        <% @data and @data.each do |activity| %>
-                          <% next if activity.item.blank? %>
-                          <% if ["Follow", "Like", "Collection", "Bid"].include?(activity.item_type) %>
-                            <%= render "activities/#{activity.item_type.downcase}", activity: activity if ["Follow", "Like", "Collection", "Bid"].include?(activity.item_type) %>
-                          <% end %>
+                  <div class="profile-details">
+                     <span class="bg-shadow "></span>
+                     <% if @user.attachment.attached? %>
+                      <%= image_tag url_for(@user.profile_image), class:"background_banner_image" %>
+                     <% else %>
+                      <img src="../../assets/bg-grey.png" class="background_banner_image">
+                     <% end %>
+                     <%= image_tag url_for(@user.profile_image), class:"profile-image-tag" %>
+                     <div class="prfile_name_details">
+                        <% if @user.name %>
+                          <h4><%= link_to_name(@user) %></h4>
                         <% end %>
-                      </div>
-                    <% else %>
-                      <% 1.times do %>
-                        <div class="col-12">
-                          <%= render partial: 'common/empty' %>
-                        </div>
-                      <% end %>
-                    <% end %>
-
+                        <h5>
+                         <!--   <% if @user.twitter_link %>
+                            <span class="twitter-id"> <%= link_to_twitter(@user) %>
+                            <img src="../../assets/nft/modeling/check.png">
+                            </span>
+                           <% end %> -->
+                           <span class="insta-id"> <%= @user.masked_address(8) %> 
+                           <span hidden="hidden" id="address"> 
+                           <%= @user.address %> </span> 
+                           <img src="../../assets/nft/modeling/copy.png" class="copy_address">
+                           </span>
+                        </h5>
+                        <ul>
+                           <% if @user.personal_url %>
+                           <li><a href= <%= format_link(@user.personal_url) %> target="_blank"><img src="../../assets/nft/modeling/insta.png"></a></li>
+                           <% end %>
+                           <% if @user.twitter_link %>
+                           <li><a href= <%= twitter_url(@user) %> target="_blank"><img src="../../assets/nft/modeling/twt.png"></a></li>
+                           <% end %>
+                        </ul>
+                     </div>
                   </div>
-                </div>
-                <!-- end content -->
-              </div>
+               </div>
+               <div class="profile-bg view-mob-detail">
+                    <% if current_user == @user %>
+                     <a href="<%=edit_user_path(current_user)%>">
+                        <span class="edit-profile">
+                           <img src="../../assets/nft/Edit-Profile.svg"> Edit Profile
+                        </span>
+                     </a>
+                  <% end %>
+                  <div class="profile-details profile-pic-shown">
+                      <span class="bg-shadow "></span>
+                     <% if @user.attachment.attached? %>
+                     <%= image_tag url_for(@user.profile_image), class:"background_banner_image" %>
+                     <% else %>
+                     <img src="../../assets/bg-grey.png" class="background_banner_image">
+                     <% end %>
+                  </div>
+                  <div class="profile-details profile-name-details">
+                     <%= image_tag url_for(@user.profile_image), class:"profile-image-tag" %>
+                     <div class="prfile_name_details">
+                        <% if @user.name %>
+                        <h4><%= link_to_name(@user) %>
+                        <!-- <span> 
+                        <% if @user.twitter_link %>
+                          <img src="../../assets/nft/modeling/check.png"> 
+                        <% end %>
+                        </span> -->
+                        </h4>
+                        
+                        <% end %>
+                        <h5>
+                           <!--
+                           <% if @user.twitter_link %>
+                            <span> <%= link_to_twitter(@user) %></span>
+                           <% end %>
+                           -->
+                            <span  class="highlight-address"> <span> <%= @user.masked_address(8) %> </span>
+                              <span hidden="hidden" id="address"> 
+                              <%= @user.address %> </span> 
+                              <img src="../../assets/nft/modeling/copy.png" class="copy_address">
+                            </span>
+                           
+                        </h5>
+                        <% if @user.bio and @user.bio.length > 150 %>
+                           <p> <a class="textControl" > <%= link_to_bio(@user) %> </a></p>
+                        <% elsif @user.bio and @user.bio.length < 150 %>
+                           <p> <%= link_to_bio(@user) %> </p>    
+                        <% else %>        
+                           <p> No bio yet! <p>
+                        <% end %>
+                        <ul>
+                           <!-- <li><a><img src="../../assets/nft/modeling/fb.png"></a></li> -->
+                           <% if @user.personal_url %>
+                           <li><a href= <%= format_link(@user.personal_url) %> target="_blank"><img src="../../assets/nft/modeling/insta.png"></a></li>
+                           <% end %>
+                           <!-- <li><a><img src="../../assets/nft/modeling/you.png"></a></li> -->
+                           <% if @user.twitter_link %>
+                           <li><a href= <%= twitter_url(@user) %> target="_blank"><img src="../../assets/nft/modeling/twt.png"></a></li>
+                           <% end %>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
             </div>
-
-            <div class="tab-pane fade" id="tab-4" role="tabpanel">
-              <div class="row row--grid">
-                <!-- details form -->
-                <div class="col-12 col-lg-6">
-                  <form action="#" class="sign__form sign__form--profile">
-                    <div class="row">
-                      <div class="col-12">
-                        <h4 class="sign__title"><%= t('users.show.profile_details') %></h4>
-                      </div>
-
-                      <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                        <div class="sign__group">
-                          <label class="sign__label" for="username"><%= t('users.show.login') %></label>
-                          <input id="username" type="text" name="username" class="sign__input" placeholder="User123">
+            <div class="col-12">
+               <div class="profile-tabs tabs-panel tabs-lists">
+                  <div class="row mobile-row-riverse">
+                     <div class="col-lg-8 col-md-12 col-sm-12 col-12">
+                        <div class="tab about-profile-information">
+                           <button class="tablinks active hide-activity-btn" onclick="openCity(event, 'About')">
+                           <%= t('users.show.about') %>
+                           </button>
+                           <button class="tablinks active mob-view-profile-tab" onclick="openCity(event, 'Activity')">
+                           <%= t('users.show.activity') %>
+                           </button>
+                           <button class="tablinks" onclick="openCity(event, 'On-Sale')">
+                           <%= t('users.show.on_sale') %>
+                           </button>
+                           <button class="tablinks" onclick="openCity(event, 'Created')">
+                           <%= t('users.show.created') %>
+                           </button>
+                           <button class="tablinks" onclick="openCity(event, 'Collectibles')">
+                           <%= t('users.show.collectibles') %>
+                           </button>
+                           <button class="tablinks" onclick="openCity(event, 'My-Collections')">
+                           My Collections
+                           </button>
+                           <button class="tablinks" onclick="openCity(event, 'Favorite')">
+                           <%= t('users.show.liked') %></a>
+                           </button>
                         </div>
-                      </div>
+                     </div>
+                     <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                        <div class="tabs-panel following-details">
+                           <div class="tab">
+                              <button id="activity" class="tablinks hide-activity-btn">
+                              <span id="activity-tab" class="activity-tab"> <%= t('users.show.activity') %></span>
+                              </button>
+                              <button id="following" class="tablinks web-follow-btn">
+                                 Following <span> (<%= @user.followees.count %>)</span>
+                              </button>
+                              <button id="followers" class="tablinks web-follow-btn remove-border">
+                                 Followers <span>(<%= @user.followers.count %>)</span>
+                              </button>
+                              
+                              <button id="mob-following" class="tablinks mob-follow-btn">
+                                 <span><%= @user.followees.count %></span>  Following
+                              </button>
+                              <button id="mob-followers" class="tablinks mob-follow-btn">
+                                 <span><%= @user.followers.count %></span> Followers
+                              </button>
 
-                      <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                        <div class="sign__group">
-                          <label class="sign__label" for="email"><%= t('users.show.email') %></label>
-                          <input id="email" type="text" name="email" class="sign__input" placeholder="email@email.com">
+                              <% if current_user.nil? %>
+                                 <button id="follow" class="tablinks mob-follow-btn">
+                                    <em class="follow-no-user"> Follow </em>
+                                 </button>
+                              <% elsif current_user.present? && current_user != @user %> 
+                                 <% if !current_user.followees.include?(@user) %>
+                                    <button id="follow" class="tablinks mob-follow-btn">
+                                       <em> <%= link_to follow_users_path(id: @user.address) do %> 
+                                       Follow 
+                                       <% end %>
+                                       </em>
+                                    </button>
+                                 <% else %>
+                                    <button id="follow" class="tablinks mob-follow-btn">
+                                       <em> <%= link_to unfollow_users_path(id: @user.address) do %> 
+                                       Unfollow 
+                                       <% end %>
+                                       </em>
+                                    </button>
+                                 <% end %>
+                              <% end %>
+
+                           </div>
+                           <div class="activity-dropdown Activity" id="activity-dropdown">
+                              <% if @activity.present? %>
+                              <% @activity.each do |activity| %>
+                              <% next if activity.item.blank? %>
+                              <% if ["Follow", "Like", "Bid", "Collection"].include?(activity.item_type) %>
+                              <%= render "activities/#{activity.item_type.downcase}", activity: activity if ["Follow", "Like", "Collection", "Bid"].include?(activity.item_type) %>
+                              <% end %>
+                              <% end %>
+                              <% else %>
+                              <p> No Activity yet! </p>
+                              <% end %>
+                           </div>
+                           <div class="activity-dropdown Following", id="following-dropdown">
+                              <% if @following.present? %>
+                              <%= render "follow", follows: @following, id: "following", followees: @following %>
+                              <% else %>
+                              <p> 0 Following </p>
+                              <% end %>
+                           </div>
+                           <div class="activity-dropdown Followers", id="followers-dropdown">
+                              <% if @followers.present? %>
+                              <%= render "follow", follows: @followers, id: "followers", followees: @followers %>
+                              <% else %>
+                              <p> 0 Followers </p>
+                              <% end %>
+                           </div>
                         </div>
-                      </div>
+                     </div>
+                  </div>
+                  
+                  <div id="About" class="tabcontent profile-mob-details hide-activity-btn" style="display: block;">
+                     <!-- 
+                     <% if @user.name %>
+                     <h6 class="panel-detail-heading"><%= @user.name %></h6>
+                     <% end %>
+                     -->
+                     <% if @user.bio %>
+                     <%= link_to_bio(@user) %>
+                     <% else %>
+                     <p class="no-data"> No Bio Yet </p>
+                     <% end %>
+                  </div>
 
-                      <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                        <div class="sign__group">
-                          <label class="sign__label" for="firstname"><%= t('users.show.first_name') %></label>
-                          <input id="firstname" type="text" name="firstname" class="sign__input" placeholder="John">
-                        </div>
-                      </div>
-
-                      <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                        <div class="sign__group">
-                          <label class="sign__label" for="lastname"><%= t('users.show.last_name') %></label>
-                          <input id="lastname" type="text" name="lastname" class="sign__input" placeholder="Doe">
-                        </div>
-                      </div>
-
-                      <div class="col-12">
-                        <button class="sign__btn" type="button"><%= t('shared.save') %></button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                <!-- end details form -->
-
-                <!-- password form -->
-                <div class="col-12 col-lg-6">
-                  <form action="#" class="sign__form sign__form--profile">
-                    <div class="row">
-                      <div class="col-12">
-                        <h4 class="sign__title"><%= t('users.show.change_password') %></h4>
-                      </div>
-
-                      <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                        <div class="sign__group">
-                          <label class="sign__label" for="oldpass"><%= t('users.show.old_password') %></label>
-                          <input id="oldpass" type="password" name="oldpass" class="sign__input">
-                        </div>
-                      </div>
-
-                      <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                        <div class="sign__group">
-                          <label class="sign__label" for="newpass"><%= t('users.show.new_password') %></label>
-                          <input id="newpass" type="password" name="newpass" class="sign__input">
-                        </div>
-                      </div>
-
-                      <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                        <div class="sign__group">
-                          <label class="sign__label" for="confirmpass"><%= t('users.show.confirm_new_password') %></label>
-                          <input id="confirmpass" type="password" name="confirmpass" class="sign__input">
-                        </div>
-                      </div>
-
-                      <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                        <div class="sign__group">
-                          <label class="sign__label" for="select">Select</label>
-                          <select name="select" id="select" class="sign__select">
-                            <option value="0">Option</option>
-                            <option value="1">Option 2</option>
-                            <option value="2">Option 3</option>
-                            <option value="3">Option 4</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      <div class="col-12">
-                        <button class="sign__btn" type="button"><%= t('shared.change') %></button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                <!-- end password form -->
-              </div>
+                  <div id="Activity" class="tabcontent profile-mob-details mob-view-profile-tab" style="display: block;">
+                     <% if @activity.present? %>
+                        <% @activity.each do |activity| %>
+                           <% next if activity.item.blank? %>
+                              <% if ["Follow", "Like", "Bid", "Collection"].include?(activity.item_type) %>
+                                 <%= render "activities/#{activity.item_type.downcase}", activity: activity if ["Follow", "Like", "Collection", "Bid"].include?(activity.item_type) %>
+                              <% end %>
+                        <% end %>
+                     <% else %>
+                        <p> No Activity yet! </p>
+                     <% end %>
+                  </div>
+                  
+                  <div id="On-Sale" class="tabcontent profile-mob-details ">
+                     <ul>
+                        <span class="bg-transition"></span>
+                        <% if @on_sale_collections.present? %>
+                        <% @data.each do |collection| %>
+                        <%= render "/dashboard/collection_card", collection: collection %>
+                        <% end %>
+                        <%  else %>
+                        <p class="no-data"> No Collection Found </p>
+                        <% end %>
+                     </ul>
+                  </div>
+                  <div id="Created" class="tabcontent profile-mob-details">
+                     <ul>
+                        <span class="bg-transition"></span>
+                        <% if @created_collections.present? %>
+                        <% @created_collections.each do |collection| %>
+                        <%= render "/dashboard/collection_card", collection: collection %>
+                        <% end %>
+                        <%  else %>
+                        <p class="no-data"> No Collection Found </p>
+                        <% end %>
+                     </ul>
+                  </div>
+                  <div id="Collectibles" class="tabcontent profile-mob-details">
+                     <ul>
+                        <span class="bg-transition"></span>
+                        <% if @collectibles.present? %>
+                        <% @collectibles.each do |collection| %>
+                        <%= render "/dashboard/collection_card", collection: collection %>
+                        <% end %>
+                        <%  else %>
+                        <p class="no-data"> No Collection Found </p>
+                        <% end %>
+                     </ul>
+                  </div>
+                  <div id="My-Collections" class="tabcontent profile-mob-details">
+                     <span class="bg-transition"></span>
+                     <div class="modeling-artist-list">
+                        <ul>
+                           <%if @my_collections.present? %>
+                              <%@my_collections.all.each do |single_contract|%>
+                              <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                                 <%= render 'dashboard/own_contract', contract: single_contract %>
+                              </div>
+                              <% end %>
+                           <% else %>
+                              <p class="no-data"> No Collection Found </p>
+                           <%end%>
+                        </ul>
+                     </div>
+                  </div>
+                  <div id="Favorite" class="tabcontent profile-mob-details">
+                     <ul>
+                        <span class="bg-transition"></span>
+                        <% if @liked.present? %>
+                        <% @liked.each do |like| %>
+                        <% next unless like.collection.present? %>
+                        <%= render "/dashboard/collection_card", collection: like.collection %>
+                        <% end %>
+                        <% else %>
+                        <p> No Favorite Found  </p>
+                        <% end %>
+                     </ul>
+                  </div>
+               </div>
             </div>
-          </div>
-          <!-- end content tabs -->
-        </div>
+         </div>
       </div>
-    </div>
-  </div>
+   </div>
 </main>
+
+
+<div class="User_following-list" id="mob-following-list">
+   <div class="close-icon"><img src="../../assets/nft/Close-white.svg" class="close-btn"></div>
+   <div id="mob-following" class="activity-dropdown-lists">
+      <h5>Following</h5>
+      <% if @following.present? %>
+      <%= render "follow", follows: @following, id: "following", followees: @following %>
+      <% else %>
+      <p> 0 Following </p>
+      <% end %>
+   </div>
+</div>
+
+<div class="User_following-list" id="mob-followers-list">
+   <div class="close-icon"><img src="../../assets/nft/Close-white.svg" class="close-btn"></div>
+   <div id="mob-followers" class="activity-dropdown-lists">
+      <h5>Followers</h5>
+      <% if @followers.present? %>
+      <%= render "follow", follows: @followers, id: "followers", followees: @followers %>
+      <% else %>
+      <p> 0 Followers </p>
+      <% end %>
+   </div>
+</div>
+
 
 
 
 <%= render partial: 'users/report_user' %>
-
 <script type="text/javascript">
-  $(document).ready(function($) {
-    $(document).on("click", ".triggerReportUserValidation", function (e) {
-      clearToastr();
-      e.preventDefault()
-      var form = $("#reportUserForm")[0]
-      if (!$('#message').val().length) {
-        return toastr.error('Please enter valid message');
-      } else if (form.checkValidity()) {
-        $.ajax({
-          url: '/users/report',
-          type: 'POST',
-          async: false,
-          data: {
-            id: "<%= @user.address %>",
-            message: $("#message").val()
-          },
-          dataType: "script",
-          success: function (respVal) {
-            window.location.href = "/users/<%= @user.address %>"
-          }
-        });
-      }
+
+   $(document).ready(function(){
+     $(".close-top-notify").click(function(){
+       $(".main").addClass("close-nav");
+     });
+   });
+
+   $(document).ready(function(){
+      $(".follow-no-user").click(function(){  
+         toastr.error('Please connect your wallet to proceed.');
+      })
+   }
+   );
+   
+   $(document).ready(function(){
+       $(".copy_address").click(function(){
+           var copyText = document.getElementById("address").innerText;
+           var dummyText = document.createElement('input');
+           document.body.appendChild(dummyText);
+           dummyText.value = copyText;
+           dummyText.select();
+           document.execCommand("copy", false);
+           dummyText.remove();
+           toastr.success('Address Copied Successfully!')
+       });
+     });
+
+   $(document).ready(function(){
+       $(".close-btn").click(function(){
+           $(".User_following-list").removeClass("active");
+       });
+     });
+
+   $(document).ready(function(){
+       $("#mob-following").click(function(){
+          $("#mob-following-list").addClass("active");
+       });
+     });
+
+   $(document).ready(function(){
+       $("#mob-followers").click(function(){
+          $("#mob-followers-list").addClass("active");
+       });
+     });
+   
+   
+   function openCity(evt, cityName, ) {
+     var i, tabcontent, tablinks;
+     tabcontent = document.getElementsByClassName("tabcontent");
+     for (i = 0; i < tabcontent.length; i++) {
+       tabcontent[i].style.display = "none";
+     }
+     tablinks = document.getElementsByClassName("tablinks");
+     for (i = 0; i < tablinks.length; i++) {
+       tablinks[i].className = tablinks[i].className.replace(" active", "");
+     }
+     document.getElementById(cityName).style.display = "block";
+     evt.currentTarget.className += " active";
+     if (cityName == "On-Sale" || cityName == "Created" || cityName == "Collectibles")
+     {   
+         activityElement = document.getElementById("Activity");
+         activityElement.classList.add('inactive');
+     }
+   }
+   
+   $(document).ready(function() {
+   $(function () {
+      $(".morelink").trigger( "click");
+   });
+    var showChar = 130;  
+    var moretext = "Read more";
+    var lesstext = "Read less";
+
+    $('.textControl').each(function() {
+        var content = $(this).html();
+ 
+        if(content.length > showChar) {
+ 
+            var c = content.substr(0, showChar) + "...";
+            var h = content.substr(showChar, content.length - showChar);
+            var html = c + '<span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + lesstext + '</a></span>';
+            $(this).html(html);
+        }
     });
-  });
+ 
+    $(".morelink").click(function(){
+        if($(this).hasClass("less")) {
+            $(this).removeClass("less");
+            $(this).html(lesstext);
+        } else {
+            $(this).addClass("less");
+            $(this).html(moretext);
+        }
+        $(this).parent().prev().toggle();
+        $(this).prev().toggle();
+        return false;
+    });
+    
+   });
+   
+   $(document).ready(function(){
+      $(document).mouseup(e => {
+         if ($('#activity').is(e.target) || $("#activity-tab").is(e.target))
+         {  
+            $("#activity").toggleClass("active");
+            $('#activity-dropdown').toggleClass("active");
+            $("#following").removeClass("active");
+            $('#following-dropdown').removeClass("active");
+            $("#followers").removeClass("active");
+            $('#followers-dropdown').removeClass("active");
+         }
+         else if ($('#following').is(e.target))
+         {  
+            $("#following").toggleClass("active");
+            $('#following-dropdown').toggleClass("active");
+            $("#activity").removeClass("active");
+            $('#activity-dropdown').removeClass("active");
+            $("#followers").removeClass("active");
+            $('#followers-dropdown').removeClass("active");
+
+         }
+         else if ($('#followers').is(e.target))
+         {  
+            $("#followers").toggleClass("active");
+            $('#followers-dropdown').toggleClass("active");
+            $("#activity").removeClass("active");
+            $('#activity-dropdown').removeClass("active");
+            $("#following").removeClass("active");
+            $('#following-dropdown').removeClass("active");
+         }
+         else 
+         {  
+            $("#activity").removeClass("active");
+            $('#activity-dropdown').removeClass("active");
+            $("#following").removeClass("active");
+            $('#following-dropdown').removeClass("active");
+            $("#followers").removeClass("active");
+            $('#followers-dropdown').removeClass("active");
+         }
+      });
+      
+   });
+
+
+
 </script>

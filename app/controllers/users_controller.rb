@@ -22,6 +22,13 @@ class UsersController < ApplicationController
     @followers_count = @user.followers.count
     @followees_count = @user.followees.count
     @liked = @user.likes
+    @on_sale_collections = @user.on_sale_collections
+    @created_collections = @user.created_collections
+    @collectibles = @user.collectibles
+    @my_collections = @user.my_collections
+    @activity = @user.activity
+    @following = @user._following
+    @followers = @user._followers
   end
 
   def edit

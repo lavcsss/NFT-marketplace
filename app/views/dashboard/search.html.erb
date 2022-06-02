@@ -1,149 +1,410 @@
-<%if false%>
-<section class="token-constructions">
-  <div class="container">
-    <div class="row margin-top-minus-20">
+<main class="main mt-0 NFT-detail discover_Page">
+    <div class="discover_menus">
+        <div class="tab">
+           <div class="container">
+          <button class="tablinks active" onclick="openCity(event, 'all_nfts')">All NFTs</button>
+          <button class="tablinks" onclick="openCity(event, 'Artists')">Artists</button>
+          <button class="tablinks" onclick="openCity(event, 'Collections')">Collections</button>
+        </div>
+      </div>
 
-        <div class="col-md-12">
-          <div class="col-xs-12 dis-padd-lr-0-res">
+    
+      </div>
+    <div class="container bg-effect">
+      <div class="discover-container">
+          <div id="all_nfts" class="tabcontent" style="display: block;">
+            <div class="row">
+              <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12 mobile-hide-sideNav "> <!-- when click the tab links , add """open-inner-tab""" class here-->
+                <div class="filter-Items">
+                  <div class="discover_menus">
+                    <h5 class="panel-heading">Filter <span>
+                      <% if @collections.count <= 1 %>
+                        (<%= @collections.count %> Result)</span>
+                      <% else %>
+                        (<%= @collections.count %> Results)</span>
+                      <% end %>
+                      </h5>
+                      <ul class="nav nav-tabs">
+                    <li ><a data-toggle="tab" href="#Category" class="active">
+                      <img src="../../assets/nft/modeling/cate-black.svg" class="black">
+                      <img src="../../assets/nft/modeling/cate.svg" class="blue">
+                    Category</a></li>
+                    <!-- <li><a data-toggle="tab" href="#Sale_Type">
+                      <img src="../../assets/nft/modeling/Sale-Type.svg" class="black">
+                      <img src="../../assets/nft/modeling/Sale-Type_blue.svg" class="blue">
+                    Sale Type</a></li>
+                    <li><a data-toggle="tab" href="#Price_Range">
+                      <img src="../../assets/nft/modeling/Price-Range.svg" class="black">
+                      <img src="../../assets/nft/modeling/Price-Range-blue.svg" class="blue">
+                    Price Range </a></li> -->
+                  </ul>
 
-            <div class="row pb-15 pt-30">
-              <div class="input-element-form-search" style="background-image: linear-gradient(to right, #00000047 , #000000cf), url(/assets/searchbg.jpg)">
-
-                  <div class="search-block">
-                    <h3><%= t('dashboard.search_collections')%></h3>
-                    <%=form_tag search_path, :method=>:get do%>
-                      <i class="fa fa-search"></i>
-                      <input type="text" name="query" class="searchInputPage" id="searchInput" placeholder="Search by creator, collectible or collection" value="<%=params[:query]%>">
-                      <div id='submitsearch' style="">
-                        <span><%= t('dashboard.search')%></span>
-                      </div>
-                    <%end%>
+                  <div class="inner-tab-content-sec tab-content">
+                    <div class="discover_menus">
+                    <h5 class="panel-heading clear_all">Filter
+                      <i>Clear All</i>
+                    </h5>
                   </div>
+                    <div id="Category" class="tab-pane fade in active show">
+                      <div class="Category-Lists">
+                        <% Category.all.each do |category| %>
+                          
+                          <% 
+                          isActive = ""
+                          if session[:category].include? category.name
+                            isActive="active"
+                          end  
+                          %>
+                          <label class="<%= isActive%>">
+                            <a href="javascript:void(0);" class="category category_web <%= isActive%>" data-category="<%= category.name%>"><%= category.name%></a>
+                          </label>
+                        <%end%>
+                        <a class="mob-apply-btn"><button>Apply</button></a>
+                      </div>
+                    </div>
+                    <div id="Sale_Type" class="tab-pane fade">
+                       <div class="Category-Lists">
+                        <label>Buy Now</label>
+                        <label>On Auction</label>
+                        <label>New  </label>
+                        <label>Offers</label>
+                        <label>Not for Sale</label>
+                      
+                      </div>
+                    </div>
+                    <div id="Price_Range" class="tab-pane fade" >
+                      <div class="Category-Lists">
+                           <div class="member-detail">
+                             <a>
+                            <span>   <img src="../../assets/nft/banner-img/cc20c8bbceaa457718feb98ed273299c.png" alt="NFT_IMG_1" />  </span>
+                            <strong>ShannonRose</strong>
+                           </a>
+                         </div>  
+                         <div class="min-to-max">
+                           <button><input placeholder="Min"></button>
+                           <button><input placeholder="Max"></button>
+                         </div>
+                         <div class="min-to-max next-proceed-btn">
+                           <button>Apply</button>
+                           <button>Clear</button>
+                         </div>
+                      </div>
+                    </div>
+                
+                  </div>
+                   
+                </div>
               </div>
               
             </div>
 
-            <div class="row pb-15 pt-30">
-              <div class="col-md-12 col-sm-12 col-xs-12 dis-heading-width">
-                <h3 class="mt-0"><%= t('dashboard.search_results', query: params[:query])%></h3>
-              </div>
-            </div>
-            <div class="col-md-12 col-sm-12 col-xs-12">
-              <div class="ul-width-passing">
-                <ul class="nav nav-tabs token-list-details">
-                  <li class="<%=params[:tab]!='users' ? 'active': ''%>">
-                    <%=link_to t('dashboard.items'), search_path(query: params[:query])%>
-                  </li>
-                  <li class="<%=params[:tab]=='users' ? 'active': ''%>">
-                    <%=link_to t('dashboard.users'), search_path(tab: "users", query: params[:query])%>
-                  </li>
+           
+              <div class="col-xl-9 col-lg-8  col-md-12 col-sm-12 col-12">
+                <div class="clear-filter-heading">
+                  <% if session[:category].present? %> 
+                    <h5> <button class="clear_all">Clear Filters</button></h5>
+                      <ul class="current-filters">
+                        <% for category in session[:category] %>
+                          <li>
+                            <span><%= category %></span>&nbsp;<a href="javascript:void(0)" id="sub_<%= category %>" class="removeFilter"><img src="../../assets/nft/close-item.svg"></a>
+                          </li>
+                        <%end%>
+                      </ul>
 
-                </ul>
+                  <%end%>
+                </div>
+                <div class="profile-tabs tabs-panel discover-profile"> 
+                  <div class="tabcontent all_nfts">
+                     <% if @collections.present? %>
+                   
+                   <ul id="nft_collection"> 
+                        <span class="bg-transition"></span>
+                          <% @collections.each do |collection| %>
+                            <%=render "dashboard/collection_card", collection: collection%>  
+                          <% end %>
+                    </ul>
+                  <%  else %>
+                    <p style="text-align:center" class="no-data"> No NFT’s Found </p>
+                  <% end %>
+                    
+                </div>
               </div>
+                    <!-- <div class="sort-items">
+                      <select name="cars" id="cars">
+                        <option value="" disabled selected>Sort by  <span><img src="../../assets/nft/down-arrow.svg"> Recently Sold</span></option>
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                        <option value="opel">Opel</option>
+                        <option value="audi">Audi</option>
+                      </select>
+                    </div> -->
+
+                </div>
             </div>
           </div>
         </div>
 
-        <div class="col-md-12 pt-10 tabs-content-bg border-custom-style">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="tab-content pt-20">
-
-
-                    <div id="items" class="tab-pane fade in <%=params[:tab]!='users' ? 'active': ''%>">
-                        <div class="row" style="">
-                        <% @collections and @collections.each do |collection| %>
-                            <%= render "collection_card", collection: collection %>
-                        <% end %>
+        <div id="Artists" class="tabcontent" style="display: none;">
+          <div class="">
+          <div class="modeling-artist-list">
+            <ul>
+                  <% if @artists.present? %>
+                     <% @artists.each do |artist| %>
+                        <%= render "/dashboard/artist", artist: artist %>
+                     <% end %>
+                  <% else %>
+                     <% 1.times do%>
+                        <div class="col-12">
+                           <%= render partial: 'common/empty' %>
                         </div>
+                     <%end%>
+                  <% end %>
+               </ul>
+            </div>
+          </div>
+         </div>
+
+         <div id="Collections" class="tabcontent" style="display: none;">
+            <div class="">
+            <div class="modeling-artist-list">
+              <ul>
+                <%if @own_contract.present? %>
+                  <%@own_contract.all.each do |single_contract|%>
+                     <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                        <%= render 'dashboard/own_contract', contract: single_contract %>
                      </div>
-                    <div id="users" class="tab-pane fade in <%=params[:tab]=='users' ? 'active': ''%>">
-                      <div class="row">
-                        <% @users and @users.each do |user| %>
-                            <%= render "user_card", user: user %>
-                        <% end %>
+                  <%end%>
+               <%else%>
+                  <% 1.times do%>
+                     <div class="col-12">
+                        <%= render partial: 'common/empty' %>
+                     </div>
+                  <%end%>
+               <%end%>
+              </ul>
+            </div> 
+          </div>
+         </div>
+      </div>
+          
+    
+    
+</main>
+<div class="discover-container discover-footer-section">
+          <div id="all_nfts" class="tabcontent" style="display: block;">
+            <div class="row">
+              <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12 mobile-menu-discover category-show"> <!-- when click the tab links , add """open-inner-tab""" class here-->
+                <div class="filter-Items">
+                  <div class="discover_menus">
+                    <h5 class="panel-heading">Filter <span> 
+                      <% if @collections.count <= 1 %>
+                        (<%= @collections.count %> Result)</span>
+                      <% else %>
+                        (<%= @collections.count %> Results)</span>
+                      <% end %>
+                      </h5>
+                      <ul class="nav nav-tabs">
+                    <li ><a data-toggle="tab" href="#Category" class="active">
+                      <img src="../../assets/nft/modeling/cate-black.svg" class="black">
+                      <img src="../../assets/nft/modeling/cate.svg" class="blue">
+                    Category</a></li>
+                    <!-- <li><a data-toggle="tab" href="#Sale_Type">
+                      <img src="../../assets/nft/modeling/Sale-Type.svg" class="black">
+                      <img src="../../assets/nft/modeling/Sale-Type_blue.svg" class="blue">
+                    Sale Type</a></li>
+                    <li><a data-toggle="tab" href="#Price_Range">
+                      <img src="../../assets/nft/modeling/Price-Range.svg" class="black">
+                      <img src="../../assets/nft/modeling/Price-Range-blue.svg" class="blue">
+                    Price Range </a></li> -->
+                  </ul>
+
+                  <div class="inner-tab-content-sec tab-content">
+                    <div class="discover_menus">
+                    <h5 class="panel-heading">Filter
+                      <a class="clear_all"><i>Clear All</i></a>
+                    </h5>
+                  </div>
+                    <div id="Category" class="tab-pane fade in active show">
+                      <div class="Category-Lists">
+                        <% Category.all.each do |category| %>
+                          <% 
+                          isActive = ""
+                          if session[:category].include? category.name
+                            isActive="active"
+                          end  
+                          %>
+                          <label class="<%= isActive%>">
+                            <a href="javascript:void(0);" class="category category_mobile  <%= isActive%>" data-category="<%= category.name%>"><%= category.name%></a>
+                          </label>
+                        <%end%>
+                        <a class="mob-apply-btn"><button class="apply">Apply</button></a>
                       </div>
                     </div>
+                    <div id="Sale_Type" class="tab-pane fade">
+                       <div class="Category-Lists">
+                        <label>Buy Now</label>
+                        <label>On Auction</label>
+                        <label>New  </label>
+                        <label>Offers</label>
+                        <label>Not for Sale</label>
+                      
+                      </div>
+                    </div>
+                    <div id="Price_Range" class="tab-pane fade" >
+                      <div class="Category-Lists">
+                           <div class="member-detail">
+                             <a>
+                            <span>   <img src="../../assets/nft/banner-img/cc20c8bbceaa457718feb98ed273299c.png" alt="NFT_IMG_1" />  </span>
+                            <strong>ShannonRose</strong>
+                           </a>
+                         </div>  
+                         <div class="min-to-max">
+                           <button><input placeholder="Min"></button>
+                           <button><input placeholder="Max"></button>
+                         </div>
+                         <div class="min-to-max next-proceed-btn">
+                           <button>Apply</button>
+                           <button>Clear</button>
+                         </div>
+                      </div>
+                    </div>
+                
+                  </div>
+                   
                 </div>
-            </div>
-        </div>
-    </div>
-  </div>
-</section>
-<%end%>
-<main class="main">
-<div class="container">
-      <div class="row row--grid">
-        <!-- title -->
-        <div class="col-12">
-          <div class="main__title main__title--page">
-            <h1><%= t('dashboard.explore_digital_assets')%></h1>
-          </div>
-        </div>
-        <!-- end title -->
-
-        <!-- filter -->
-        <div class="col-12">
-          <div class="main__filter">
-             <%=form_tag search_path, :method=>:get, :class=>'main__filter-search' do%>
-              <input type="text" name="query" placeholder="Search..." value="<%=params[:query]%>">
-              <button type="submit"><i class="fas fa-search"></i></button>
-            <%end%>
-
-            <div class="main__filter-wrap">
-                 <div class="header__action header__action--profile one-filled-val">
-                  <a class="" href="javascript:void(0);" role="button" id="dropdownMenuFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <%= params[:category] || 'All Categories' %>                   
-                    <i class="fas fa-chevron-down"></i>
-
-                  </a>
-
-                  <ul class="dropdown-menu header__profile-menu" aria-labelledby="dropdownMenuProfile">
-                    <li><%= link_to 'All Categories', search_path(query: params[:query])%></li>
-                  <% Category.all.each do |category| %>
-                    <li>
-                      <%= link_to category.name, search_path(category: category.name,query: params[:query])%>
-                    </li>
-                    <%end%>
-                  </ul>
-                </div>
-             </div>
-          </div>
-        </div>
-        <!-- end filter -->
-      </div>
-      <div class="filters-content">
-        <div class="row row--grid">
-          
-          <% if @collections.present? %>
-            <% @collections.each do |collection| %>
-              <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-                <%=render "dashboard/collection_card", collection: collection%>
               </div>
-            <% end %>
-          <% else %>
-          <div class="col-12  mt-30">
-            <div class="row">
-                  <% if @users.present? %>
-                  <% @users.each do |user| %>
-                    <%=render "dashboard/user_card", user: user%>
-                  <% end %>
-                <% else %>
-                    <h3><%= t('dashboard.no_data_found')%></h3>
-                <% end %>
-                <% end %>
+              
+            </div>
             </div>
           </div>
         </div>
-      <!-- paginator -->
-      <% unless params[:query] %>>
-        <div class="row">
-          <div class="col-12">
-            <div class="flickr_pagination">
-              <%= will_paginate @collections %>
-            </div>
-          </div>
-        </div>
-      <% end %>
-      <!-- end paginator -->
-    </div>
-</main>
+
+
+<script>
+   
+   function openCity(evt, cityName) {
+     var i, tabcontent, tablinks;
+     tabcontent = document.getElementsByClassName("tabcontent");
+     for (i = 0; i < tabcontent.length; i++) {
+       tabcontent[i].style.display = "none";
+     }
+     tablinks = document.getElementsByClassName("tablinks");
+     for (i = 0; i < tablinks.length; i++) {
+       tablinks[i].className = tablinks[i].className.replace(" active", "");
+     }
+     document.getElementById(cityName).style.display = "block";
+     $("."+cityName).css("display", "block");
+     evt.currentTarget.className += " active";
+   }
+   
+
+   
+// function openCity(evt, cityName) {
+//   var i, tabcontent, tablinks;
+//   tabcontent = document.getElementsByClassName("tabcontent");
+//   for (i = 0; i < tabcontent.length; i++) {
+//     tabcontent[i].style.display = "none";
+//   }
+//   tablinks = document.getElementsByClassName("tablinks");
+//   for (i = 0; i < tablinks.length; i++) {
+//     tablinks[i].className = tablinks[i].className.replace(" active", "");
+//   }
+//   document.getElementById(cityName).style.display = "block";
+//   evt.currentTarget.className += " active";
+// }
+
+
+$('.current-filters > li > a').click(function(e){
+   var $this = $(this),
+       clearAll = $this.parent('li').hasClass('clear-current-filters')
+
+    if(clearAll ){
+        $this.closest('ul').empty();
+    }else{
+        $this.parent().remove();
+    }
+});
+
+$(document).on("click", ".clear_all", function() {
+    $(".category").removeClass("active")
+    filterRecords()
+})
+$(document).on("click", ".removeFilter", function() {
+var selected_filter = $(this).attr("id")
+selected_filter= selected_filter.replace("sub_","")
+$("[data-category="+selected_filter+"]").removeClass('active')
+$("[data-category="+selected_filter+"]").parent().removeClass('active')
+filterRecords()
+})
+
+
+
+
+$(document).on("click", ".category_web", function() {
+  $("[data-category="+$(this).attr("data-category")+"]").toggleClass('active')
+  $("[data-category="+$(this).attr("data-category")+"]").parent().toggleClass('active')
+  filterRecords()
+})
+
+$(document).on("click", ".category_mobile", function() {
+  $("[data-category="+$(this).attr("data-category")+"]").toggleClass('active')
+  $("[data-category="+$(this).attr("data-category")+"]").parent().toggleClass('active')
+})
+
+
+function filterRecords(){
+  var category = [];
+  
+  $(".filterList").html('');
+  $('.category').each(function(){
+    if($(this).hasClass("active") && category.indexOf($(this).attr("data-category"))== -1){
+      
+      category.push($(this).attr("data-category"))
+      $(".filterList").append('<span>'+$(this).attr("data-category")+'</span>&nbsp;<a  href="javascript:void(0)" id="sub_'+$(this).attr("data-category")+'" class="removeFilter"><img src="../../assets/nft/close-item.svg"></a>')
+    }
+  })
+    var url = "/filter_by"
+  var request =  $.ajax({
+     url: url,
+     type: "post",
+     dataType: "json",
+     async: false,
+     data: {category:category}
+   })
+request.done(function (response) {
+ 
+ if(response.filter_data='success'){
+    location.reload()
+ }else{
+   $("#nft_collection").html('<p> No records found! </p>');
+   $(".count_record").html("(0 Result)")
+ }
+
+  });
+request.fail(function () {
+ toastr.error('Something Went Wrong!')
+});  
+
+}
+
+// $('.category-show').on('click', function(){
+
+// $(this).addClass("open-inner-tab");
+// $('.apply').removeClass("open-inner-tab");
+
+// });
+
+$('.category-show').click(function(e) {
+  
+  $(this).addClass('open-inner-tab');
+  
+});
+
+$(document).on("click", ".apply", function() {
+  $('.category-show').each(function(){
+    $(this).removeClass("open-inner-tab")
+  })
+  filterRecords()
+})
+
+</script>

@@ -11,8 +11,6 @@ const Like = (props) => {
   const isLikedByMe = props.liked;
   const [liked, setLiked] = useState(isLikedByMe);
   const [likesCount, setlikesCount] = useState(likes_count);
-  
-
 
   const like = async () => {
     const token = document.querySelector('[name=csrf-token]').content

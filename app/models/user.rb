@@ -86,7 +86,7 @@ class User < ApplicationRecord
   end
 
   def full_name
-    name.present? ? name : masked_address(8)
+    name.present? ? name : masked_address(6)
   end
 
   def total_transaction(is_buy=false)
@@ -289,6 +289,34 @@ class User < ApplicationRecord
     else
       Collection.where("owner_id=? and put_on_sale=?", id, true).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: page_no)
     end
+  end
+
+  def on_sale_collections
+    Collection.where("owner_id=? and put_on_sale=?", id, true).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: 1)
+  end
+
+  def created_collections
+    Collection.by_creator(self).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: 1)
+  end
+
+  def collectibles
+    Collection.where("owner_id=?", id).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: 1)
+  end
+
+  def my_collections
+    self.nft_contracts.includes(owner: { attachment_attachment: :blob }).paginate(page: 1)
+  end
+
+  def activity
+    self_activities(nil, 1)
+  end
+
+  def _following
+    followees.includes(attachment_attachment: :blob).paginate(page: 1)
+  end
+
+  def _followers
+    followers.includes(attachment_attachment: :blob).paginate(page: 1)
   end
 
   def self.validate_user address
