@@ -416,10 +416,14 @@
      }
      document.getElementById(cityName).style.display = "block";
      evt.currentTarget.className += " active";
-     if (cityName == "On-Sale" || cityName == "Created" || cityName == "Collectibles")
+     if (cityName != "Activity")
      {   
          activityElement = document.getElementById("Activity");
          activityElement.classList.add('inactive');
+     }
+     else{
+        activityElement = document.getElementById("Activity");
+        activityElement.classList.remove('inactive');
      }
    }
    
