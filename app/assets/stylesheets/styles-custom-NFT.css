@@ -2066,7 +2066,7 @@ box.My_modal.congratulation-modal.open-modal {
     border: 2px solid #3C97F2;
 }
 .sign__radio label:before{
-    border: 2px solid #162C5B;
+    /* border: 2px solid #3C97F2; */
 }
 .nft-details-list .sign__radio label:after {
     content: '';
