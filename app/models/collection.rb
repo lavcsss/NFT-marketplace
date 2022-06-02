@@ -108,6 +108,44 @@ class Collection < ApplicationRecord
     "#{price} #{currency} #{'<span class=\'para-color\'>($ ' + fiat_price.to_s + ')</span>' if fiat_price > 0}".html_safe
   end
 
+  def title_desc_detail
+    price, currency = sale_price
+    fiat_price = sale_price_to_fiat(price, currency)
+    "#{'<span>($ ' + fiat_price.to_s + ')</span>' if fiat_price > 0}".html_safe
+  end
+
+  def title_asc
+    price, currency = sale_price
+    fiat_price = sale_price_to_inr(price, currency)
+    "#{price} #{currency} #{'<span class=\'para-color\'>(' + fiat_price.to_s + ')</span>' if fiat_price > 0}".html_safe
+  end
+
+  def price_inr
+    price, currency = sale_price
+    fiat_price = sale_price_to_inr(price, currency)
+    "#{'<span class=\'para-color\'>' + fiat_price.to_s + '</span>' if fiat_price > 0}".html_safe
+  end
+
+  def gst_inr   
+    price, currency = sale_price
+    fiat_price = sale_price_to_inr(price, currency)
+    gst = fiat_price * 18/100 
+  end 
+
+  def total_inr_amt 
+    price, currency = sale_price
+    fiat_price = sale_price_to_inr(price, currency)
+    total =  fiat_price + gst_inr
+  end
+
+  def razorpay_total
+    if total_inr_amt < 1 
+      (total_inr_amt.to_f.round(2) * 1000).to_i
+    else 
+      total_inr_amt * 100
+    end 
+  end
+
   def sale_price
     return [instant_sale_price.to_s, instant_currency_symbol] if instant_sale_enabled
     return [max_bid.amount, max_bid.crypto_currency_type] if max_bid
@@ -124,8 +162,20 @@ class Collection < ApplicationRecord
     return (price.to_f * usd_price).round(2)
   end
 
+  def sale_price_to_inr price, currency='eth'
+    return 0 unless currency
+    rupee_price = Rails.cache.fetch "#{currency}_price", expires_in: 10.seconds do
+      Api::Etherscan.rupee_price(currency.downcase)
+    end
+    return (price.to_f * rupee_price).round(2)
+  end
+
   def collection_info
     "<p class='para-color'>Collection (#{nft_contract&.contract_type&.upcase})</p><h4 data-toggle='tooltip' data-placement='top' title=\"#{nft_contract&.address}\">#{nft_contract&.masked_address}</h4>".html_safe
+  end
+
+  def contract_address
+    "<h4 data-toggle='tooltip' data-placement='top' title=\"#{nft_contract&.address}\">#{nft_contract&.masked_address}</h4>".html_safe
   end
 
   def collection_info_name
@@ -134,6 +184,14 @@ class Collection < ApplicationRecord
 
   def total_editions
     "#{owned_tokens.to_i} of #{no_of_copies}"
+  end
+
+  def total_copies  
+    "#{no_of_copies}"
+  end
+
+  def total_copies_sold  
+    sold_quantity = (no_of_copies - owned_tokens).to_i 
   end
 
   def creator_name

@@ -40,6 +40,9 @@ body {
   font-weight: 600;
 }
 
+
+
+
 /* Hehmlet start */
 /*
 @font-face {
@@ -5488,6 +5491,9 @@ input.sign__input:-internal-autofill-selected {
   font-family: "DM Sans", sans-serif;
   letter-spacing: 0.5px;
 }
+
+
+
 .sm_modal button.modal__close.md_cls i {
   /* background: var(--theme-color);
     opacity: 1;
@@ -6232,6 +6238,9 @@ div#Inr-modal .mfp-close-btn-in .mfp-close {
   /* max-width: 440px; */
   overflow: visible;
 }
+
+
+
 .asset__btns .modal__close {
   position: relative;
   top: 0;

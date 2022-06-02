@@ -1,57 +1,110 @@
 
 <% collection_attachment = collection.get_attachment(current_user)%>
-<div class="card">
-  <div class="t_c">
-
-    <a href="<%= collection_path(collection.address)%>" class="card__cover">
-        <span class="collection-card-img" style="background-image: url('<%= cover_url(collection) %>')">
-           <%= image_tag cover_url(collection)%>
-        </span>
+<li>
+<div class="img-panel">
+    <a href="<%= collection_path(collection.address)%>" class="image-fit"> 
+        <%= image_tag cover_url(collection)%>
     </a>
-    <%# if current_user %>
-                <%= react_component("collections/like", address: current_user&.address, 
-                likes: collection.likes, collectionId: collection.id, 
+    <div class="desc">
+        <h6 class="auction-heading">
+           <a href="<%= collection_path(collection.address)%>"> <strong><%= collection.title %></strong> </a>
+          <span>
+                <a class="more_action_btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="../../assets/nft/share-blue.svg" alt="NFT_IMG_1" class="share-menu-icon" />
+                </a>
+                <ul class="dropdown-menu header__profile-menu" aria-labelledby="dropdownMenuProfile">
+                <li><a target=_blank href="https://www.facebook.com/sharer/sharer.php?u=<%= current_url %>&caption=<%= collection.name %>&description=<%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                  <i class="fa fa-facebook"></i><span>Facebook</span>
+                  </a>
+                </li>
+                <li><a target=_blank href="https://twitter.com/share?url=<%= current_url %>&text=<%= collection.name %>, <%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                  <i class="fa fa-twitter"></i><span>Twitter</span>
+                </a></li>
+                <li><a target=_blank href="https://telegram.me/share/url?url=<%= current_url %>&text=<%= collection.name %>, <%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                  <i class="fa fa-telegram"></i><span>Telegram</span>
+                </a></li>
+                <li><a target=_blank href="mailto:?subject=<%= collection.name %>&body=<%= collection.description %> Link here:<%= current_url %>">
+                  <i class="fa fa-envelope"></i><span>Envelope</span>
+                </a></li>
+              </ul>
+              <%= react_component("collections/like", address: current_user&.address, 
+                likes: collection.likes, collectionId: collection.id, addClass: "profile_likes_icon", 
                 liked: collection.is_liked_by_me(current_user&.id)
                 ) %>
-        <!-- <button class="card__likes heart">
-          <i class="far fa-heart"></i>
-          <i class="fas fa-heart"></i>
-          <span><%= collection.likes.count%></span>
-        </button> -->
-        
-    <%# end %>
+            </span>
+        </h6>
+        <% if collection.own_collection.present? %>
+            <a><h5><%= collection.contract_name %></h5></a>
+        <% else %>                    
+            <a> <h5><%= collection.collection_info_name %></h5></a>
+        <% end %>
+        <div class="caption">
+            <div class="profile-detail">
+                <%= image_tag collection.creator.profile_image %>
+                <div class="name-detail">
+                    <h6>Creator</h6>
+                    <% if collection.creator.name %>
+                      <a href="/users/<%=collection.creator.address%>" class="user_name"> <%= collection.creator.name %> </a>
+                    <% else %>
+                      <a href="/users/<%=collection.creator.address%>" class="user_address"> <%= masked_address(collection.creator.address) %> </a>
+                    <% end %>
+                </div>
+            </div>
 
-  </div>
-  <div class="grid-box">
-    <h3 class="card__title" data-toggle="tooltip" data-placement="top" title="<%= collection.title %>">
-      <a href="<%= collection_path(collection.address)%>"><%= collection.title %></a>
-    </h3>
+            <div class="profile-detail">
+                <%= image_tag collection.owner.profile_image %>
+                <div class="name-detail">
+                    <h6>Owner</h6>
+                    <% if collection.owner.name %>
+                      <a href="/users/<%=collection.owner.address%>" class="user_name"> <%= collection.owner.name %> </a>
+                    <% else %>
+                      <a href="/users/<%=collection.owner.address%>" class="user_address"> <%= masked_address(collection.owner.address) %> </a>
+                    <% end %>
+                </div>
+            </div>
+            
+        </div>
+        <div class="caption add-btn">
+            <div class="profile-detail">
+                <div class="name-detail">
+                  <% if collection.instant_sale_price%>
+                        <h6> Price </h6>
+                    <i><a><%=collection.instant_sale_price%> </a> WETH</i>
+                  <% else %>
+                      <% if collection.max_bid %>
+                        <h6 class="bid_status">Highest bid </h6>
+                      <i><a><%= collection.max_bid.amount %></a> WETH </i>
+                    <%else%>
+                        <h6><span>No active Bids<span></h6> 
+                    <% end %>  
+                  <% end %>
+                </div>
+            </div>
+           <div class="profile-detail">
+              <% if not collection.is_owner?(current_user)%>   
+                <% if collection.put_on_sale? %>
+                  <a href="<%= collection_path(collection.address)%>">
+                    <button class="buy-btn">
+                        Buy
+                    </button>
+                  </a>
+                <% else %>
+                  <a href="<%= collection_path(collection.address)%>">
+                    <button class="buy-btn">
+                        Not for Sale 
+                    </button>
+                  </a>
+                <% end %>
+              <% else %>
+                <a href="<%= collection_path(collection.address)%>"  style="visibility: collapse;">
+                  <button class="buy-btn">
+                      Buy
+                  </button>
+                </a>
+              <% end %>
 
-    <div class="card__author">
-      <%= image_tag collection.owner.profile_image %>
-      <a href="<%=user_path(collection.owner.address)%>" data-toggle="tooltip" data-placement="top" title="@<%= collection.owner.full_name%>">@<%= collection.owner.full_name%></a>
-    </div>
-  </div>
-  <div class="card__info">
-    <div class="card__price">
-      <div class="smart-one">
-        <div class="one-smart-inner">
-          <% if collection.instant_sale_price%>
-            <span><%= t('shared.reserve_price')%></span>
-            <span><%=collection.instant_sale_price%> ETH</span>  
-          <% else %>
-            <% if collection.max_bid %>
-              <p class="bid_status">Highest bid <b><%= collection.max_bid.value %></b></p>
-            <%else%>
-              <span>No active Bids</span> 
-            <% end %>
-          <%end%>
+            </div>
         </div>
-        <div class="two-smart-inner">
-          <a href="<%= collection_path(collection.address)%>" class="place-bid-card">Buy Now</a>
-        </div>
-      </div>
-      
     </div>
-  </div>
 </div>
+</li>

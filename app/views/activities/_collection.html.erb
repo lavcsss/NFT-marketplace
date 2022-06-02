@@ -1,110 +1,58 @@
 
 
-<% if activity.event == 'create' ||
-        (activity.event == 'update' &&
-                Collection.is_valid_activity(activity) &&
-                (!activity.changeset["state"].present? ||
-                        (activity.changeset["state"].present? && activity.changeset["state"] != ["pending", "approved"]))) %>
-    <% cover_image = activity.item.cover.present? ? activity.item.cover : activity.item.attachment %>
-    <div class="activity">
-      <% if activity.event == "create" %>
-          <%= link_to collection_path(activity.item.address),:class=>"activity__cover" do %>
-              <%= image_tag url_for(cover_image),:size=>"140x162" %>
-          <% end %>
-          <div class="activity__content">
-            <h3 class="activity__title">
-              <%= link_to collection_path(activity.item.address) do %>
-                  <%= activity.item.title %>
-              <% end %>
+<% if activity.event == 'create' || 
+   (activity.event == 'update' && Collection.is_valid_activity(activity) && 
+   (!activity.changeset["state"].present? || 
+   (activity.changeset["state"].present? && activity.changeset["state"] != ["pending", "approved"]))) %>
 
-            </h3>
-            <p class="activity__text">Minted by
-              <%= link_to user_path(activity.item.creator.address) do %>
-                  @<%= activity.item.creator.full_name %>
-              <% end %>
-              <span class="for_txt">for <b><%=activity.item.instant_sale_price%> WETH</b></span></p>
-            <span class="activity__time"><%= time_ago_in_words(activity.created_at) %> </span>
-          </div>
+    <div class="member-detail">
+      <% if activity.event == "create" && activity.item.present? %>
+          <a>
+          <span><%= image_tag url_for(activity.item.creator.profile_image) %> </span>
+          <strong>@<%= activity.item.creator.full_name %>
+          <em>Minted <%= activity.item.title %> </em>
+          <i> <%= time_ago_in_words(activity.created_at) %> ago </i>
+          </strong>
+          </a>
       <% else %>
+          <% owner_name = activity.next ? activity.next.reify.owner.full_name : activity.item.owner.full_name %>
           <% if activity.event == "update" %>
               <% if activity.changeset.keys.include?("owner_id") %>
-               <% activity_dup = activity.dup %>
-                  <%= link_to collection_path(activity.item.address),:class=>"activity__cover" do %>
-                      <%= image_tag url_for(cover_image),:size=>"140x162" %>
-                  <% end %>
-                  <div class="activity__content">
-                    <h3 class="activity__title">
-                      <%= link_to collection_path(activity.item.address) do %>
-                          <%= activity.item.title %>
-                      <% end %>
-
-                    </h3>
-                    <p class="activity__text">Transferred from
-                      <%= link_to user_path(activity.reify.owner.address) do %>
-                          @<%= activity.reify.owner.full_name %>
-                      <% end %>
-                      <span class="for_txt"> to <b>@<%= link_to activity_dup.item.owner.full_name, user_path(activity_dup.item.owner.address)%></b> for <%= activity.reify.executed_price %> WETH</span></p>
-                    <span class="activity__time"><%= time_ago_in_words(activity_dup.created_at.nil? ? activity_dup.changeset["updated_at"].last : activity_dup.created_at) rescue "" %> </span>
-                  </div>
-              <% elsif activity.changeset.keys.include?("put_on_sale") %>
-                  <%= link_to collection_path(activity.item.address),:class=>"activity__cover" do %>
-                      <%= image_tag url_for(cover_image),:size=>"140x162" %>
-                  <% end %>
-                  <div class="activity__content">
-                    <h3 class="activity__title">
-                      <%= link_to collection_path(activity.item.address) do %>
-                          <%= activity.item.title %>
-                      <% end %>
-
-                    </h3>
-                    <p class="activity__text"><%= activity.changeset["put_on_sale"].last ? 'Put on sale' : 'Removed from sale' %> by
-                      <%= link_to user_path(activity.item.owner.address) do %>
-                          @<%= activity.item.owner.full_name %>
-                      <% end %>   <span class="for_txt"> on </span>
-                      <span class="activity__time"><%= time_ago_in_words(activity.created_at) %> </span>
-                  </div>
-
+                <a>
+                 <span><%= image_tag url_for(activity.reify.owner.profile_image) %></span>
+                 <strong> @<%= activity.reify.owner.full_name %>
+                    <em lin> Transferred <%= activity.item.title %> to 
+                    <%= owner_name %> from <%= activity.reify.owner.full_name %></em>
+                    <i> <%= time_ago_in_words(activity.created_at) %> ago </i>
+                  </strong>
+                </a>
               <% elsif activity.changeset.keys.include?("instant_sale_price") %>
-                  <%= link_to collection_path(activity.item.address),:class=>"activity__cover" do %>
-                      <%= image_tag url_for(cover_image),:size=>"140x162" %>
-                  <% end %>
-                  <div class="activity__content">
-                    <h3 class="activity__title">
-                      <%= link_to collection_path(activity.item.address) do %>
-                          <%= activity.item.title %>
-                      <% end %>
-
-                    </h3>
-                    <p class="activity__text">Price updated by
-                      <%= link_to user_path(activity.item.owner.address) do %>
-                          @<%= activity.item.owner.full_name %>
-                      <% end %>
-                      <span class="for_txt">for <b><%=activity.changeset["instant_sale_price"].last%> WETH</b></span></p>
-                    <span class="activity__time"><%= time_ago_in_words(activity.created_at) %> </span>
-                  </div>
-
-
+                 <a>
+                    <span>  <%= image_tag url_for(activity.item.owner.profile_image) %> </span>
+                    <strong> @ <%= owner_name %>
+                        <em> Updated the price for <%= activity.item.title %> to <%= activity.changeset["instant_sale_price"].last %> WETH </em>
+                        <i><%= time_ago_in_words(activity.created_at) %> ago </i>
+                    </strong>
+                </a>
+              <% elsif activity.changeset.keys.include?("put_on_sale") %>
+                <a>
+                  <span> <%= image_tag url_for(activity.item.owner.profile_image) %> </span>
+                  <strong> @ <%= owner_name %>
+                    <em> Put up <%= activity.item.title %> for sale</em>
+                    <i><%= time_ago_in_words(activity.created_at) %> ago</i>
+                  </strong>
+                </a>
               <% elsif activity.changeset["state"].present? && activity.changeset["state"] == ["approved", "burned"] %>
-                  <%= link_to collection_path(activity.item.address),:class=>"activity__cover" do %>
-                      <%= image_tag url_for(cover_image) ,:size=>"140x162"%>
-                  <% end %>
-                  <div class="activity__content">
-                    <h3 class="activity__title">
-                      <%= link_to collection_path(activity.item.address) do %>
-                          <%= activity.item.title %>
-                      <% end %>
-
-                    </h3>
-                    <p class="activity__text">Burned on updated by
-                      <%= link_to user_path(activity.item.owner.address) do %>
-                          @<%= activity.item.owner.full_name %>
-                      <% end %>   <span class="for_txt"> on </span>
-                      <span class="activity__time"><%= time_ago_in_words(activity.created_at) %> </span>
-                  </div>
-
-
+                <a>
+                    <span><%= image_tag url_for(activity.item.owner.profile_image) %></span>
+                    <strong> @ <%= owner_name %>
+                        <em> Burned <%= activity.item.title %> </em>
+                        <i> <%= time_ago_in_words(activity.created_at) %> ago </i>
+                    </strong>
+                </a>
               <% end %>
           <% end %>
       <% end %>
     </div>
 <% end %>
+    

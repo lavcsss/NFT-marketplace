@@ -1,0 +1,611 @@
+/*NFT Modal start*/
+.My_modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 30px;
+  display: none;
+}
+body.open-modal {
+    background: #000;
+    position: relative;
+}
+body.open-modal:before {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: #00000070;
+    top: 0;
+    left: 0;
+    z-index: 99;
+}
+.My_modal.open-modal {
+    display: block;
+    position: fixed;
+    z-index: 99;
+}
+.My_modal .close-icon {
+  float: right;
+  background: #EFEFF0 0% 0% no-repeat padding-box;
+  border-radius: 11px 41px 11px 11px;
+  width: 33px;
+  height: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 11px;
+  top: 10px;
+}
+.My_modal .close-icon img {
+  width: 10px!important;
+  cursor: pointer;
+}
+.My_modal .payment-details h5 {
+  letter-spacing: 0px;
+  color: #000000;
+  font-family: 'Hahmlet', serif;
+  font-weight: 500;
+  font-size: 22px;
+  text-align: center;
+  width: 100%;
+  margin: 20px 0 10px 0;
+}
+.My_modal .payment-details p {
+  text-align: center;
+  letter-spacing: 0px;
+  font-size: 16px;
+  font-family: 'Hahmlet', serif;
+font-weight: 500;
+  color: #162C5B;
+  width: 100%;
+  padding: 0 0 15px 0;
+}
+.My_modal .payment-details a {
+  display: block;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #F0F0F0;
+  border-radius: 5px;
+  width: 70%;
+  font-size: 13px;
+  margin: 0 auto;
+  margin-bottom: 15px;
+  padding: 10px;
+  text-align: center;
+}
+.My_modal .payment-details a img {
+  width: 20px;
+  margin-right: 10px;
+}
+.My_modal .form-grid {
+  margin: 10px 0 20px 0;
+}
+.My_modal .form-grid label {
+  text-align: left;
+  letter-spacing: 0px;
+  color: #162C5B;
+  font-family: 'Hahmlet', serif;
+  font-size: 15px;
+}
+.My_modal .form-grid .input-values {
+  position: relative;
+}
+.My_modal .form-grid .input-values svg.folder {
+  width: 18px;
+  position: absolute;
+  top: 0;
+  left: 10px;
+  bottom: 0;
+  margin: auto;
+}
+.My_modal .form-grid .input-values .info {
+  width: 16px;
+  position: absolute;
+  right: 10px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+.My_modal .form-grid .input-values input {
+  width: 100%;
+  background: #fff 0% 0% no-repeat padding-box;
+  border: 1px solid #F0F0F0;
+  border-radius: 5px;
+  font-size: 13px;
+  padding: 7px 40px;
+  cursor: alias;
+  outline: none;
+}
+.My_modal .form-grid .input-values.bg-fill input {
+  background: #E6E6E6 0% 0% no-repeat padding-box;
+}
+.My_modal .form-grid .nft-details {
+  display: flex;
+  border-bottom: 1px solid #7070702b;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+.My_modal .form-grid .nft-details p {
+  font-size: 15px;
+  margin: 10px 0;
+}
+.My_modal .form-grid .nft-details p span,
+.My_modal .form-grid .nft-details p em {
+  text-align: left;
+  letter-spacing: 0px;
+  color: #162C5B;
+  font-size: 14px;
+  font-family: CircularStd_Normal;
+  display: block;
+}
+.My_modal .form-grid .nft-details p strong {
+  display: block;
+  letter-spacing: 0px;
+  font-family: CircularStd_Bold;
+  font-size: 15px;
+  font-weight: 600;
+  color: #162C5B;
+}
+.My_modal .form-grid .nft-details p em {
+  font-size: 13px;
+  font-style: normal;
+}
+.My_modal .form-grid .nft-details a {
+  font-size: 14px;
+  color: #162C5B;
+}
+.My_modal .form-grid .nft-details.total {
+  border-bottom: 0;
+}
+.My_modal .form-grid .proceed-btn {
+  text-align: center;
+}
+.My_modal .form-grid .proceed-btn button {
+  background: #3C97F2 0% 0% no-repeat padding-box;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #fff;
+  border: 0;
+  outline: none;
+  padding: 10px;
+  min-width: 170px;
+}
+.My_modal ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.My_modal ul li {
+  text-align: center;
+  width: 49%;
+  position: relative;
+  height: 430px;
+  border-right: 1px solid #f5f5f5;
+  padding: 10px 30px;
+  padding-right: 40px;
+  padding-top: 0;
+}
+.My_modal ul li:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+.My_modal ul li img {
+  width: 80px!important;
+  margin-bottom: 20px;
+}
+.My_modal ul li h6 {
+  text-align: center;
+  letter-spacing: 0px;
+  color: #000000;
+  font-size: 18px;
+  font-family: 'Hahmlet', serif;
+}
+.My_modal ul li p {
+  text-align: center;
+  letter-spacing: 0px;
+  color: #162C5B;
+  font-family: 'Hahmlet', serif;
+  font-size: 14px;
+  margin: 0;
+  line-height: 20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #f5f5f5;
+    padding-bottom: 10px;
+}
+.My_modal ul li p.remove-border {
+  border-bottom: 0;
+  line-height: 25px;
+}
+
+.My_modal ul li p img {
+
+    width: 16px;
+    margin: unset;
+    max-width: 16px;
+    padding-right: 5px;
+
+}
+
+.My_modal ul li button {
+    width: 70%;
+    background: #3C97F2 0% 0% no-repeat padding-box !important;
+    border-radius: 10px;
+    padding: 10px;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;  
+}
+.payment-modal {
+  width: auto;
+  background: #FCFCFC 0% 0% no-repeat padding-box;
+  box-shadow: -16px 3px 20px #00000010;
+  border-radius: 30px;
+}
+.My_modal.checkout.MuiBox-root.css-0 {
+  padding-left: 70px;
+  padding-right: 70px;
+}
+.My_modal.mft-purchase.open-modal {
+    width: auto;
+}
+
+.My_modal.mft-purchase.open-modal ul {
+    flex-flow: row wrap;
+}
+
+.My_modal.mft-purchase.open-modal ul li {
+    width: 100%;
+    height: auto;
+}
+
+.My_modal.mft-purchase.open-modal ul li button {
+    position: unset;
+}
+
+.My_modal.mft-purchase.open-modal ul li h6 {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #162C5B;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.My_modal.mft-purchase.open-modal ul li p {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #162C5B;
+    width: 70%;
+    margin: 0 auto 20px auto;
+        font-family: CircularStd_Normal;
+    font-weight: 400;
+        font-size: 16px;
+    line-height: 25px;
+}
+
+.My_modal.create_collectible.open-modal {
+  cursor: default;  
+}
+
+.My_modal.create_collectible.open-modal .modal-body-sec h6 {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #162C5B;
+    font-size: 24px;
+    font-family: Hahmlet;
+    font-weight: 600;
+    margin: 20px 0 0 0;
+}
+
+.My_modal.create_collectible.open-modal .modal-body-sec p {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #162C5B;
+    width: 72%;
+    opacity: 1;
+    margin: 15px auto 5px auto;
+/*        font-family: CircularStd_Normal;
+    font-weight: 400;*/
+        font-size: 16px;
+    line-height: 24px;
+}
+.back-btn {
+    float: left;
+    background: #D9ECFF;
+    font-size: 13px;
+    border-radius: 100px;
+    padding: 4px 15px;
+    border: 1px solid #3C97F2;
+    color: #3C97F2;
+    font-family: Hahmlet;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+        position: absolute;
+    left: 20px;
+    top: 20px;
+}
+.back-btn img {
+    max-width: 20px;
+    width: 20px;
+    transform: rotate(180deg);
+    padding-left: 8px;
+}
+.My_modal.create_collectible.open-modal .modal-body-sec ul li {
+    height: auto;
+    padding: 0;
+    width: 43%;
+    margin: 0 auto;
+    border-right: 0;
+    box-shadow: none;
+}
+box.My_modal.create_collectible.open-modal ul li .choose-single-multiple {
+    width: 170px;
+    height: 180px;
+    margin: 10px auto 15px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row wrap;
+    position: relative;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+}
+.My_modal.create_collectible.open-modal .modal-body-sec ul li p {
+    width: auto;
+    margin: auto;
+    text-align: center;
+    letter-spacing: 0px;
+    display: block;
+/*    font-family: CircularStd_Normal;
+    font-weight: 400;*/
+        font-size: 15px;
+    line-height: 20px;
+
+}
+
+.My_modal.create_collectible.open-modal .modal-body-sec ul {
+    background: #F2F2F2 0% 0% no-repeat padding-box;
+    border-radius: 20px;
+  padding: 35px 35px 20px 35px;
+    margin: 20px 0 20px 0;
+}
+
+.My_modal.create_collectible.open-modal ul li .choose-single-multiple img {
+    margin: auto;
+    margin-top: 35px;
+}
+.My_modal.create_collectible.open-modal ul li .choose-single-multiple button {
+    border-radius: 50px;
+    font-size: 14px;
+    bottom: 20px;
+    width: fit-content;
+    padding: 3px 20px;
+    position: absolute;
+}
+.My_modal.create_collectible.open-modal .modal-body-sec ul li p a {
+    text-align: center;
+    font-size: 16px;
+    line-height: 23px;
+    letter-spacing: 0px;
+    color: #3C97F2;
+        font-family: CircularStd_Normal;
+    font-weight: 400;
+  }
+
+.My_modal.create_collectible.open-modal .modal-body-sec .footer-bottom {
+/*    background: #3C97F2 0% 0% no-repeat padding-box;
+    border-radius: 0px 0px 30px 30px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 15px;*/
+}
+
+.My_modal.create_collectible.open-modal .modal-body-sec .footer-bottom p {
+    letter-spacing: 0px;
+    color: #162C5B;
+    opacity: 1;
+    width: 71%;
+    font-style: italic;
+    margin: 0 auto;
+        font-size: 16px;
+    line-height: 24px;
+        font-family: CircularStd_Normal;
+    font-weight: 400;
+}
+box.My_modal.steps-approve.open-modal {
+    width: 520px;
+}
+.My_modal .modal-top-heading h6 {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #162C5B;
+    font: normal normal medium 26px/30px Hahmlet;
+}
+.My_modal .modal-top-heading p {
+    text-align: center;
+    letter-spacing: 0px;
+    color: #162C5B;
+    width: 80%;
+    margin: 0 auto;
+    font-size: 18px;
+    line-height: 25px;
+}
+.progress-steps {
+    display: flex;
+    align-items: center;
+    width: 95%;
+    margin: 20px auto 0 auto;
+}
+ .progress-steps img {
+    background: #766d6d;
+    border-radius: 100px;
+    padding: 10px;
+    width: 44px;
+    margin: unset;
+}
+.process-states {
+    margin-left: 13px;
+}
+.process-states h6 {
+    text-align: left;
+    letter-spacing: 0px;
+    font-size: 20px;
+    line-height: 32px;
+    color: #162C5B;
+    font-weight: bold;
+}
+.process-states p {
+    text-align: left;
+        letter-spacing: 0px;
+    color: #162C5B;
+    line-height: 28px;
+    font-size: 16px;
+}
+.process-states h6,  .process-states p {
+    text-align: left;
+    margin: auto;
+    border-bottom: 0;
+    padding: 0;
+}
+ .progress-steps button {
+    position: unset;
+    width: unset;
+    margin: unset;
+    margin-left: auto;
+    border-radius: 100px;
+    padding: 6px 20px;
+    font-size: 15px;
+    min-width: 140px;
+    background: #3C97F2 0% 0% no-repeat padding-box;
+border-radius: 26px;
+color: #fff;
+}
+@media screen and (max-width: 991px) and (min-width: 768px) {
+  .My_modal.open-modal{
+    width: 730px;
+  }
+  .My_modal ul li {
+    padding: 0px;
+  }
+}
+@media screen and (max-width: 767px) and (min-width: 280px) {
+
+  .My_modal {
+    width: 90%;
+    height: calc(100% - 200px);
+    overflow: auto;
+  }
+  box.My_modal.steps-approve.open-modal{
+    height: auto;
+  }
+  box.My_modal.steps-approve.open-modal ul li{
+    box-shadow: none;
+    margin-top: 0;
+  }
+  .My_modal ul {
+    flex-flow: row wrap;
+  }
+  .My_modal ul li {
+    width: 100%;
+    height: auto;
+    border: 0;
+    margin-top: 30px;
+    padding: 30px;
+    box-shadow: 0 0 10px #ddd;
+    border-radius: 10px;
+  }
+  .My_modal ul li button {
+    position: unset;
+    margin-top: 20px;
+    width: 90%;
+    padding: 8px;
+}
+  .My_modal ul li .input-wrap {
+    bottom: 30px;
+  }
+  .My_modal ul li:last-child {
+    padding-right: 30px;
+  }
+  .My_modal.checkout.MuiBox-root.css-0 {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  .My_modal.create_collectible.open-modal .modal-body-sec ul li{
+    width: 60%;
+  }
+}
+@media screen and (max-width: 425px) and (min-width: 280px) {
+  .My_modal ul li img {
+    width: 60px;
+  }
+  .My_modal ul li h6 {
+    font-size: 14px;
+  }
+  .My_modal ul li p {
+    font-size: 12px;
+  }
+  .My_modal.payment-modal.MuiBox-root.css-0 {
+    width: 90%;
+    height: auto;
+  }
+  .My_modal.payment-modal.MuiBox-root.css-0 .payment-details h5 {
+    font-size: 19px;
+  }
+  .My_modal.payment-modal.MuiBox-root.css-0 .payment-details p,
+  .My_modal.create_collectible.open-modal .modal-body-sec p,
+  .My_modal.create_collectible.open-modal .modal-body-sec ul li p {
+    font-size: 14px;
+  }
+  .My_modal.payment-modal.MuiBox-root.css-0 .payment-details a {
+    font-size: 12px;
+  }
+  .My_modal .form-grid .nft-details {
+    flex-flow: row wrap;
+    padding: 10px;
+    border: 1px solid #7070702b;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+  .My_modal .form-grid .nft-details p ,
+  .My_modal.create_collectible.open-modal .modal-body-sec ul li,
+  .My_modal.create_collectible.open-modal .modal-body-sec p,
+  .My_modal.create_collectible.open-modal .modal-body-sec .footer-bottom p{
+    width: 100%;
+  }
+  .My_modal .form-grid .nft-details.total {
+    border-bottom: 1px solid #7070702b;
+  }
+  .My_modal.create_collectible.open-modal .modal-body-sec {
+    margin-top: 40px;
+}
+}
+@media screen and (max-width: 375px) and (min-width: 280px) {
+  .My_modal {
+    width: 97%;
+    padding: 16px;
+  }
+  .My_modal ul li {
+    padding: 20px;
+  }
+  .My_modal ul li .input-wrap {
+    bottom: 18px;
+  }
+}
+
+/*NFT Modal end*/

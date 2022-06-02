@@ -66,6 +66,7 @@
     margin: 0px 0 30px 0;
     object-fit: cover;
     background: #fff;
+    overflow: hidden;
 }
 .modeling-details .add-expand-btn .img-responsive {
     width: 100%;
@@ -267,7 +268,7 @@ img.like-img {
     padding: 0 0px 0 8px;
     cursor: pointer;
 }
-.desction-detail p {text-align: left;font: normal normal normal 16px/28px Hahmlet;letter-spacing: 0px;color: #162C5B;}
+.desction-detail p {text-align: left;font: normal normal normal 16px/28px Hahmlet;letter-spacing: 0px;color: #162C5B;margin: 0;}
 
 .modal-description {
     position: relative;
@@ -308,7 +309,13 @@ img.like-img {
 .member-detail i a {
     margin-left: 10px;
 }
-
+.modeling-details ul li.remove-ellipses a strong {
+    white-space: normal;
+    text-overflow: unset;
+    overflow: visible;
+    word-break: break-word;
+    line-height: 24px;
+}
 .tabs-panel .tabcontent .asset__action.asset__action--verified .content_details {text-align: left;
 font: normal normal bold 18px/20px Hahmlet;
 letter-spacing: 0px;
@@ -336,9 +343,12 @@ color: #3C97F2;display: block;width: 100%;}
 
 .member-detail_profile_detail i {display: block;width: 75%;}
 
-.member-detail_profile_detail i a {display: block;white-space: nowrap;
+.member-detail_profile_detail i a {
+    display: block;white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;max-width: 100%;}
+    text-overflow: ellipsis;max-width: 100%;
+    color: #000!important;
+}
 
 .description-panels .member-detail {width: 50%;}
 .member-detail a span img,.member-detail .a_tag span img {
@@ -403,7 +413,24 @@ width: 14px;
     color: #162C5B;
 }
 .place-buy-details .highest-bid h5{
-    font-weight: 600;
+    font-weight: bold;
+    font-size: 16px;
+}
+.place-buy-details .highest-bid h5 i {
+    font-style: normal;
+/*    max-width: 80px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;*/
+}
+
+.place-buy-details .highest-bid h5 span {
+/*    max-width: 80px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;*/
 }
 .place-buy-details .highest-bid p {
     text-align: left;
@@ -454,17 +481,43 @@ width: 14px;
     font: normal normal bold 20px/29px Hahmlet;
     letter-spacing: 0px;
     color: #162C5B;
+    white-space: nowrap;
     opacity: 0.5;
+    position: relative;
+    width: 140px;
+    text-align: center;
+    min-width: 140px;
 }
 .tabs-panel .tab button:nth-child(1){
     padding-left: 0;
 }
-
+.tabs-panel.following-details .tab button {
+    /*min-width: auto;
+    width: auto; */
+}
 /* Create an active/current tablink class */
 .tabs-panel .tab button.active {
-    border-bottom: 2px solid #3C97F2;
     background: transparent;
     opacity: 1;
+}
+.tabs-panel.following-details .tab {
+    overflow: unset;
+}
+
+.tabs-panel .tab button.active:after {
+    background: #3C97F2;
+}
+
+.tabs-panel .tab button:after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    width: 80%;
+    height: 3px;
+    background: transparent;
+    margin: auto;
+    left: 0;
+    right: 0;
 }
 
 /* Style the tab content */
@@ -521,25 +574,39 @@ main.main.mt-0.NFT-detail {
 
 span.edit-profile {
     position: absolute;
-    right: 20px;
-    top: 20px;
-    background: #0000008f 0% 0% no-repeat padding-box;
+    right: 25px;
+    bottom: 30px;
+    background: #fff 0% 0% no-repeat padding-box;
     border-radius: 29px;
     opacity: 1;
-    backdrop-filter: blur(50px);
     text-align: left;
-    font: normal normal normal 15px Circular Std;
+    font-size: 14px;
     letter-spacing: 0px;
-    color: #FFFFFF;
+    color: #000;
     display: flex;
     align-items: center;
     justify-content: center;
-padding: 6px 14px;
+    padding: 8px 10px;
+    z-index: 10;
+    cursor: pointer;
+    font-family: 'Hahmlet', serif;
+}
+span.edit-profile.follow-btn {
+    text-align: left; 
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    background: #3C97F2;
+    min-width: 110px;
 }
 
+    span.edit-profile.follow-btn.unfollow-btn {
+        color: #3C97F2;
+        background: #EDF6FF 0% 0% no-repeat padding-box;
+        border: 1px solid #3C97F2;
+    }
 span.edit-profile img {
     margin-right: 8px;
-    width: 30px;
+    width: 16px;
 }
 .prfile_name_details {
     z-index: 18;
@@ -669,11 +736,45 @@ span.edit-profile img {
     border-radius: 10px;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-around;
+}
+.tabs-panel.following-details .tab {
+    overflow: unset;
+}
+.profile-tabs.tabs-panel.tabs-lists .tab button:before {
+    content: '';
+    position: absolute;
+    right: 0%;
+    top: 0;
+    width: 1px;
+    height: 70%;
+    background: #8b96adc7;
+    bottom: 0;
+    margin: auto
+}
+
+.tabs-panel .tab button:last-child:before {
+    display: none;
+}
+
+.profile-tabs.tabs-panel.tabs-lists .tabs-panel.following-details .tab button:before {
+    right: -6px;
 }
 
 .profile-tabs.tabs-panel {
     position: relative;
+
+}
+.profile-tabs.tabs-panel.tabs-lists .tabs-panel.following-details .tab button.remove-border:before {display: none;}
+
+.profile-tabs.tabs-panel .tab::-webkit-scrollbar{
+    height: 0px;
+}
+.profile-tabs.tabs-panel .tab::-webkit-scrollbar-thumb {
+
+    background-color: #afaaaa;
+    outline: 0;
+    border-radius: 8px;
 
 }
 
@@ -856,15 +957,19 @@ span.edit-profile img {
   object-fit: cover;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail h6 {
-  color: #707070;
-  font-size: 13px;
-  font-family: CircularStd_Normal ;
+    color: #707070;
+    font-size: 13px;
+    font-family: 'Hahmlet', serif;
+    font-weight: 400;
+    width: 100%;
+    text-align: left;
 
 }
+
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail a{
     color: #000000;
     font-size: 14px;
-    font-family: CircularStd_Normal;
+    font-family: 'Hahmlet', serif;
     white-space: nowrap;
     /* text-overflow: ellipsis; */
     overflow: hidden;
@@ -902,7 +1007,7 @@ span.edit-profile img {
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail .user_name{
     color: #000000;
     font-size: 14px;
-    font-family: CircularStd_Normal ;
+    font-family: 'Hahmlet', serif ;
     white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -916,7 +1021,7 @@ span.edit-profile img {
   margin: 0;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail .name-detail a {
-  font-family: CircularStd_Bold ;
+  font-family: 'Hahmlet', serif ;
   font-weight: 600;
 }
 
@@ -924,7 +1029,7 @@ span.edit-profile img {
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail .name-detail i {
     display: flex;
     align-items: center;
-    font-family: CircularStd_Bold;
+    font-family: 'Hahmlet', serif;
     font-weight: 600;
     font-size: 14px;
     font-style: normal;
@@ -996,8 +1101,13 @@ font-weight: 600;
     text-align: left;
     font: normal normal normal 14px/9px Hahmlet;
     letter-spacing: 0px;
-    color: #707070;
     line-height: normal;
+    color: #707070;
+}
+
+.member-detail a strong i {
+    color: #3C97F2 !important;
+
 }
 .activity-dropdown  .member-detail a strong i ,.activity-dropdown  .member-detail  .a_tag strong i {
     color: #3C97F2;
@@ -1363,19 +1473,20 @@ ul.current-filters li span {
     display: flex;
     align-items: center;
     border-bottom: 1px solid #162c5b38;
+        overflow: auto;
+
 }
 
 ul.current-filters li {
     display: flex;
     align-items: center;
     margin-right: 15px;
-    overflow: auto;
     padding-bottom: 6px
 }
-ul.current-filters li::-webkit-scrollbar{
+ul.current-filters::-webkit-scrollbar{
     height: 4px;
 }
-ul.current-filters li::-webkit-scrollbar-thumb{
+ul.current-filters::-webkit-scrollbar-thumb{
     border-radius: 100px;
 }
 ul.current-filters li a {
@@ -1591,6 +1702,11 @@ a.mob-apply-btn button {
 .tabs-panel .tabcontent.profile-mob-details.mob-view-profile-tab{
     display: none!important;
 }
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .name-detail i a {max-width: 70px;width: unset;}
+
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail {width: auto;}
+
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption.add-btn .profile-detail .name-detail {width: 100%;}
 /*Discover tab end*/
 
 /* common modal start */
@@ -1704,9 +1820,276 @@ font-family: 'Hahmlet', serif;
 }
 .burn-Token .modal-footer {justify-content: space-between;}
 /* common modal end */
+/*choosen file upload start*/
+.upload-choosen-files .codrops-header {
+    max-width: 100%;
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    border-radius: 10px;
+}
+
+main.choose-upload-file.main {
+    background: #E3F1FF 0% 0% no-repeat padding-box;
+    margin-top: 64px!important;
+    padding-top: 50px!important;
+}
+
+main.choose-upload-file.main .container {
+    width: 92%;
+    margin: 0 auto;
+    max-width: 92%;
+}
+/*.upload-choosen-files .codrops-header div#imagePreviewRes {
+position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%!important;
+    height: 100%!important;
+    z-index: 0;
+    border-radius: 8px!important;
+
+}*/
+
+.drop-file-img,.select-categories
+{
+    display: none;
+}
+
+.upload-choosen-files .codrops-header .box {
+    box-shadow: none;
+    display: block;
+    background: transparent;
+    text-align: center;
+}
+.upload-choosen-files .codrops-header .box img {
+    max-width: 200px;
+}
+.upload-choosen-files .codrops-header .box span#placeholder{
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+    font: normal normal 13px/16px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B
+}
+.upload-choosen-files .codrops-header .box label#choose_file_selected{
+    background: #3C97F2 0% 0% no-repeat padding-box;
+    border-radius: 25px;
+    text-align: center;
+    font: normal normal bold 14px/18px Hahmlet;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    border: 1px solid #3C97F2;
+}
+.codrops-header_innertab{
+    box-shadow: none;
+    height: 660px;
+    background: #F2F6FFAD 0% 0% no-repeat padding-box;
+    border: 1px dashed #3483E29C;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.signle-collectible-item-info .main__title.main__title--create {
+    margin: 0;
+}
+
+.signle-collectible-item-info .main__title.main__title--create h2 {
+    border-left: 0;
+    text-align: left;
+    font: normal normal 28px/41px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    padding-left: 0;
+}
+
+.signle-collectible-item-info .main__title.main__title--create h2:before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    bottom: 0;
+    width: 120px;
+    height: 1px;
+    background: #3C97F2;
+}
+
+.signle-collectible-item-info .sign__title {
+    text-align: left;
+    font: normal normal 600 24px/41px Hahmlet;
+    letter-spacing: 0px;
+    color: #3C97F2;
+    border-bottom: 1px solid #ddd;
+}
+
+.signle-collectible-item-info .sign__label, .signle-collectible-item-info .switch_group label,.signle-collectible-item-info .switch_group p {
+    text-align: left;
+    font: normal normal 16px/28px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;padding: 0;
+}
+
+.signle-collectible-item-info .sign__input,
+.signle-collectible-item-info .sign__textarea,
+.signle-collectible-item-info .sign__select {
+    text-align: left;
+    font: normal normal 14px/19px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    border:  0;
+      }
+
+      .signle-collectible-item-info .sign__select{
+        background-image: url("../../assets/nft/down-arrow-blue.svg");
+      }
+
+.signle-collectible-item-info .switch_group label {
+    font-weight: 400;
+    
+}
+
+.signle-collectible-item-info .switch_group p {
+    font-size: 14px;
+    opacity: 60%;
+}
+
+.signle-collectible-item-info div#collection-type .sign__title, .signle-collectible-item-info .sign__title {
+    text-align: left;
+    font: normal normal 600 18px/41px Hahmlet;
+    letter-spacing: 0px;
+    color: #3C97F2;padding: 0;
+}
+
+.signle-collectible-item-info div .sign__radio label {
+    text-align: left;
+    font: normal normal normal 16px/24px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+}
+
+.signle-collectible-item-info .sign__btn.create-item {
+       text-align: center;
+    font: normal normal 600 16px/30px Hahmlet;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    margin: 30px auto 0 auto;
+    background: #3C97F2;
+    border: 1px solid #3C97F2;
+    }
+    .uploaded-nft {
+    width: 280px;
+    height: 230px;
+    padding: 10px;
+    margin: 0 auto 20px auto;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 6px #00000029;
+    border-radius: 10px;
+    position: relative;
+}
+
+box.My_modal.congratulation-modal.open-modal {
+    width: 470px;
+}
+.uploaded-nft img.selected-nft {
+    width: 100%;
+    margin: 0 auto;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    position: relative;
+    z-index: 0;
+    display: block;
+}
+
+.modal-body-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.modal-body-section h6 {
+    text-align: center;
+    font: normal normal 27px/43px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    font-weight: 500;
+}
+
+.modal-body-section p {
+    text-align: center;
+    font: normal normal 15px/24px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;font-weight: 400;}
+
+.modal-body-section button {
+    background: #3C97F2 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    min-width: 150px;
+    padding: 6px;
+    text-align: center;
+    font: normal normal bold 15px/28px Hahmlet;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+}
+
+.uploaded-nft:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 90%;
+    background: #00000066;
+    height: 90%;
+    right: 0;
+    border-radius: 10px;
+    bottom: 0;
+    margin: auto;
+    z-index: 1;
+}
+
+.uploaded-nft img.congratz-img {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;  
+    margin: auto;
+    z-index: 1;
+    width: 50px;
+}
+.nft-details-list .sign__radio input:checked + label:before{
+    border: 2px solid #3C97F2;
+}
+.sign__radio label:before{
+    border: 2px solid #162C5B;
+}
+.nft-details-list .sign__radio label:after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 7px;
+    width: 10px;
+    height: 10px;
+    background: transparent;
+    border-radius: 100px;
+}
+.nft-details-list .sign__radio input:checked + label:after {
+    background: #3C97F2;
+}
+.switch_type input:checked + .slider {
+    background-color: #3C97F2;
+}
+/*choosen file upload end*/
+
 
 @media screen and (max-width: 9999px) and (min-width: 2501px) {
-    main.NFT-detail.modeling-NFT .container{
+    main.NFT-detail.modeling-NFT .container,
+    main.choose-upload-file.main .container{
          width: 1600px;
     max-width: 1600px;
     padding-left: 0%;
@@ -1765,6 +2148,18 @@ font-family: 'Hahmlet', serif;
 .place-buy-details .highest-bid button i{
     max-width: 47px;
 }
+.profile-tabs.tabs-panel .tab{
+      justify-content: unset;  
+      overflow: auto;
+}
+.tabs-panel.following-details .tab {
+    justify-content: space-around;
+    overflow: unset;
+}
+.tabs-panel.following-details .tab button {
+    width: auto;
+    min-width: auto;
+}
 }
 @media only screen and (max-width:1240px) and (min-width: 1201px){
      .place-buy-details .highest-bid button{
@@ -1789,9 +2184,14 @@ font-family: 'Hahmlet', serif;
         width: 48%;
         margin: 0 10px 20px 0;
     }
-    .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail a{
-        width: 60px;
-    }
+.tabs-panel.following-details .tab{
+    overflow: auto;
+    justify-content: flex-start;
+}
+.tabs-panel.following-details .tab button{
+    min-width: 120px;
+    width: 120px;
+}
     .profile-tabs.tabs-panel .tab button:nth-child(1){
         padding-left: 0;
     }
@@ -1845,6 +2245,9 @@ font-family: 'Hahmlet', serif;
 .discover-profile.profile-tabs.tabs-panel .tabcontent ul li .img-panel a.image-fit{
     height: 220px;
 }
+.profile-tabs.tabs-panel .tab button{
+    font-size: 15px;
+}
 }  
 @media only screen and (max-width:1024px) and (min-width: 280px){
       .bg-effect:before{
@@ -1852,7 +2255,7 @@ font-family: 'Hahmlet', serif;
      top: -260px;
     }
 .profile-tabs.tabs-panel.tabs-lists .tab button{
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .modal-description{
@@ -1870,10 +2273,22 @@ font-family: 'Hahmlet', serif;
     .User_following-list{
     display: block;
 }
+footer.discover-bottom-footer.footer.section-footer.wide-window {
+    padding-bottom: 150px;
+}
 .place-buy-details .highest-bid button{
         font:  normal normal normal 11px/18px Hahmlet;
         padding: 10px 5px;
         width: 98%;
+}
+.profile-bg.view-mob-detail span.edit-profile {
+    bottom: auto;
+    top: 10px;
+    font-size: 10px;
+    right: 10px;
+}
+.profile-tabs.tabs-panel.tabs-lists .tab button:before{
+    display: none;
 }
 .member-detail a strong, .member-detail a, .member-detail .a_tag strong {font-size: 15px;line-height: 20px;}
 
@@ -1973,6 +2388,9 @@ font-family: 'Hahmlet', serif;
     .modeling-details ul li {
     width: 50%;
 }
+.modeling-details ul li.remove-ellipses {width: 100%;}
+
+.modeling-details ul li.remove-ellipses a strong {width: 100%;max-width: 100%;}
 .bg-effect:before {
     right: -40%;
     top: 0;
@@ -1993,16 +2411,6 @@ font-family: 'Hahmlet', serif;
 
 }
 
-.profile-tabs.tabs-panel .tab::-webkit-scrollbar{
-    height: 5px;
-}
-.profile-tabs.tabs-panel .tab::-webkit-scrollbar-thumb {
-
-    background-color: #afaaaa;
-    outline: 0;
-    border-radius: 8px;
-
-}
 .profile-tabs.tabs-panel .tab::-webkit-scrollbar-track {
     background: #ddd;
 }
@@ -2025,19 +2433,14 @@ font-family: 'Hahmlet', serif;
     justify-content: flex-start;
 }
 .profile-tabs.tabs-panel .tabs-panel.following-details .tab button {
-    width: auto;
+    width: 50%;
     min-width: auto;
     opacity: 1;
     color: #162c5b80;
 }
 
-.profile-tabs.tabs-panel .tabs-panel.following-details .tab,
-.profile-tabs.tabs-panel .tab.about-profile-information {
+.profile-tabs.tabs-panel .tabs-panel.following-details .tab{
     justify-content: space-evenly;
-}
-.profile-tabs.tabs-panel .tab.about-profile-information button{
-        min-width: auto;
-    padding: 5px 10px;
 }
 .profile-tabs.tabs-panel .tab button.mob-follow-btn{
     display: block;
@@ -2072,6 +2475,10 @@ font-family: 'Hahmlet', serif;
     box-shadow: none;
     border-bottom: 2px solid #E2E2E2;
     border-radius: 0;
+    justify-content: space-between;
+}
+.profile-tabs.tabs-panel.tabs-lists .tab button{
+    padding: 5px 10px;
 }
 .hide-activity-btn,.profile-bg.hide-mob-detail{
     display: none;
@@ -2101,10 +2508,14 @@ font-family: 'Hahmlet', serif;
     font: normal normal normal 14px/20px Hahmlet;
     margin: 0;
 }
-a.textControl {display: inline-block;max-width: 90%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
 
-a.morelink.less {display: block;width: 100%;color: #162c5b;}
+a.textControl{
+    word-wrap:break-word;
+}
 
+a.morelink{
+    width: 100%;color: #3C97F2;
+}
 
 .profile-bg.view-mob-detail .prfile_name_details ul{
     margin: 20px 0 10px 0;
@@ -2306,8 +2717,17 @@ main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
 .bg-effect:before{
         right: -330px;
     }
+    footer.footer.nft-detail-bottom-footer.section-footer.wide-window {
+    padding-bottom: 170px;
+}
+    .signle-collectible-item-info{
+        margin-top: 20px;
+    }
     .prfile_name_details h5{
     flex-flow: row wrap;
+}
+.codrops-header_innertab{
+    height: auto;
 }
 .discover-profile.profile-tabs.tabs-panel .tabcontent ul li{
     width: 100%;
@@ -2369,8 +2789,8 @@ main.NFT-detail.modeling-NFT {
     margin-bottom: 10px;
 }
 span.royalty-span {
-    top: -42px;
-    right: 15px;
+    top: 4px;
+    right: 35px;
     font-size: 14px;
 }
 .place-buy-details {
@@ -2401,12 +2821,20 @@ span.royalty-span {
 .description-panels .member-detail{
     width: 50%;
 }
+box.My_modal.congratulation-modal.open-modal {
+    width: 80%;
+}
 }
 @media only screen and (max-width:425px) and (min-width: 280px){
 .change-price-popup .modal-footer,.burn-Token .modal-footer{
     flex-flow: row wrap;
     justify-content: center;
 }
+span.royalty-span{
+        top: 4px;
+    right: 25px;
+}
+
 .change-price-popup .modal-footer .bidding-element-btn,.burn-Token .modal-footer .bidding-element-btn{
     margin: 10px 0 0 0;
 }
@@ -2417,7 +2845,7 @@ span.royalty-span {
     padding: 0;
 }
 .description-panels .member-detail strong a, .description-panels .member-detail strong{
-        font-size: 16px;
+    font-size: 16px;
     word-break: break-word;
 }
 .description-panels .member-detail strong a, .description-panels .member-detail strong{
@@ -2441,10 +2869,12 @@ span.royalty-span {
 .madeling-heading h5 {
     font-size: 30px;
 }
-.madeling-heading p {
+.madeling-heading p,
+.tabs-panel .tab button {
     font-size: 16px;
 }
-.profile-tabs.tabs-panel .tabs-panel.following-details .tab button{
+.profile-tabs.tabs-panel .tabs-panel.following-details .tab button,
+.tabs-panel .tabcontent .asset__action.asset__action--verified .content_details{
     padding: 5px 0;
     font-size: 15px;
 }
@@ -2464,13 +2894,51 @@ span.royalty-span {
 .change-price-popup .unlock-description-section{
     margin-top: 0;
 }
-.change-price-popup h4{
+.change-price-popup h4,
+.modal-body-section h6{
     font-size: 22px;
+}
+.signle-collectible-item-info .main__title.main__title--create h2{
+font-size: 20px;
+    padding-bottom: 3px;
+}
+.modal-body-section p,
+.modal-body-section button,
+.place-buy-details .highest-bid h6, .place-buy-details .highest-bid button,
+ .modeling-details ul li a strong, .modeling-details ul li .a_tag strong, .desction-detail h6{
+    font-size: 14px;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail .name-detail a.now-wrap-ellipse, .NFT_SCREEN .section.section_3 ul li .img-panel .desc .caption.add-btn .profile-detail .name-detail a.now-wrap-ellipse{
     font-size: 13px;
 }
+.uploaded-nft {
+    width: 100%;
+    height: 200px;
+    margin: 40px auto 10px auto;
+}
+.signle-collectible-item-info .switch_group p {
+    line-height: 18px;
+    font-size: 13px;
+}
 
+.signle-collectible-item-info div .sign__radio label {
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.signle-collectible-item-info div#collection-type .sign__title, .signle-collectible-item-info .sign__title {
+    font-size: 16px;
+}
+
+.signle-collectible-item-info .sign__label {
+    font-size: 14px;
+}
+
+.signle-collectible-item-info .sign__input, .signle-collectible-item-info .sign__textarea, .signle-collectible-item-info .sign__select {
+    padding: 12px;
+    font-size: 13px;
+    line-height: 20px;
+}
 }
 @media only screen and (max-width:375px) and (min-width: 280px){
     main.main.mt-0.NFT-detail.profile-Page {
@@ -2516,8 +2984,8 @@ span.royalty-span {
     min-width: auto;
 }
 .profile-tabs.tabs-panel .tab.about-profile-information button{
-      font-size: 15px;
-    padding: 5px;   
+      font-size: 16px;
+    padding: 5px 10px;   
 }
 .place-buy-details .highest-bid h6,.place-buy-details .highest-bid p {
 /*    visibility: visible;
@@ -2558,6 +3026,12 @@ span.royalty-span {
     height: 35px;
 }
 }
+@media only screen and (max-width:370px) and (min-width: 337px){
+    .discover_menus .tab button, .discover_menus .tab button.active{
+        margin-right: 10px;
+        padding: 8px 0px;
+}
+}
 @media only screen and (max-width:337px) and (min-width: 280px){
     .description-panels .member-detail strong a, .description-panels .member-detail strong{
         max-width: 100%;
@@ -2567,8 +3041,8 @@ span.royalty-span {
         padding: 8px 0px;
 }
 .profile-tabs.tabs-panel .tab.about-profile-information button{
-      font-size: 12px;
-    padding: 5px 0;   
+      font-size: 15px;
+    padding: 5px 10px;   
 }
 .profile-tabs.tabs-panel .tabs-panel.following-details .tab button{
     font-size: 13px;
@@ -2610,5 +3084,10 @@ span.royalty-span {
 .discover_menus .tab .container {
     width: 100%;
     max-width: 100%!important;
+}
+}
+@media only screen and (max-width:325px) and (min-width: 280px){
+main.main.mt-0.NFT-detail.discover_Page {
+    padding: 108px 0 0 0!important;
 }
 }

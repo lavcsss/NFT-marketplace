@@ -14,10 +14,10 @@
 
     <ul  class="color-black">
         <li>
-       <a class="logo-nav-design" href="<%= root_path %>"> 
-        <img src="/assets/nft/logo symbol.svg" class="crosstower-icon" />
-        <img src="/assets/nft/text_logo(black)" class="crosstower-text mobile-visible-none" />
-         <img src="/assets/nft/text_logo.svg" class="crosstower-text visible-none" />
+        <a class="logo-nav-design" href="javascript:void(0)"> 
+        <img src="/assets/nft/logo symbol.svg" class="crosstower-icon header_nav" />
+        <img src="/assets/nft/text_logo(black)" class="crosstower-text mobile-visible-none header_nav" />
+         <img src="/assets/nft/text_logo.svg" class="crosstower-text visible-none header_nav" />
         </a>
 
             <div class="mobile-menu-item">
@@ -139,11 +139,19 @@
 
 $(document).ready(function() {
   $(document).mouseup(function(e) {
+    var container = $("#menuToggle");
+    if (!container.is(e.target) 
+      && container.has(e.target).length === 0) 
+  {
     $("#open-menu-profile").removeClass("active");
     $("#open-menu").removeClass("active");
     $("#menuToggle").removeClass("hiden-list");
     $(".NFT_SCREEN_Header").removeClass("hiden-list");
+    }
     });
+    $('.header_nav').click(function(){
+      window.location.href = "<%= root_path %>";
+    })    
   });
 
 $(document).ready(function() {
@@ -159,14 +167,13 @@ $(document).ready(function() {
 
 $(document).ready(function(){
   $("#menuToggle").click(function(){
-    $("#menuToggle").toggleClass("hiden-list");
-  });
-});
-
-
-$(document).ready(function(){
-  $("#menuToggle").click(function(){
-    $(".NFT_SCREEN_Header").toggleClass("hiden-list");
+    if($(this).hasClass("hiden-list")){
+      $("#menuToggle").removeClass("hiden-list")
+      $(".NFT_SCREEN_Header").removeClass("hiden-list")
+    }else{
+      $("#menuToggle").addClass("hiden-list")
+      $(".NFT_SCREEN_Header").addClass("hiden-list")
+    }
   });
 });
 

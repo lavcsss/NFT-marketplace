@@ -45,7 +45,7 @@
             <%if @tokens.present?%>
               <%@tokens.each do |collection|%>
                 <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-                  <%= render "dashboard/collection_card", collection: collection %>
+                  <%= render "dashboard/collection_card_old", collection: collection %>
                 </div>
               <%end%>
             <%else%>

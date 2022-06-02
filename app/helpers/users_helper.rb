@@ -1,25 +1,21 @@
 module UsersHelper
   def link_to_image(user)
     return if user.blank?
-    link_to user_path(user.address), class: "author__avatar author__avatar--verified" do
       image_tag url_for(user.profile_image)
-    end
   end
 
   def link_to_name(user)
     return if user.blank?
-    content_tag(:h1, class: "author__name") do
       link_to user.full_name, user_path(user.address)
-    end
   end
+
+
 
   def link_to_twitter(user)
     return if user&.twitter_link.blank?
-    content_tag(:h2, class: "author__nickname") do
       link_to "https://twitter.com/#{user.twitter_link}" do
         "@ #{user.twitter_link}"
       end
-    end
   end
 
   def link_to_bio(user)
@@ -37,8 +33,18 @@ module UsersHelper
     end
   end
 
+  def twitter_url(user)
+    return if user&.twitter_link.blank?
+      "https://twitter.com/#{user.twitter_link}"
+  end
+
   def format_link(url)
     return url if url.match(/\Ahttp[s]{0,1}\:/)
     'https://' + url
   end
+
+  def masked_address(address, first_char=6, last_char=3)
+    "#{address[0..first_char]}...#{address.split(//).last(last_char).join("").to_s}"
+  end
+  
 end

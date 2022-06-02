@@ -1,4 +1,4 @@
-<div id="transferTokenForm" class="zoom-anim-dialog mfp-hide modal sm_modal">
+<div id="transferTokenForm" class="zoom-anim-dialog mfp-hide modal sm_modal transfer-token">
   <button class="modal__close md_cls" type="button"><i class="fas fa-times"></i></button>
   <h4 class="modal-title share_link_page_h4"><%= t('collections.show.transfer_token')%></h4>
   <%= form_tag('#', class: 'change-price-form', id: 'tokenTransferForm') do %>
@@ -31,6 +31,8 @@
 <div id="transferToken" class="zoom-anim-dialog mfp-hide modal sm_modal">
   <button class="modal__close md_cls" type="button"><i class="fas fa-times"></i></button>
   <h4 class="modal-title share_link_page_h4"><%= t('shared.follow_steps')%></h4>
+  <h5><b>Great things take time! But this one will be only a few minutes.</b></h5>
+
   <div class="modal-body">
     <div class="convertEth">
       <%= render partial: 'transferring' %>

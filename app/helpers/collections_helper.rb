@@ -41,9 +41,5 @@ module CollectionsHelper
     
     nft_contract_path(:id => collection.nft_contract.address)
   end
-
-  def is_liked_by_me(collection, user)
-    return collection
-  end
   
 end
