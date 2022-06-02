@@ -2691,7 +2691,14 @@ a.mob-apply-btn {
     line-height: 18px;
     min-width: 120px;
 }
+.User_following-list.active .activity-dropdown-lists#mob-followers .member-detail a span img ,
+.User_following-list.active .activity-dropdown-lists#mob-following .member-detail a span img {margin-top: 0;}
 
+.User_following-list.active .activity-dropdown-lists#mob-followers .member-detail a strong ,
+.User_following-list.active .activity-dropdown-lists#mob-following .member-detail a strong{margin-left: 5px;}
+
+.User_following-list.active .activity-dropdown-lists#mob-followers .member-detail a,
+.User_following-list.active .activity-dropdown-lists#mob-following .member-detail a {align-items: center;}  
 }
 @media only screen and (max-width:928px) and (min-width: 280px){
 
@@ -2733,7 +2740,7 @@ main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
         right: -330px;
     }
     .place-buy-details .highest-bid button{
-        padding: 10px;
+        padding: 10px 20px;
     }
     footer.footer.nft-detail-bottom-footer.section-footer.wide-window {
     padding-bottom: 170px;
@@ -2847,6 +2854,18 @@ box.My_modal.congratulation-modal.open-modal {
 .change-price-popup .modal-footer,.burn-Token .modal-footer{
     flex-flow: row wrap;
     justify-content: center;
+}
+main.NFT-detail.modeling-NFT .modal-description .tabs-panel .tab button {
+ font-size: 16px;
+ width: auto;
+ min-width: auto;
+ padding: 7px 20px;
+}
+
+.tabs-panel #History .member-detail .asset__action,
+.tabs-panel #Bids .member-detail .asset__action {
+ flex-flow: nowrap;
+ margin: 0;
 }
 span.royalty-span{
         top: 4px;
@@ -3109,5 +3128,8 @@ font-size: 20px;
 @media only screen and (max-width:325px) and (min-width: 280px){
 main.main.mt-0.NFT-detail.discover_Page {
     padding: 108px 0 0 0!important;
+}
+.place-buy-details .highest-bid button{
+    padding: 10px;
 }
 }
