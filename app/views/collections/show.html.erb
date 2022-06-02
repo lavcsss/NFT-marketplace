@@ -210,7 +210,7 @@
                       <h5>No bids</h5>
                     <%end%>
                         <% if current_user && current_user.is_approved? %>
-                          <a href="javascript:void(0)" onclick="window.show_modal('#Payment-modal')"><button>Buy for 
+                          <a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal')"><button>Buy for 
                             <i><%= @collection.instant_sale_price%></i> WETH</button></a>
                         <% else %>
                           <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> WETH</button></a>
@@ -394,7 +394,7 @@
                       <h5>No bids</h5>
                     <%end%>
                         <% if current_user && current_user.is_approved? %>
-                          <a href="javascript:void(0)" onclick="window.show_modal('#Payment-modal')"><button>
+                          <a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal')"><button>
                             Buy for <i><%= @collection.instant_sale_price%></i> ETH</button></a>
                         <% else %>
                           <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> ETH</button></a>
@@ -448,6 +448,7 @@
   <%= render partial: 'collections/execute_bid' %>
 <% end %>
 
+<%= render partial: 'collections/buy_modal' %>
 
 <script type="text/javascript">
 
