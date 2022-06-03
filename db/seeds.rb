@@ -15,6 +15,6 @@ Erc20Token.find_or_create_by(chain_id: CHAIN_ID, symbol: 'WETH')
 
 ### CREATING SHARED NFT CONTRACT ADDRESSES
 NftContract.find_or_create_by(contract_type: 'nft721', symbol: 'Shared')
-  .update(name: 'NFT', address: '0x6BD9E90a704F91fb813Fdf756e6141d08fc7172C')
+  .update(name: 'NFT', address: '0xF9aD031c883d7eBB21De3eCD3f2bA25B3912B51e')
 NftContract.find_or_create_by(contract_type: 'nft1155', symbol: 'Shared')
-  .update(name: 'NFT', address: '0x0Ee3CCcCDcDBE432D2B623f326BB93CD5358d153')
+  .update(name: 'NFT', address: '0x15093425Ef7110723FB0A2b3aD9E4eD9681DEA42')

@@ -418,7 +418,7 @@ window.approveNFT = async function approveNFT(contractType, contractAddress, sha
       var receipt = await contractapp.setApprovalForAll(transferProxyContractAddress, true, {from: account});
        receipt = await receipt.wait();
     }
-     if (sendBackTo == 'executeBid') {
+    if (sendBackTo == 'executeBid') {
       return window.approveBidSuccess()
     } else {
       return window.collectionApproveSuccess(contractType, existingToken);
@@ -705,9 +705,10 @@ window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAss
     var receipt = await contract.buyAsset(orderStruct,gon.collection_data["imported"],splitSign(sellerSign, nonce_value),{from: account, gasLimit: 516883, gasPrice: String(gasPrices)});
     receipt = await receipt.wait();
     await updateCollectionBuy(collectionId, buyingAssetQty, receipt.transactionHash)
-    return window.buyPurchaseSuccess(collectionId)
+  return window.buyPurchaseSuccess(collectionId)
   } catch (err) {
-    return window.buyPurchaseFailed(err['message'])
+  console.error(err);
+  return window.buyPurchaseFailed(err['message'])
   }
 }
 
@@ -792,6 +793,7 @@ window.MintAndAcceptBid = async function MintAndAcceptBid(buyer, buyingAssetType
     return window.acceptBidFailed(err['message'])
   }
 }
+
 
 window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAssetAddress, tokenId, paymentAmt, buyingAssetQty, paymentAssetAddress, decimals, buyerSign, collectionId, bidId) {
   try {
