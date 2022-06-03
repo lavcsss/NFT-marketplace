@@ -87,7 +87,7 @@ Rails.application.routes.draw do
   get 'category_filter', to: 'dashboard#set_categories_by_filter'
   get 'gas_price', to: 'dashboard#gas_price'
   get 'collections', to: 'dashboard#collections'
-
+  post '/filter_by', to: 'dashboard#filter_by'
   
 
   ### STATIC PAGES
