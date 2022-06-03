@@ -1380,7 +1380,7 @@ main.main.mt-0.NFT-detail.discover_Page {
     letter-spacing: 0px;
     color: #3C97F2;
     line-height: 20px;
-    padding: 7px 25px;
+    padding: 6px 15px;
     border-radius: 8px;
     cursor: pointer;
     margin: 0 5px 14px 0;
@@ -2184,7 +2184,7 @@ box.My_modal.congratulation-modal.open-modal {
     min-width: 160px;
 }
 .Category-Lists label{
-    padding: 7px 18px;
+    padding: 5px 10px;
 }
 
 }
@@ -2193,7 +2193,7 @@ box.My_modal.congratulation-modal.open-modal {
         padding: 7px 0 ;
     }
     .Category-Lists label{
-            padding: 5px 15px;
+            padding: 5px 10px;
     }
     .discover-profile.profile-tabs.tabs-panel .tabcontent ul li{
         width: 48%;
@@ -2242,7 +2242,7 @@ box.My_modal.congratulation-modal.open-modal {
         padding: 14px;
     }
     .Category-Lists label{
-        padding: 5px 18px;
+        padding: 5px 12px;
     }
     .Category-Lists label button {
     color: #162c5b;
@@ -2360,15 +2360,15 @@ footer.discover-bottom-footer.footer.section-footer.wide-window {
     bottom: 0;
 }
 .User_following-list.active .close-icon {
-    position: fixed;
+position: fixed;
     right: 20px;
-    bottom: 340px;
+    bottom: 210px;
     background: #484848;
-    width: 27px;
-    height: 27px;
+    width: 25px;
+    height: 25px;
     border-radius: 100px;
     box-shadow: 0 0 4px #dddddd91;
-    z-index: 1;
+    z-index: 9999;
 }
 
 .User_following-list.active .activity-dropdown-lists .member-detail a {
@@ -2854,6 +2854,9 @@ box.My_modal.congratulation-modal.open-modal {
 .change-price-popup .modal-footer,.burn-Token .modal-footer{
     flex-flow: row wrap;
     justify-content: center;
+}
+.place-buy-details .highest-bid button{
+        padding: 10px 8px;
 }
 main.NFT-detail.modeling-NFT .modal-description .tabs-panel .tab button {
  font-size: 16px;
