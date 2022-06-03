@@ -1325,7 +1325,7 @@ main.main.mt-0.NFT-detail.discover_Page {
     border-radius: 8px;
     background: #FAFAFA 0% 0% no-repeat padding-box;
     border: 1px solid #E5ECF2;
-    font: normal normal normal 18px Hahmlet;
+    font: normal normal normal 17px Hahmlet;
     letter-spacing: 0px;
     color: #162C5B;
     display: flex;
@@ -1380,14 +1380,14 @@ main.main.mt-0.NFT-detail.discover_Page {
     letter-spacing: 0px;
     color: #3C97F2;
     line-height: 20px;
-    padding: 6px 15px;
+    padding: 6px 12px;
     border-radius: 8px;
     cursor: pointer;
     margin: 0 5px 14px 0;
     transition: 0.5s;
 }
 .Category-Lists label a{
-        font: normal normal normal 16px Hahmlet;
+        font: normal normal normal 14px Hahmlet;
     letter-spacing: 0px;
     color: #3C97F2;
 }
@@ -1920,7 +1920,7 @@ position: absolute;
     letter-spacing: 0px;
     color: #162C5B;
     position: relative;
-    padding-bottom: 10px;
+    padding-bottom: 17px;
     margin-bottom: 20px;
     padding-left: 0;
 }
@@ -1931,7 +1931,7 @@ position: absolute;
     left: 5px;
     bottom: 0;
     width: 120px;
-    height: 1px;
+    height: 2px;
     background: #3C97F2;
 }
 
@@ -1949,7 +1949,17 @@ position: absolute;
     letter-spacing: 0px;
     color: #162C5B;padding: 0;
 }
+.add-span-maximun.sign__group {position: relative;}
 
+.add-span-maximun.sign__group span {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font: normal normal 13px/20px Hahmlet;
+    color: #3C97F2;
+    font-weight: 500;
+    padding-left: 5px;
+    }
 .signle-collectible-item-info .sign__input,
 .signle-collectible-item-info .sign__textarea,
 .signle-collectible-item-info .sign__select {
@@ -1980,7 +1990,19 @@ position: absolute;
     letter-spacing: 0px;
     color: #3C97F2;padding: 0;
 }
+.signle-collectible-item-info .radio-img > input:checked + .image {
+    border: 2px solid #3c97f2;
+}
 
+.signle-collectible-item-info .icon-style-choose-collection span {
+    background: #3c97f2;
+}
+
+.signle-collectible-item-info .para-style-choose-collection p,.signle-collectible-item-info .label-style-choose-collection label {
+    font: normal normal normal 16px/24px Hahmlet;
+    letter-spacing: 0px;
+    color: #86888b;margin: 0;
+}
 .signle-collectible-item-info div .sign__radio label {
     text-align: left;
     font: normal normal normal 16px/24px Hahmlet;
@@ -2101,10 +2123,121 @@ box.My_modal.congratulation-modal.open-modal {
 }
 /*choosen file upload end*/
 
+/*Profile setting css start*/
+main.main.profile-settings {
+    margin-top: 80px!important;
+}
+main.main.profile-settings .container .author__meta {
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 18px;
+    padding: 30px 0;
+    box-shadow: none;
+    border: 0;
+}
+
+main.main.profile-settings .container .author__meta img {
+    max-width: 90%;
+    border-radius: 18px;
+    background: #ddd;
+    margin-bottom: 20px;
+    height: 190px;
+    object-fit: cover;
+    width: 200px;
+}
+
+main.main.profile-settings .container .author__meta a {
+    text-align: left;
+    font: normal normal 20px/20px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+}
+main.main.profile-settings .container .sign__form {
+    border: 0;
+    padding: 20px 30px;
+}
+
+main.main.profile-settings .container .sign__title {
+    text-align: left;
+    font: normal normal bold 24px/30px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;padding: 0;
+}
+
+main.main.profile-settings .container .avatar-upload .avatar-preview > div,
+main.main.profile-settings .container .avatar-upload .avatar-preview {
+    width: 150px;height: 150px;}
+
+main.main.profile-settings .container .sign__label {
+    text-align: left;
+    font: normal normal 15px/28px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;padding: 0;
+}
+
+main.main.profile-settings .container .sign__input {
+    text-align: left;
+    font: normal normal normal 15px/24px Hahmlet;
+    letter-spacing: 0px;
+    color: #8C939A;
+}
+main.main.profile-settings .container  .sign__input:focus{
+    border-color: #3C97F2;
+}
+main.main.profile-settings .container .lik_hold span {
+    bottom: 7px;
+    color: #3C97F2;
+}
+main.main.profile-settings .container .lik_hold.t_link span {
+    top: 40px;
+}
+main.main.profile-settings .container .lik_hold p {
+    text-align: left;
+    font: normal normal normal 13px/18px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+}
+
+main.main.profile-settings .container .sign__btn {
+    background: #3C97F2;
+    border: 1px solid #3C97F2;
+    box-shadow: none;
+    border-radius: 10px;
+    text-align: center;
+    font: normal normal normal 16px/24px Hahmlet;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    width: 200px;
+}
+main.main.profile-settings .container .avatar-upload .avatar-preview .avatar-edit.edit-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: auto;
+    height: auto;
+    padding: 0;
+}
+
+main.main.profile-settings .container .avatar-upload .avatar-preview .avatar-edit.edit-icon label {
+    padding: 0!important;
+    background: #3C97F2 0% 0% no-repeat padding-box;
+    border: #3C97F2;
+}
+main.main.profile-settings .container .avatar-upload .avatar-preview .avatar-edit.edit-icon label img {
+    width: 40px;
+}
+main.main.profile-settings .container  .avatar-edit p {
+  font: normal normal normal 14px/19px Hahmlet;
+  letter-spacing: 0px;
+  color: #162C5B;
+}
+/*Profile setting css end*/
 
 @media screen and (max-width: 9999px) and (min-width: 2501px) {
     main.NFT-detail.modeling-NFT .container,
-    main.choose-upload-file.main .container{
+    main.choose-upload-file.main .container,
+    main.main.profile-settings .container{
          width: 1600px;
     max-width: 1600px;
     padding-left: 0%;
@@ -2140,7 +2273,8 @@ box.My_modal.congratulation-modal.open-modal {
   }
 }
 @media only screen and (max-width:2500px) and (min-width: 280px){
-    main.NFT-detail.modeling-NFT .container {
+    main.NFT-detail.modeling-NFT .container ,
+    main.main.profile-settings .container{
     max-width: 94%;
     width: 94%;
 }
@@ -2184,9 +2318,11 @@ box.My_modal.congratulation-modal.open-modal {
     min-width: 160px;
 }
 .Category-Lists label{
-    padding: 5px 10px;
+padding: 4px 8px;
 }
-
+.Category-Lists label a {
+    font-size: 12px;
+}
 }
 @media only screen and (max-width:1200px) and (min-width: 280px){
     .profile-tabs.tabs-panel.tabs-lists .tab button{
@@ -2739,6 +2875,32 @@ main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
 .bg-effect:before{
         right: -330px;
     }
+    main.main.profile-settings .container .avatar-upload {
+    display: block;
+    text-align: center;
+}
+
+main.main.profile-settings .container .avatar-upload .avatar-preview > div, 
+main.main.profile-settings .container .avatar-upload .avatar-preview {
+    margin: 0 auto;
+}
+
+main.main.profile-settings .container .avatar-edit p {
+    text-align: center;
+}
+
+main.main.profile-settings .container .avatar-upload .avatar-preview .avatar-edit.edit-icon label {
+    width: auto;
+}
+main.main.profile-settings .container .sign__btn {
+    margin: 20px auto;
+}
+    ul.switch_group li.li_inp_grp .inp-grp-flex .sign__group {width: 47%;margin-bottom: 0;}
+
+ul.switch_group li.li_inp_grp .inp-grp-flex {display: flex;
+    align-items: center;
+    justify-content: space-between;}
+
     .place-buy-details .highest-bid button{
         padding: 10px 20px;
     }
@@ -2849,8 +3011,17 @@ span.royalty-span {
 box.My_modal.congratulation-modal.open-modal {
     width: 80%;
 }
+.signle-collectible-item-info .main__title.main__title--create h2 {width: 100%;justify-content: center;}
+
+.signle-collectible-item-info .main__title.main__title--create h2:before {left: 0;right: 0;margin: auto;}
 }
 @media only screen and (max-width:425px) and (min-width: 280px){
+   main.main.profile-settings .container .sign__form{
+    padding: 15px;
+   }
+    .upload-choosen-files .codrops-header .box img{
+    width: 100%;
+}
 .change-price-popup .modal-footer,.burn-Token .modal-footer{
     flex-flow: row wrap;
     justify-content: center;
@@ -2941,8 +3112,10 @@ span.royalty-span{
     font-size: 22px;
 }
 .signle-collectible-item-info .main__title.main__title--create h2{
-font-size: 20px;
-    padding-bottom: 3px;
+    font-size: 20px;
+    line-height: 29px;
+    justify-content: center;
+    text-align: center;
 }
 .modal-body-section p,
 .modal-body-section button,
@@ -2972,7 +3145,9 @@ font-size: 20px;
     font-size: 16px;
 }
 
-.signle-collectible-item-info .sign__label {
+.signle-collectible-item-info .sign__label,
+main.main.profile-settings .container .sign__label,
+main.main.profile-settings .container .sign__input {
     font-size: 14px;
 }
 
@@ -2981,10 +3156,18 @@ font-size: 20px;
     font-size: 13px;
     line-height: 20px;
 }
+main.main.profile-settings .container .sign__title{
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
 }
 @media only screen and (max-width:375px) and (min-width: 280px){
     main.main.mt-0.NFT-detail.profile-Page {
     padding-top: 80px!important;
+}
+.add-span-maximun.sign__group span{
+    font-size: 11px;
 }
 .change-price-popup h4, .sm_modal h4 {
     margin-top: 20px;
@@ -3135,4 +3318,7 @@ main.main.mt-0.NFT-detail.discover_Page {
 .place-buy-details .highest-bid button{
     padding: 10px;
 }
+ .signle-collectible-item-info .sign__btn.create-item {
+    width: 100%;
+ }
 }
