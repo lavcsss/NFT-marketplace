@@ -99,7 +99,7 @@ class Collection < ApplicationRecord
 
   def title
     collection_title = name.camelcase
-    single? ? collection_title : "#{collection_title} - #{total_editions}"
+    #single? ? collection_title : "#{collection_title} - #{total_editions}"
   end
 
   def title_desc

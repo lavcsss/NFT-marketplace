@@ -328,7 +328,7 @@
                      <strong><%= link_to @collection.owner.full_name, user_path(@collection.owner.address)%></strong>
                   </div>
                 </li>
-                <li>
+                <li class="adjst-mrgn">
                   <label>Minted on</label>
                    <a>
                    <strong><%=@collection.created_at.strftime("%b %m,%Y")%></strong>
