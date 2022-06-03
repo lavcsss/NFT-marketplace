@@ -42,6 +42,7 @@
     font-size: 40px;
     font-weight: 400;
     font-family: 'Hahmlet', serif;
+    word-break: break-word;
 
 }
 
@@ -905,6 +906,13 @@ span.edit-profile img {
   overflow: hidden;
   white-space: nowrap;
   width: 83%;
+}
+.profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading a {
+    display: block;
+    max-width: 80%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .auction-heading span {
     margin-left: auto;
@@ -2875,6 +2883,13 @@ main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
 .bg-effect:before{
         right: -330px;
     }
+    .modeling-details.responsive-modeling ul li.adjst-mrgn a strong {
+    line-height: 35px;
+}
+.madeling-heading h5 {
+    word-break: break-word;
+    margin-top: 50px;
+}
     main.main.profile-settings .container .avatar-upload {
     display: block;
     text-align: center;
