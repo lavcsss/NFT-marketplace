@@ -684,9 +684,6 @@ window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAss
     var nonce_value = await getContractSignNonce(collectionId, sellerSign);
     var account = getCurrentAccount()
     // supply, tokenURI, royalty needs to be passed but WILL NOT be used by the Contract
-    var supply = 0;
-    var tokenURI = "abcde";
-    var royaltyFee = 0;
     var orderStruct = [
       assetOwner,
       account,
@@ -696,9 +693,6 @@ window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAss
       unitPrice,
       paymentAmt,
       tokenId,
-      // supply,
-      // tokenURI,
-      // royaltyFee,
       buyingAssetQty
     ]
     var gasPrices = await gasPrice();
@@ -804,9 +798,6 @@ window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAsse
     var account = getCurrentAccount()
     var gasPrices = await gasPrice();
     // supply, tokenURI, royalty needs to be passed but WILL NOT be used by the Contract
-    var supply = 0;
-    var tokenURI = "abcde";
-    var royaltyFee = 0;
     var orderStruct = [
       account,
       buyer,
@@ -816,9 +807,6 @@ window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAsse
       unitPrice,
       paymentAmt,
       tokenId,
-      // supply,
-      // tokenURI,
-      // royaltyFee,
       buyingAssetQty
     ]
     var receipt = await contract.executeBid(orderStruct,gon.collection_data["imported"],splitSign(buyerSign, nonce_value),{from: account, gasLimit: 516883, gasPrice: String(gasPrices)});
