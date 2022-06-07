@@ -340,7 +340,7 @@ window.createCollectible721 = async function createCollectible721(contractAddres
     }
     var tx = await txn.wait();
     var tokenId = parseInt(tx.events[0].topics[tx.events[0].topics.length-1])
-    await updateTokenId(tokenId, collectionId, txn.transactionHash)
+    await updateTokenId(tokenId, collectionId, tx.transactionHash)
     return window.collectionMintSuccess(collectionId)
   } catch (err) {
     console.error(err);
@@ -370,7 +370,7 @@ window.createCollectible1155 = async function createCollectible1155(contractAddr
     }
     var tx = await txn.wait();
     var tokenId = parseInt(tx.events[0].data.slice(0,66))
-    await updateTokenId(tokenId, collectionId, txn.transactionHash)
+    await updateTokenId(tokenId, collectionId, tx.transactionHash)
     return window.collectionMintSuccess(collectionId)
   } catch (err) {
     console.error(err);
