@@ -22,7 +22,7 @@
                 <div class="col-12">
                     <% if @contract.description.present? %>
                         <div class="pt-10 pb-50 section-form">
-                            <p class="inner-token-content-han short_content"><%= @contract.description[0,10]+ '....'%></p>
+                            <p class="inner-token-content-han short_content"><%= @contract.description.truncate(20) %></p>
                             <div class="inner-token-content-han full_content" style="display: none;">
                                 <div class="trix-content">
                                     <div class="content-break"><p><%=@contract.description%></p></div>

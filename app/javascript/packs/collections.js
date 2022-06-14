@@ -109,8 +109,6 @@ $(document).ready(function () {
       } else {
         if ($('#collection_instant_sale_enabled').is(":checked") && (!validFloat($("#instant-price").val()))) {
           return toastr.error('Please enter valid instant price')
-        }else if($("input[name=chooseCollection]").filter(":checked").val()=="create" && mintType == "lazy"){
-          return toastr.error('Lazy Minting disabled with Own Contract');
         } else if ($('#no_of_copies').length && !validNum($('#no_of_copies').val())) {
           return toastr.error('Please enter valid no of copies')
         } else if ($('#no_of_copies').length && $("#no_of_copies")[0].validationMessage !== "") {
@@ -161,8 +159,8 @@ $(document).ready(function () {
   })
 
   window.startContractDeploy = function startContractDeploy(contractType) {
-    var name = $('#nft_contract_name').val().trim();
-    var symbol = $('#nft_contract_symbol').val().trim();
+    var name = $('#nft_contract_name').val();
+    var symbol = $('#nft_contract_symbol').val();
     var desc = $('#nft_contract_desc').val();
     var imageElement = document.getElementById('nft_contract_attachment').files
     var image = null
@@ -188,8 +186,10 @@ $(document).ready(function () {
       });
     } else {
       var compiled_details = getContractABIAndBytecode('', contractType, false); //shared=false
-      var abi = compiled_details['compiled_contract_details']['abi']
+      console.log(compiled_details)
+      var abi = compiled_details['compiled_contract_details']['abi_factory']
       var bytecode = compiled_details['compiled_contract_details']['bytecode']
+      console.log(abi, bytecode, name, symbol, contractType, collectionId)
       contractDeployInit()
       deployContract(abi, bytecode, name, symbol, contractType, collectionId, image, desc, cover_image);
     }
@@ -215,12 +215,22 @@ $(document).ready(function () {
   }
 
   window.contractDeploySuccess = function contractDeploySuccess(contractAddress, contractType) {
+    console.log("Contract Address: " + contractAddress);
     $('.deployProgress').addClass('hide')
     $('.deployProgress').addClass('hide')
     $('.deployDone').addClass('disabledLink').removeClass('hide')
 
     //  OPEN SIGN METHOD
-    initCollectionCreate(contractAddress, contractType)
+    // $('.signDone').addClass('hide')
+    // $('.signStart').addClass('hide')
+    // $('.signProgress').removeClass('hide')
+    console.log(contractAddress, contractType)
+    var MintType = $("input[name=chooseMintType]").filter(":checked").val()
+    if (MintType == 'lazy') {
+      initLazyMint()
+    } else {
+      initCollectionCreate(contractAddress, contractType)
+    }
   }
 
   window.contractDeployFailed = function contractDeployFailed(errorMsg) {
@@ -246,6 +256,7 @@ $(document).ready(function () {
     approveCollection($('#collection_id').val());
     if ($('#collection_instant_sale_enabled').is(":checked")){
      collectionCreateInit(true)
+     console.log('Signing using metamask')
      initsignFixedPriceProcess(true)
     }else{
       toastr.success('Collection created succcessfully.')
@@ -363,6 +374,8 @@ $(document).ready(function () {
     if (details) {
       // tokenID is 0 for Lazy-minting blocks
       const tokenId = is_lazy_minting ? 0 : details['token_id']  
+      console.log(details['unit_price'], details['pay_token_decimal'], details['pay_token_address'],
+        details['token_id'], details['asset_address'], details['collection_id'])
       signSellOrder(details['unit_price'], details['pay_token_decimal'], details['pay_token_address'],
       tokenId, details['asset_address'], details['collection_id'])
     } else {
@@ -370,18 +383,30 @@ $(document).ready(function () {
     }
   }
 
+function updateOwnContractCollection(collectionId) {
+  var request = $.ajax({
+    url: `/collections/${collectionId}/update_state`,
+    type: "POST",
+    async: false,
+    dataType: "script"
+  });
+}
+
   window.bidSignFixedSuccess = function bidSignFixedSuccess(collectionId) {
     toastr.success('Collection created succcessfully.')
     window.location.href = '/collections/' + collectionId
   }
 
-  window.bidSignFixedFailed = function bidSignFailed(errorMsg) {
+  window.bidSignFixedFailed = function bidSignFailed(errorMsg, collectionId='') {
     toastr.error(errorMsg)
     hideAll()
     $('.convertDone').removeClass('hide')
     $('.approveDone').removeClass('hide')
     $('.mintDone').removeClass('hide')
     $('.signFixPriceRetry').removeClass('hide')
+    if (collectionId != ''){
+      updateOwnContractCollection(collectionId)
+    }
   }
 
   $(document).on("click", ".signFixPriceRetry", function () {
@@ -418,6 +443,10 @@ $(document).ready(function () {
     var ethBalance = await window.ethBalance();
     var totalAmt = $("#bid-total-amt-dp").attr('bidAmt')
     var symbol = $('#bid_currency :selected').text();
+    console.log(curErc20Balance)
+    console.log(totalAmt)
+    console.log((isGreaterThanOrEqualTo(curErc20Balance, totalAmt)))
+    console.log(symbol)
     if (isGreaterThanOrEqualTo(curErc20Balance, totalAmt)) {
       $('.convertEth').addClass("hide")
       initApproveBidProcess(contractAddress)
@@ -493,6 +522,8 @@ $(document).ready(function () {
     $('.signbidProgress').removeClass('hide')
     var details = fetchCollectionDetails(null, contractAddress)
     if (details) {
+      console.log(details['asset_address'], details['token_id'], $("#bid_qty").val(), $("#bid-total-amt-dp").attr('bidAmt'),
+        details['pay_token_address'], details['pay_token_decimal'], details['collection_id'], $("#bid-total-amt-dp").attr('bidPayAmt'))
       bidAsset(details['asset_address'], details['token_id'], $("#bid_qty").val(), $("#bid-total-amt-dp").attr('bidAmt'),
         details['pay_token_address'], details['pay_token_decimal'], details['collection_id'], $("#bid-total-amt-dp").attr('bidPayAmt'))
     } else {
@@ -521,6 +552,7 @@ $(document).ready(function () {
 
   // BUYING MODEL STARTS HERE
   $(document).on("click", ".triggerBuyValidation", function (e) {
+    console.log("Collection1: " + gon.collection_data)
     clearToastr();
     e.preventDefault()
     if (!validNum($('#buy_qty').val())) {
@@ -589,6 +621,8 @@ $(document).ready(function () {
   }
 
   window.buyApproveSuccess = function buyApproveSuccess(transactionHash, contractAddress) {
+    console.log("buyApproveSuccess")
+    console.log(contractAddress)
     $('.approvebuyProgress').addClass('hide')
     $('.approvebuyDone').removeClass('hide')
     initPurchaseProcess(contractAddress)
@@ -613,7 +647,13 @@ $(document).ready(function () {
     $('.approvebuyDone').removeClass('hide')
     $('.purchaseProgress').removeClass('hide')
     $('.purchaseAndMintProgress').removeClass('hide')
+    console.log("initPurchaseProcess")
+    console.log(contractAddress)
     var paymentDetails = fetchCollectionDetails(null, contractAddress)
+    console.log(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+      paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy-total-amt-dp").attr('buyAmt')),
+      paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
+      paymentDetails['seller_sign'], paymentDetails['collection_id'])
     if($('#is_collection_lazy_minted').val()=="true"){
       MintAndBuyAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
         paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy-total-amt-dp").attr('buyAmt')),
@@ -668,14 +708,17 @@ $(document).ready(function () {
     $('#erc20ContractAddress').text($(this).attr('erc20ContractAddress'))
     $('#bidId').val($(this).attr('bidId'))
     calculateBidExec($(this))
-     show_modal('#bidDetail')
+    // $("#bidDetail").modal("show")
+    show_modal('#bidDetail')
   })
 
   // EXECUTING BID MODEL HERE
   $(document).on("click", ".triggerExecuteBidValidation", function (e) {
     clearToastr();
     e.preventDefault();
-     show_modal('#executeBid')
+    // $("#bidDetail").modal("hide")
+    // $("#executeBid").modal("show");
+    show_modal('#executeBid')
     initApproveExecBidProcess();
   })
 
@@ -706,7 +749,11 @@ $(document).ready(function () {
   window.initAcceptBidProcess = function initAcceptBidProcess() {
     var contractAddress = $('#erc20ContractAddress').text();
     var paymentDetails = fetchCollectionDetails($('#bidId').val(), contractAddress);
-    var lazyMint = $('#is_collection_lazy_minted').val()
+    console.log(paymentDetails['buyer_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+      paymentDetails['token_id'], toNum(paymentDetails['amount']), toNum(paymentDetails['quantity']),
+      paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
+      paymentDetails['buyer_sign'], paymentDetails['collection_id'])
+      var lazyMint = $('#is_collection_lazy_minted').val()
     if(lazyMint=="true"){
       $('.MintAndacceptBidProgress').removeClass('hide')
       MintAndAcceptBid(paymentDetails['buyer_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
@@ -778,6 +825,8 @@ $(document).ready(function () {
     }
     show_modal('#burnToken');
     qnty = qnty ==-1 ?  paymentDetails['owned_tokens'] : qnty 
+    console.log(paymentDetails['contract_type'], paymentDetails['asset_address'],
+      paymentDetails['token_id'], qnty, paymentDetails['collection_id'], paymentDetails['shared'])
     burnNFT(paymentDetails['contract_type'], paymentDetails['asset_address'],
       paymentDetails['token_id'], qnty, paymentDetails['collection_id'], paymentDetails['shared'])
   }
@@ -812,6 +861,8 @@ $(document).ready(function () {
     } else if (form.checkValidity()) {
       var address = fetchTransferDetails()
       if (address) {
+        // $("#transferTokenForm").modal("hide");
+        // $("#transferToken").modal("show");
         show_modal('#transferToken');
         initTransferProcess($('.transferAddress').val(), $('.transferQuantity').val());
       } else {
@@ -842,6 +893,9 @@ $(document).ready(function () {
 
   window.initTransferProcess = function initTransferProcess(recipientAddress, transferQty) {
     var paymentDetails = fetchCollectionDetails()
+    console.log(paymentDetails['contract_type'], paymentDetails['asset_address'], recipientAddress,
+      paymentDetails['token_id'], transferQty, paymentDetails['collection_id'])
+    console.log(gon.collection_data['contract_shared'])
     if (recipientAddress.toLowerCase() == paymentDetails['owner_address']) {
       toastr.error("You can't transfer your own tokens to you. Please try to transfer to another user.");
       $.magnificPopup.close();
@@ -964,6 +1018,8 @@ $(document).ready(function () {
   function convertEthToWeth(totalAmt, callBackType = 'Bid') {
     $('.allRetry').addClass('hide')
     $('.convertProgress').removeClass('hide')
+    // $("#" + callBackType + "-modal").modal("hide")
+    // $("#place" + callBackType).modal("show")
     $.magnificPopup.close();
     $.magnificPopup.open({
       closeOnBgClick: false ,
@@ -985,6 +1041,7 @@ $(document).ready(function () {
   })
 
   $(document).on("click", ".buy-now", function () {
+    console.log($('#buyContractAddress').text())
     loadTokenBalance($('#buyContractAddress').text(), $('#buyContractDecimals').text());
   })
 
@@ -1081,10 +1138,10 @@ $(document).ready(function () {
   });
   $(document).on('click', '.chooseCollectionType', function (e) {
     if($(this).val() == 'create') {
-      $('#lazy_minting').hide()
+      // $('#lazy_minting').hide()
       $('#chooseMintType_mint').prop('checked', true)
     }else {
-      $('#lazy_minting').show()
+      // $('#lazy_minting').show()
     }
   });
 })

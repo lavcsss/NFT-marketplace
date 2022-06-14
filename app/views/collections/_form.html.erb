@@ -271,12 +271,10 @@
                         <%= radio_button_tag 'chooseMintType', "mint", nil, class: "chooseCollectionErc", :checked => true%>
                         <label for="chooseMintType_mint">Instant Minting</label>
                       </li>
-                      <% if @nft.nil? && false %>>
-                        <li id="lazy_minting">
-                          <%= radio_button_tag 'chooseMintType', "lazy", nil, class: "chooseCollectionNft", disabled: @nft.present? %>
-                          <label for="chooseMintType_lazy">Lazy Minting</label>
-                        </li>
-                      <% end  %>
+                      <li id="lazy_minting">
+                        <%= radio_button_tag 'chooseMintType', "lazy", nil, class: "chooseCollectionNft", disabled: @nft.present? %>
+                        <label for="chooseMintType_lazy">Lazy Minting</label>
+                      </li>
                     </ul>
                   </div>
                 </div>   

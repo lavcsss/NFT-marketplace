@@ -1,4 +1,6 @@
+
 class Collection < ApplicationRecord
+  include Collection::ImportNft
   include Searchable
   include AASM
 
@@ -395,7 +397,8 @@ class Collection < ApplicationRecord
       contract_shared: shared?,
       instant_sale_price: instant_sale_price,
       put_on_sale: put_on_sale,
-      imported: imported
+      imported: imported,
+      owner_address: owner&.address
     }
   end
 

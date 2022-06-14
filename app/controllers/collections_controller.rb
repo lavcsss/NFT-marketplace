@@ -72,7 +72,7 @@ class CollectionsController < ApplicationController
   end
 
   def show
-    import_validate if @collection.imported? rescue
+    @collection.update_imported_nft if @collection.imported?
     @tab = params[:tab]
     @activities = PaperTrail::Version.where(item_type: "Collection", item_id: @collection.id).order("created_at desc")
     @max_bid = @collection.max_bid
@@ -315,48 +315,13 @@ class CollectionsController < ApplicationController
     render json: nonce
   end
 
+  def update_state
+    collection = Collection.find_by_address(params[:id])
+    collection.state = :pending
+    collection.save!
+  end
+
   private
-
-  def import_validate
-    balance = nft_balance
-    if @collection.collection_type == 'single' && @collection.owner.address.downcase != balance.downcase
-      import721 balance
-    elsif @collection.collection_type == 'multiple'
-      import1155 balance
-    end
-  end
-
-  def import721(address)
-    user = User.find_by_address(address.downcase)
-    @collection.update(
-      state: :import_invalid,
-      put_on_sale: false,
-      instant_sale_price: nil,
-      instant_sale_enabled: false,
-      owner: user.present? ? user : @collection.owner
-    )
-  end
-
-  def import1155(balance)
-    return @collection.update(
-      state: :import_invalid,
-      owned_tokens: 0,
-      put_on_sale: false,
-      instant_sale_price: nil,
-      instant_sale_enabled: false
-    ) if balance.nil? || balance.to_i.zero?
-
-    @collection.update(owned_tokens: balance)
-  end
-
-  def nft_balance
-    Utils::Web3.new.check_ownership(
-      @collection.collection_type,
-      @collection.nft_contract.address,
-      @collection.owner.address,
-      @collection.token
-    )
-  end
 
   def lazy_mint_token_update
     # After getting sold, the owner will mint with creators name and transfer
