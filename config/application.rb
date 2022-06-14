@@ -20,6 +20,7 @@ module Rarible
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Font added to the assets
+    config.autoload_paths << Rails.root.join('lib')
     config.assets.paths << Rails.root.join("app", "assets", "fonts")
     config.active_job.queue_adapter = :sidekiq
   end

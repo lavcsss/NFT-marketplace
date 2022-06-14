@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_05_171958) do
+ActiveRecord::Schema.define(version: 2022_06_07_115832) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -182,7 +182,7 @@ ActiveRecord::Schema.define(version: 2022_05_05_171958) do
     t.bigint "owner_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "description"
+    t.text "description"
     t.index ["owner_id"], name: "index_nft_contracts_on_owner_id"
   end
 

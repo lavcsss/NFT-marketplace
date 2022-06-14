@@ -59,6 +59,9 @@ class ApplicationController < ActionController::Base
     gon.transferProxyContractAddress = Settings.transferProxyContractAddress
     gon.wethAddress = Settings.wethAddress
     gon.tradeContractAddress = Settings.tradeContractAddress
+    gon.factoryContractAddressFor721 = Settings.factoryContractAddressFor721
+    gon.factoryContractAddressFor1155 = Settings.factoryContractAddressFor1155
+    gon.deprecatedTransferProxyContractAddress = Settings.deprecatedTransferProxyContractAddress
     gon.wallet = session[:wallet]
     gon.address = session[:address]
     gon.ethereum_provider = Rails.application.credentials.config[:ethereum_provider]

@@ -62,6 +62,7 @@ Rails.application.routes.draw do
       post :get_nonce_value
       post :save_nonce_value
       post :get_contract_sign_nonce
+      post :update_state
     end
   end
 
