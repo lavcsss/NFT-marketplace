@@ -253,31 +253,25 @@ class Collection < ApplicationRecord
       elsif final_qty > 0
         collection = Collection.where(owner_id: new_owner_id, nft_contract_id: nft_contract_id, token: token).first
         if collection && !burn_transfer
-      	  collection.assign_attributes({owned_tokens: (collection.owned_tokens + quantity), no_of_copies: (collection.no_of_copies + quantity),
-                                        transaction_hash: transaction_hash})
+      	  collection.assign_attributes({owned_tokens: (collection.owned_tokens + quantity)})
         else
           collection = self.dup.tap do |destination_package|
             destination_package.attachment.attach(self.attachment.blob)
             destination_package.cover.attach(self.cover.blob) if self.cover.present?
           end
-          collection.assign_attributes({owner_id: new_owner_id, address: self.class.generate_uniq_token, put_on_sale: false, owned_tokens: quantity, instant_sale_price: nil,
-                                       instant_sale_enabled: false, transaction_hash: transaction_hash, no_of_copies: quantity})
+          collection.assign_attributes({owner_id: new_owner_id, address: self.class.generate_uniq_token, put_on_sale: false, owned_tokens: quantity, instant_sale_price: nil, instant_sale_enabled: false})
         end
         collection.save
         quantity_remains = {
           owned_tokens: final_qty, 
-          put_on_sale: final_qty !=0 ? true : false, 
-          instant_sale_price: final_qty !=0 ? instant_sale_price : nil, 
-          instant_sale_enabled: final_qty !=0 ? true : false,
-          token: lazy_minted && final_qty !=0 ? nil : token,
-          transaction_hash: self.transaction_hash,
+          put_on_sale: false, 
+          instant_sale_price: nil, 
+          instant_sale_enabled: false,
+          transaction_hash: transaction_hash
         }
         quantity_remains.merge!({no_of_copies: no_of_copies - quantity}) if burn_transfer
         self.update(quantity_remains)
         redirect_address = collection.address
-        puts "======================"
-        puts collection.address
-        puts self.address
       end
     else
       self.update({owner_id: new_owner_id, put_on_sale: false, instant_sale_price: nil, instant_sale_enabled: false, transaction_hash: transaction_hash })
