@@ -74,7 +74,9 @@
                <li class="wd-100">
                   <label>View proof of authenticity</label>
                   <a target="_blank" href="<%= "https://gateway.pinata.cloud/ipfs/#{@collection.image_hash}" %>"><span><img src="../../assets/nft/modeling/IPES.png" class="nft-coin" /></span><strong>IPFS</strong>  <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>
-                  <a target="_blank" href="<%= "#{Rails.application.credentials.config[:etherscan_url]}/tx/#{@collection.transaction_hash}" %>"><span><img src="../../assets/nft/modeling/eth.png" class="nft-coin" />  </span><strong>Etherscan</strong> <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>           
+                  <% if @collection.transaction_hash.present? %>
+                     <a target="_blank" href="<%= "#{Rails.application.credentials.config[:etherscan_url]}/tx/#{@collection.transaction_hash}" %>"><span><img src="../../assets/nft/modeling/eth.png" class="nft-coin" />  </span><strong>Etherscan</strong> <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>           
+                  <% end %>
                </li>
             </ul>
          </div>
@@ -119,23 +121,27 @@
                </a>
                <ul class="dropdown-menu header__profile-menu" aria-labelledby="dropdownMenuProfile">
                   <% if current_user && current_user.is_approved? %>
-                  <% if @collection.put_on_sale? %>
-                  <li><a href="javascript:void(0)" onclick="window.show_modal('#removeSaleModal')"><%= t('collections.show.remove_from_sale')%></a></li>
+                     <% if @collection.put_on_sale? %>
+                     <li><a href="javascript:void(0)" onclick="window.show_modal('#removeSaleModal')"><%= t('collections.show.remove_from_sale')%></a></li>
+                     <% else %>
+                     <li><a href="javascript:void(0)" class="change-price" onclick="window.show_modal('#change-price')"><%= t('shared.put_on_sale')%></a></li>
+                     <% end %>
+                     <li><a href="javascript:void(0)" class="change-price" onclick="window.show_modal('#change-price')" ><%= t('collections.show.change_price')%></a></li>
+                     <%if !@collection.is_lazy_minted? %>
+                        <li><a href="javascript:void(0)"  class="transfer-token" onclick="window.show_modal('#transferTokenForm')" ><%= t('collections.show.transfer_token')%></a></li>
+                        <li><%= link_to "Burn token", 'javascript:void(0)', 'onclick': "window.show_modal('#burnModal')" %></li>
+                     <% end %>
                   <% else %>
-                  <li><a href="javascript:void(0)" class="change-price" onclick="window.show_modal('#change-price')"><%= t('shared.put_on_sale')%></a></li>
-                  <% end %>
-                  <li><a href="javascript:void(0)" class="change-price" onclick="window.show_modal('#change-price')" ><%= t('collections.show.change_price')%></a></li>
-                  <li><a href="javascript:void(0)"  class="transfer-token" onclick="window.show_modal('#transferTokenForm')" ><%= t('collections.show.transfer_token')%></a></li>
-                  <li><%= link_to "Burn token", 'javascript:void(0)', 'onclick': "window.show_modal('#burnModal')" %></li>
-                  <% else %>
-                  <% if @collection.put_on_sale? %>
-                  <li><a href="" class="show-login-message"><%= t('collections.show.remove_from_sale')%></a></li>
-                  <% else %>
-                  <li><a href="javascript:void(0)" class="show-login-message change-price"><%= t('shared.put_on_sale')%></a></li>
-                  <% end %>
-                  <li><a href="javascript:void(0)" class="show-login-message change-price" ><%= t('collections.show.change_price')%></a></li>
-                  <li><a href="javascript:void(0)"  class="show-login-message transfer-token" ><%= t('collections.show.transfer_token')%></a></li>
-                  <li><a href="javascript:void(0)"  class="show-login-message" ><%= t('collections.show.burn_token')%></a></li>
+                     <% if @collection.put_on_sale? %>
+                        <li><a href="" class="show-login-message"><%= t('collections.show.remove_from_sale')%></a></li>
+                     <% else %>
+                        <li><a href="javascript:void(0)" class="show-login-message change-price"><%= t('shared.put_on_sale')%></a></li>
+                     <% end %>
+                     <li><a href="javascript:void(0)" class="show-login-message change-price" ><%= t('collections.show.change_price')%></a></li>
+                     <%if !@collection.is_lazy_minted? %> 
+                        <li><a href="javascript:void(0)"  class="show-login-message transfer-token" ><%= t('collections.show.transfer_token')%></a></li>
+                        <li><a href="javascript:void(0)"  class="show-login-message" ><%= t('collections.show.burn_token')%></a></li>
+                     <% end %>
                   <% end %>
                </ul>
             </div>
@@ -346,7 +352,9 @@
                <li class="wd-100">
                   <label>View proof of authenticity</label>
                   <a target="_blank" href="<%= "https://gateway.pinata.cloud/ipfs/#{@collection.image_hash}" %>"><span><img src="../../assets/nft/modeling/IPES.png" class="nft-coin" /></span><strong>IPFS</strong>  <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>
-                  <a target="_blank" href="<%= "#{Rails.application.credentials.config[:etherscan_url]}/tx/#{@collection.transaction_hash}" %>"><span><img src="../../assets/nft/modeling/eth.png" class="nft-coin" />  </span><strong>Etherscan</strong> <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>           
+                  <% if @collection.transaction_hash.present? %>
+                     <a target="_blank" href="<%= "#{Rails.application.credentials.config[:etherscan_url]}/tx/#{@collection.transaction_hash}" %>"><span><img src="../../assets/nft/modeling/eth.png" class="nft-coin" />  </span><strong>Etherscan</strong> <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>           
+                  <% end %>
                </li>
             </ul>
          </div>
