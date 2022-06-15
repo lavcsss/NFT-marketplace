@@ -17,7 +17,6 @@ class DashboardController < ApplicationController
   def set_categories_by_filter
     params[:page_no] ||= 1
     @category_collections = params[:query].present? ? Collection.search("*#{build_elastic_search_str(params[:query].strip)}*").records.on_sale : Collection.on_sale
-
     @category_collections = @category_collections.get_with_sort_option(params[:sort_by]) if params[:sort_by]
     @category_collections = @category_collections.where("category like ?", "%#{params[:category]}%") if params[:category].present?
     @category_collections = @category_collections.on_sale.with_attached_attachment.paginate(page: params[:page_no] || 1)

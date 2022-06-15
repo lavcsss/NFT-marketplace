@@ -17,7 +17,8 @@
             <h5><%= @collection.title %></h5>
             <% if @collection.single? %>
             <p>Editions: <strong><%= @collection.total_copies %></strong>
-               <% else %>
+            <% else %>
+            
             <p>Editions: <strong><%= @collection.total_copies %></strong> | Editions Sold: <strong><%= @collection.total_copies_sold %></strong></p>
             <% end %>
          </div>
@@ -155,7 +156,7 @@
          </div>
          <div class="description-panels">
             <div class="member-detail w-50">
-               <label>Creators</label>
+               <label>Creator</label>
                <div class="member-detail_profile_detail">
                   <a>
                   <span>   <%= image_tag @collection.creator.profile_image %>  </span>
