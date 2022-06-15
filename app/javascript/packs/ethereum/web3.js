@@ -405,8 +405,10 @@ function splitSign(sign, nonce) {
   // var s = `0x${sign.slice(64, 128)}`
   // var v = web3.utils.toDecimal(`0x${sign.slice(128, 130)}`)
   // return [v, r, s, nonce]
+  console.log(sign)
   let sig = ethers.utils.splitSignature(sign);
-  return [sig.v,sig.r,sig.s, nonce];
+  console.log(sig);
+  return [sig.v,sig.r, sig.s, nonce];
 }
 
 
@@ -884,13 +886,14 @@ window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAss
     ]
     var gasPrices = await gasPrice();
      console.log("--------step -1-----")
-    var receipt = await contract.buyAsset(orderStruct,gon.collection_data["imported"],splitSign(sellerSign, nonce_value),{from: account, gasLimit: 516883, gasPrice: String(gasPrices)});
+    var receipt = await contract.buyAsset(orderStruct, gon.collection_data["imported"], 
+                                          splitSign(sellerSign, nonce_value),
+                                          {from: account, gasLimit: 516883, gasPrice: String(gasPrices)});
     receipt = await receipt.wait();
      console.log("--------step -2-----")
     await updateCollectionBuy(collectionId, buyingAssetQty, receipt.transactionHash)
      console.log("--------step -3-----")
     return window.buyPurchaseSuccess(collectionId)
-     console.log("--------step -4-----")
   } catch (err) {
     console.log(err);
     return window.buyPurchaseFailed(err['message'])
