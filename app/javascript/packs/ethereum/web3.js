@@ -1098,7 +1098,7 @@ window.getNetworkType = async function getNetworkType() {
    }else{
     var type = await window.provider.getNetwork();
    }
-  return type["name"];
+  return type;
 }
 
 
