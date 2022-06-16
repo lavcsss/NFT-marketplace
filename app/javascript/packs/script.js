@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 $(document).ready(function(){
 
 	window.ethers = ethers;
-  setProvider();
+//   setProvider();
 
   if (window.ethers && window.ethers.providers.Web3Provider) {
      checkNetwork();
@@ -15,9 +15,8 @@ $(document).ready(function(){
 
 	async function checkNetwork() {
     if (window.ethers && window.ethers.providers.Web3Provider) {
-        const network = await provider.getNetwork();
-        console.log("network name  " + network["name"])
-        if (network["name"] === 'rinkeby'){
+        const network = await getNetworkType();
+        if (network === 'rinkeby'){
            $(".loading-gif-network").hide();
             loadBalance();
         } else {
