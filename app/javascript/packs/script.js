@@ -16,7 +16,6 @@ $(document).ready(function(){
 	async function checkNetwork() {
     if (window.ethers && window.ethers.providers.Web3Provider) {
         const network = await getNetworkType();
-		console.log(network);
         if (parseInt(network['chainId']) === 4){
            $(".loading-gif-network").hide();
             loadBalance();
