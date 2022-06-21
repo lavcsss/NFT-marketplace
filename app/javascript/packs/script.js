@@ -115,7 +115,7 @@ $(document).ready(function(){
 				} else if (audExt.includes(ftype)) {
 					$('.coverUpload').removeClass("hide");
 					$('#file-2').prop('required', true);
-					$("#mandatory_symbol").replaceWith("<span id='mandatory_symbol'>*</span>")
+					// $("#mandatory_symbol").replaceWith("<span id='mandatory_symbol'>*</span>")
 					previewSection.hide();
 					previewSection.fadeIn(650);
 					imagePreview.html('<audio width="300" height="300" controls><source src="mov_bbb.mp4" id="audio_here"> </audio>');
@@ -124,7 +124,8 @@ $(document).ready(function(){
 					$('#audio_here').parent()[0].load();
 				} else if (vidExt.includes(ftype)) {
 					$('.coverUpload').removeClass("hide");
-					$('#file-2').prop('required', false);
+					// $('#file-2').prop('required', false);
+					$('#file-2').prop('required', true);
 					previewSection.hide();
 					previewSection.fadeIn(650);
 					imagePreview.html('<video width="300" height="200" controls><source src="mov_bbb.mp4" id="video_here"> </video>');
