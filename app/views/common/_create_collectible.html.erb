@@ -1,0 +1,43 @@
+<Modal>
+   <Box class="My_modal create_collectible" id="create-collectible-modal" >
+      <div class="back-btn">  <img src="/assets/nft/right.svg" alt="Blue_CLOSE" /> Back</div>
+      <div class="close-icon">  <img src="/assets/nft/blue-Close.svg" alt="Blue_CLOSE" /></div>
+      <div class="modal-body-sec">
+         <h6>Create Collectible</h6>
+         <p class="remove-border">Switch between options of single and multiple to choose the count of your NFTs that has to be created and start creating your fortune</p>
+         <ul>
+            <li>
+                <a href="<%= new_collection_path(type: "single")%>">
+                    <div class="choose-single-multiple">
+                        <img src="/assets/nft/modal-img/Single-image.svg" alt="NFT_Modal" />
+                        <button>Single</button>
+                    </div>
+                </a>
+               <p>Choose <a>“Single” </a> if you want your collectible to be one of a kind</p>
+            </li>
+            <li>
+                <a href="<%= new_collection_path(type: "multiple")%>">
+                    <div class="choose-single-multiple">
+                        <img src="/assets/nft/modal-img/multiple-image.svg" alt="NFT_Modal" />
+                        <button>Multiple</button>
+                    </div>
+               </a>
+               <p>Choose<a> “Multiple” </a>if you want to sell one collectible multiple times</p>
+            </li>
+         </ul>
+         <div class="footer-bottom">
+            <p>We do not own your private keys and cannot access your funds without your confirmation..</p>
+         </div>
+      </div>
+   </Box>
+</Modal>
+
+<script>
+
+ $(document).ready(function(){
+     $(".back-btn").click(function(){
+       $("#create-collectible-modal").removeClass("open-modal");
+     });
+   });
+
+</script>

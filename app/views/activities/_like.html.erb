@@ -1,12 +1,12 @@
 <% if activity.event == "create" && activity.item.user.present? && activity.item.collection.present? %>
     <div class="member-detail">
-      <a>
+      <div class="member-user-profile">
           <span> <%= image_tag url_for(activity.item.user.profile_image) %> </span>
-          <strong> 
-            @<%= activity.item.user.full_name %>
+          <div class="user-profile-detail"> 
+            <a href="<%= user_path(activity.item.user.address) %>"> <%= activity.item.user.full_name %></a>
             <em>Liked <%= activity.item.collection.title %></em>
             <i> <%= time_ago_in_words(activity.created_at) %> ago </i>
-          </strong>
-      </a>
+          </div>
+      </div>
     </div>
 <% end %>

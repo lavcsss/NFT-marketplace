@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user, except: [:show]
+  before_action :authenticate_user, except: [:show, :followers_list, :following_list]
   before_action :set_user, only: [:show, :follow, :unfollow, :like, :unlike, :report, :load_tabs]
   skip_before_action :is_approved
   skip_before_action :verify_authenticity_token, only: [:report]
@@ -29,6 +29,7 @@ class UsersController < ApplicationController
     @activity = @user.activity
     @following = @user._following
     @followers = @user._followers
+    @nft_collections = @user.nft_collections
   end
 
   def edit
@@ -45,13 +46,13 @@ class UsersController < ApplicationController
 
   def follow
     Follow.find_or_create_by({follower_id: current_user.id, followee_id: @user.id})
-    redirect_to user_path(@user.address), notice: 'Following successful'
+    render json: {status: "success", following_count:  @user.followees.count, followers_count: @user.followers.count}
   end
 
   def unfollow
     follow = Follow.where({follower_id: current_user.id, followee_id: @user.id}).first
     follow.destroy if follow.present?
-    redirect_to user_path(@user.address), notice: 'Unfollowed successful'
+    render json: {status: "success", following_count:  @user.followees.count, followers_count: @user.followers.count}
   end
 
   def like
@@ -91,10 +92,20 @@ class UsersController < ApplicationController
     @liked = @user.likes
   end
 
+  def followers_list
+    @user = User.find_by(address: params[:id].strip!)
+    @followers = @user.get_collections("followers", params[:filters], 1, @user.address)
+  end
+
+  def following_list
+    @user = User.find_by(address: params[:id].strip!)
+    @following = @user.get_collections("following", params[:filters], 1, @user.address)
+  end
+
   private
 
   def user_params
-    params.require(:user).permit(:name, :bio, :attachment, :twitter_link, :personal_url, :banner)
+    params.require(:user).permit(:name, :bio, :attachment, :twitter_link, :personal_url, :banner, :youtube_link, :facebook_link)
   end
 
   def set_user

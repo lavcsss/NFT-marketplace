@@ -325,7 +325,7 @@ font-weight: 500;
     background: #D9ECFF;
     font-size: 13px;
     border-radius: 100px;
-    padding: 4px 15px;
+    padding: 5px 15px;
     border: 1px solid #3C97F2;
     color: #3C97F2;
     font-family: Hahmlet;
@@ -334,8 +334,8 @@ font-weight: 500;
     align-items: center;
     cursor: pointer;
         position: absolute;
-    left: 20px;
-    top: 20px;
+    top: 14px;
+    left: 14px;
 }
 .back-btn img {
     max-width: 20px;
@@ -496,6 +496,196 @@ box.My_modal.steps-approve.open-modal {
 border-radius: 26px;
 color: #fff;
 }
+
+/*
+notification css start*/
+box.My_modal.notify-inbox-message.open-modal {
+    width: 500px;
+}
+
+.notify-heading {
+    text-align: left;
+    font: normal normal bold 25px/30px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    }
+
+.about-notification {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 0px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #E2E2E2;
+    border-radius: 5px;
+    padding: 10px;
+    border-left: 5px solid #e2e2e2;
+}
+
+.info-detail {
+    margin-left: 12px;
+}
+
+.info-detail h6 {
+    text-align: left;
+    font: normal normal normal 20px/24px Hahmlet;
+    letter-spacing: 0px;
+    color: #3C97F2;margin: 0;
+}
+
+.info-detail p {
+    text-align: left;
+    font: normal normal normal 15px/25px Hahmlet;
+    letter-spacing: 0px;
+    color: #162C5B;
+    opacity: 1;margin: 0;
+}
+
+.about-notification img {
+    width: 45px;
+    border-radius: 50%;
+    height: 45px;
+}
+.about-notification.active {
+    border: 1px solid #3C97F2;
+    border-left: 5px solid #3C97F2;
+}
+.about-notification  img.notify-clear,
+.about-notification.active img.notify-icon{
+    display: none;
+}
+
+.about-notification.active img.notify-clear {
+  display: block;
+}
+
+.notify-msg-box p.notify-time {
+    text-align: right;
+    font-size: 13px;
+    letter-spacing: 0px;
+    color: #8C939A;
+}
+box.My_modal.notify-inbox-message.open-modal .modal-body-section {
+  max-height: 320px;
+  overflow: auto;
+  padding-right: 10px;
+}
+
+/*notification css end*/
+box.My_modal.notify-inbox-message.share-media.open-modal .notify-heading {color: #000000;font-size: 20px;text-align: center;}
+
+box.My_modal.notify-inbox-message.share-media.open-modal .about-notification {
+      border: 0;
+    padding: 0;
+    justify-content: center;
+    margin: 10px 10px 30px 10px;
+}
+box.My_modal.notify-inbox-message.share-media.open-modal .about-notification img {width: 36px;margin: 0 7px;}
+
+box.My_modal.notify-inbox-message.share-media.open-modal {width: 410px;}
+box.My_modal.notify-inbox-message.share-media.open-modal button {background: #fff;border: 1px solid #3C97F2;color: #3C97F2;background: #E3F1FF;border-radius: 30px;padding: 10px;min-width: 170px;}
+
+box.My_modal.notify-inbox-message.share-media.open-modal button img {width: 20px;margin-right: 10px;}
+.contract-detail-popup .sm_modal h4 {
+    text-align: center;
+     font: normal normal 26px/30px Hahmlet;
+     letter-spacing: 0px;
+     color: #162C5B;
+    font-weight: 500;
+}
+.contract-detail-popup .sign__label {
+    padding: 0;
+    text-align: left;
+     font: normal normal 15px/27px Hahmlet;
+     letter-spacing: 0px;
+     color: #162C5B;
+}
+
+.contract-detail-popup input[type="file" i] {
+    padding: 3px 5px;
+}
+.contract-detail-popup .box {
+    margin-bottom: 15px;
+}
+.contract-detail-popup button.sign__btn.modal__close.md_cls {
+    background: #fff;
+    color: #3C97F2;
+}
+.contract-detail-popup .sign__btn {
+    min-width: 200px;
+    width: auto;
+    margin: 0;
+    border-radius: 8px;
+    font: normal normal bold 16px/37px Hahmlet;
+}
+.contract-detail-popup button.sign__btn.btn.btn-primary.createOwnErc721Form {
+    margin-left: auto;
+}
+.choose-file-design {
+    position: relative;
+}
+
+ span.choose-file {
+    position: absolute;
+    left: 0;
+}
+ .choose-imgaes {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    background: #fff;
+    border-radius: 5px;
+    height: 97%;
+    width: 99%;
+    bottom: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    padding-left: 6px;
+}
+
+.choose-imgaes span {
+    background: #F2F2F2 0% 0% no-repeat padding-box;
+     border: 1px solid #E2E2E2;
+     border-radius: 5px;
+     text-align: left;
+     font: normal normal 14px/24px Hahmlet;
+     letter-spacing: 0px;
+     color: #162C5B;
+    padding: 2px 11px;
+}
+ .choose-imgaes em {
+    text-align: left;
+     font: normal normal 14px/25px Hahmlet;
+     letter-spacing: 0px;
+     color: #162C5B;
+     opacity: 0.5;
+    font-weight: 500;
+    margin-left: 16px;
+}
+.contract-detail-popup .sign__input {
+    color: #162C5B;
+    opacity: 0.5;
+}
+.contract-detail-popup .modal-footer {
+    margin-top: 20px;
+}
+
+.contract-detail-popup [type="file"]::-webkit-file-upload-button {
+  background: #F2F2F2 0% 0% no-repeat padding-box;
+border: 1px solid #E2E2E2;
+  border-radius: 5px;
+  color: #162C5B;
+  cursor: pointer;
+  font: normal normal 14px/25px Hahmlet;
+  outline: none;
+  padding: 3px 12px;
+  transition: all 1s ease;
+  font-weight:500;
+  opacity: 1;
+}
+
 @media screen and (max-width: 991px) and (min-width: 768px) {
   .My_modal.open-modal{
     width: 730px;
@@ -506,14 +696,15 @@ color: #fff;
 }
 @media screen and (max-width: 767px) and (min-width: 280px) {
 
-  .My_modal {
+  .My_modal ,
+  box.My_modal.notify-inbox-message.open-modal{
     width: 90%;
-    height: calc(100% - 200px);
+    height: calc(100% - 120px);
     overflow: auto;
+    margin-top: 20px;
   }
-  box.My_modal.steps-approve.open-modal{
-    height: auto;
-  }
+  box.My_modal.steps-approve.open-modal,
+  box.My_modal.notify-inbox-message.open-modal {height: auto;}
   box.My_modal.steps-approve.open-modal ul li{
     box-shadow: none;
     margin-top: 0;
@@ -549,30 +740,73 @@ color: #fff;
   .My_modal.create_collectible.open-modal .modal-body-sec ul li{
     width: 60%;
   }
+  contract-detail-popup .sign__btn {
+    min-width: 160px;
+}
 }
 @media screen and (max-width: 425px) and (min-width: 280px) {
   .My_modal ul li img {
     width: 60px;
   }
+  .contract-detail-popup .sign__btn{
+    min-width: 150px;
+    font-size: 14px;
+    padding: 0 10px;
+  }
+  box.My_modal.notify-inbox-message.share-media.open-modal{
+    width: 90%;
+  }
+  box.My_modal.notify-inbox-message.share-media.open-modal .about-notification img{
+        width: 34px;
+    margin: 0px;
+  }
+  box.My_modal.notify-inbox-message.share-media.open-modal .about-notification{
+        justify-content: space-between;
+    margin: 5px 0 30px 0;
+  }
+ box.My_modal.notify-inbox-message.share-media.open-modal .modal-body-section{
+    padding: 0;
+  }
+  box.My_modal.notify-inbox-message.share-media.open-modal button{
+    min-width: 140px;
+    padding: 6px;
+  }
+  box.My_modal.notify-inbox-message.share-media.open-modal .modal-body-section{
+    padding: 0;
+  }
   .My_modal ul li h6 {
     font-size: 14px;
   }
-  .My_modal ul li p {
+  .My_modal ul li p ,
+  .notify-msg-box p.notify-time{
     font-size: 12px;
   }
   .My_modal.payment-modal.MuiBox-root.css-0 {
     width: 90%;
     height: auto;
   }
-  .My_modal.payment-modal.MuiBox-root.css-0 .payment-details h5 {
+.info-detail h6{
+  font-size: 15px;
+}
+.info-detail p{
+  font-size: 13px;
+}
+.about-notification img{
+  width: 48px;
+}
+
+  .My_modal.payment-modal.MuiBox-root.css-0 .payment-details h5,
+    .notify-heading ,.sm_modal h4{
     font-size: 19px;
   }
   .My_modal.payment-modal.MuiBox-root.css-0 .payment-details p,
   .My_modal.create_collectible.open-modal .modal-body-sec p,
-  .My_modal.create_collectible.open-modal .modal-body-sec ul li p {
+  .My_modal.create_collectible.open-modal .modal-body-sec ul li p ,
+  .follow-step-content .head{
     font-size: 14px;
   }
-  .My_modal.payment-modal.MuiBox-root.css-0 .payment-details a {
+  .My_modal.payment-modal.MuiBox-root.css-0 .payment-details a ,
+  .follow-step-content .text{
     font-size: 12px;
   }
   .My_modal .form-grid .nft-details {
@@ -606,6 +840,49 @@ color: #fff;
   .My_modal ul li .input-wrap {
     bottom: 18px;
   }
-}
+  .change-price-popup .modal-footer .bidding-element-btn, .burn-Token .modal-footer .bidding-element-btn{
+    margin: 10px 0 0 6px;
+    min-width: 71px;
+    padding: 8px 7px!important;
+    font-size: 12px;
+  }
+  .change-price-popup h4, .sm_modal h4{
+    font-size: 20px;
+  }
+  .modal-body label, .modal-body p, .sign__input{
+    font-size: 13px;
+  }
+  box.My_modal.notify-inbox-message.share-media.open-modal button{
+        min-width: 130px;
+    padding: 5px;
+    font-size: 13px;
+  }
+  box.My_modal.notify-inbox-message.share-media.open-modal button img{
+    margin-right: 2px;
+  }
+  box.My_modal.create_collectible.open-modal ul li .choose-single-multiple{
+        transform: scale(0.8);
+  }
+  .My_modal.create_collectible.open-modal .modal-body-sec ul{
+    padding: 10px;
+  }
+  .contract-detail-popup .sign__btn
+  {
+       min-width: 125px;
+    line-height: unset;
 
+  }
+}
+@media screen and (max-width: 319px) and (min-width: 280px) {
+box.My_modal.notify-inbox-message.share-media.open-modal .about-notification img{
+  width: 27px;
+
+}
+.contract-detail-popup .sign__btn{
+      min-width: auto;
+    font-size: 13px;
+    padding: 0 20px;
+    line-height: unset;
+}
+}
 /*NFT Modal end*/

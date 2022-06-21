@@ -60,6 +60,10 @@ class User < ApplicationRecord
                                   where(id: buyer_ids).includes(:buyings).order(Arel.sql("field(id, #{buyer_ids.join(',')})"))
                                 end
                             }
+  
+  validates_length_of :bio, :maximum => 500
+  validates_length_of :name, :maximum => 23
+
 
   def self.default_image
     '/assets/default_user.png'
@@ -317,6 +321,10 @@ class User < ApplicationRecord
 
   def _followers
     followers.includes(attachment_attachment: :blob).paginate(page: 1)
+  end
+
+  def nft_collections
+    Api::NftCollections::nft_collections(address, 1)
   end
 
   def self.validate_user address

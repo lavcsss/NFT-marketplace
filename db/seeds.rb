@@ -18,3 +18,10 @@ NftContract.find_or_create_by(contract_type: 'nft721', symbol: 'Shared')
   .update(name: 'NFT', address: '0x561d7Cb8628A7E661f47Fe0ef0c0a676546b781E')
 NftContract.find_or_create_by(contract_type: 'nft1155', symbol: 'Shared')
   .update(name: 'NFT', address: '0xAAab06CdC8A4Ff6B04F58EA59BE9014B7b0717cD')
+
+  # SEEDING CELEBRITY USER DATA
+  celebrity_data = JSON.parse(File.read('app/assets/static/celebrity.json'))
+  celebrity_data.each do |item|
+    Celebrity.find_or_create_by(title: item["title"]).update(asset: item["asset"],
+       description: item["description"], redirect_link: item["redirect_link"])
+  end

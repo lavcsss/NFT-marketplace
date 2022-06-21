@@ -1,75 +1,53 @@
-<section class="user_banner_sec">
-    <div class="image-bg-token" style="background: url(<%= @contract.cover_url%>)"></div>
-</section>
-<section class="token-constructions">
-    <div class="container">
-        <div class="row han-token">
+<main class="NFT-detail test-collection">
+   <section class="user_banner_sec">
+      <div class="image-bg-token" style="background: url(<%= @contract.cover_url%>)"></div>
+   </section>
+   <div class="container bg-effect">
+      <section class="token-constructions">
+         <div class="row han-token">
             <div class="col-12">
-                <div class="token-constructions-details">
-                    <div class="token-constructions-image">
-                        <img class="img-responsive" src="<%= @contract.attachment_url%>">
-                    </div>
-                </div>
+               <div class="token-constructions-details">
+                  <div class="token-constructions-image">
+                     <img class="img-responsive" src="<%= @contract.attachment_url%>">
+                  </div>
+               </div>
             </div>
-        </div>
-        <div class="contract-divider text-center">
+         </div>
+         <div class="contract-divider text-center">
             <div class="row">
-                <div class="col-12 dis-heading-width">
-                    <h3 class="cluster_name_heading"><%= @contract.name%></h3>
-                </div>
+               <div class="col-12 dis-heading-width">
+                  <h3 class="cluster_name_heading"><%= @contract.name%></h3>
+               </div>
             </div>
             <div class="row">
-                <div class="col-12">
-                    <% if @contract.description.present? %>
-                        <div class="pt-10 pb-50 section-form">
-                            <p class="inner-token-content-han short_content"><%= @contract.description.truncate(20) %></p>
-                            <div class="inner-token-content-han full_content" style="display: none;">
-                                <div class="trix-content">
-                                    <div class="content-break"><p><%=@contract.description%></p></div>
-                                </div>
-                            </div>
-                            <span class="readMrBtnBlk">
-                                <a href="javascript:void(0);" class="readmore-btn anchor-read"><i class="fa fa-angle-down" aria-hidden="true"></i></a>
-                                <a href="javascript:void(0);" class="readless-btn anchor-read" style="display: none;"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
-                            </span>
-                        </div>
-                    <% end %>
-                </div>
+               <div class="col-12">
+                  <% if @contract.description.present? and @contract.description.length > 150 %>
+                     <p class="contract-desc textControl"> <%= @contract.description.length %> </p>
+                  <% elsif @contract.description.present? and @contract.description.length < 150 %>
+                     <p class="contract-desc"> <%= @contract.description %> </p>
+                  <% end %>
+               </div>
             </div>
-        </div>
-        
-        <div class="row row--grid pb-50">
-            <div class="col-12 mb-20">
-                <h3 class="h3-recent-list">Recently Listed</h3>
+         </div>
+         <div class=" mb-20">
+            <h3 class="h3-recent-list">Recently Listed</h3>
+         </div>
+         <div class="profile-tabs tabs-panel">
+            <div class="tabcontent">
+               <ul>
+               <%if @tokens.present?%>
+               <%@tokens.each do |collection|%>
+               <%= render "dashboard/collection_card", collection: collection %>
+               <%end%>
+               <%else%>
+               <div class="celebrity-no-data-found">
+               <p> No result found! </p>
+               </div>
+               <%end%>
+               </ul>
             </div>
-            <%if @tokens.present?%>
-              <%@tokens.each do |collection|%>
-                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-                  <%= render "dashboard/collection_card_old", collection: collection %>
-                </div>
-              <%end%>
-            <%else%>
-              <% 4.times do %>
-                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-                  <%= render partial: 'common/empty_card_collection' %>
-                </div>
-              <%end%>
-            <%end%>
-          </div>
-    </div>
-</section>
-
-<script type="text/javascript">
-    $(".readmore-btn").click(function(){
-        $(".short_content").css("display","none");
-        $('.full_content').css("display","block");
-        $(this).css("display","none");
-        $('.readless-btn').css("display","block");
-    });
-    $(".readless-btn").click(function(){
-        $(".full_content").css("display","none");
-        $('.short_content').css("display","block");
-        $(this).css("display","none");
-        $('.readmore-btn').css("display","block");
-    });
-</script>
+         </div>
+   </div>
+   </section>
+   </div>
+</main>

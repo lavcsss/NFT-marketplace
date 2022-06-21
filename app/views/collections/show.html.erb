@@ -1,6 +1,7 @@
 <% is_collection_owner = @collection.is_owner?(current_user) %>
 <%= hidden_field_tag 'collection_id', @collection.address %>
 <%= hidden_field_tag 'is_collection_lazy_minted', @collection.is_lazy_minted? %>
+<span hidden="hidden" id="contract_address">  <%= @collection.nft_contract&.address %> </span> 
 <span id="eth_balance" class="curEthBalance hide">0.0</span>
 <span id="erc20_balance" class="curErc20Balance hide">0.0</span>
 <span id="BuyerserviceFee" class="hide"><%= buyer_service_fee %></span>
@@ -30,13 +31,12 @@
             <%elsif ['video/mp4', 'video/webm'].include?(@collection.attachment.content_type)%>         
             <%= attachment_tag(@collection) %>
             <%else%>         
-              <div class="add-expand-btn">
-                <%= attachment_tag(@collection) %>
-                <div class="expand-btn">
+                <div class="add-expand-btn">
+                  <img data-enlargeable src="<%= url_for(@collection.attachment) %> " class="img-responsive" />
+                  <div class="expand-btn">
                     <img src="../../assets/nft/maximize.svg">
-                    <!-- <img src="../../assets/nft/minimize.svg"> -->
-                </div>
-              </div>
+                  </div> 
+               </div>
             <%end%>
             <ul class="web-modeling-detail-menus">
                <div class="modal-sub-heading">
@@ -57,7 +57,10 @@
                </li>
                <li class="remove-ellipses">
                   <label>Contract Address</label>
-                  <a><strong><%=@collection.contract_address%></strong></a>
+                  <a>
+                     <strong><%=@collection.contract_address%></strong>
+                     <img src="../../assets/nft/modeling/copy.png" class="copy_address">
+                  </a>
                </li>
                <!-- <li>
                   <label>Token ID</label>
@@ -106,6 +109,7 @@
                   </a>
                </li>
             </ul>
+            
             <%= react_component("collections/like", address: current_user&.address, likes: @collection.likes, collectionId: @collection.id, 
                liked: @collection.is_liked_by_me(current_user&.id)) %>
             <% if current_user && @collection.is_owner?(current_user) %>
@@ -180,9 +184,9 @@
                   <%= image_tag "image-4.jpg" %>
                   <% end %>
                   <% if @collection.own_collection.present? %>
-                  <i><a><%= @collection.contract_name %></a></i>
+                  <i><a href="<%=nft_contract_path(@collection.collection_address)%>"><%= @collection.contract_name %></a></i>
                   <% else %>                    
-                  <i><a><%= @collection.collection_info_name %></a></i>
+                  <i><a href="<%=nft_contract_path(@collection.collection_address)%>"><%= @collection.collection_info_name %></a></i>
                   <% end %>
                   </a>
                </div>
@@ -238,9 +242,9 @@
                <h6>Price</h6>
                <% if current_user && current_user.is_approved? %>
                <a>
-                  <h5> 
+                  <button> 
                      <i><%= @collection.instant_sale_price%></i> WETH <%= @collection.title_desc_detail %>
-                  </h5>
+                  </button>
                </a>
                <% else %>
                <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> WETH</button></a>
@@ -290,7 +294,7 @@
                   <%= render "activities/collection_card_activity", activity: activity %>
                   <% end %>
                   <% else %>
-                  <%= render partial: 'common/empty_card_collection' %>
+                  <p> No History yet! </p>
                   <% end %>
                </div>
             </div>
@@ -333,9 +337,12 @@
                   <strong><%=@collection.created_at.strftime("%b %m,%Y")%></strong>
                   </a>
                </li>
-               <li  class="remove-ellipses">
+              <li class="remove-ellipses">
                   <label>Contract Address</label>
-                  <a><strong><%=@collection.contract_address%></strong></a>
+                  <a>
+                     <strong><%=@collection.contract_address%></strong>
+                     <img src="../../assets/nft/modeling/copy.png" class="copy_address">
+                  </a>
                </li>
                <!-- <li>
                   <label>Token ID</label>
@@ -392,9 +399,9 @@
       <%end%>
       <% if current_user && current_user.is_approved? %>
       <a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal')" class="buy-now"><button>
-      Buy for <i><%= @collection.instant_sale_price%></i> ETH</button></a>
+      Buy for <i><%= @collection.instant_sale_price%></i> WETH</button></a>
       <% else %>
-      <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> ETH</button></a>
+      <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> WETH</button></a>
       <% end %>
    </div>
    <%end%>        
@@ -495,6 +502,20 @@
       e.preventDefault();
       $.magnificPopup.close();
     });
+
+      $(document).ready(function(){
+       $(".copy_address").click(function(){
+           var copyText = document.getElementById("contract_address").innerText;
+           console.log(copyText);
+           var dummyText = document.createElement('input');
+           document.body.appendChild(dummyText);
+           dummyText.value = copyText;
+           dummyText.select();
+           document.execCommand("copy", false);
+           dummyText.remove();
+           toastr.success('Address Copied Successfully!')
+       });
+     });
    
    });
    function openCity(evt, cityName) {
@@ -548,38 +569,37 @@
         return false;
     });
    });
-   
+
+  
    $('.expand-btn').click(function() {
-   $("img[data-enlargeable]").trigger( "click");
-   });
-   
-   $('img[data-enlargeable]').addClass('img-enlargeable').click(function() {
-   var src = $('img[data-enlargeable]').attr('src');
-   var modal;
-   
-   function removeModal() {
-    modal.remove();
-    $('body').off('keyup.modal-close');
-   }
-   modal = $('<div>').css({
-    background: 'RGBA(0,0,0,.5) url(' + src + ') no-repeat center',
-    backgroundSize: 'contain',
-    width: '100%',
-    height: '100%',
-    position: 'fixed',
-    zIndex: '10000',
-    top: '0',
-    left: '0',
-    cursor: 'zoom-out'
-   }).click(function() {
-    removeModal();
-   }).appendTo('body');
-   //handling ESC
-   $('body').on('keyup.modal-close', function(e) {
-    if (e.key === 'Escape') {
-      removeModal();
-    }
-   });
+         var src = $('img[data-enlargeable]').attr('src');
+         var modal;
+         var close_tag;
+         modal = $('<div>').css({
+            background: 'RGBA(0,0,0,.5)',
+            width: '100%',
+            height: '100%',
+            position: 'fixed',
+            zIndex: '10000',
+            top: '0',
+            left: '0',
+            cursor: true, 
+         }).addClass("enlarged-bg").appendTo('body');
+         image_tag =  "<img src=" + src + " class='enlarged-img'/> <div class='expand-btn minimize-btn'> <img src='../../assets/nft/minimize.svg' /> </div>"
+         $(".enlarged-bg").append(image_tag);
+         
+
+         function removeModal() {
+            modal.remove();
+            $('body').off('keyup.modal-close');
+         }
+
+         $(document).mouseup(e => {
+            if ($('div').is(e.target) || $('.minimize-btn').click())
+            {
+               removeModal();
+            }
+         })
    });
    
 </script>

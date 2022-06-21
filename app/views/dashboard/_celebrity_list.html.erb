@@ -1,0 +1,14 @@
+<% if celebrity_data.present? %>
+    <% celebrity_data.each do |celebrity| %>
+        <div class="celebrity-img-info">
+        <a href="<%= celebrity.redirect_link %>" target="_blank" class="navigate-to-Link"></a>
+        <img src="<%= celebrity.asset%>" alt="NFT_IMG_1" />
+        <h6><%= celebrity.title%></h6>
+        <p><%= celebrity.description%></p>
+        </div>
+    <% end %>
+<% else %>
+    <div class="celebrity-no-data-found">
+        <p> No result found! </p>
+    </div>
+<% end %>

@@ -75,10 +75,10 @@
                     <div id="Price_Range" class="tab-pane fade" >
                       <div class="Category-Lists">
                            <div class="member-detail">
-                             <a>
+                             <div class="member-user-profile">
                             <span>   <img src="../../assets/nft/banner-img/cc20c8bbceaa457718feb98ed273299c.png" alt="NFT_IMG_1" />  </span>
-                            <strong>ShannonRose</strong>
-                           </a>
+                           <div class="user-profile-detail"> <a>ShannonRose</a></div>
+                          </div>
                          </div>  
                          <div class="min-to-max">
                            <button><input placeholder="Min"></button>
@@ -253,10 +253,10 @@
                     <div id="Price_Range" class="tab-pane fade" >
                       <div class="Category-Lists">
                            <div class="member-detail">
-                             <a>
+                             <div class="member-user-profile">
                             <span>   <img src="../../assets/nft/banner-img/cc20c8bbceaa457718feb98ed273299c.png" alt="NFT_IMG_1" />  </span>
-                            <strong>ShannonRose</strong>
-                           </a>
+                            <div class="user-profile-detail"> <a>ShannonRose</a></div>
+                           </div>
                          </div>  
                          <div class="min-to-max">
                            <button><input placeholder="Min"></button>
@@ -364,26 +364,26 @@ function filterRecords(){
     }
   })
     var url = "/filter_by"
-  var request =  $.ajax({
-     url: url,
-     type: "post",
-     dataType: "json",
-     async: false,
-     data: {category:category}
-   })
-request.done(function (response) {
- 
- if(response.filter_data='success'){
-    location.reload()
- }else{
-   $("#nft_collection").html('<p> No records found! </p>');
-   $(".count_record").html("(0 Result)")
- }
+    var request =  $.ajax({
+      url: url,
+      type: "post",
+      dataType: "json",
+      async: false,
+      data: {category:category}
+    })
+  request.done(function (response) {
+  
+  if(response.filter_data='success'){
+      location.reload()
+  }else{
+    $("#nft_collection").html('<p> No records found! </p>');
+    $(".count_record").html("(0 Result)")
+  }
 
-  });
-request.fail(function () {
- toastr.error('Something Went Wrong!')
-});  
+    });
+  request.fail(function () {
+  toastr.error('Something Went Wrong!')
+  });  
 
 }
 

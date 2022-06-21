@@ -1,0 +1,46 @@
+[{
+    "asset":"../../assets/nft/exclusive-celebrity/David_Bowie.png",
+    "title":"BowieWorld Genesis",
+    "description": "3D Multi-User Metaverses since '99", 
+    "redirect_link": "https://nft.crosstower.com/nft_contracts/0xAa58e6e4d53D00B79566de4782fE9d39acD1CEB2"
+},
+
+{
+    "asset":"../../assets/nft/exclusive-celebrity/Antara.png",
+    "title":"Antara Movie NFT's",
+    "description": "The History Making NFT", 
+    "redirect_link": "https://antara.crosstower.com/"
+}, 
+
+
+{
+    "asset":"../../assets/nft/exclusive-celebrity/Mike Boornazian.png",
+    "title":"Mike Boornazian",
+    "description": "An American Actor, Model and Influencer", 
+    "redirect_link": "https://nft.crosstower.com/users/0x0a98bbcdada014f0d0d2ea9f5d9551dcf35b7ae3"
+}, 
+
+
+{
+    "asset":"../../assets/nft/exclusive-celebrity/Patrick Farrell.png",
+    "title":"Patrick Farrell",
+    "description": "A community builder, Tech company founder", 
+    "redirect_link": "https://nft.crosstower.com/users/0xa86a6321ce1d95b4e96e6a48658e48d2741d6814"
+},
+
+
+{
+    "asset":"../../assets/nft/exclusive-celebrity/ShannonRoseStudio.png",
+    "title":"SharonRose",
+    "description": "Paintings and Mixed Media Artworks", 
+    "redirect_link": "https://nft.crosstower.com/users/0xd081af35f73dd206d47462ea5e41e75a05df4509"
+}, 
+
+{
+    "asset":"../../assets/nft/exclusive-celebrity/Alejandro Glatt.png",
+    "title":"Alejandro Glatt",
+    "description": "Tulum Based Multidisciplinary Artist", 
+    "redirect_link": "https://nft.crosstower.com/users/0x98502f2831b2f7be79fe4e14db1ce536b576294e"
+}
+
+]

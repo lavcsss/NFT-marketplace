@@ -225,6 +225,10 @@ class Collection < ApplicationRecord
     self.nft_contract.owner_id
   end
 
+  def collection_address
+    self.nft_contract.address
+  end
+
 
   def place_bid(bidding_params)
     details = bidding_params[:details]

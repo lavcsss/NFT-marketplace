@@ -46,5 +46,14 @@ module UsersHelper
   def masked_address(address, first_char=6, last_char=3)
     "#{address[0..first_char]}...#{address.split(//).last(last_char).join("").to_s}"
   end
+
+  def notification_image_url(image_url)
+    if image_url.match(/\Ahttp[s]{0,1}\:/)
+      index_pt = image_url.index('/rails')  
+      Rails.application.credentials.config[:app_url] + image_url[index_pt..-1]
+    else
+      image_url
+    end   
+  end
   
 end

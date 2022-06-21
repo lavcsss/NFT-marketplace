@@ -109,13 +109,13 @@ $(document).ready(function(){
 					previewSection.hide();
 					previewSection.fadeIn(650);
 					imagePreview.css('background-image', 'url('+e.target.result +')');
-					imagePreview.css({ 'height': '225px' });
+					imagePreview.css({ 'height': '610px' });
+					document.getElementById("drop-img").className = "drop-file-img";  
 				} else if (coverImg) {
 					return toastr.error('Invalid file type!');
 				} else if (audExt.includes(ftype)) {
 					$('.coverUpload').removeClass("hide");
 					$('#file-2').prop('required', true);
-					// $("#mandatory_symbol").replaceWith("<span id='mandatory_symbol'>*</span>")
 					previewSection.hide();
 					previewSection.fadeIn(650);
 					imagePreview.html('<audio width="300" height="300" controls><source src="mov_bbb.mp4" id="audio_here"> </audio>');
@@ -136,7 +136,7 @@ $(document).ready(function(){
 					return toastr.error('Invalid file type!');
 				}
 				imagePreview.css({ 
-					'width': '300px', 
+					'width': '540px', 
 					'background-size': 'cover',
 					'background-repeat': 'no-repeat',
 					'background-position': 'center',
