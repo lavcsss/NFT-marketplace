@@ -1,0 +1,3 @@
+class Celebrity < ApplicationRecord
+
+end

@@ -23,6 +23,14 @@ class DashboardController < ApplicationController
     @category_collections = @category_collections.reorder(likes_count: 'desc').limit(18)
   end
 
+  def celebrity_list
+    if params[:search].present?
+      @celebrity_data = Celebrity.where("title like :search OR description like :search", search: "%#{params[:search]}%") 
+    else
+      @celebrity_data = Celebrity.all()
+    end 
+  end
+
   def top_buyers_and_sellers
     @top_sellers = User.top_seller(params[:days]).with_attached_attachment
     @top_buyers = User.top_buyer(params[:days]).with_attached_attachment
@@ -63,8 +71,12 @@ class DashboardController < ApplicationController
   end   
    
   def notifications
-    Notification.unread(current_user).update_all(is_read: true) if Notification.unread(current_user).present?
+    # Notification.unread(current_user).update_all(is_read: true) if Notification.unread(current_user).present?
     @notifications = current_user.notifications
+  end
+
+  def read_notifications
+    Notification.unread(current_user).update_all(is_read: true) if Notification.unread(current_user).present?
   end
 
   def contract_abi

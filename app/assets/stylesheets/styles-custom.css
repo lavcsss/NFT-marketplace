@@ -3121,7 +3121,7 @@ ul.nav.nav-tabs.token-list-details {
 }
 
 .follow-step-icon i {
-  font-size: 22px;
+  font-size: 36px;
   color: var(--theme-color);
 }
 .follow-step-content {
@@ -3133,11 +3133,30 @@ ul.nav.nav-tabs.token-list-details {
 }
 .follow-step-content h4 {
   font-size: 14px;
-  font-weight: 700;
   margin: 0;
   text-align: left;
   line-height: 1.4;
 }
+
+.follow-step-content span {
+  margin: 0;
+  text-align: left;
+  line-height: 1.6;
+  color: #162C5B;
+  
+}
+
+.follow-step-content .head {
+  font-size: 18px;  
+  font-family: CircularStd_Bold;
+  
+}
+
+.follow-step-content .text {
+  font-size: 16px;  
+  font-family: CircularStd_Normal;
+}
+
 .follow-step-content p {
   font-size: 13px !important;
   margin: 0;
@@ -4073,6 +4092,8 @@ section.create-collectible-section p {
 
 #imagePreviewRes {
   border-radius: 15px !important;
+  width: 100%!important;
+  
 }
 
 .chosen-container-multi .chosen-choices {
@@ -7099,14 +7120,14 @@ ul.switch_group li.li_inp_grp {
 }
 @media (max-width: 360px) {
   #imagePreviewRes {
-    max-width: 240px;
-    max-height: 200px;
+    max-width: 221px;
+    max-height: 204px;
   }
   .close-preview-button {
     padding-top: 5px;
     height: 30px;
     width: 30px;
-    right: 20px;
+    right: 5px;
   }
 }
 

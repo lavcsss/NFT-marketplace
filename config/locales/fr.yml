@@ -147,7 +147,7 @@ fr:
     change: Change
     edit: Edit
     destroy: Destroy
-    in_progress: 'In Progress..'
+    in_progress: 'In Progress'
     done: Done
     save: Save
     show: Show

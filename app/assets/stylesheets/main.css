@@ -24,19 +24,19 @@ body {
 
 @font-face {
   font-family: CircularStd_Normal;
-  src: url("../fonts/NFT/Circular-Std-Font/CircularStd-Book.ttf");
+  src: url("NFT/Circular-Std-Font/CircularStd-Book.ttf");
   font-weight: 400;
 }
 
 @font-face {
   font-family: CircularStd_Medium;
-  src: url("../fonts/NFT/Circular-Std-Font/circular-std-medium.ttf");
+  src: url("NFT/Circular-Std-Font/circular-std-medium.ttf");
   font-weight: 500;
 }
 
 @font-face {
   font-family: CircularStd_Bold;
-  src: url("../fonts/NFT/Circular-Std-Font/CircularStd-Bold.ttf");
+  src: url("NFT/Circular-Std-Font/CircularStd-Bold.ttf");
   font-weight: 600;
 }
 
@@ -2307,8 +2307,8 @@ a.explore-all {
 }
 .card__cover video,
 .card__cover img {
-  width: 100%;
-  height: 250px;
+  width: 300px;
+  height: 300px;
   object-fit: cover;
   object-position: center;
   border-radius: 5px;
@@ -2352,7 +2352,7 @@ a.explore-all {
   right: 0;
 }
 .card__cover img {
-  width: 100%;
+  width: 300px;
 }
 .card__cover--carousel {
   display: block;
@@ -2408,12 +2408,12 @@ a.explore-all {
   font-size: 16px;
 }
 .card__title a {
-  color: #4d4d4d;
-  font-weight: 500 !important;
+  color: #3C97F2 !important;
+  font-weight: 400 !important;
   line-height: 21px;
   width: 100%;
   display: block;
-  font-size: 18px;
+  font: normal normal bold 16px/22px Hahmlet;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
@@ -2565,6 +2565,9 @@ button.card__likes.heart i {
   left: 14px;
   top: 5px;
 }
+.t_c .card__likes {width: 20px;height: 20px;padding: 0;right: 8px;}
+
+.t_c .card__likes i {left: 0!important;top: 3px!important;}
 button.card__likes.heart i.far {
   opacity: 1;
 }
@@ -5490,6 +5493,7 @@ input.sign__input:-internal-autofill-selected {
   margin-bottom: 10px;
   font-family: "DM Sans", sans-serif;
   letter-spacing: 0.5px;
+  color: #162C5B;
 }
 
 
@@ -6234,13 +6238,10 @@ div#Inr-modal .mfp-close-btn-in .mfp-close {
 
 .sm_modal {
   background: #fff;
-  max-width: 520px;
+  max-width: 600px;
   /* max-width: 440px; */
   overflow: visible;
 }
-
-
-
 .asset__btns .modal__close {
   position: relative;
   top: 0;

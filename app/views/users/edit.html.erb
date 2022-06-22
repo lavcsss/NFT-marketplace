@@ -1,31 +1,23 @@
-<main class="main mt-0">
+<main class="main profile-settings">
   <!--<% if current_user.banner.present? %>
     <div class="main__author" style="background: url(<%= url_for(current_user.banner) %>) center center / cover no-repeat;;"></div>
   <% else %>
    <div class="main__author" data-bg="/assets/dummy-image.jpg" style="background: url(&quot;/assets/dummy-image.jpg&quot;) center center / cover no-repeat;"></div>
   <% end %>-->
-  <div class="container">
+  <div class="container bg-effect">
     <div class="row row--grid">
-      <div class="col-12 col-xl-3">
+      <div class="col-lg-3 col-md-4 col-sm-12 col-12 col-xl-3">
         <div class="author author--page">
           <div class="author__meta">
             <%= link_to_image(current_user) %>
             <%= link_to_name(current_user) %>
-            <%= link_to_twitter(current_user) %>
-            <%= link_to_bio(current_user) %>
-            <%= link_to_personal_url(current_user) %>
-
-            <div class="author__wrap">
-              <div class="author__followers">
-                <p><%= current_user.followers.count %></p>
-                <span><%= t('users.edit.followers') %></span> 
-              </div>
-            </div>
+  
+       
           </div>
         </div>
       </div>
 
-      <div class="col-12 col-xl-9">
+      <div class="col-lg-9 col-md-8 col-sm-12 col-12 col-xl-9">
         <div class="edit_profile">
           <div class="row row--grid">
             <div class="col-12 col-lg-12">
@@ -47,11 +39,14 @@
                           <% else %>
                             <div id="imagePreview" style="background-image: url('<%= User.default_image %>');"></div>
                           <% end %>
+
+                            <div class="avatar-edit edit-icon">
+                            <%= file_field_tag 'user[attachment]', class: 'form-control-file', id: "imageUpload" %>
+                            <label for="imageUpload"><img src="../../assets/nft/edit.svg" class="uploadImage"></label>
+                        </div> 
                         </div>
                       
                         <div class="avatar-edit">
-                            <%= file_field_tag 'user[attachment]', class: 'form-control-file', id: "imageUpload" %>
-                            <label for="imageUpload"><%= t('users.edit.upload_profile') %></label>
                             <p><%= t('users.edit.recommended_image_size', size: '400x400') %><br><%= t('users.edit.gif_compatible') %></p>
                         </div>                       
                       </div>
@@ -74,8 +69,8 @@
                   </div>
                   <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="sign__group">
-                      <label class="sign__label" for="user_name"><%= t('users.edit.user_name') %></label>
-                      <%= text_field_tag 'user[name]', current_user.name, class: 'sign__input', placeholder: t('users.form.name'), required: true %>
+                      <label class="sign__label" for="user_name">Username</label>
+                      <%= text_field_tag 'user[name]', current_user.name, class: 'sign__input', placeholder: "Enter username", required: false, maximum: 23 %>
                     </div>
                   </div>
 
@@ -93,9 +88,7 @@
                     <div class="sign__group lik_hold t_link">
                       <label class="sign__label" for="twitter_username"><%= t('users.edit.twitter_username') %></label>
                       <%= text_field_tag 'user[twitter_link]', current_user.twitter_link, class: 'sign__input', id: "twitter-username" %>
-                          <span>@</span>
-<!--                          <span id="twitt_link"><%#= t('users.edit.link') %></span>-->
-                          <p><%= t('users.edit.twitter_link_text') %></p>
+                      <span>@</span>
                     </div>
                   </div>
 
@@ -107,34 +100,31 @@
                     </div>
                   </div>
 
+                  <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="sign__group lik_hold">
+                      <label class="sign__label" for="portfolio_url">Facebook URL </label>
+                      <%= text_field_tag 'user[facebook_link]', current_user.facebook_link, class: 'sign__input', id: "personal-site-or-portfolio", placeholder: "Enter Facebook URL" %>
+                          <span>https://</span>
+                    </div>
+                  </div>
+
+                   <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="sign__group lik_hold">
+                      <label class="sign__label" for="portfolio_url">Youtube URL </label>
+                      <%= text_field_tag 'user[youtube_link]', current_user.youtube_link, class: 'sign__input', id: "personal-site-or-portfolio", placeholder: "Enter Youtube URL" %>
+                          <span>https://</span>
+                    </div>
+                  </div>
+
                   <div class="col-12">
                     <div class="sign__group">
                       <label class="sign__label" for="bio"><%= t('users.edit.bio') %></label>
-                      <%= text_area_tag 'user[bio]', current_user.bio, class: 'sign__input', placeholder: t('users.form.bio'), rows: 4, required: true %>
+                      <%= text_area_tag 'user[bio]', current_user.bio, class: 'sign__input', placeholder: t('users.form.bio'), rows: 4, maximum: 500, required: false %>
                     </div>
                   </div>
-                  
-                  <!--<div class="row">-->
-                  <!--<div class="col-12">
-                    <div class="verify-box">
-                      <div class="sign__group vr_box">
-                        <label class="sign__label">Verification</label>
-                        <p>Proceed with verification process to get more visibility and gain trush on Trap Marketplace. Please allow up to several weeks for the process.</p>
-                      </div>
-                      <div class="sign__group btn_box">
-                        <button class="sign__btn ver_btn create-clr" type="button">Get Verified <i class="fa fa-check"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>-->
-                  <!--<div class="col-12 col-md-6 col-lg-6 col-xl-6 text-center">-->
-                  <!--<button class="sign__btn ver_btn create-clr" type="button">Get Verified <i class="fa fa-check"></i>-->
-                  <!--</button>-->
-                  <!--</div>-->
-                  <!--</div>-->
-
+              
                   <div class="col-12 text-center">
-                    <button type="submit" type="button" class="sign__btn"><%= t('users.form.update') %></button>
+                    <button type="submit" type="button" class="disabled_btn sign__btn" ><%= t('users.form.update') %></button>
                   </div>
                 </div>
               <%end%>
@@ -147,11 +137,27 @@
   </div>
 </main>
 <script type="text/javascript">
+
 $(document).ready(function(){
   $(".close-top-notify").click(function(){
     $(".main").addClass("close-nav");
   });
 });
+
+$(document).ready(function() {
+     $(':input[type="submit"]').prop('disabled', true);
+     $('.sign__input').keyup(function() {
+        if($(this).val() != '') {
+           $(':input[type="submit"]').prop('disabled', false);
+           $('.sign__btn').removeClass("disabled_btn");
+        }
+     });
+
+    $(".uploadImage").click(function(){
+        $(':input[type="submit"]').prop('disabled', false);
+        $('.sign__btn').removeClass("disabled_btn");
+    });
+ });
 
   
 </script>

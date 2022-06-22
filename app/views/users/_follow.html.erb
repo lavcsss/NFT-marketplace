@@ -1,13 +1,12 @@
 
 <% follows.each do |follow| %>
     <div class="member-detail">
-        <a>
+          <div class="member-user-profile">
         <span>  
           <%= image_tag url_for(follow.profile_image) %> 
         </span>
-        <strong> @<%= follow.full_name %>
-        </strong>
-        </a>      
+        <div class="user-profile-detail"> <a href="<%= user_path(follow.address) %>"> <%= follow.full_name %> </a></div>
+        </div>  
     </div>
 <% end %>
 

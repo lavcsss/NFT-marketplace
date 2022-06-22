@@ -10,6 +10,37 @@ $(document).ready(function () {
     })
   })
 
+
+  $(document).on('click', '#followers', function () {
+    var url = document.getElementById("followers_path").innerText;
+    
+    $.ajax({
+      url: url,
+      type: "get",
+      dataType: "script",
+      data: {}
+    })
+  })
+
+
+
+  $(document).on('click', '#following', function () {
+    var url = document.getElementById("following_path").innerText;
+    $.ajax({
+      url: url,
+      type: "get",
+      dataType: "script",
+      data: {}
+    })
+  })
+
+  $(document).on('click', '.notify-inbox-message .close-icon', function () {
+    $("body").removeClass("open-modal");
+    $(".notify-inbox-message").removeClass("open-modal");
+  });
+
+  
+
   $(document).on('click', '.dark-theme-slider', function () {
     lightSelected = $(this).hasClass('lightTheme');
     document.getElementById('themeChange').setAttribute('href', lightSelected ? 'dark' : '');
@@ -85,6 +116,40 @@ $(document).ready(function () {
   preventNegativeNumbers(document.getElementById('royalties'));
   preventNegativeNumbers(document.getElementById('instant-price'));
   preventNegativeNumbers(document.getElementsByClassName('only-numbers'));
+});
+
+$(document).ready(function() {
+  $(function () {
+     $(".morelink").trigger( "click");
+  });
+  var showChar = 130;  
+  var moretext = "Read more";
+  var lesstext = "Read less";
+
+  $('.textControl').each(function() {
+     var content = $(this).html();
+
+     if(content.length > showChar) {
+
+           var c = content.substr(0, showChar) + "...";
+           var h = content.substr(showChar, content.length - showChar);
+           var html = c + '<span class="morecontent"><span>' + h + '</span><a href="" class="morelink">' + lesstext + '</a></span>';
+           $(this).html(html);
+     }
+  });
+
+  $(".morelink").click(function(){
+     if($(this).hasClass("less")) {
+           $(this).removeClass("less");
+           $(this).html(lesstext);
+     } else {
+           $(this).addClass("less");
+           $(this).html(moretext);
+     }
+     $(this).parent().prev().toggle();
+     $(this).prev().toggle();
+     return false;
+  });
 });
 
 function preventNegativeNumbers(inputs){

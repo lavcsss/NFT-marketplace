@@ -6,53 +6,48 @@
    (activity.changeset["state"].present? && activity.changeset["state"] != ["pending", "approved"]))) %>
 
     <div class="member-detail">
+      <div class="member-user-profile">
       <% if activity.event == "create" && activity.item.present? %>
-          <a>
           <span><%= image_tag url_for(activity.item.creator.profile_image) %> </span>
-          <strong>@<%= activity.item.creator.full_name %>
+          <div class="user-profile-detail"> 
+          <a href="<%= user_path(activity.item.creator.address)%>"><%= activity.item.creator.full_name %></a>
           <em>Minted <%= activity.item.title %> </em>
           <i> <%= time_ago_in_words(activity.created_at) %> ago </i>
-          </strong>
-          </a>
+          </div>
+          
       <% else %>
           <% owner_name = activity.next ? activity.next.reify.owner.full_name : activity.item.owner.full_name %>
           <% if activity.event == "update" %>
               <% if activity.changeset.keys.include?("owner_id") %>
-                <a>
                  <span><%= image_tag url_for(activity.reify.owner.profile_image) %></span>
-                 <strong> @<%= activity.reify.owner.full_name %>
-                    <em lin> Transferred <%= activity.item.title %> to 
-                    <%= owner_name %> from <%= activity.reify.owner.full_name %></em>
-                    <i> <%= time_ago_in_words(activity.created_at) %> ago </i>
-                  </strong>
-                </a>
+                  <div class="user-profile-detail"> 
+                  <a href="<%= user_path(activity.reify.owner.address)%>"> <%= activity.reify.owner.full_name %> </a>
+                  <em lin> Transferred <%= activity.item.title %> to 
+                  <%= owner_name %> from <%= activity.reify.owner.full_name %></em>
+                  <i> <%= time_ago_in_words(activity.created_at) %> ago </i>
+                  </div>
               <% elsif activity.changeset.keys.include?("instant_sale_price") %>
-                 <a>
                     <span>  <%= image_tag url_for(activity.item.owner.profile_image) %> </span>
-                    <strong> @ <%= owner_name %>
+                    <div class="user-profile-detail">  <a href="<%= user_path(activity.item.owner.address)%>"> <%= owner_name %> </a>
                         <em> Updated the price for <%= activity.item.title %> to <%= activity.changeset["instant_sale_price"].last %> WETH </em>
                         <i><%= time_ago_in_words(activity.created_at) %> ago </i>
-                    </strong>
-                </a>
+                    </div>
               <% elsif activity.changeset.keys.include?("put_on_sale") %>
-                <a>
                   <span> <%= image_tag url_for(activity.item.owner.profile_image) %> </span>
-                  <strong> @ <%= owner_name %>
+                  <div class="user-profile-detail">  <a href="<%= user_path(activity.item.owner.address)%>"> <%= owner_name %> </a>
                     <em> Put up <%= activity.item.title %> for sale</em>
                     <i><%= time_ago_in_words(activity.created_at) %> ago</i>
-                  </strong>
-                </a>
+                  </div>
               <% elsif activity.changeset["state"].present? && activity.changeset["state"] == ["approved", "burned"] %>
-                <a>
                     <span><%= image_tag url_for(activity.item.owner.profile_image) %></span>
-                    <strong> @ <%= owner_name %>
+                    <div class="user-profile-detail">  <a href="<%= user_path(activity.item.owner.address)%>"> <%= owner_name %> </a>
                         <em> Burned <%= activity.item.title %> </em>
                         <i> <%= time_ago_in_words(activity.created_at) %> ago </i>
-                    </strong>
-                </a>
+                    </div>
               <% end %>
           <% end %>
       <% end %>
+      </div>
     </div>
 <% end %>
     

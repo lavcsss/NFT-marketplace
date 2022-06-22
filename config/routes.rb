@@ -38,6 +38,8 @@ Rails.application.routes.draw do
       post :bid
       post :report
       post :create_contract
+      post :follow
+      post :unfollow
     end
   end
   resources :nft_contracts, only: [:show]
@@ -83,12 +85,17 @@ Rails.application.routes.draw do
   get 'activities', to: 'activities#index'
   get 'load_more_activities', to: 'activities#load_more'
   get 'search', to: 'dashboard#search'
+  get 'celebrity', to: 'dashboard#celebrity'
   get 'notifications', to: 'dashboard#notifications'
   get 'contract_abi', to: 'dashboard#contract_abi'
   get 'category_filter', to: 'dashboard#set_categories_by_filter'
   get 'gas_price', to: 'dashboard#gas_price'
   get 'collections', to: 'dashboard#collections'
   post '/filter_by', to: 'dashboard#filter_by'
+  put 'read_notifications', to: 'dashboard#read_notifications'
+  get 'followers_list', to: 'users#followers_list'
+  get 'following_list', to: 'users#following_list'
+  get 'celebrity_list', to: 'dashboard#celebrity_list'
   
 
   ### STATIC PAGES

@@ -1,0 +1,40 @@
+<Modal>
+   <Box id="create-nft-modal" class="My_modal">
+      <div class="close-icon">  <img src="/assets/nft/blue-Close.svg" alt="Blue_CLOSE" /></div>
+      <div>
+         <ul>
+            <li>
+               <img src="/assets/nft/add-nft-modal.svg" alt="NFT_Modal" />
+               <h6>Create your NFT</h6>
+               <p class="remove-border">Mint your NFTs on the Ethereum blockchain and create unique collections.</p>
+               <p><img src="/assets/nft/check symbol.svg" alt="NFT_Modal" />Sell NFTs in the Marketplace</p>
+               <p class="remove-border"> <img src="/assets/nft/check symbol.svg" alt="NFT_Modal" />Earn Royalties on your Art/Collectibles</p>
+               <a id="create-nft-btn"> <button>Create</button> </a>
+            </li>
+            <li>
+               <img src="/assets/nft/add-nft-modal.svg" alt="NFT_Modal" />
+               <h6>White Gloves Service</h6>
+               <p class="remove-border">New to NFT minting? Connect with CrossTower team to make your project a success.</p>
+               <p><img src="/assets/nft/check symbol.svg" alt="NFT_Modal" />Grow Community</p>
+               <p><img src="/assets/nft/check symbol.svg" alt="NFT_Modal" />Roadmap and Strategy Consulting</p>
+               <p><img src="/assets/nft/check symbol.svg" alt="NFT_Modal" />Custom Marketing Campaigns</p>
+               <p class="remove-border"><img src="/assets/nft/check symbol.svg" alt="NFT_Modal" />Custom Graphic Service for creating NFTs</p>
+               <a target="_blank" href="https://crosstower.com/_nft/contactus.html"><button>Contact Us</button></a>
+            </li>
+         </ul>
+      </div>
+   </Box>
+</Modal>
+
+<script>
+
+ $(document).ready(function(){
+     $("#create-nft-btn").click(function(){
+       $("#create-collectible-modal").addClass("open-modal");
+       $("body").addClass("open-modal");
+     });
+   });
+
+</script>
+
+<%= render partial: 'common/create_collectible' %>

@@ -1,0 +1,6 @@
+$('#following-dropdown').addClass('active');
+<% if @following.present? %>
+    $('#following-dropdown').html('<%= j(render "follow", follows: @following, id: "following", followees: @following) %>');
+<% else %>
+    $('#following-dropdown').html('<p> 0 Following </p>');
+<% end %> 

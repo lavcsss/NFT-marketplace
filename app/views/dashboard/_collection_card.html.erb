@@ -34,9 +34,9 @@
             </span>
         </h6>
         <% if collection.own_collection.present? %>
-            <a><h5><%= collection.contract_name %></h5></a>
+            <a href="<%=nft_contract_path(collection.collection_address)%>"> <h5><%= collection.contract_name %></h5></a>
         <% else %>                    
-            <a> <h5><%= collection.collection_info_name %></h5></a>
+            <a href="<%=nft_contract_path(collection.collection_address)%>"> <h5><%= collection.collection_info_name %></h5></a>
         <% end %>
         <div class="caption">
             <div class="profile-detail">

@@ -4,30 +4,30 @@
     <% bid = activity.item %>
     <% cover_image = bid.collection.cover.present? ? bid.collection.cover : bid.collection.attachment %>
     <% if activity.event == 'create' %>
-      <a>
+     <div class="member-user-profile">
         <span> <%= image_tag url_for(bid.user.profile_image) %> </span>
-        <strong>  @<%= bid.user.full_name %> 
+        <div class="user-profile-detail"> <a href="<%= user_path(bid.user.address)%>">  <%= bid.user.full_name %></a>
         <em> Offered <%= bid.crypto_currency %> <%= bid.crypto_currency_type %> to <%= bid.collection.title %> </em>
         <i> <%= time_ago_in_words(activity.created_at) %></i>
-        </strong>
-      </a>
+       </div>
+      </div>
     <% else %>
         <% if activity.changeset["state"].last == "executed" %>
-        <a>
+       <div class="member-user-profile">
           <span> <%= image_tag url_for(bid.owner.profile_image) %> </span>
-          <strong> @ <%= bid.owner.full_name %>
+          <div class="user-profile-detail"> <a href="<%= user_path(bid.owner.address)%>"> <%= bid.owner.full_name %> </a>
           <em> Accepted the bid for <%= bid.collection.title %> for <%= bid.crypto_currency %> <%= bid.crypto_currency_type %> </em>
           <i> <%= time_ago_in_words(activity.created_at) %> </i>
-          </strong>
-        </a>
+          </div>
+       </div>
         <% elsif activity.changeset["state"].last == "expired" %>
-          <a>
+        <div class="member-user-profile">
             <span> <%= image_tag url_for(bid.owner.profile_image) %> </span>
-            <strong> @ <%= bid.owner.full_name %>
+             <div class="user-profile-detail">  <a href="<%= user_path(bid.owner.address)%>"> <%= bid.owner.full_name %></a>
             <em> Expired the bid for <%= bid.collection.title %> for <%= bid.crypto_currency %> <%= bid.crypto_currency_type %> </em>
             <i> <%= time_ago_in_words(activity.created_at) %><i>
-            </strong>
-          </a>
+           </div>
+         </div>
         <% end %>
     <% end %>
    </div>

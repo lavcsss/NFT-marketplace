@@ -1,14 +1,14 @@
 <% if activity.event == "create" %>
     <div class="member-detail">
 
-      <a>
+     <div class="member-user-profile">
         <span> <%= image_tag url_for(activity.item.follower.profile_image) %> </span>
-        <strong>
-          @<%= activity.item.follower.full_name %>
-            <em>Started following @<%= activity.item.followee.full_name %></em>
+        <div class="user-profile-detail"> 
+          <a href="<%= user_path(activity.item.follower.address) %>"> <%= activity.item.follower.full_name %></a>
+            <em>Started following <a href="<%= user_path(activity.item.followee.address) %>" class="activity-followee"> <%= activity.item.followee.full_name %> </a> </em>
             <i> <%= time_ago_in_words(activity.created_at) %> ago </i>
-        </strong>
-      </a>
+       </div>
+    </div>
 
     </div>
 <% end %>

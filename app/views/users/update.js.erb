@@ -2,5 +2,5 @@
 	<%= custom_error_flash(@error, 'error') %>
 <% else %>
 	<% flash.keep[:notice] = t('users.edit.update_success') %>
-	window.location.replace("<%= root_path %>");
+	window.location.replace("<%= user_path(current_user.address) %>");
 <% end %>

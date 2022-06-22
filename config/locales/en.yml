@@ -39,14 +39,27 @@ en:
     put_on_sale: Listed by %{owner_name}
     price_updated: Price updated to %{price} by %{owner_name}
     ownership_transfer: Transferred to %{buyer_name} by %{owner_name}
-    new_bid: Offered Bid %{bid_amount} Eth by %{buyer_name}
+    new_bid: Offered Bid %{bid_amount} WETH by %{buyer_name}
     bid_accept: Your bid have been accepted by %{owner_name}
     expire_bid: Your bid expired by %{owner_name}
     profile_verified: Profile successfully verified
     burn_token: Burned %{collection_name} by %{owner_name}
     nft_sold: NFT %{collection_name} sold successfully
-    following: User %{user_name} started following
+    following: User %{user_name} started following you
     like: NFT %{collection_name} liked by %{user_name}
+  notifications_header:
+    put_on_sale: Item Listed
+    price_updated: Item Price Updated
+    ownership_transfer: Item Transferred 
+    new_bid: New Bid
+    bid_accept: Bid Accepted
+    expire_bid: Bid Expired
+    profile_verified: Profile Verified
+    burn_token: Item Burned
+    nft_sold:  Item Sold
+    following: Started Following
+    like: Item Liked 
+
   admin:
     no_records: No Records Found
     dashboard:
@@ -193,7 +206,7 @@ en:
     edit: Edit
     destroy: Destroy
     delete: Delete
-    in_progress: 'In Progress..'
+    in_progress: 'In Progress'
     done: Done
     save: Save
     show: Show
@@ -211,10 +224,10 @@ en:
     highest_bid: Highest bid
     place_a_bid: Place a bid
     reserve_price: Reserve price
-    put_on_sale: Put on sale
+    put_on_sale: Put On Sale
     put_on_sale_msg: You'll receive bids on this item
     pos_msg: You'll receive bids on this item
-    instant_sale_price: Instant sale price
+    instant_sale_price: Instant Sale Price
     instant_sale_price_msg: Enter the price for which the item will be instantly sold
     unlock_one_purchased: Unlock once purchased
     unlock_one_purchased_msg: Content will be unlocked after successful transaction
@@ -340,10 +353,10 @@ en:
       choose_file: Choose file
       categories: Categories
       item_details: Item details
-      item_name: Item name
-      description: Description
+      item_name: NFT Name
+      description: Description(Optional)
       number_of_copies: Number of Copies
-      royalties: Royalties
+      royalties: Creator Royalty
       properties: Properties
       choose_collection: Choose Collection
       nft: NFT
@@ -359,6 +372,8 @@ en:
       sign_message: Sign message
       sign_message_text: Sign message with new collection preferences
       approve: Approve
+      inr_payment: Inr payment
+      fund_received: Fund received
       approve_text: Checking balance and approving
       upload_mint: Upload files & Mint token
       fixed_price: Set fixed price
@@ -396,7 +411,9 @@ en:
       report: Report
       other_author_assets: Other author assets
       unlock_description: Unlock Description
-      user_wallet_address: User Wallet Address
+      wallet_address: User Wallet Address
+      wallet: User wallet address
+      fiat_from: From
       transferring: Transferring
       follow_the_wallet: Follow the wallet
       place_a_bid: Place a Bid
@@ -405,6 +422,11 @@ en:
       crypto_type: Crypto Type
       quantity: Quantity
       your_balance: Your balance
+      price_eth: Buy price in WETH
+      price_inr: Price
+      gas_fees: Gas Fees
+      inr_gst: 18% GST
+      total_price: Total
       your_bidding_balance: Your bidding balance
       service_fee: Service fee
       total_bid_amount: Total bid amount
@@ -427,11 +449,19 @@ en:
       your_buy_balance: Your buy balance
       you_will_pay: You will pay
       pay: pay
+      pay_inr: Proceed to Buy
       checkout: Checkout
+      nft_details: NFT Details
       owner_token: Owner %{token} editions
   header:
     title: Connect to Wallet
-    connect_wallet: Connect Your Wallet  
+    payment_title: Pay using cryptocurrency or fiat to buy the NFT
+    connect_wallet: Connect Your Wallet 
+    connect_inr: Payment using INR 
+    connect_crypto: Payment using crypto
+    payment_status: INR Payment Status
+    Success: Success  
+    Failure: Failure
     wallet_help: Connect with one of available wallet providers or create a new wallet.
     wallet_info: What is wallet?
     metamask_wallet: Metamask Wallet  

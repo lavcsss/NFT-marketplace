@@ -5,7 +5,7 @@ class NftContractsController < ApplicationController
 
 
   def show
-    @contract = NftContract.where.not(symbol:"Shared").where(address: params[:id]).first
+    @contract = NftContract.where(address: params[:id]).first
     unless @contract.present?
       redirect_path = request.referer.present? ? request.referer : root_path
       redirect_to redirect_path, alert: 'Invalid contract address!' and return  
