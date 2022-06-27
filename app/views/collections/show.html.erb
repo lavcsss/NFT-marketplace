@@ -76,7 +76,7 @@
                   </li> -->
                <li class="wd-100">
                   <label>View proof of authenticity</label>
-                  <a target="_blank" href="<%= "https://gateway.pinata.cloud/ipfs/#{@collection.image_hash}" %>"><span><img src="../../assets/nft/modeling/IPES.png" class="nft-coin" /></span><strong>IPFS</strong>  <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>
+                  <a target="_blank" href="<%= "https://ipfs.io/ipfs/#{@collection.image_hash}" %>"><span><img src="../../assets/nft/modeling/IPES.png" class="nft-coin" /></span><strong>IPFS</strong>  <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>
                   <% if @collection.transaction_hash.present? %>
                      <a target="_blank" href="<%= "#{Rails.application.credentials.config[:etherscan_url]}/tx/#{@collection.transaction_hash}" %>"><span><img src="../../assets/nft/modeling/eth.png" class="nft-coin" />  </span><strong>Etherscan</strong> <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>           
                   <% end %>
@@ -358,7 +358,7 @@
                   </li> -->
                <li class="wd-100">
                   <label>View proof of authenticity</label>
-                  <a target="_blank" href="<%= "https://gateway.pinata.cloud/ipfs/#{@collection.image_hash}" %>"><span><img src="../../assets/nft/modeling/IPES.png" class="nft-coin" /></span><strong>IPFS</strong>  <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>
+                  <a target="_blank" href="<%= "https://ipfs.io/ipfs/#{@collection.image_hash}" %>"><span><img src="../../assets/nft/modeling/IPES.png" class="nft-coin" /></span><strong>IPFS</strong>  <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>
                   <% if @collection.transaction_hash.present? %>
                      <a target="_blank" href="<%= "#{Rails.application.credentials.config[:etherscan_url]}/tx/#{@collection.transaction_hash}" %>"><span><img src="../../assets/nft/modeling/eth.png" class="nft-coin" />  </span><strong>Etherscan</strong> <span><img src="../../assets/nft/modeling/link.svg"/>  </span></a>           
                   <% end %>
