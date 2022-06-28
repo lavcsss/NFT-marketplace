@@ -49,6 +49,7 @@ yarn-debug.log*
 jsconfig.json
 package-lock.json
 yarn.lock
+nohup.out
 .browserslistrc
 .eslintrc
 .nvmrc
