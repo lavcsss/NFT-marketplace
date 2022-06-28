@@ -370,8 +370,8 @@
                      </a> 
                   </div>
                   <ul>
-                     <% if @category_collections.present? %>
-                        <% @category_collections.each do |collection| %> 
+                     <% if @hot_collections.present? %>
+                        <% @hot_collections.each do |collection| %> 
                            <% collection_attachment = collection.get_attachment(current_user)%>
                            <li>
                               <div class="img-panel">

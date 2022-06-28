@@ -1,11 +1,18 @@
 <% if params[:page_no].to_i > 1 %>
-  $('.filters-content .row').append('<%= j(render partial: 'collection_card_by_categories', locals: {category_collections: @category_collections}) %>');
+  <% if params[:category].present? %>
+    $('.all_nfts').replaceWith('<%= j(render partial: 'collection_card_by_categories', locals: {category_collections: @category_collections}) %>');
+  <% else %>
+    $('.all_nfts').append('<%= j(render partial: 'collection_card_by_categories', locals: {category_collections: @category_collections}) %>');
+  <% end %>
 <% else %>
-  $('.filters-content .row').html('<%= j(render partial: 'collection_card_by_categories', locals: {category_collections: @category_collections}) %>');
+  <% if params[:category].present? %>
+    $('.all_nfts').replaceWith('<%= j(render partial: 'collection_card_by_categories', locals: {category_collections: @category_collections}) %>');
+  <% else %>
+    $('.all_nfts').html('<%= j(render partial: 'collection_card_by_categories', locals: {category_collections: @category_collections}) %>');
+  <% end %>
 <% end %>
-$('#dropdownMenuFilter').html('<%=params[:category] || 'All Categories'%> <i class="fas fa-chevron-down"></i>')
-// Top filter highlight
-$(".top-filter li.active").removeClass("active")
+
+
 <% if params[:category].present? %>
   $("*[data-name='<%= params[:category] %>']").closest("li").addClass("active")
 <% else %>

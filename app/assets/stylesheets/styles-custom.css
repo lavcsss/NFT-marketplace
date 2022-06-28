@@ -1148,7 +1148,7 @@ li.communit-ddm-social-media a:active i {
 .load-more-items a {
   text-align: center;
   background: var(--theme-color);
-  color: var(--white);
+  color: var(--white) !important;
   padding: 8px 25px;
   border-radius: 20px;
   display: inline-block;

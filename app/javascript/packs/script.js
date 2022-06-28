@@ -83,8 +83,8 @@ $(document).ready(function(){
 	function readURLSingle(input, file, previewSection, imagePreview, closePreviewBtn, placeholder, fileId, chooseFile, coverImg) {
 		var ftype = file.type;
 		var fsize = file.size / 1024 / 1024; // in MBs
-		var validFileSize = coverImg ? 30 : 100;
-    if (fsize > validFileSize) {
+		var validFileSize = coverImg ? 30: 15;
+    	if (fsize > validFileSize) {
 			return toastr.error(`Invalid file size!. Must be less than ${validFileSize}MB`);
 		}
 		var imgExt = ['image/png', 'image/jpeg', 'image/gif'];
