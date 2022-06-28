@@ -96,6 +96,7 @@ Rails.application.routes.draw do
   get 'followers_list', to: 'users#followers_list'
   get 'following_list', to: 'users#following_list'
   get 'celebrity_list', to: 'dashboard#celebrity_list'
+  get 'collections_list', to: 'nft_contracts#collections_list'
   
 
   ### STATIC PAGES

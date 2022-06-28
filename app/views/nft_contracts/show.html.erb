@@ -1,3 +1,4 @@
+<%= hidden_field_tag 'collection_address', @contract.address %>
 <main class="NFT-detail test-collection">
    <section class="user_banner_sec">
       <div class="image-bg-token" style="background: url(<%= @contract.cover_url%>)"></div>
@@ -32,20 +33,31 @@
          <div class=" mb-20">
             <h3 class="h3-recent-list">Recently Listed</h3>
          </div>
-         <div class="profile-tabs tabs-panel">
+         <div class="profile-tabs tabs-panel nft-collections">
             <div class="tabcontent">
                <ul>
                <%if @tokens.present?%>
-               <%@tokens.each do |collection|%>
-               <%= render "dashboard/collection_card", collection: collection %>
-               <%end%>
+                  <%@tokens.each do |collection|%>
+                  <%= render "dashboard/collection_card", collection: collection %>
+                  <%end%>
                <%else%>
-               <div class="celebrity-no-data-found">
-               <p> No result found! </p>
-               </div>
+                  <div class="celebrity-no-data-found">
+                  <p> No result found! </p>
+                  </div>
                <%end%>
                </ul>
             </div>
+         </div>
+         <div class="col-12">
+            <% if params[:page_no].to_i < @tokens.total_pages and @tokens.present? %>
+               <div class="row">
+                  <div class="col-md-12 pt-15 pb-15">
+                  <div class="load-more-items">
+                     <a href="javascript:void(0)" data-page-no="2" category="" class="collection-load-more">Load More NFTs</a>
+                  </div>
+                  </div>
+               </div>
+            <% end %>
          </div>
    </div>
    </section>

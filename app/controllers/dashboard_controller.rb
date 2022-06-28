@@ -26,7 +26,7 @@ class DashboardController < ApplicationController
       end
     @category_collections = params[:query].present? ? Collection.search("*#{build_elastic_search_str(params[:query].strip)}*").records.on_sale : Collection.on_sale
     @category_collections= @category_collections.where(filter_query)
-    @category_collections = @category_collections.on_sale.with_attached_attachment.paginate(page: params[:page_no] || 1, per_page: 18)
+    @category_collections = @category_collections.on_sale.with_attached_attachment.paginate(page: params[:page_no] || 1, per_page: 15)
     @category_collections = @category_collections.reorder(likes_count: 'desc')
   end
 
