@@ -63,6 +63,18 @@ $(document).ready(function () {
     })
   });
 
+  $(document).on("click", ".collection-load-more", function (e) {
+    $.ajax({
+      url: "/collections_list",
+      type: "get",
+      dataType: "script",
+      data: {page_no: $(this).data("page-no"), id: $("#collection_address").val()}
+    })
+  });
+
+
+
+
   $(window).scroll(function() {
     if ($(window).scrollTop() == $(document).height() - $(window).height()) {
       $(".dashboard-load-more").click()

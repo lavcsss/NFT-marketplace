@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_07_115832) do
+ActiveRecord::Schema.define(version: 2022_06_20_152747) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -73,6 +73,15 @@ ActiveRecord::Schema.define(version: 2022_06_07_115832) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.boolean "is_active", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "celebrities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "asset"
+    t.string "title"
+    t.string "description"
+    t.string "redirect_link"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -195,6 +204,7 @@ ActiveRecord::Schema.define(version: 2022_06_07_115832) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "image_url"
+    t.string "header"
     t.index ["from_user_id"], name: "index_notifications_on_from_user_id"
     t.index ["to_user_id"], name: "index_notifications_on_to_user_id"
   end
@@ -231,6 +241,8 @@ ActiveRecord::Schema.define(version: 2022_06_07_115832) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "is_active", default: true
     t.boolean "is_approved", default: false
+    t.string "youtube_link"
+    t.string "facebook_link"
   end
 
   create_table "versions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
