@@ -7,15 +7,6 @@ class CollectionsController < ApplicationController
 
   skip_before_action :verify_authenticity_token
 
-  def collection_ipfs_hash
-    collection = Collection.where(image_hash: nil)
-    collection.count
-    collection.each do |coll|
-      metadata_hash = Api::Pinata.new.upload(coll)
-      puts metadata_hash
-    end
-  end
-
   def new
     @collection_type = params[:type]
     if params[:contract_address] && params[:token]

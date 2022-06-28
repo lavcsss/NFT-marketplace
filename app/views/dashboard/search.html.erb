@@ -17,11 +17,11 @@
               <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12 mobile-hide-sideNav "> <!-- when click the tab links , add """open-inner-tab""" class here-->
                 <div class="filter-Items">
                   <div class="discover_menus">
-                    <h5 class="panel-heading">Filter <span>
-                      <% if @collections.count <= 1 %>
-                        (<%= @collections.count %> Result)</span>
+                    <h5 class="panel-heading">Filter <span id="collection-count">
+                      <% if @category_collections.count <= 1 %>
+                        (<%= @category_collections.count %> Result)</span>
                       <% else %>
-                        (<%= @collections.count %> Results)</span>
+                        (<%= @category_collections.count %> Results)</span>
                       <% end %>
                       </h5>
                       <ul class="nav nav-tabs">
@@ -115,18 +115,27 @@
                 </div>
                 <div class="profile-tabs tabs-panel discover-profile"> 
                   <div class="tabcontent all_nfts">
-                     <% if @collections.present? %>
-                   
-                   <ul id="nft_collection"> 
-                        <span class="bg-transition"></span>
-                          <% @collections.each do |collection| %>
-                            <%=render "dashboard/collection_card", collection: collection%>  
-                          <% end %>
-                    </ul>
+                     <% if @category_collections.present? %>
+                      <ul id="nft_collection"> 
+                          <span class="bg-transition"></span>
+                            <% @category_collections.each do |collection| %>
+                              <%=render "dashboard/collection_card", collection: collection%>  
+                            <% end %>
+                      </ul>
                   <%  else %>
                     <p style="text-align:center" class="no-data"> No NFT’s Found </p>
                   <% end %>
-                    
+                </div>
+                <div class="col-12">
+                  <% if params[:page_no].to_i < @category_collections.total_pages and @category_collections.present? %>
+                    <div class="row">
+                      <div class="col-md-12 pt-15 pb-15">
+                        <div class="load-more-items">
+                          <a href="javascript:void(0)" data-page-no="2" category="" class="dashboard-load-more">Load More NFTs</a>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
                 </div>
               </div>
                     <!-- <div class="sort-items">
@@ -170,9 +179,7 @@
               <ul>
                 <%if @own_contract.present? %>
                   <%@own_contract.all.each do |single_contract|%>
-                     <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
                         <%= render 'dashboard/own_contract', contract: single_contract %>
-                     </div>
                   <%end%>
                <%else%>
                   <% 1.times do%>
@@ -197,10 +204,10 @@
                 <div class="filter-Items">
                   <div class="discover_menus">
                     <h5 class="panel-heading">Filter <span> 
-                      <% if @collections.count <= 1 %>
-                        (<%= @collections.count %> Result)</span>
+                      <% if @category_collections.count <= 1 %>
+                        (<%= @category_collections.count %> Result)</span>
                       <% else %>
-                        (<%= @collections.count %> Results)</span>
+                        (<%= @category_collections.count %> Results)</span>
                       <% end %>
                       </h5>
                       <ul class="nav nav-tabs">
