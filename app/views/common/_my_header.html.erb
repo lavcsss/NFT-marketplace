@@ -87,42 +87,42 @@
          </li>
       </ul>
 </div>
-   <div class="nft-header mobile-menu" >
-      <ul>
-         <li>
-            <div class="dropdown-lists">
-               <div class="nft-menus">
-                  <img src="/assets/nft/Create-bg-fill.svg" alt="NFT_Create" />
-                  <a class="create-nft">Create</a>
-               </div>
-               <div class="nft-menus">
-                  <img  src="/assets/nft/Discover-bg-fill.svg" alt="NFT_Discover" />
-                  <a href="/search">Discover</a>
-               </div>
-               <div class="nft-menus">
-                  <img src="/assets/nft/communicative-bg-fill.svg" alt="NFT_COMMU" />
-                  <a>Community</a>
-                  <div class="inline-menus">
-                     <a href="https://crosstower.com/_nft/blogs.html">Blog</a>
-                     <a href="">Help Center</a>
-                     <a href="https://crosstower.com/_nft/contactus.html">Contact Us</a>
-                  </div>
-               </div>
-               <div class="nft-menus">
-                  <span class="profile"> <img src="/assets/nft/wallet.svg" alt="NFT_Profile"  /></span>
-                  <a> User </a>
-                  <div class="inline-menus">
-                     <a href="<%=my_items_path%>">Profile</a>
-                     <a href="<%=edit_user_path(current_user)%>">Settings</a>
-                     <a class="view-notification">Notification</a>
-                     <a href="<%= activities_path(activity_type: "activity") %>">Activity</a>
-                     <a href="javascript:void(0);" onclick="window.disconnect(<%= current_user.address %>)">Sign out</a>
-                  </div>
+<div class="nft-header mobile-menu" >
+   <ul>
+      <li>
+         <div class="dropdown-lists">
+            <div class="nft-menus">
+               <img src="/assets/nft/Create-bg-fill.svg" alt="NFT_Create" />
+               <a class="create-nft">Create</a>
+            </div>
+            <div class="nft-menus">
+               <img  src="/assets/nft/Discover-bg-fill.svg" alt="NFT_Discover" />
+               <a href="/search">Discover</a>
+            </div>
+            <div class="nft-menus">
+               <img src="/assets/nft/communicative-bg-fill.svg" alt="NFT_COMMU" />
+               <a>Community</a>
+               <div class="inline-menus">
+                  <a href="https://crosstower.com/_nft/blogs.html">Blog</a>
+                  <a href="">Help Center</a>
+                  <a href="https://crosstower.com/_nft/contactus.html">Contact Us</a>
                </div>
             </div>
-         </li>
-      </ul>
-   </div>
+            <div class="nft-menus">
+               <span class="profile"> <img src="/assets/nft/wallet.svg" alt="NFT_Profile"  /></span>
+               <a> User </a>
+               <div class="inline-menus">
+                  <a href="<%=my_items_path%>">Profile</a>
+                  <a href="<%=edit_user_path(current_user)%>">Settings</a>
+                  <a class="view-notification">Notification</a>
+                  <a href="<%= activities_path(activity_type: "activity") %>">Activity</a>
+                  <a href="javascript:void(0);" onclick="window.disconnect(<%= current_user.address %>)">Sign out</a>
+               </div>
+            </div>
+         </div>
+      </li>
+   </ul>
+</div>
 </div>
 
 <div class="notification-list"> </div>
@@ -214,6 +214,5 @@
 
    
 </script>
-
 <%= render partial: 'common/wallet_connect' %>
 <%= render partial: "/common/create_nft" %>
