@@ -1443,7 +1443,7 @@ main.main.mt-0.NFT-detail.discover_Page {
     font-size: 17px;
     border-bottom: 2px solid transparent;
     text-align: center;
-    font: normal normal 500 26px/37px Hahmlet;
+    font: normal normal 500 22px/37px Hahmlet;
     letter-spacing: 0px;
     color: #162C5B;
     margin-right: 30px;
@@ -1452,7 +1452,7 @@ main.main.mt-0.NFT-detail.discover_Page {
 /* Create an active/current tablink class */
 .discover_menus .tab button.active {
     border-bottom: 2px solid #3C97F2;
-    font: normal normal 600 26px/37px Hahmlet;
+    font: normal normal 600 22px/37px Hahmlet;
 
 }
 
@@ -1676,11 +1676,15 @@ ul.current-filters li a {
     display: flex;
     align-items: center;
     flex-flow: row wrap;
+        width: 95%;
+    margin: 0 auto;
 }
 .modeling-artist-list ul li {
-    width: 250px;
+    width: 18%;
     border-radius: 10px;
     margin: 0 20px 20px 0;
+    margin-left: 20px;
+    margin-right: 0;
 }
 .modeling-artist-list_detail img {
     width: 100%;
@@ -2669,10 +2673,10 @@ main.NFT-detail.test-collection h3.h3-recent-list:before {
 }
  .token-constructions .profile-tabs.tabs-panel .tabcontent ul {
     padding: 0;
-    padding-left: 50px;
-    padding-right: 50px;
 }
+.token-constructions .profile-tabs.tabs-panel .tabcontent ul li {width: 30%;margin-left: 18px;margin-right: 13px;}
 
+.token-constructions .profile-tabs.tabs-panel .tabcontent ul li .img-panel {width: 100%;}
 /*test Collection css end
 */
 @media screen and (max-width: 9999px) and (min-width: 2501px) {
@@ -2786,6 +2790,16 @@ padding: 4px 8px;
     .profile-tabs.tabs-panel.tabs-lists .tab button{
     font-size: 12px;
 }
+.token-constructions .profile-tabs.tabs-panel .tabcontent ul li{
+    margin-right: 0;
+}
+.modeling-artist-list ul li{
+    margin-left: 0;
+    margin-right: 16px;
+}
+.modeling-artist-list_detail{
+    height: 180px;
+}
 .profile-tabs.tabs-panel.tabs-lists .tab button:before{
     right: -5px;
 }
@@ -2895,9 +2909,20 @@ padding: 4px 8px;
     .profile-tabs.tabs-panel.tabs-lists .tabcontent#imported-nfts ul li{
         width: 30%;
     }
-    .celebrity-img-info{
+    .celebrity-img-info,
+    .modeling-artist-list ul li{
         width: 30%;
     }
+    .modeling-artist-list ul li{
+        margin-right: 14px;
+    }
+    .modeling-artist-list_detail_pincode h6, .modeling-artist-list_detail_pincode h6 a{
+        font-size: 16px;
+    }
+    .token-constructions .profile-tabs.tabs-panel .tabcontent ul li{
+        width: 47%;
+    }
+
 }
 
 footer.discover-bottom-footer.footer.section-footer.wide-window {
@@ -3370,6 +3395,10 @@ main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
     .profile-tabs.tabs-panel.tabs-lists .tabcontent ul{
         width: 100%;
     }
+    .token-constructions .profile-tabs.tabs-panel .tabcontent ul li{
+        width: 100%;
+        margin: 0 0 20px 0;
+    }
     .celebrity-img-info{
             width: 44%;
     margin: 0 10px 20px 10px
@@ -3660,8 +3689,14 @@ span.royalty-span{
     height: 25px;
 }
 .modeling-artist-list ul li{
-    width: 90%;
+    width: 45%;
     margin: 0 auto 20px auto;
+}
+.modeling-artist-list_detail{
+    height: 160px;
+}
+.modeling-artist-list_detail_pincode h6, .modeling-artist-list_detail_pincode h6 a{
+    font-size: 14px;
 }
 .discover_menus .tab button, .discover_menus .tab button.active{
     font-size: 14px;
@@ -3782,6 +3817,9 @@ main.NFT-detail.test-collection h3.cluster_name_heading{
 @media only screen and (max-width:375px) and (min-width: 280px){
     main.main.mt-0.NFT-detail.profile-Page {
     padding-top: 80px!important;
+}
+.modeling-artist-list_detail{
+    height: 130px;
 }
 .celebrity-header h4 {
     font-size: 20px;
@@ -4015,6 +4053,9 @@ main.NFT-detail.test-collection{
 .place-buy-details .highest-bid button{
     min-width: auto;
     width: 90%;
+}
+.modeling-artist-list_detail{
+    height: 110px;
 }
 footer.footer.section-footer .footer_nav li a{
     margin-bottom: 0;
