@@ -1155,6 +1155,8 @@ li.communit-ddm-social-media a:active i {
   font-size: 14px;
   border: 1px solid var(--theme-color);
   font-weight: 700;
+  font-family: 'Hahmlet', serif;
+
 }
 
 .load-more-items a:hover,

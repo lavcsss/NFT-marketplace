@@ -2526,9 +2526,11 @@ section.blog-section.celebrity-section {
     flex-flow: row wrap;
 }
  .celebrity-img-info {
-    width: 22%;
+    width: 23%;
     position: relative;
     margin: 0 18px 22px 0;
+    margin-left: 20px;
+    margin-right: 0;
 }
  .celebrity-img-info img {
     width: 100%;
@@ -2583,7 +2585,10 @@ section.blog-section.celebrity-section {
     font-size: 14px;
     line-height: 20px;
 }
+.celebrity-info-detail {position: absolute;bottom: 14px;z-index: 12;left: 18px;}
 
+
+.celebrity-img-info .celebrity-info-detail p,.celebrity-img-info .celebrity-info-detail h6 {position: unset;}
 
 /*celebrity css end*/
 /*test Collection css start*/
@@ -2664,6 +2669,8 @@ main.NFT-detail.test-collection h3.h3-recent-list:before {
 }
  .token-constructions .profile-tabs.tabs-panel .tabcontent ul {
     padding: 0;
+    padding-left: 50px;
+    padding-right: 50px;
 }
 
 /*test Collection css end
@@ -2857,6 +2864,9 @@ padding: 4px 8px;
             right: -770px;
      top: -260px;
     }
+    .celebrity-img-info{
+        width: 22%;
+    }
 .profile-tabs.tabs-panel.tabs-lists .tab button{
     font-size: 11px;
 }
@@ -2883,6 +2893,9 @@ padding: 4px 8px;
     }
     .profile-tabs.tabs-panel.tabs-lists .tabcontent#My-Collections ul li,
     .profile-tabs.tabs-panel.tabs-lists .tabcontent#imported-nfts ul li{
+        width: 30%;
+    }
+    .celebrity-img-info{
         width: 30%;
     }
 }
@@ -3351,6 +3364,9 @@ main.main.mt-0.NFT-detail.discover_Page {padding: 120px 0 0 0!important;}
 .bg-effect:before{
         right: -330px;
     }
+    .celebrity-img-info{
+        width: 46%;
+    }
     .profile-tabs.tabs-panel.tabs-lists .tabcontent ul{
         width: 100%;
     }
@@ -3563,6 +3579,9 @@ main.NFT-detail.test-collection .image-bg-token {
 }
    .celebrity-blogs{
     width: 100%;
+   }
+   .celebrity-img-info{
+    width: 44%;
    }
    .profile-tabs.tabs-panel.tabs-lists .tabcontent ul li {
     width: 100%;
@@ -4012,5 +4031,12 @@ footer.footer.nft-detail-bottom-footer.section-footer.wide-window{
 }
 .signle-collectible-item-info .main__title.main__title--create h2{
         font-size: 15px;
+}
+.celebrity-img-info{
+    width: 90%;
+    margin: 0 auto 20px auto;
+}
+.celebrity-img-info img{
+    height: 200px;
 }
 }

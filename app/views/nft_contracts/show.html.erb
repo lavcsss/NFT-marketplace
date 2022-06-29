@@ -23,7 +23,7 @@
             <div class="row">
                <div class="col-12">
                   <% if @contract.description.present? and @contract.description.length > 150 %>
-                     <p class="contract-desc textControl"> <%= @contract.description.length %> </p>
+                     <p class="contract-desc textControl"> <%= @contract.description %> </p>
                   <% elsif @contract.description.present? and @contract.description.length < 150 %>
                      <p class="contract-desc"> <%= @contract.description %> </p>
                   <% end %>
