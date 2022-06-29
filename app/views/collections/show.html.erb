@@ -186,7 +186,7 @@
                   <% if @collection.own_collection.present? %>
                   <i><a href="<%=nft_contract_path(@collection.collection_address)%>"><%= @collection.contract_name %></a></i>
                   <% else %>                    
-                  <i><a href="<%=nft_contract_path(@collection.collection_address)%>"><%= @collection.collection_info_name %></a></i>
+                  <i><a><%= @collection.collection_info_name %></a></i>
                   <% end %>
                   </a>
                </div>

@@ -382,9 +382,9 @@
                                        <h6 class="auction-heading">
                                           <strong><%= collection.title %></strong>
                                           <% if collection.own_collection.present? %>
-                                             <a  class="auction_navigation" href="<%=nft_contract_path(collection.collection_address)%>"> <strong>  <%= collection.contract_name %> </strong> </a>
-                                          <% else %>                    
-                                              <a class="auction_navigation" href="<%=nft_contract_path(collection.collection_address)%>"> <strong>  <%= collection.collection_info_name %> </strong> </a>
+                                             <a class="auction_navigation" href="<%=nft_contract_path(collection.collection_address)%>"> <strong>  <%= collection.contract_name %> </strong> </a>
+                                          <% else %>               
+                                              <a class="auction_navigation"> <strong>  <%= collection.collection_info_name %> </strong> </a>
                                           <% end %>
                                        </h6>
                                     </a>
