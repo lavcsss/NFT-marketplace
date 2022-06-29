@@ -135,7 +135,7 @@ $(document).ready(function() {
      $(".morelink").trigger( "click");
   });
   var showChar = 130;  
-  var moretext = "Read more";
+  var moretext = "...Read more";
   var lesstext = "Read less";
 
   $('.textControl').each(function() {
@@ -143,7 +143,7 @@ $(document).ready(function() {
 
      if(content.length > showChar) {
 
-           var c = content.substr(0, showChar) + "...";
+           var c = content.substr(0, showChar);
            var h = content.substr(showChar, content.length - showChar);
            var html = c + '<span class="morecontent"><span>' + h + '</span><a href="" class="morelink">' + lesstext + '</a></span>';
            $(this).html(html);
