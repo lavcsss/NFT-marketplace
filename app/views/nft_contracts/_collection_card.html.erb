@@ -1,13 +1,9 @@
-<div class="tabcontent">
-    <ul>
-    <%if @tokens.present?%>
-        <%@tokens.each do |collection|%>
-        <%= render "dashboard/collection_card", collection: collection %>
-        <%end%>
-    <%else%>
-        <div class="celebrity-no-data-found">
-        <p> No result found! </p>
-        </div>
+<%if @tokens.present?%>
+    <%@tokens.each do |collection|%>
+    <%= render "dashboard/collection_card", collection: collection %>
     <%end%>
-    </ul>
-</div>
+<%else%>
+    <div class="celebrity-no-data-found">
+    <p> No result found! </p>
+    </div>
+<%end%>

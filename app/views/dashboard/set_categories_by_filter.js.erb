@@ -1,14 +1,14 @@
 <% if params[:page_no].to_i > 1 %>
   <% if params[:category].present? %>
-    $('.all_nfts').replaceWith('<%= j(render partial: 'collection_card_by_categories', locals: {category_collections: @category_collections}) %>');
+    $('.nft_collection').replaceWith('<%= j(render partial: 'collection_card_by_categories', locals: {collections: @category_collections}) %>');
   <% else %>
-    $('.all_nfts').append('<%= j(render partial: 'collection_card_by_categories', locals: {category_collections: @category_collections}) %>');
+    $('.nft_collection').append('<%= j(render partial: 'collection_card_by_categories', locals: {collections: @category_collections}) %>');
   <% end %>
 <% else %>
   <% if params[:category].present? %>
-    $('.all_nfts').replaceWith('<%= j(render partial: 'collection_card_by_categories', locals: {category_collections: @category_collections}) %>');
+    $('.nft_collection').replaceWith('<%= j(render partial: 'collection_card_by_categories', locals: {collections: @category_collections}) %>');
   <% else %>
-    $('.all_nfts').html('<%= j(render partial: 'collection_card_by_categories', locals: {category_collections: @category_collections}) %>');
+    $('.nft_collection').html('<%= j(render partial: 'collection_card_by_categories', locals: {collections: @category_collections}) %>');
   <% end %>
 <% end %>
 

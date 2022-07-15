@@ -40,7 +40,6 @@ config/credentials.yml.enc
 /public/packs-test
 /node_modules
 /config/environment/development.rb
-/db/schema.rb
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity

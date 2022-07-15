@@ -1,0 +1,64 @@
+<% if ['listings', 'created', 'collectibles'].include?(@tab)  %>
+    <% if params[:page_no].to_i > 1 %>
+        $('#<%= @tab %> .nft_collection').append('<%= j(render partial: "dashboard/collection_card_by_categories", locals: {collections: @data, tab: @tab}) %>');
+    <% else %>
+        $('#<%= @tab %> .nft_collection').html('<%= j(render partial: "dashboard/collection_card_by_categories", locals: {collections: @data, tab: @tab}) %>');
+    <% end %>    
+    $("#load-more").html('<%= j(render partial: "load_more") %>');
+<% elsif ['liked'].include?(@tab) %>
+    <% if params[:page_no].to_i > 1 %>
+        $('#<%= @tab %>').append('<%= j(render partial: "like_section") %>');
+    <% else %>
+        $('#<%= @tab %>').html('<%= j(render partial: "like_section") %>');
+    <% end %>
+    $("#load-more").html('<%= j(render partial: "load_more") %>');
+<% elsif ['my_collections'].include?(@tab) %>
+     <% if params[:page_no].to_i > 1 %>
+        $('#<%= @tab %>').append('<%= j(render partial: "my_collection") %>');
+    <% else %>
+        $('#<%= @tab %>').html('<%= j(render partial: "my_collection") %>');
+    <% end %>
+    $("#load-more").html('<%= j(render partial: "load_more") %>');
+<% elsif ['nft_collections'].include?(@tab) %>
+    $('#<%= @tab %>').html('<%= j(render partial: "imported_nft") %>');
+<% elsif ['following'].include?(@tab) %>
+    $('#following-dropdown').addClass('active');
+    <% if @data.present? %>
+        $('#following-dropdown').html('<%= j(render "follow", follows: @data, id: "following", followees: @data) %>');
+    <% else %>
+         $('#following-dropdown').html('<p> 0 Following </p>');
+    <% end %>
+<% elsif ['followers'].include?(@tab) %>
+    $('#followers-dropdown').addClass('active');
+    <% if @data.present? %>
+        $('#followers-dropdown').html('<%= j(render "follow", follows: @data, id: "followers", followees: @data) %>');
+    <% else %>
+         $('#followers-dropdown').html('<p> 0 Following </p>');
+    <% end %>
+<% elsif ['activity'].include?(@tab) %>
+    $('#activity-dropdown').addClass('active');
+    $('#activity-dropdown').html('<%= j(render partial: "activity_section") %>');
+<% elsif ['activity-mob'].include?(@tab) %>
+     <% if params[:page_no].to_i > 1 %>
+        $('#activity-mob').append('<%= j(render partial: "activity_section") %>');
+    <% else %>
+        $('#activity-mob').html('<%= j(render partial: "activity_section") %>');
+    <% end %>
+    $("#load-more").html('<%= j(render partial: "load_more") %>');
+<% elsif ['followers-mob'].include?(@tab) %>
+    $("#mob-followers-list").addClass("active");
+    $('#mob-followers-list').html('<%= j(render partial: "mobile_followers") %>');
+<% elsif ['following-mob'].include?(@tab) %>
+    $("#mob-following-list").addClass("active");
+    $('#mob-following-list').html('<%= j(render partial: "mobile_following") %>');
+<% end %>
+
+$(".loading-gif").hide();
+$('body').css('overflow','auto');
+
+$(".user-dashboard-load-more").data("page-no", "<%= params[:page_no].to_i + 1 %>")
+$("#current_tab").replaceWith('<span hidden="hiddden" id="current_tab"> <%= @tab %> </span>' );
+<%  @tab != 'nft_collections' && if params[:page_no].to_i == @data.total_pages%>
+  $(".user-dashboard-load-more").closest(".row").hide()
+<% end %>
+

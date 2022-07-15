@@ -565,6 +565,135 @@ function updateOwnContractCollection(collectionId) {
     }
   })
 
+  $(document).on("click", ".triggerFiatBuyValidation", function (e) {
+    clearToastr();
+    e.preventDefault()
+    if (!validNum($('#buy_qty').val())) {
+      return toastr.error('Please enter valid quantity');
+    } else if (!isLessThanOrEqualTo($('#buy_qty').val(), $('#buy_qty').attr('maxQuantity'))) {
+      return toastr.error('Maximum quantity available is ' + $('#buy_qty').attr('maxQuantity'))
+    } else {
+      initStripePayment();
+    }
+  })
+
+
+  window.initStripePayment = async function initStripePayment(){
+    $('#Fiat-modal').addClass('hide');
+    $(".loading-gif").show();
+    var collectionId = $('#collection_id').val();
+    var qty = $('#buy_qty').val().replace(/[^0-9]/g, '') || 0;
+    $.ajax({
+      url: `/collections/${collectionId}/create_product_price`,
+      type: "POST",
+      async: false,
+      data: {"quantity": qty},
+      dataType: "json",
+      global: false
+    })
+    .done(function(msg) { 
+      setTimeout(function(){
+        if (msg['status'] == 'success'){
+        createStripeSession(msg['price_id']['id'], msg['payment_id']);
+        }
+        else{
+          $.magnificPopup.close();
+          $(".loading-gif").hide();
+          toastr.error("Something Went Wrong! Please contact support");
+        }
+      }, 2000);  
+    })
+    .fail(function(jqXHR, textStatus) {
+      $.magnificPopup.close();
+      $(".loading-gif").hide();
+      toastr.error("Something Went Wrong! Please contact support");
+    });
+  }
+
+  window.createStripeSession = async function createStripeSession(price_id, payment_id){
+    var collectionId = $('#collection_id').val();
+    $.ajax({
+      url: `/collections/${collectionId}/create_stripe_session`,
+      type: "POST",
+      async: false,
+      data: {"price_id": price_id, "payment_id": payment_id},
+      dataType: "json",
+      global: false
+    }).done(function(msg){
+      if (msg['status'] == 'success'){
+        window.location = msg['session_url'];
+      }else{
+        $.magnificPopup.close();
+        $(".loading-gif").hide();
+        toastr.error("Something Went Wrong! Please contact support");
+      }
+    }).fail(function(jqXHR, textStatus) {
+      $.magnificPopup.close();
+      $(".loading-gif").hide();
+      toastr.error("Something Went Wrong! Please contact support");
+    });
+  
+  };
+
+  $(document).on("click", "#fiat-payment-validate", function (e) {
+    $(".loading-gif").show();
+    var collectionId = $('#collection_id').val();
+    var token = getUrlParameter('token');
+    $.ajax({
+      url: `/collections/${collectionId}/validate_fiat_payment`,
+      type: "POST",
+      async: false,
+      data: {token: token},
+      dataType: "json",
+    })
+    .done(function(msg) { 
+      setTimeout(function(){
+      if (msg['status'] == 'success'){
+          $(".loading-gif").show();
+          $("#loader-text").replaceWith("<h1 id='loader-text'>Transferring your NFT. Please wait ... </h1>");
+          $("#buy_qty").val(1);
+          calculateBuy($('#BuyerserviceFee').text());
+          initBuyFiatProcess($("#buyContractAddress").text(), 
+                             $("#buyContractDecimals").text(), msg['quantity'], msg['payment_amt']);
+      }
+      else if (msg['status'] == 'cancelled'){
+        $.magnificPopup.close();
+        $(".loading-gif").hide();
+        toastr.warning('Your payment has been cancelled.')
+      }
+      else{
+        $.magnificPopup.close();
+        $(".loading-gif").hide();
+        toastr.error('Invalid Payment Request! Please contact support')
+      }
+    }, 2000);  
+    })
+    .fail(function(jqXHR, textStatus) {
+      return false;
+    });
+  });
+
+
+  window.initBuyFiatProcess = async function initBuyFiatProcess(contractAddress, contractDecimals, fiatQty, paymentAmt) {
+    var paymentDetails = fetchCollectionDetails(null, contractAddress)
+    console.log(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+      paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum(fiatQty), toNum(paymentAmt),
+      paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
+      paymentDetails['seller_sign'], paymentDetails['collection_id'])
+    if($('#is_collection_lazy_minted').val() == "true"){
+      MintAndTransferAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+        paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum(fiatQty), toNum(paymentAmt),
+        paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
+        paymentDetails['seller_sign'], paymentDetails['collection_id'], paymentDetails['token_uri'], paymentDetails['royalty'],paymentDetails['shared'],paymentDetails['total'])
+    }else{
+      buyAndTransferAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+      paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum(fiatQty), toNum(paymentAmt),
+      paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
+      paymentDetails['seller_sign'], paymentDetails['collection_id'])
+    }
+  }
+
+ 
   window.initBuyProcess = async function initBuyProcess() {
     var curErc20Balance = $('#erc20_balance').text()
     var ethBalance = await window.ethBalance();
@@ -1041,7 +1170,6 @@ function updateOwnContractCollection(collectionId) {
   })
 
   $(document).on("click", ".buy-now", function () {
-    console.log($('#buyContractAddress').text())
     loadTokenBalance($('#buyContractAddress').text(), $('#buyContractDecimals').text());
   })
 

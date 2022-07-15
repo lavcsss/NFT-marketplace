@@ -75,7 +75,8 @@
                      <span class="placeholder" id="placeholder" style=""><b>Drag and Drop files</b>or</span>
                      <input accept="image/png,image/jpeg,image/gif,video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg" type="file" name="collection[attachment]" id="file-1" class="sign__file-upload create_file_upload"/>
                      <div id="imagePreviewRes"></div>
-                     <label id="choose_file_selected" for="file-1"><span><%= t('collections.form.choose_file') %></span></label> 
+                     <label id="choose_file_selected" for="file-1"><span><%= t('collections.form.choose_file') %>  </span></label> 
+                     <span  class="placeholder" id="placeholder" style=""><b>PNG, GIF, MP4 or MP3. Max 15mb. </b> </span>
                      <div class="close-preview-button" id="close-preview-button">
                         <span>X</span>
                      </div>
@@ -142,8 +143,8 @@
                      </li>
                      <li id="instPrice" class="li_inp_grp hide">
                         <div class="inp-grp-flex">
-                           <div class="sign__group">
-                              <input type="text" name="collection[instant_sale_price]" class="sign__input" id="instant-price" placeholder="Enter price for one piece"/>
+                           <div class="sign__group" style="width: 181%;">
+                              <input onkeypress="return validDecimalPoint(event)" type="text" name="collection[instant_sale_price]" class="sign__input" id="instant-price" placeholder="Enter price for one piece" />
                            </div>
                            <div class="sign__group">
                               <%= select_tag "collection[erc20_token_id]", options_for_select(Erc20Token.select_options), class: "sign__select chosen-select", required: true %>
@@ -165,6 +166,7 @@
                         </li> -->
                   </ul>
                </div>
+               <div>
                <div id="collection-type">
                   <h4 class="sign__title"><%= t('collections.form.choose_collection') %></h4>
                   <div class="sign__group sign__group--row">
@@ -186,7 +188,7 @@
                   <%end%>
                   <%=render partial: 'own_contract',  locals: {blank:true, contract: nil} %>
                </div>
-                <div class="col-12 <%= 'hide' if @nft.present? %>">
+                <div class="<%= 'hide' if @nft.present? %>">
                   <h4 class="sign__title">Choose Minting Type</h4>
                   <div class="sign__group sign__group--row">
                      <ul class="sign__radio">

@@ -1,0 +1,57 @@
+<div class="pop-div pop-width mfp-hide" id="Fiat-modal">
+    <div class="close-button modal__close"><a href="#"><img src="../../assets/nft/fiat_payment/close.png"></a></div>
+    <h2>Checkout</h2>
+    <form class="inline inline-pop" >
+      <div class="input-icons">
+          <p>User Wallet Address</p>
+          <i class="fa-solid fa-wallet icon"  style="margin-top:-7px;"><img src="../../assets/nft/fiat_payment/wallet-black.svg" class="checkout-pop-wallet-icon"></i>
+          <i class="fa fa-info-circle icon info-icon" aria-hidden="true"></i>
+          <% if current_user.present? %>
+          <input class="input-field wallet-input-box" type="text" placeholder="<%= current_user.address %>" readonly>
+          <% end %>
+          <p>From Address</p>
+          <i class="fa-solid fa-wallet icon"  style="margin-top:-7px;"><img src="../../assets/nft/fiat_payment/wallet-blue.svg" class="checkout-pop-wallet-icon"></i>
+          <input class="input-field" type="text" placeholder="<%= @collection.owner.address %>" readonly>
+          <h2 style="margin:0px; padding: 10px 0px;">NFT Details</h2>
+          <% price, symbol = @collection.sale_price %>
+          <% if @collection.multiple? %>
+            <div>
+              <label for="recipient-name" class="col-form-label"><%= t('collections.show.quantity_available', token: @collection.owned_tokens.to_i) %></label>
+              <input id='buy_qty' name="buy[quantity]" maxQuantity="<%= @collection.owned_tokens.to_i %>" class="validInteger sign__input mul_buy_inp" placeholder="Enter quantity" required/>
+            </div>
+          <% else %>
+            <input id='buy_qty' name="buy[quantity]" value="<%= @collection.owned_tokens.to_i %>" maxQuantity="<%= @collection.owned_tokens.to_i %>" class="validInteger sign__input" hidden/>
+          <% end %>
+          <table>
+            <tr>
+                <td>Name<br>
+                  <b><%= @collection.name %></b>
+                </td>
+                <td style="width:33% ;">Creator<br>
+                  <b><%= @collection.creator.full_name %></b>
+                </td>
+                <td>Collection <br>
+                  <% if @collection.own_collection.present? %>
+                  <%= @collection.contract_name %>
+                  <% else %>
+                  <%= @collection.collection_info_name %>
+                  <% end %>
+                </td>
+            </tr>
+            <tr>
+                <td>Price<br>
+                  <span style="font-size: 13px;"><b>This cost include gas & conversion fees</b></span>
+                </td>
+                <td></td>
+                <% if @collection.multiple? %>
+                  <td style="text-align:right ;" id="total-fiat-price"> $ 0.00</td>
+                <% else %>
+                  <td style="text-align:right ;" id="total-fiat-price"> $ <%= total_fiat_price_helper(@collection, 1)%></td>
+                <% end %>
+            </tr>
+          </table>
+          <div class="pop-button" style="margin-top:50px ;"><a href="javascript:void(0);" class="triggerFiatBuyValidation" role="button"> Proceed to Buy</a></div>
+      </div>
+    </form>
+</div>
+

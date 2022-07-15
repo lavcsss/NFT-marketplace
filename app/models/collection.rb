@@ -26,6 +26,7 @@ class Collection < ApplicationRecord
   has_many :bids
   has_many :transactions
   has_many :likes, dependent: :destroy
+  has_many :fiat_payments, class_name: 'FiatPayment', foreign_key: 'collection_id'
 
   has_paper_trail
 
@@ -42,10 +43,9 @@ class Collection < ApplicationRecord
   store :data, accessors: [:highest_bid, :expire_bid_days]
 
   validates :name, :description, :category, :attachment, :royalty, presence: true
-  validates :royalty, numericality: { less_than_or_equal_to: 50, message: "accepts numbers less than or equal to 50 only" }, if: Proc.new { |c| c.royalty.present? }
-
+  validates :royalty, numericality: { less_than_or_equal_to: 30, message: "accepts numbers less than or equal to 30 only" }, if: Proc.new { |c| c.royalty.present? }
   validates :name, length: {maximum: 100}
-  validates :description, length: {maximum: 1000}
+  validates :description, length: {maximum: 1000}, allow_blank: true
   validates :unlock_description, length: {maximum: 250}, allow_blank: true
 
 
@@ -100,8 +100,9 @@ class Collection < ApplicationRecord
   end
 
   def title
-    collection_title = name.camelcase
+    # collection_title = name.camelcase
     #single? ? collection_title : "#{collection_title} - #{total_editions}"
+    return name
   end
 
   def title_desc
@@ -118,34 +119,13 @@ class Collection < ApplicationRecord
 
   def title_asc
     price, currency = sale_price
-    fiat_price = sale_price_to_inr(price, currency)
+    fiat_price = sale_price_to_fiat(price, currency)
     "#{price} #{currency} #{'<span class=\'para-color\'>(' + fiat_price.to_s + ')</span>' if fiat_price > 0}".html_safe
   end
 
-  def price_inr
+  def price_fiat
     price, currency = sale_price
-    fiat_price = sale_price_to_inr(price, currency)
-    "#{'<span class=\'para-color\'>' + fiat_price.to_s + '</span>' if fiat_price > 0}".html_safe
-  end
-
-  def gst_inr   
-    price, currency = sale_price
-    fiat_price = sale_price_to_inr(price, currency)
-    gst = fiat_price * 18/100 
-  end 
-
-  def total_inr_amt 
-    price, currency = sale_price
-    fiat_price = sale_price_to_inr(price, currency)
-    total =  fiat_price + gst_inr
-  end
-
-  def razorpay_total
-    if total_inr_amt < 1 
-      (total_inr_amt.to_f.round(2) * 1000).to_i
-    else 
-      total_inr_amt * 100
-    end 
+    fiat_price = sale_price_to_fiat(price, currency)
   end
 
   def sale_price
@@ -162,14 +142,6 @@ class Collection < ApplicationRecord
       Api::Etherscan.usd_price(currency.downcase)
     end
     return (price.to_f * usd_price).round(2)
-  end
-
-  def sale_price_to_inr price, currency='eth'
-    return 0 unless currency
-    rupee_price = Rails.cache.fetch "#{currency}_price", expires_in: 10.seconds do
-      Api::Etherscan.rupee_price(currency.downcase)
-    end
-    return (price.to_f * rupee_price).round(2)
   end
 
   def collection_info

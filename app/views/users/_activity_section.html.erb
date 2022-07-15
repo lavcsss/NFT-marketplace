@@ -1,0 +1,10 @@
+<% if @data.present? %>
+    <% @data.each do |activity| %>
+        <% next if activity.item.blank? %>
+        <% if ["Follow", "Like", "Bid", "Collection"].include?(activity.item_type) %>
+            <%= render "activities/#{activity.item_type.downcase}", activity: activity if ["Follow", "Like", "Collection", "Bid"].include?(activity.item_type) %>
+        <% end %>
+    <% end %>
+<% else %>
+    <p> No Activities yet! </p>
+<% end %>

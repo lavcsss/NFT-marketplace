@@ -1,7 +1,7 @@
 <% if params[:page_no].to_i > 1 %>
-    $(".nft-collections").append('<%= j(render partial: 'collection_card', locals: {category_collections: @tokens}) %>');
+    $(".nft_collection").append('<%= j(render partial: 'collection_card', locals: {collections: @tokens}) %>');
 <% else %>
-    $(".nft-collections").html('<%= j(render partial: 'collection_card', locals: {category_collections: @tokens}) %>');
+    $(".nft_collection").html('<%= j(render partial: 'collection_card', locals: {collections: @tokens}) %>');
 <% end %>
 
 $(".collection-load-more").data("page-no", "<%= params[:page_no].to_i + 1 %>")

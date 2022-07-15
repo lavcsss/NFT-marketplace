@@ -49,7 +49,7 @@
         </div>
       </div>
 
-      <div class="row mb-15">
+      <!-- <div class="row mb-15">
         <div class="col-md-10 col-sm-10 col-xs-10">
           <label><%= t('shared.unlock_one_purchased') %></label>
           <p class="para-color"><%= t('shared.unlock_one_purchased_msg') %></p>
@@ -66,15 +66,15 @@
         </div>
       </div>
       <div class="row mb-15 unlock-description-section <%= 'hide' unless @collection.unlock_on_purchase? %>">
-      <!--   <div class="col-md-8 col-sm-8 col-xs-8">
+      <div class="col-md-8 col-sm-8 col-xs-8">
           <label><%= t('collections.show.unlock_description') %></label>
-        </div> -->
+      </div>
         <div class="col-md-12">
           <div class="form-group">
             <input type="text" name="collection[unlock_description]" class="form-control input-custom sign__input" id="collection-unlock-description" placeholder="Enter unlock description" value="<%= @collection.unlock_description %>"/>
           </div>
         </div>
-      </div>
+      </div>-->
 
     </div>
     <div class="modal-footer">

@@ -62,7 +62,7 @@
                </div>
                <%= render "common/search" %>
                <div class="nft-menus open-right-menu-detail open-menu-profile">
-                  <img src="/assets/nft/wallet.svg" alt="NFT_Wallet" />
+                  <img src="/assets/nft/wallet.svg" alt="NFT_Wallet" class="wallet-icon"/>
                   <% if current_user.attachment.present? %>
                   <%= image_tag url_for(current_user.profile_image), class: "profile-img current-user-profile" %>
                   <% else %>
@@ -109,7 +109,7 @@
                </div>
             </div>
             <div class="nft-menus">
-               <span class="profile"> <img src="/assets/nft/wallet.svg" alt="NFT_Profile"  /></span>
+               <span class="profile wallet-icon"> <img src="/assets/nft/wallet.svg" alt="NFT_Profile"  /></span>
                <a> User </a>
                <div class="inline-menus">
                   <a href="<%=my_items_path%>">Profile</a>

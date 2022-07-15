@@ -167,11 +167,38 @@ ActiveRecord::Schema.define(version: 2022_06_20_152747) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "fiat_payments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "collection_id"
+    t.integer "amount"
+    t.string "price_id"
+    t.string "product_id"
+    t.integer "quantity"
+    t.string "token"
+    t.integer "status", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["collection_id"], name: "index_fiat_payments_on_collection_id"
+    t.index ["user_id"], name: "index_fiat_payments_on_user_id"
+  end
+
   create_table "follows", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "follower_id", null: false
     t.integer "followee_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "kyc_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "name"
+    t.string "email_id"
+    t.string "country"
+    t.string "mobile_no"
+    t.text "address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_kyc_details_on_user_id"
   end
 
   create_table "likes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -265,6 +292,9 @@ ActiveRecord::Schema.define(version: 2022_06_20_152747) do
   add_foreign_key "collections", "users", column: "owner_id"
   add_foreign_key "featured_collections", "collections"
   add_foreign_key "featured_users", "users"
+  add_foreign_key "fiat_payments", "collections"
+  add_foreign_key "fiat_payments", "users"
+  add_foreign_key "kyc_details", "users"
   add_foreign_key "likes", "collections"
   add_foreign_key "likes", "users"
   add_foreign_key "nft_contracts", "users", column: "owner_id"

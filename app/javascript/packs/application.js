@@ -27,7 +27,7 @@ require('packs/formatter.js');
 require('packs/ethereum/web3.js');
 require('packs/common.js');
 require('packs/collections.js');
-
+require('packs/users.js')
 require('packs/jquery.magnific-popup.min');
 require('packs/select2.min');
 require('packs/smooth-scrollbar.js');

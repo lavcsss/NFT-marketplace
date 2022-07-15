@@ -63,16 +63,15 @@ const scrollableTabs = () => {
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
-          }
+        }
         document.getElementById(tab_id).style.display = "block";
-
         var onSaleElement = document.getElementsByClassName("listings-mob");
-        if (tab_id != "On-Sale")
+        if (tab_id != "listings")
         {
         onSaleElement[0].classList.remove('on-sale-active');
         }
-      }
-
+        fetchTabContent(tab_id);
+      }    
     return (<div className={"tablinks mob-view-profile-tab"}>
         <AppBar position="static" color="default">
           <Tabs
@@ -84,13 +83,13 @@ const scrollableTabs = () => {
             scrollButtons="on"  
             aria-label="scrollable force tabs example"
           >
-          <Tab label="Listings"  {...a11yProps(0)} onClick={() => {renderData("On-Sale");}}/>
-          <Tab label="Created"  {...a11yProps(1)} onClick={() => {renderData("Created");}}/>
-          <Tab label="Collected" {...a11yProps(2)} onClick={() => {renderData("Collectibles");}}/>
-          <Tab label="Collections" {...a11yProps(3)} onClick={() => {renderData("My-Collections");}}/>
-          <Tab label="Favorite"  {...a11yProps(4)} onClick={() => {renderData("Favorite");}}/>
-          <Tab label="Import NFTs" {...a11yProps(5)} onClick={() => {renderData("imported-nfts");}}/>
-          <Tab label="Activity"  {...a11yProps(6)} onClick={() => {renderData("Activity");}}/>
+          <Tab label="Listings"  {...a11yProps(0)} onClick={() => {renderData("listings");}}/>
+          <Tab label="Created"  {...a11yProps(1)} onClick={() => {renderData("created");}}/>
+          <Tab label="Collected" {...a11yProps(2)} onClick={() => {renderData("collectibles");}}/>
+          <Tab label="Collections" {...a11yProps(3)} onClick={() => {renderData("my_collections");}}/>
+          <Tab label="Favorite"  {...a11yProps(4)} onClick={() => {renderData("liked");}}/>
+          <Tab label="Import NFTs" {...a11yProps(5)} onClick={() => {renderData("nft_collections");}}/>
+          <Tab label="Activity"  {...a11yProps(6)} onClick={() => {renderData("activity-mob");}}/>
           </Tabs>
         </AppBar>
 
