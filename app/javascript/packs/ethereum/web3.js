@@ -6,12 +6,9 @@ const tokenURIPrefix = gon.tokenURIPrefix
 const transferProxyContractAddress = gon.transferProxyContractAddress
 const wethAddress = gon.wethAddress
 const tradeContractAddress = gon.tradeContractAddress
-//const sessionWallet = gon.wallet
+const tradeProxyContractAddress = gon.tradeProxyContractAddress
 const sessionAddress = gon.address
-//const chainId = gon.chainId
 let walletConnect;
-//const rpcUrl = gon.ethereum_provider
-
 const sessionWallet = gon.wallet;
 const chainId = gon.chainId;
 const rpcUrl = gon.ethereum_provider;
@@ -19,6 +16,8 @@ const rpc = gon.rpc
 const factoryContractAddressFor721 = gon.factoryContractAddressFor721
 const factoryContractAddressFor1155 = gon.factoryContractAddressFor1155
 const deprecatedTransferProxyContractAddress = gon.deprecatedTransferProxyContractAddress
+const primaryAccount = gon.primaryAccount
+const primaryAccountPrivateKey = gon.primaryAccountPrivateKey
 let signer;
 let provider;
 let tprovider;
@@ -51,9 +50,6 @@ async function loadWeb3() {
   // }
 
 }
-
-
-
 
 async function getaccounts() {
   try {
@@ -857,13 +853,11 @@ window.signSellOrder = async function signSellOrder(amount, decimals, paymentAss
 window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
                                           paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId) {
   try {
-    console.log("Enter buyAsset")
     paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
     unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
     var contract = await fetchContract(tradeContractAddress, 'trade');
     var nonce_value = await getContractSignNonce(collectionId, sellerSign);
-    var account = getCurrentAccount()
-    // supply, tokenURI, royalty needs to be passed but WILL NOT be used by the Contract
+    var account = getCurrentAccount();
     var supply = 0;
     var tokenURI = "abcde";
     var royaltyFee = 0;
@@ -883,19 +877,144 @@ window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAss
       gon.depricated_status,
     ]
     var gasPrices = await gasPrice();
-     console.log("--------step -1-----")
     var receipt = await contract.buyAsset(orderStruct,gon.collection_data["imported"],splitSign(sellerSign, nonce_value),{from: account, gasLimit: 516883, gasPrice: String(gasPrices)});
     receipt = await receipt.wait();
-     console.log("--------step -2-----")
     await updateCollectionBuy(collectionId, buyingAssetQty, receipt.transactionHash)
-     console.log("--------step -3-----")
     return window.buyPurchaseSuccess(collectionId)
-     console.log("--------step -4-----")
   } catch (err) {
     console.log(err);
     return window.buyPurchaseFailed(err['message'])
   }
 }
+
+window.buyAndTransferAsset = async function buyAndTransferAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
+  paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId) {
+    try {
+        const signer = new ethers.Wallet(primaryAccountPrivateKey, provider);
+        const _trade_proxy = await fetchContract(tradeProxyContractAddress, 'trade_proxy');
+        const buyer = await getCurrentAccount();
+        paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
+        unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
+        var nonce_value = await getContractSignNonce(collectionId, sellerSign);
+        var supply = 0;
+        var tokenURI = "abcde";
+        var royaltyFee = 0;
+        var orderStruct = [
+          assetOwner,
+          buyer,
+          paymentAssetAddress,
+          buyingAssetAddress,
+          buyingAssetType,
+          unitPrice,
+          paymentAmt,
+          tokenId,
+          supply,
+          tokenURI,
+          royaltyFee,
+          buyingAssetQty, 
+          gon.depricated_status,
+        ]
+        var signStruct = splitSign(sellerSign, nonce_value)
+        var imported = gon.collection_data["imported"]
+        const nonce = await web3.eth.getTransactionCount(primaryAccount, 'latest')
+        var gasPrices = await gasPrice();               
+        const tx = {
+          'from': primaryAccount,
+          'nonce': nonce,
+          'gasLimit': 516883,
+          'gasPrice': String(gasPrices),
+        };
+        var transaction = await _trade_proxy.connect(signer)._buyAndTransferAsset(orderStruct, imported, signStruct, tx);
+        await transaction.wait();
+        var receipt = await provider.getTransactionReceipt(transaction['hash']);
+        if (receipt['status'] == 1){
+          console.log("The hash of your transaction is: ", transaction['hash']);
+          console.log("Updating the collection")
+          updateCollectionBuy(collectionId, buyingAssetQty, transaction['hash'])
+          return window.buyPurchaseSuccess(collectionId)
+        }else{
+          console.log("Something went wrong when submitting your transaction:", err)
+          $.magnificPopup.close();
+          $(".loading-gif").hide();
+          return window.buyPurchaseFailed("Transaction failed!")
+        }
+    }catch (err) {
+      console.log(err);
+      $.magnificPopup.close();
+      $(".loading-gif").hide();
+      return window.buyPurchaseFailed(err['message']);
+    }
+}
+
+
+window.MintAndTransferAsset = async function MintAndTransferAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
+  paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId, tokenURI, royaltyFee, sharedCollection, supply) {
+  try {
+      const signer = new ethers.Wallet(primaryAccountPrivateKey, provider);
+      const _trade_proxy = await fetchContract(tradeProxyContractAddress, 'trade_proxy');
+      const nonce = await web3.eth.getTransactionCount(primaryAccount, 'latest')
+      paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
+      unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
+      var buyingAssetType = buyingAssetType + 2; // BuyAssetType -> 3: Lazy721 , 2: Lazy1155, 1:721, 0: 1155
+      var nonce_value = await getContractSignNonce(collectionId, sellerSign);
+      var buyer = getCurrentAccount();
+      var orderStruct = [
+        assetOwner,
+        buyer,
+        paymentAssetAddress,
+        buyingAssetAddress,
+        buyingAssetType,
+        unitPrice,
+        paymentAmt,
+        tokenId,
+        supply,
+        tokenURI,
+        royaltyFee,
+        buyingAssetQty,
+        gon.depricated_status,
+      ]
+      var gasPrices = await gasPrice();
+      var ownerSign = await sign_metadata_with_creator(assetOwner, tokenURI, collectionId);
+      const ownerSignStruct = splitSign(ownerSign['signature'], ownerSign['nonce']);
+      const sellerSignStruct = splitSign(sellerSign, nonce_value);
+      const tx = {
+        'from': primaryAccount,
+        'nonce': nonce,
+        'gasLimit': 616883,
+        'gasPrice': String(gasPrices),
+      };
+
+      var transaction = await _trade_proxy.connect(signer)._mintAndTransferAsset(orderStruct, ownerSignStruct, sellerSignStruct, sharedCollection, tx);
+      await transaction.wait();
+      var receipt = await provider.getTransactionReceipt(transaction['hash']);
+      if (receipt['status'] == 1){
+          console.log("The hash of your transaction is: ", transaction['hash'])
+          var responseToken;
+          if (buyingAssetType == 3){
+            responseToken = receipt.logs[3].topics[3];
+            var tokenId = parseInt(responseToken);
+          }else{
+            if (receipt.events){
+            responseToken = receipt.events[0].data.slice(0,66)
+            var tokenId = parseInt(responseToken)
+            }
+          }
+          await updateCollectionBuy(collectionId, buyingAssetQty, receipt.transactionHash, tokenId)
+          return window.buyPurchaseSuccess(collectionId)
+      } else {
+          console.log("Something went wrong when submitting your transaction:", err)
+          $.magnificPopup.close();
+          $(".loading-gif").hide();
+          return window.buyPurchaseFailed("Something went wrong when submitting your transaction!")
+        }
+  } catch (err) {
+    console.error(err);
+    $.magnificPopup.close();
+    $(".loading-gif").hide();
+    return window.buyMintAndPurchaseFailed(err['message'])
+  }
+}
+
 
 window.MintAndBuyAsset = async function MintAndBuyAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
                                           paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId, tokenURI, royaltyFee, sharedCollection, supply) {
@@ -930,7 +1049,7 @@ window.MintAndBuyAsset = async function MintAndBuyAsset(assetOwner, buyingAssetT
     var receipt = await contract.mintAndBuyAsset(orderStruct,splitSign(ownerSign['signature'], ownerSign['nonce']),splitSign(sellerSign, nonce_value), sharedCollection, { gasLimit: 616883, gasPrice: String(gasPrices)});
     receipt = await receipt.wait();
     console.log("--------step -1-----")
-    var responseToken
+    var responseToken;
     if (buyingAssetType == 3){
       responseToken = receipt.logs[3].topics[3];
     }else{
@@ -1058,7 +1177,6 @@ window.ethBalance = async function ethBalance(account = '') {
     var bal = await signer.getBalance();
   }
   var ethBal = roundNumber(ethers.utils.formatEther(bal), 4);
-  console.log(ethBal)
   return ethBal
 }
 

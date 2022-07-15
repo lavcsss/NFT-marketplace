@@ -1,4 +1,12 @@
-<% @data.each do |like| %>
-  <% next if like.collection.blank? %>
-  <%= render "liked", collection: like.collection, like_ids: @liked.pluck(:collection_id) %>
-<% end %>
+<ul>
+  <span class="bg-transition"></span>
+  <% if @data.present? %>
+    <% @data.each do |like| %>
+      <% if like.collection.present? %>
+        <%= render "/dashboard/collection_card", collection: like.collection %>
+      <% end %>
+    <% end %>
+  <% else %>
+      <p style="text-align:center" class="no-data"> No Favorite's Found </p>
+  <% end %>
+</ul>

@@ -310,10 +310,11 @@ $(document).ready(function(){
 		checkNetwork()
 	}, 10000);
 
-	window.show_modal = async function show_modal(id) {
+	window.show_modal = async function show_modal(id, showCloseBtn=true) {
 		$.magnificPopup.open({
 			closeOnBgClick: false ,
 			enableEscapeKey: false,
+			showCloseBtn:showCloseBtn,
 			items: {
 				src: id
 			},

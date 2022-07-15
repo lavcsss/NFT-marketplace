@@ -6,6 +6,7 @@ class CollectionsController < ApplicationController
   before_action :set_collection, except: [:new, :create, :update_token_id, :sign_metadata_hash]
 
   skip_before_action :verify_authenticity_token
+  include CollectionsHelper
 
   def new
     @collection_type = params[:type]
@@ -258,6 +259,89 @@ class CollectionsController < ApplicationController
       ""
     end
     render json: sign.present? ? sign.merge("nonce" => nonce) : {}
+  end
+
+
+  def create_product_price
+    begin
+      collection_name = @collection.name
+      product_id = Stripe::Product.create(name: collection_name)
+      quantity = params[:quantity].to_i
+      unit_amount = (total_fiat_price_helper(@collection, quantity) * 100 ).to_i # in cents
+      price = Stripe::Price.create(
+          {
+            product: product_id,
+            unit_amount: unit_amount, 
+            currency: 'usd',
+          }
+        )
+      payment = FiatPayment.create(amount: unit_amount, 
+                                  product_id: product_id['id'], 
+                                  price_id: price['id'],
+                                  user: current_user, 
+                                  collection: @collection, 
+                                  quantity: quantity)
+      if payment.valid?
+        payment.save
+        render json: {status: "success", price_id: price, payment_id: payment.id}
+      else
+        @errors = payment.errors.full_messages
+        render json: {status: "failure",}
+      end
+    rescue Exception => e
+      Rails.logger.warn "################## Exception while creating stripe product & price ##################"
+      Rails.logger.warn "ERROR: #{e.message}, PARAMS: #{params.inspect}"
+      Rails.logger.warn $!.backtrace[0..20].join("\n")
+      @errors = e.message
+      render json: {status: "failure",}
+    end
+  end
+
+  def create_stripe_session
+    begin
+      base_url = Rails.application.credentials.config[:app_url]
+      payment = FiatPayment.where(id: params[:payment_id])
+      success_key, failure_key, uniq_token = generate_verify_fiat_token()
+      payment.update(token: uniq_token)
+      session = Stripe::Checkout::Session.create({
+        line_items: [{
+          price: params[:price_id],
+          quantity: 1,
+        }],
+        mode: 'payment',
+        success_url: "#{base_url}/collections/#{@collection.address}?token=#{success_key}",
+        cancel_url: "#{base_url}/collections/#{@collection.address}?token=#{failure_key}"
+      })
+      payment.update(status: :pending)
+      render json: {status: "success", session_url: session.url }
+    rescue Exception => e
+      Rails.logger.warn "################## Exception while creating stripe session ##################"
+      Rails.logger.warn "ERROR: #{e.message}, PARAMS: #{params.inspect}"
+      Rails.logger.warn $!.backtrace[0..20].join("\n")
+      @errors = e.message
+      render json: {status: "failure",}
+    end
+  end
+
+  def validate_fiat_payment
+    decoded_hash = decode_hash(params[:token])
+    uniq_token = decoded_hash["token"]
+    status = decoded_hash["status"]
+    quantity = 1
+    payment = FiatPayment.where(token: uniq_token, status: :pending, user: current_user, collection: @collection).first
+    if payment.present?
+      quantity = payment.quantity
+      status == "success" ? payment.update(status: :success) : payment.update(status: :cancelled)
+    else
+      status = "failure"
+    end
+    crypto_amt = total_payment_crypto(@collection, quantity)
+    render json: {status: status, quantity: quantity, payment_amt: crypto_amt }
+  end
+
+  def total_fiat_price
+    fiat_price = total_fiat_price_helper(@collection, params[:quantity].to_i)
+    render json: {status: "success", data: fiat_price}
   end
 
   def fetch_details

@@ -62,10 +62,13 @@ class ApplicationController < ActionController::Base
     gon.factoryContractAddressFor721 = Settings.factoryContractAddressFor721
     gon.factoryContractAddressFor1155 = Settings.factoryContractAddressFor1155
     gon.deprecatedTransferProxyContractAddress = Settings.deprecatedTransferProxyContractAddress
+    gon.tradeProxyContractAddress = Settings.tradeProxyContractAddress
     gon.wallet = session[:wallet]
     gon.address = session[:address]
     gon.ethereum_provider = Rails.application.credentials.config[:ethereum_provider]
     gon.chainId = Rails.application.credentials.config[:chainId]
     gon.rpc = Rails.application.credentials.config[:ethereum_provider]
+    gon.primaryAccount = Rails.application.credentials.config[:primary_account][:address]
+    gon.primaryAccountPrivateKey = Rails.application.credentials.config[:primary_account][:private_key]
   end
 end

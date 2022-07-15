@@ -1,7 +1,7 @@
 <%= hidden_field_tag 'collection_address', @contract.address %>
 <main class="NFT-detail test-collection">
    <section class="user_banner_sec">
-      <div class="image-bg-token" style="background: url(<%= @contract.cover_url%>)"></div>
+      <div class="image-bg-token" style="background: url('<%= @contract.cover_url%>')"></div>
    </section>
    <div class="container bg-effect">
       <section class="token-constructions">
@@ -35,7 +35,7 @@
          </div>
          <div class="profile-tabs tabs-panel nft-collections">
             <div class="tabcontent">
-               <ul>
+               <ul class="nft_collection">
                <%if @tokens.present?%>
                   <%@tokens.each do |collection|%>
                   <%= render "dashboard/collection_card", collection: collection %>

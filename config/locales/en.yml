@@ -372,7 +372,6 @@ en:
       sign_message: Sign message
       sign_message_text: Sign message with new collection preferences
       approve: Approve
-      inr_payment: Inr payment
       fund_received: Fund received
       approve_text: Checking balance and approving
       upload_mint: Upload files & Mint token
@@ -423,10 +422,6 @@ en:
       quantity: Quantity
       your_balance: Your balance
       price_eth: Buy price in WETH
-      price_inr: Price
-      gas_fees: Gas Fees
-      inr_gst: 18% GST
-      total_price: Total
       your_bidding_balance: Your bidding balance
       service_fee: Service fee
       total_bid_amount: Total bid amount
@@ -449,7 +444,7 @@ en:
       your_buy_balance: Your buy balance
       you_will_pay: You will pay
       pay: pay
-      pay_inr: Proceed to Buy
+      proceed_to_buy: Proceed to Buy
       checkout: Checkout
       nft_details: NFT Details
       owner_token: Owner %{token} editions
@@ -457,9 +452,9 @@ en:
     title: Connect to Wallet
     payment_title: Pay using cryptocurrency or fiat to buy the NFT
     connect_wallet: Connect Your Wallet 
-    connect_inr: Payment using INR 
-    connect_crypto: Payment using crypto
-    payment_status: INR Payment Status
+    pay_fiat: Payment using Fiat 
+    pay_crypto: Payment using crypto
+    payment_status: Fiat Payment Status
     Success: Success  
     Failure: Failure
     wallet_help: Connect with one of available wallet providers or create a new wallet.

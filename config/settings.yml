@@ -1,7 +1,9 @@
 tokenURIPrefix: 'https://gateway.pinata.cloud/ipfs/'
-transferProxyContractAddress: '0x37F5caA252D81C1Bc8a81FD9d22c6bce600d2E42'
+transferProxyContractAddress: '0xabBBb8f81061766D069BbEDAcbA58b2697eC49d1'
 deprecatedTransferProxyContractAddress: '0x6209dee8106e7B2b8aa5c19df6288cb0586de668'
 wethAddress: '0xc778417E063141139Fce010982780140Aa0cD5Ab'
-tradeContractAddress: '0x8DD31FDa5756dDF88F5f546293Bb75F48996e210'
-factoryContractAddressFor721: '0x693D5Ba6452E13EdacA02D05bf40E11Ed8A7A6BD'
-factoryContractAddressFor1155: '0x5B84E04fe4E9C368a4eD805643BBc5c9E7282cAA'
+tradeContractAddress: '0x5CEACA0cFB2e70bfd46D773ece00436A9B05633B'
+factoryContractAddressFor721: '0xd92F512a0341382c775aBCf9D5718d8a8CBD5974'
+factoryContractAddressFor1155: '0x1AA51b8411D7440C03F8a1aCefcc23471C3F4A78'
+tradeProxyContractAddress: '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318'
+

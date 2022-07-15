@@ -1,0 +1,10 @@
+<ul>
+    <span class="bg-transition"></span>
+    <% if @data[:collections].present? %>
+        <% @data[:collections].each do |collection| %>
+            <%= render "my_collection_card", collection: collection %>
+        <% end %>
+    <%  else %>
+        <p class="no-data"> No Collection's Found </p>
+    <% end %>
+</ul>

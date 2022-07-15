@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user, except: [:show, :followers_list, :following_list]
-  before_action :set_user, only: [:show, :follow, :unfollow, :like, :unlike, :report, :load_tabs]
+  before_action :authenticate_user, except: [:show, :followers_list, :following_list, :show_tabs]
+  before_action :set_user, only: [:show, :follow, :unfollow, :like, :unlike, :report,]
   skip_before_action :is_approved
   skip_before_action :verify_authenticity_token, only: [:report]
 
@@ -17,19 +17,10 @@ class UsersController < ApplicationController
   def build_data
     @reportees = @user.reports.pluck(:created_by_id)
     @page_no = params[:page_no] || 1
-    @tab = params[:tab]
-    @data = @user.get_collections(@tab, params[:filters], @page_no, @user.address)
+    @tab = "about"
+    @data = @user.get_collections("listings", params[:filters], @page_no, @user.address)
     @followers_count = @user.followers.count
     @followees_count = @user.followees.count
-    @liked = @user.likes
-    @on_sale_collections = @user.on_sale_collections
-    @created_collections = @user.created_collections
-    @collectibles = @user.collectibles
-    @my_collections = @user.my_collections
-    @activity = @user.activity
-    @following = @user._following
-    @followers = @user._followers
-    @nft_collections = @user.nft_collections
   end
 
   def edit
@@ -83,23 +74,15 @@ class UsersController < ApplicationController
     collection.update_attribute('nft_contract_id', @nft_contract.id) if collection
   end
 
-  def load_tabs
-    @page_no = params[:page_no] || 1
+
+  def show_tabs
+    params[:page_no] ||= 1
+    @user = User.find_by(address: params[:id].strip!)
+    @page_no = params[:page_no]
     @tab = params[:tab]
-    @data = @user.get_collections(@tab, params[:filters], @page_no, current_user.address)
+    @data = @user.get_collections(@tab, params[:filters], @page_no, @user.address)
     @followers_count = @user.followers.count
     @followees_count = @user.followees.count
-    @liked = @user.likes
-  end
-
-  def followers_list
-    @user = User.find_by(address: params[:id].strip!)
-    @followers = @user.get_collections("followers", params[:filters], 1, @user.address)
-  end
-
-  def following_list
-    @user = User.find_by(address: params[:id].strip!)
-    @following = @user.get_collections("following", params[:filters], 1, @user.address)
   end
 
   private

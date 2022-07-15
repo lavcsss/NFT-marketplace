@@ -1,0 +1,9 @@
+<div class="close-icon"><img src="../../assets/nft/Close-white.svg" class="close-btn" /></div>
+<div id="mob-following" class="activity-dropdown-lists">
+    <h5>Following</h5>
+    <% if @data.present? %>
+    <%= render "follow", follows: @data, id: "following", followees: @data %>
+    <% else %>
+    <p> 0 Following </p>
+    <% end %>
+</div>

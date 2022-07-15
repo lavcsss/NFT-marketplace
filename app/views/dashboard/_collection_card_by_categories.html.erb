@@ -1,10 +1,7 @@
-<% if @category_collections.present? %>
-  <ul id="nft_collection"> 
-      <span class="bg-transition"></span>
-        <% @category_collections.each do |collection| %>
-          <%=render "dashboard/collection_card", collection: collection%>  
-        <% end %>
-  </ul>
-<% elsif params[:page] == 1 %>
-  <p style="text-align:center" class="no-data"> No NFT’s Found </p>
+<% if collections.present? %>
+  <% collections.each do |collection| %>
+  <%= render "/dashboard/collection_card", collection: collection %>
+  <% end %>
+<%  else %>
+  <p style="text-align:center" class="no-data"> No NFT's Found </p>
 <% end %>
