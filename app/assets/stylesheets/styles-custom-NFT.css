@@ -1078,7 +1078,7 @@ span.edit-profile img {
   margin-bottom: 6px;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail {
-  width: 46%;
+  width: 33%;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail img {
   width: 35px;
@@ -1700,6 +1700,7 @@ ul.current-filters li a {
 .modeling-artist-list_detail {
     position: relative;
     height: 220px;
+    width: 220px;
     border-radius: 10px;
 }
 .modeling-artist-list_detail:before {

@@ -2,6 +2,8 @@
 <span hidden="hidden" id="unfollow_path"> <%=unfollow_users_path(id: @user.address)%> </span> 
 <span hidden="hidden" id="followers_path"> <%= "/followers_list?id=#{@user.address}" %> </span>
 <span hidden="hidden" id="following_path"> <%= "/following_list?id=#{@user.address}" %> </span>
+<span hidden="hiddden" id="load_tabs"><%="/show_tabs?id=#{@user.address}"%> </span> 
+<span hidden="hiddden" id="current_tab"></span> 
 
 <main class="main mt-0 NFT-detail profile-Page">
    <div class="" >
@@ -84,7 +86,7 @@
                            <img src="../../assets/nft/Edit-Profile.svg"> Edit Profile
                         </span>
                      </a>
-                  <% end %>
+                     <% end %>
                   <div class="profile-details profile-pic-shown">
                       <span class="bg-shadow "></span>
                      <% if @user.attachment.attached? %>
@@ -104,14 +106,11 @@
                         <% end %>
                         </span> -->
                         </h4>
-                        
                         <% end %>
                         <h5>
-                           <!--
-                           <% if @user.twitter_link %>
+                           <!--<% if @user.twitter_link %>
                             <span> <%= link_to_twitter(@user) %></span>
-                           <% end %>
-                           -->
+                           <% end %>-->
                             <span  class="highlight-address"> <span> <%= @user.masked_address(8) %> </span>
                               <span hidden="hidden" id="address"> 
                               <%= @user.address %> </span> 
@@ -149,25 +148,25 @@
                   <div class="row mobile-row-riverse">
                      <div class="col-lg-8 col-md-12 col-sm-12 col-12 border-bottom-grey">
                         <div class="tab about-profile-information">
-                           <button class="tablinks active hide-in-mob-view" onclick="openCity(event, 'About')">
+                           <button class="tablinks active hide-in-mob-view" onclick="openTabs(event, 'About')">
                            <%= t('users.show.about') %>
                            </button>
-                           <button class="tablinks hide-in-mob-view" onclick="openCity(event, 'On-Sale')">
+                           <button class="tablinks hide-in-mob-view" onclick="openTabs(event, 'listings')">
                            Listings
                            </button>
-                           <button class="tablinks hide-in-mob-view" onclick="openCity(event, 'Created')">
+                           <button class="tablinks hide-in-mob-view" onclick="openTabs(event, 'created')">
                            <%= t('users.show.created') %>
                            </button>
-                           <button class="tablinks hide-in-mob-view" onclick="openCity(event, 'Collectibles')">
+                           <button class="tablinks hide-in-mob-view" onclick="openTabs(event, 'collectibles')">
                            Collected
                            </button>
-                           <button class="tablinks hide-in-mob-view" onclick="openCity(event, 'My-Collections')">
+                           <button class="tablinks hide-in-mob-view" onclick="openTabs(event, 'my_collections')">
                            Collections
                            </button>
-                           <button class="tablinks hide-in-mob-view" onclick="openCity(event, 'Favorite')">
+                           <button class="tablinks hide-in-mob-view" onclick="openTabs(event, 'liked')">
                            Favorite
                            </button>
-                           <button class="tablinks hide-in-mob-view remove-border-line" onclick="openCity(event, 'imported-nfts')">
+                           <button class="tablinks hide-in-mob-view remove-border-line" onclick="openTabs(event, 'nft_collections')">
                            Import NFTs
                            </button>
                         </div>
@@ -178,20 +177,20 @@
                      <div class="col-lg-4 col-md-12 col-sm-12 col-12">
                         <div class="tabs-panel following-details">
                            <div class="tab">
-                              <button id="activity" class="tablinks hide-in-mob-view">
+                              <button id="activity" class="tablinks hide-in-mob-view" onclick="fetchTabContent('activity')">
                               <span id="activity-tab" class="activity-tab"> <%= t('users.show.activity') %></span>
                               </button>
-                              <button id="following" class="tablinks web-follow-btn">
+                              <button id="following" class="tablinks web-follow-btn" onclick="fetchTabContent('following')">
                                  Following <span class="following-count"> (<%= @user.followees.count %>)</span>
                               </button>
-                              <button id="followers" class="tablinks web-follow-btn remove-border">
+                              <button id="followers" class="tablinks web-follow-btn remove-border" onclick="fetchTabContent('followers')">
                                  Followers <span class="followers-count">(<%= @user.followers.count %>)</span>
                               </button>
                               
-                              <button id="mob-following" class="tablinks mob-follow-btn">
+                              <button id="mob-following" class="tablinks mob-follow-btn" onclick="fetchTabContent('following-mob')">
                                  <span class="following-count"><%= @user.followees.count %></span>  Following
                               </button>
-                              <button id="mob-followers" class="tablinks mob-follow-btn">
+                              <button id="mob-followers" class="tablinks mob-follow-btn" onclick="fetchTabContent('followers-mob')">
                                  <span class="followers-count"><%= @user.followers.count %></span> Followers
                               </button>
 
@@ -213,38 +212,19 @@
 
                            </div>
                            <div class="activity-dropdown Activity" id="activity-dropdown">
-                              <% if @activity.present? %>
-                              <% @activity.each do |activity| %>
-                              <% next if activity.item.blank? %>
-                              <% if ["Follow", "Like", "Bid", "Collection"].include?(activity.item_type) %>
-                              <%= render "activities/#{activity.item_type.downcase}", activity: activity if ["Follow", "Like", "Collection", "Bid"].include?(activity.item_type) %>
-                              <% end %>
-                              <% end %>
-                              <% else %>
-                              <p> No Activities yet! </p>
-                              <% end %>
                            </div>
                            <div class="activity-dropdown Following", id="following-dropdown">
-                              <!-- <% if @following.present? %>
-                              <%= render "follow", follows: @following, id: "following", followees: @following %>
-                              <% else %>
-                              <p> 0 Following </p>
-                              <% end %> -->
-                              <!-- <div id="loading" style="transition: 0.5s"><p style="text-align: center;"> Loading.. </p> </div> -->
                            </div>
                            <div class="activity-dropdown Followers", id="followers-dropdown">
-                              <!-- <div id="loading" style="transition: 0.5s"><p style="text-align: center;"> Loading.. </p> </div> -->
                            </div>
                         </div>
                      </div>
                   </div>
                   
                   <div id="About" class="tabcontent profile-mob-details hide-in-mob-view" style="display: block;">
-                     <!-- 
-                     <% if @user.name %>
+                     <!-- <% if @user.name %>
                      <h6 class="panel-detail-heading"><%= @user.name %></h6>
-                     <% end %>
-                     -->
+                     <% end %>-->
                      <% if @user.bio.present? %>
                      <%= link_to_bio(@user) %>
                      <% else %>
@@ -252,23 +232,19 @@
                      <% end %>
                   </div>
 
-                  <div id="Activity" class="tabcontent profile-mob-details" >
-                     <% if @activity.present? %>
-                        <% @activity.each do |activity| %>
-                           <% next if activity.item.blank? %>
-                              <% if ["Follow", "Like", "Bid", "Collection"].include?(activity.item_type) %>
-                                 <%= render "activities/#{activity.item_type.downcase}", activity: activity if ["Follow", "Like", "Collection", "Bid"].include?(activity.item_type) %>
-                              <% end %>
-                        <% end %>
-                     <% else %>
-                        <p> No Activities yet! </p>
-                     <% end %>
+                  <div id="activity-mob" class="tabcontent profile-mob-details">
                   </div>
                   
-                  <div id="On-Sale" class="tabcontent profile-mob-details ">
-                     <ul>
+                  <div id="listings" class="tabcontent profile-mob-details ">
+                     <ul class="nft_collection"> 
+                           <span class="bg-transition"></span>
+                     </ul>
+                  </div>
+
+                  <div id="listings" class="listings-mob tabcontent profile-mob-details mob-view-profile-tab on-sale-active">
+                     <ul class="nft_collection">
                         <span class="bg-transition"></span>
-                        <% if @on_sale_collections.present? %>
+                        <% if @data.present? %>
                         <% @data.each do |collection| %>
                         <%= render "/dashboard/collection_card", collection: collection %>
                         <% end %>
@@ -277,83 +253,27 @@
                         <% end %>
                      </ul>
                   </div>
-
-                  <div id="On-Sale" class="listings-mob tabcontent profile-mob-details mob-view-profile-tab on-sale-active">
-                     <ul>
+                  
+                  <div id="created" class="tabcontent profile-mob-details">
+                     <ul class="nft_collection"> 
                         <span class="bg-transition"></span>
-                        <% if @on_sale_collections.present? %>
-                        <% @data.each do |collection| %>
-                        <%= render "/dashboard/collection_card", collection: collection %>
-                        <% end %>
-                        <%  else %>
-                        <p class="no-data"> No NFT's Found </p>
-                        <% end %>
-                     </ul>
-                   </div>
-
-                  <div id="Created" class="tabcontent profile-mob-details">
-                     <ul>
-                        <span class="bg-transition"></span>
-                        <% if @created_collections.present? %>
-                        <% @created_collections.each do |collection| %>
-                        <%= render "/dashboard/collection_card", collection: collection %>
-                        <% end %>
-                        <%  else %>
-                        <p class="no-data"> No NFT's Found </p>
-                        <% end %>
                      </ul>
                   </div>
-                  <div id="Collectibles" class="tabcontent profile-mob-details">
-                     <ul>
+                  <div id="collectibles" class="tabcontent profile-mob-details">
+                     <ul class="nft_collection"> 
                         <span class="bg-transition"></span>
-                        <% if @collectibles.present? %>
-                        <% @collectibles.each do |collection| %>
-                        <%= render "/dashboard/collection_card", collection: collection %>
-                        <% end %>
-                        <%  else %>
-                        <p class="no-data"> No NFT's Found </p>
-                        <% end %>
                      </ul>
                   </div>
-                  <div id="My-Collections" class="tabcontent profile-mob-details">
-                     <span class="bg-transition"></span>
-                     <div class="modeling-artist-list">
-                        <ul>
-                           <%if @my_collections.present? %>
-                              <%@my_collections.all.each do |single_contract|%>
-                                 <%= render 'dashboard/own_contract', contract: single_contract %>
-                              <% end %>
-                           <% else %>
-                              <p class="no-data"> No Collection's Found </p>
-                           <%end%>
-                        </ul>
-                     </div>
+                  <div id="my_collections" class="tabcontent profile-mob-details">
                   </div>
-                  <div id="Favorite" class="tabcontent profile-mob-details">
-                     <ul>
+                  <div id="liked" class="tabcontent profile-mob-details">
+                  <ul class="nft_collection"> 
                         <span class="bg-transition"></span>
-                        <% if @liked.present? %>
-                        <% @liked.each do |like| %>
-                        <% next unless like.collection.present? %>
-                        <%= render "/dashboard/collection_card", collection: like.collection %>
-                        <% end %>
-                        <% else %>
-                        <p> No Favorite's Found  </p>
-                        <% end %>
                      </ul>
                   </div>
-
-                  <div id="imported-nfts" class="tabcontent profile-mob-details">
-                     <ul>
-                        <span class="bg-transition"></span>
-                        <% if @nft_collections[:collections].present? %>
-                           <% @nft_collections[:collections].each do |collection| %>
-                        <%= render "my_collection_card", collection: collection %>
-                           <% end %>
-                        <%  else %>
-                           <p class="no-data"> No Collection's Found </p>
-                        <% end %>
-                     </ul>
+                  <div id="nft_collections" class="tabcontent profile-mob-details">
+                  </div>
+                  <div id="load-more">
                   </div>
                </div>
             </div>
@@ -364,27 +284,9 @@
 
 
 <div class="User_following-list" id="mob-following-list">
-   <div class="close-icon"><img src="../../assets/nft/Close-white.svg" class="close-btn"></div>
-   <div id="mob-following" class="activity-dropdown-lists">
-      <h5>Following</h5>
-      <% if @following.present? %>
-      <%= render "follow", follows: @following, id: "following", followees: @following %>
-      <% else %>
-      <p> 0 Following </p>
-      <% end %>
-   </div>
 </div>
 
 <div class="User_following-list" id="mob-followers-list">
-   <div class="close-icon"><img src="../../assets/nft/Close-white.svg" class="close-btn"></div>
-   <div id="mob-followers" class="activity-dropdown-lists">
-      <h5>Followers</h5>
-      <% if @followers.present? %>
-      <%= render "follow", follows: @followers, id: "followers", followees: @followers %>
-      <% else %>
-      <p> 0 Followers </p>
-      <% end %>
-   </div>
 </div>
 
 
@@ -392,174 +294,6 @@
 
 <%= render partial: 'users/report_user' %>
 <script type="text/javascript">
-
-   $(document).ready(function(){
-     $(".close-top-notify").click(function(){
-       $(".main").addClass("close-nav");
-     });
-   });
-
-   $(document).ready(function(){
-      $(".follow-no-user").click(function(){  
-         toastr.error('Please connect your wallet to proceed.');
-      })
-   }
-   );
-   
-   $(document).ready(function(){
-      $(".copy_address").click(function(){
-         var copyText = document.getElementById("address").innerText;
-         var dummyText = document.createElement('input');
-         document.body.appendChild(dummyText);
-         dummyText.value = copyText;
-         dummyText.select();
-         document.execCommand("copy", false);
-         dummyText.remove();
-         toastr.success('Address Copied Successfully!')
-      });
-   });
-
-
-   
-   $(document).ready(function(){
-       $(".close-btn").click(function(){
-           $(".User_following-list").removeClass("active");
-       });
-     });
-
-   $(document).ready(function(){
-       $("#mob-following").click(function(){
-          $("#mob-following-list").addClass("active");
-       });
-     });
-
-   $(document).ready(function(){
-       $("#mob-followers").click(function(){
-          $("#mob-followers-list").addClass("active");
-       });
-     });
-   
-   
-   function openCity(evt, cityName, ) {
-     var i, tabcontent, tablinks;
-     tabcontent = document.getElementsByClassName("tabcontent");
-     for (i = 0; i < tabcontent.length; i++) {
-       tabcontent[i].style.display = "none";
-     }
-     tablinks = document.getElementsByClassName("tablinks");
-     for (i = 0; i < tablinks.length; i++) {
-       tablinks[i].className = tablinks[i].className.replace(" active", "");
-     }
-     document.getElementById(cityName).style.display = "block";
-     evt.currentTarget.className += " active";
-     if (cityName != "Activity")
-     {   
-         activityElement = document.getElementById("Activity");
-         activityElement.classList.add('active');
-     }
-     else{
-        activityElement = document.getElementById("Activity");
-        activityElement.classList.remove('active');
-     }
-   }
-   
-   
-   $(document).ready(function(){
-      $(document).mouseup(e => {
-         if ($('#activity').is(e.target) || $("#activity-tab").is(e.target))
-         {  
-            $("#activity").toggleClass("active");
-            $('#activity-dropdown').toggleClass("active");
-            $("#following").removeClass("active");
-            $('#following-dropdown').removeClass("active");
-            $("#followers").removeClass("active");
-            $('#followers-dropdown').removeClass("active");
-         }
-         else if ($('#following').is(e.target))
-         {  
-            $("#following").toggleClass("active");
-            $("#activity").removeClass("active");
-            $('#activity-dropdown').removeClass("active");
-            $("#followers").removeClass("active");
-            $('#followers-dropdown').removeClass("active");
-
-         }
-         else if ($('#followers').is(e.target))
-         {  
-            $("#followers").toggleClass("active");
-            $("#activity").removeClass("active");
-            $('#activity-dropdown').removeClass("active");
-            $("#following").removeClass("active");
-            $('#following-dropdown').removeClass("active");
-         }
-         else 
-         {  
-            $("#activity").removeClass("active");
-            $('#activity-dropdown').removeClass("active");
-            $("#following").removeClass("active");
-            $('#following-dropdown').removeClass("active");
-            $("#followers").removeClass("active");
-            $('#followers-dropdown').removeClass("active");
-         }
-      });
-      
-   });
-
-   function followUser(view){
-
-      var followPath = document.getElementById("follow_path").innerText;
-      var request =  $.ajax({
-      url: followPath,
-      type: "post",
-      dataType: "json",
-      })
-      request.done(function (response) {
-         if(response.status = 'success'){
-            if (view == "web-view"){
-               $(".follow-tag").replaceWith('<a onclick="unFollowUser(\'web-view\')" class="unfollow-tag"><span class="edit-profile follow-btn unfollow-btn">Unfollow</span></a>');
-            }
-            else{
-               $(".follow-tag").replaceWith('<a onclick="unFollowUser(\'mob-view\')" class="unfollow-tag">Unfollow </a>')
-            }
-            updateCount("following-count", response.following_count);
-            updateCount("followers-count", response.followers_count);
-            toastr.success('Following successful')
-         }});
-         request.fail(function () {
-         toastr.error('Something Went Wrong!')
-         }); 
-   }
-
-   function unFollowUser(view){
-
-      var unFollowPath = document.getElementById("unfollow_path").innerText;
-      var request =  $.ajax({
-      url: unFollowPath,
-      type: "post",
-      dataType: "json",
-      })
-      request.done(function (response) {
-         if(response.status = 'success'){
-            if (view == "web-view"){
-               $(".unfollow-tag").replaceWith('<a onclick="followUser(\'web-view\')" class="follow-tag"><span class="edit-profile follow-btn">Follow</span></a>');
-            }
-            else{
-               $(".unfollow-tag").replaceWith('<a onclick="followUser(\'mob-view\')" class="follow-tag">Follow </a>')  
-            }
-            updateCount("following-count", response.following_count);
-            updateCount("followers-count", response.followers_count);
-            toastr.success('Unfollowed successful')
-         }});
-         request.fail(function () {
-         toastr.error('Something Went Wrong!')
-         }); 
-   }
-   
-   function updateCount(className, count){
-      html = `<span class="${className}"> (${count})</span>`
-      $(`.${className}`).replaceWith(`${html}`);
-   }
-  
 
 
 </script>

@@ -22,6 +22,9 @@ class User < ApplicationRecord
   has_many :sellings, foreign_key: "seller_id", class_name: "Transaction"
   has_many :buyings, foreign_key: "buyer_id", class_name: "Transaction"
   has_many :notifications, foreign_key: "to_user_id"
+  has_many :fiat_payments, class_name: 'FiatPayment', foreign_key: 'user_id'
+  has_one  :kyc_details, class_name: 'KycDetail', foreign_key: 'user_id'
+
 
   has_one_attached :attachment
   has_one_attached :banner
@@ -273,58 +276,35 @@ class User < ApplicationRecord
   end
 
   def get_collections(tab, filters, page_no, owner_address)
+    item_per_page = 15
     case tab
-    when "collectibles"
-      Collection.where("owner_id=?", id).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: page_no)
+    when "listings"
+      Collection.where("owner_id=? and put_on_sale=?", id, true).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: page_no, per_page: item_per_page)
     when "created"
-      Collection.by_creator(self).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: page_no)
+      Collection.by_creator(self).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: page_no, per_page: item_per_page)
+    when "collectibles"
+      Collection.where("owner_id=?", id).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: page_no, per_page: item_per_page)
     when "liked"
-      likes.paginate(page: page_no)
+      likes.paginate(page: page_no, per_page: item_per_page)
     when "my_collections"
-      self.nft_contracts.includes(owner: { attachment_attachment: :blob }).paginate(page: page_no)
+      self.nft_contracts.includes(owner: { attachment_attachment: :blob }).paginate(page: page_no, per_page: item_per_page)
     when "activity"
-      self_activities(filters,page_no)#.paginate(page: page_no)
+      self_activities(filters, page_no)#.paginate(page: page_no)
+    when "activity-mob"
+      self_activities(filters, page_no)#.paginate(page: page_no)
     when "following"
-      followees.includes(attachment_attachment: :blob).paginate(page: page_no)
+      followees.includes(attachment_attachment: :blob).paginate(page: page_no, per_page: item_per_page)
     when "followers"
-      followers.includes(attachment_attachment: :blob).paginate(page: page_no)
+      followers.includes(attachment_attachment: :blob).paginate(page: page_no, per_page: item_per_page)
+    when "following-mob"
+      followees.includes(attachment_attachment: :blob).paginate(page: page_no, per_page: item_per_page)
+    when "followers-mob"
+      followers.includes(attachment_attachment: :blob).paginate(page: page_no, per_page: item_per_page)
     when "nft_collections"
       Api::NftCollections::nft_collections(owner_address, page_no)
     else
-      Collection.where("owner_id=? and put_on_sale=?", id, true).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: page_no)
+      Collection.where("owner_id=? and put_on_sale=?", id, true).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: page_no, per_page: item_per_page)
     end
-  end
-
-  def on_sale_collections
-    Collection.where("owner_id=? and put_on_sale=?", id, true).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: 1)
-  end
-
-  def created_collections
-    Collection.by_creator(self).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: 1)
-  end
-
-  def collectibles
-    Collection.where("owner_id=?", id).includes(attachment_attachment: :blob, creator: { attachment_attachment: :blob }, owner: { attachment_attachment: :blob }).paginate(page: 1)
-  end
-
-  def my_collections
-    self.nft_contracts.includes(owner: { attachment_attachment: :blob }).paginate(page: 1)
-  end
-
-  def activity
-    self_activities(nil, 1)
-  end
-
-  def _following
-    followees.includes(attachment_attachment: :blob).paginate(page: 1)
-  end
-
-  def _followers
-    followers.includes(attachment_attachment: :blob).paginate(page: 1)
-  end
-
-  def nft_collections
-    Api::NftCollections::nft_collections(address, 1)
   end
 
   def self.validate_user address

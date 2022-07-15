@@ -1,6 +1,7 @@
 <% is_collection_owner = @collection.is_owner?(current_user) %>
 <%= hidden_field_tag 'collection_id', @collection.address %>
 <%= hidden_field_tag 'is_collection_lazy_minted', @collection.is_lazy_minted? %>
+<span hidden="hidden" id="fiat-payment-validate"> </span>
 <span hidden="hidden" id="contract_address">  <%= @collection.nft_contract&.address %> </span> 
 <span id="eth_balance" class="curEthBalance hide">0.0</span>
 <span id="erc20_balance" class="curErc20Balance hide">0.0</span>
@@ -52,7 +53,7 @@
                <li>
                   <label>Minted on</label>
                   <a>
-                  <strong><%=@collection.created_at.strftime("%b %m,%Y")%></strong>
+                  <strong><%=@collection.created_at.strftime("%b %d, %Y")%></strong>
                   </a>
                </li>
                <li class="remove-ellipses">
@@ -105,7 +106,7 @@
                   </a>
                </li>
                <li><a target=_blank href="mailto:?subject=<%= @collection.name %>&body=<%= @collection.description %> Link here:<%= current_url %>">
-                  <i class="fa fa-envelope"></i><span>Envelope</span>
+                  <i class="fa fa-envelope"></i><span>Email</span>
                   </a>
                </li>
             </ul>
@@ -222,7 +223,11 @@
                <h5>No bids</h5>
                <%end%>
                <% if current_user && current_user.is_approved? %>
-               <a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal')" class="buy-now"><button>Buy for 
+                  <% if @collection.owner.address == @collection.creator.address %>
+                     <a href="javascript:void(0)" onclick="window.show_modal('#Payment-modal', false)" class="buy-now"><button>Buy for 
+                  <% else %>
+                     <a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal', false)" class="buy-now"><button>Buy for 
+                  <% end %>
                <i><%= @collection.instant_sale_price%></i> WETH</button></a>
                <% else %>
                <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> WETH</button></a>
@@ -334,7 +339,7 @@
                <li class="adjst-mrgn">
                   <label>Minted on</label>
                   <a>
-                  <strong><%=@collection.created_at.strftime("%b %m,%Y")%></strong>
+                  <strong><%=@collection.created_at.strftime("%b %d, %Y")%></strong>
                   </a>
                </li>
               <li class="remove-ellipses">
@@ -398,8 +403,12 @@
       <h5>No bids</h5>
       <%end%>
       <% if current_user && current_user.is_approved? %>
-      <a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal')" class="buy-now"><button>
-      Buy for <i><%= @collection.instant_sale_price%></i> WETH</button></a>
+         <% if @collection.owner.address == @collection.creator.address %>
+               <a href="javascript:void(0)" onclick="window.show_modal('#Payment-modal', false)" class="buy-now"><button>Buy for 
+         <% else %>
+               <a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal', false)" class="buy-now"><button>Buy for 
+         <% end %>
+         <i><%= @collection.instant_sale_price%></i> WETH</button></a>
       <% else %>
       <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> WETH</button></a>
       <% end %>
@@ -446,7 +455,8 @@
 <% if is_collection_owner %>
 <%= render partial: 'collections/execute_bid' %>
 <% end %>
-<%= render partial: 'collections/buy_modal' %>
+<%= render partial: 'collections/payment_modal' %>
+
 <script type="text/javascript">
    $(document).ready(function(){
       $(".button-no-user").click(function(){  
@@ -459,8 +469,13 @@
     $("#bid_amt, #bid_currency, #bid_qty").on('input', function () {
       calculateBid($('#BuyerserviceFee').text());
     });
+    
     $("#buy_qty").on('input', function () {
       calculateBuy($('#BuyerserviceFee').text());
+    });
+
+    $(".mul_buy_inp").on('input', function () {
+      calculateBuyFiatAmt();
     });
    
     <% if @collection.single? %>
@@ -470,6 +485,24 @@
         calculateBuy($('#BuyerserviceFee').text());
       });
     <% end %>
+
+    function calculateBuyFiatAmt(){
+      var qty = $('#buy_qty').val().replace(/[^0-9]/g, '') || 0;
+      if (qty != 0) {
+         $.ajax({
+            url: '/collections/' + $('#collection_id').val() + '/total_fiat_price',
+            type: 'GET',
+            async: false,
+            data: {"quantity": qty},
+            success: function (respVal) {
+            resp = respVal['data']
+            }
+         });
+         $("#total-fiat-price").html('$ ' + numToString(resp));
+      }else{
+         $("#total-fiat-price").html('$ 0.00');
+      }
+    }
    
     $(document).on("change", "#collection-put-on-sale", function () {
       if (!$(this).is(":checked")) {
@@ -502,22 +535,9 @@
       e.preventDefault();
       $.magnificPopup.close();
     });
-
-      $(document).ready(function(){
-       $(".copy_address").click(function(){
-           var copyText = document.getElementById("contract_address").innerText;
-           console.log(copyText);
-           var dummyText = document.createElement('input');
-           document.body.appendChild(dummyText);
-           dummyText.value = copyText;
-           dummyText.select();
-           document.execCommand("copy", false);
-           dummyText.remove();
-           toastr.success('Address Copied Successfully!')
-       });
-     });
    
    });
+   
    function openCity(evt, cityName) {
    var i, tabcontent, tablinks;
    tabcontent = document.getElementsByClassName("tabcontent");
@@ -563,5 +583,12 @@
             }
          })
    });
+
+   function validateFiatPayment() {
+    <%if params[:token].present? %>  
+      $("#fiat-payment-validate").click()
+    <% end %>
+   }
+   window.onload = validateFiatPayment;
    
 </script>

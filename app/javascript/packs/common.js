@@ -11,28 +11,6 @@ $(document).ready(function () {
   })
 
 
-  $(document).on('click', '#followers', function () {
-    var url = document.getElementById("followers_path").innerText;
-    
-    $.ajax({
-      url: url,
-      type: "get",
-      dataType: "script",
-      data: {}
-    })
-  })
-
-
-
-  $(document).on('click', '#following', function () {
-    var url = document.getElementById("following_path").innerText;
-    $.ajax({
-      url: url,
-      type: "get",
-      dataType: "script",
-      data: {}
-    })
-  })
 
   $(document).on('click', '.notify-inbox-message .close-icon', function () {
     $("body").removeClass("open-modal");
@@ -162,7 +140,50 @@ $(document).ready(function() {
      $(this).prev().toggle();
      return false;
   });
+
+  $("#rzp-button-order").click(function(e){
+    var options = {
+    "key": "rzp_test_SvWnVt5D4Uc3AY",
+    "amount": 1000, // 2000 paise = INR 20 NOTE:  change to dynamic plan's price
+    "name": "Razorpay",
+    "description": "NFT Services.",
+    "image": "",
+    "handler": function (response){
+      $('#Fiat-modal').addClass('hide')
+      $('.progress').show()
+      // $(".triggerInrBuyValidation").click()
+      // show_modal('#Follow-steps') 
+      $('#Fiat-modal').removeClass('hide')
+      $.ajax({
+        url: "",
+        type: "POST",
+        data: {},
+        success:function(data) {
+          window.href = "";
+        }
+      });
+    },
+    "prefill": {
+      "name": "test prof"
+    },
+    "notes": {
+    }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+    e.preventDefault();
+  });
+
 });
+
+
+
+window.getUrlParameter = function getUrlParameter(name) {
+  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+  var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+  var results = regex.exec(location.href);
+  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, '    '));
+};
 
 function preventNegativeNumbers(inputs){
   if(!inputs) {return;}
@@ -191,4 +212,28 @@ function negativeNumberPrevent(input) {
     if (pasteData.match(/[^0-9]/))
       e.preventDefault();
   }, false);
+
+     
+  window.validDecimalPoint = function validDecimalPoint(e){
+    return e.charCode === 0 || ((e.charCode >= 48 && e.charCode <= 57) || (e.charCode == 46 && document.getElementById("instant-price").value.indexOf('.') < 0));
+  }
+  
+  window.validateEmail = function validEmail(emailId){
+      return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailId));
+  }
+
+  window.validateMobileNumber = function validateMobileNumber(e){
+    var value = document.getElementById("mobile_no").value;
+    var numberAlone = value.replace(/[^0-9]/g,'');
+    var numberValidation = (e.charCode >= 48 && e.charCode <= 57) && (numberAlone.length <= 12);
+    var specialcharValidation = [40, 41, 43, 45, 32].includes(e.charCode);
+    return (numberValidation || specialcharValidation);
+  }
+
+  window.blockSpecialChar = function blockSpecialChar(e){
+      var k;
+      document.all ? k = e.keyCode : k = e.which;
+      return ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 44 && k <= 57));
+  }
+
 }

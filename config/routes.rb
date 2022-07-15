@@ -32,7 +32,6 @@ Rails.application.routes.draw do
       get :following
       get :follow
       get :unfollow
-      get :load_tabs
       post :like
       post :unlike
       post :bid
@@ -43,6 +42,8 @@ Rails.application.routes.draw do
     end
   end
   resources :nft_contracts, only: [:show]
+
+  resources :kyc_detail, only: [:create]
   resources :collections, only: [:new, :show, :create]  do
     member do
       get :remove_from_sale
@@ -65,6 +66,12 @@ Rails.application.routes.draw do
       post :save_nonce_value
       post :get_contract_sign_nonce
       post :update_state
+      post :create_product_price
+      post :create_stripe_session
+      post :validate_fiat_payment
+      post :transfer_nft
+      get :total_fiat_price
+
     end
   end
 
@@ -93,9 +100,8 @@ Rails.application.routes.draw do
   get 'collections', to: 'dashboard#collections'
   post '/filter_by', to: 'dashboard#filter_by'
   put 'read_notifications', to: 'dashboard#read_notifications'
-  get 'followers_list', to: 'users#followers_list'
-  get 'following_list', to: 'users#following_list'
   get 'celebrity_list', to: 'dashboard#celebrity_list'
+  get 'show_tabs', to: "users#show_tabs"
   get 'collections_list', to: 'nft_contracts#collections_list'
   
 

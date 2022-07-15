@@ -7,8 +7,6 @@
           <button class="tablinks" onclick="openCity(event, 'Collections')">Collections</button>
         </div>
       </div>
-
-    
       </div>
     <div class="container bg-effect">
       <div class="discover-container">
@@ -48,7 +46,6 @@
                     <div id="Category" class="tab-pane fade in active show">
                       <div class="Category-Lists">
                         <% Category.all.each do |category| %>
-                          
                           <% 
                           isActive = ""
                           if session[:category].include? category.name
@@ -62,6 +59,7 @@
                         <a class="mob-apply-btn"><button>Apply</button></a>
                       </div>
                     </div>
+                    
                     <div id="Sale_Type" class="tab-pane fade">
                        <div class="Category-Lists">
                         <label>Buy Now</label>
@@ -116,7 +114,7 @@
                 <div class="profile-tabs tabs-panel discover-profile"> 
                   <div class="tabcontent all_nfts">
                      <% if @category_collections.present? %>
-                      <ul id="nft_collection"> 
+                      <ul class="nft_collection"> 
                           <span class="bg-transition"></span>
                             <% @category_collections.each do |collection| %>
                               <%=render "dashboard/collection_card", collection: collection%>  
@@ -303,22 +301,6 @@
      $("."+cityName).css("display", "block");
      evt.currentTarget.className += " active";
    }
-   
-
-   
-// function openCity(evt, cityName) {
-//   var i, tabcontent, tablinks;
-//   tabcontent = document.getElementsByClassName("tabcontent");
-//   for (i = 0; i < tabcontent.length; i++) {
-//     tabcontent[i].style.display = "none";
-//   }
-//   tablinks = document.getElementsByClassName("tablinks");
-//   for (i = 0; i < tablinks.length; i++) {
-//     tablinks[i].className = tablinks[i].className.replace(" active", "");
-//   }
-//   document.getElementById(cityName).style.display = "block";
-//   evt.currentTarget.className += " active";
-// }
 
 
 $('.current-filters > li > a').click(function(e){
@@ -385,21 +367,11 @@ function filterRecords(){
   }else{
     $("#nft_collection").html('<p> No records found! </p>');
     $(".count_record").html("(0 Result)")
-  }
-
-    });
+  } });
   request.fail(function () {
   toastr.error('Something Went Wrong!')
   });  
-
 }
-
-// $('.category-show').on('click', function(){
-
-// $(this).addClass("open-inner-tab");
-// $('.apply').removeClass("open-inner-tab");
-
-// });
 
 $('.category-show').click(function(e) {
   

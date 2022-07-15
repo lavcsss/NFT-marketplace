@@ -405,16 +405,16 @@ box.My_modal.create_collectible.open-modal ul li .choose-single-multiple {
     font-weight: 400;
   }
 
-.My_modal.create_collectible.open-modal .modal-body-sec .footer-bottom {
-/*    background: #3C97F2 0% 0% no-repeat padding-box;
+/*  .My_modal.create_collectible.open-modal .modal-body-sec .footer-bottom {
+  background: #3C97F2 0% 0% no-repeat padding-box;
     border-radius: 0px 0px 30px 30px;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
-    padding: 15px;*/
-}
+    padding: 15px;
+}*/
 
 .My_modal.create_collectible.open-modal .modal-body-sec .footer-bottom p {
     letter-spacing: 0px;
@@ -886,3 +886,244 @@ box.My_modal.notify-inbox-message.share-media.open-modal .about-notification img
 }
 }
 /*NFT Modal end*/
+
+/* Fiat Payment Popups starts */
+.pop-div{
+  max-width: 450px;
+  margin: 5% auto;
+  background: #FFFFFE 0% 0% no-repeat padding-box;
+  box-shadow: -16px 3px 20px #00000010;
+  border-radius: 30px;
+  position: relative;
+  text-align: center;
+  min-height: 400px;
+  padding: 20px 0px;
+}
+.pop-div h2{
+  font-size: 20px;
+  font-weight: 700;
+  margin: 10px 0px 0px;
+  padding: 20px;
+  letter-spacing: 0px;
+  color: #162C5B;
+}
+.close-button{
+  width: 50px;
+  position: absolute;
+  right: 5px;
+  top: 15px;
+  cursor: pointer;
+}
+.close-button img {
+ width: 70%;
+}
+.button-div{
+ position: relative;
+  max-width: 200px;
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
+.button-div img{
+ width: 100%;
+}
+.line{
+ height: 1px;
+  max-width: 200px;
+  margin: 20px auto;
+  background-color:#DDDCDD;
+}
+.line-text{
+ background: #fff;
+  max-width: 50px;
+  margin: -36px auto 16px;
+}
+.input-container {
+  display: -ms-flexbox;
+ /* IE10 */
+  display: flex;
+  width: 100%;
+  margin-bottom: 15px;
+}
+.inline{
+  max-width:400px;
+  margin:auto;
+  text-align: left;
+}
+.inline-2{
+  max-width:400px;
+  margin:auto;
+  text-align: left;
+}
+.input-icons i {
+  margin-top: 0px;
+  position: absolute;
+  color: #3c97f2;
+}
+.inline p {
+  font-size: 14px;
+  padding: 5px 0px;
+  font-weight: 700;
+  margin: 0px;
+  color: #162C5B;
+}
+.input-icons {
+  width: 100%;
+  margin-bottom: 10px;
+}
+input{
+ background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #F0F0F0;
+  border-radius: 5px;
+  opacity: 1;
+}
+input{
+ text-align: left;
+}
+.icon {
+  padding: 9px;
+  min-width: 40px;
+}
+.select-field {
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #F0F0F0;
+  color: #162C5B;
+  font-family: CircularStd_Normal;
+  border-radius: 5px;
+  height: 40px;
+  /*line-height: 40px;*/
+  font-size: 14px;
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  margin-bottom: 10px;
+  padding-left: 35px;
+  font-family: 'DM Sans', sans-serif;
+}
+.input-field {
+  font-size: 14px;
+  width: 100%;
+  padding: 5px 10px;
+  text-align: left;
+  margin-bottom: 5px;
+  padding-left: 35px;
+  font-family: 'DM Sans', sans-serif;
+}
+.select-icons{
+  margin-top: 56px !important;
+  margin-left: 9px !important;
+}
+.wallet-input-box{
+ background: #F0F0F0 0% 0% no-repeat padding-box;
+  color: #000;
+  border: 1px solid #F0F0F0;
+}
+.intl-tel-input {
+  display: table-cell;
+}
+.intl-tel-input .selected-flag {
+  z-index: 4;
+}
+.intl-tel-input .country-list {
+  z-index: 5;
+}
+.input-group .intl-tel-input .form-control {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 0;
+}
+.intl-tel-input {
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #F0F0F0;
+  border-radius: 5px;
+  opacity: 1;
+  z-index: 1;
+  width: 100%;
+  position: relative;
+  display: inline-block;
+}
+.pop-width{
+ max-width:600px ;
+}
+.inline-pop{
+ max-width:500px ;
+}
+.form-control {
+ height: 46px;
+  display: block !important;
+ ;
+  width: 100% !important;
+ ;
+  padding: 10px 50px !important;
+ ;
+  font-size: 14px !important;
+ ;
+  line-height: 1.42857143;
+  background-color: #fff;
+  background-image: none;
+  border: none !important;
+  border-radius: 4px !important;
+ ;
+  -webkit-box-shadow:none !important;
+ ;
+  box-shadow:none !important;
+}
+.pop-button{
+ text-align: center;
+  margin: 30px auto;
+}
+.pop-button a {
+  background: #3C97F2 0% 0% no-repeat padding-box;
+  border-radius: 10px;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  padding: 10px 40px;
+  opacity: 1;
+}
+.pop-button a:hover {
+ background: #6aaff4 0% 0% no-repeat padding-box;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+}
+.mini-wallet-icon{
+  position: relative;
+  left: -15px;
+  top: -6px;
+}
+
+.checkout-pop-wallet-icon{
+  position: relative;
+  left: -15px;
+  top: -1px;
+}
+
+table{
+ width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: #162C5B
+}
+.info-icon{
+ right: 50px;
+  color: #FF9336 !important;
+}
+table td{
+ padding: 15px 0px;
+}
+table tr{
+ border-bottom: 1px solid #e1dddd;
+}
+@media (max-width: 767px) {
+  .footersec-2{
+     margin-left: 0px;
+ }
+  .pop-width{
+     margin: 0px 15px;
+ }
+  .inline-pop{
+     padding: 0px 15px;
+ }
+}
+/* Fiat Payment Popups ends*/

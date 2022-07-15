@@ -1,0 +1,12 @@
+<div class="zoom-anim-dialog mfp-hide modal sm_modal" id="Follow-steps">
+  <button class="modal__close md_cls" type="button"><i class="fas fa-times"></i></button>
+  <h4 class="modal-title"><%= t('shared.follow_steps') %></h4>
+  <div class="modal-body last_bdr_remove">
+    <div class="approveBuy">
+      <%= render partial: 'fiat_approve_buy' %>
+    </div>
+    <div class="purchaseBuy">
+      <%= render partial: 'fiat_purchase_buy' %>
+    </div>
+  </div>
+</div>

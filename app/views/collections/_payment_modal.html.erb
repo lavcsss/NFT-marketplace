@@ -1,0 +1,32 @@
+<div class="pop-div mfp-hide" id="Payment-modal">
+    <button class="modal__close close-icon" type="button"><i class="fas fa-times"></i></button>
+    <h2>Mode of Payment</h2>
+    <p>Pay using USD or Crypto to buy the<br> NFT</p>
+    <% if has_kyc_detail %>
+      <div  class="button-div img"><a href="javascript:void(0);" onclick="window.show_modal('#Fiat-modal', false)"><img src="../../assets/nft/fiat_payment/pay-usd-button.png"></a></div>
+    <% else %>
+      <div  class="button-div img"><a href="javascript:void(0);" onclick="window.show_modal('#Kyc-detail-modal', false)"><img src="../../assets/nft/fiat_payment/pay-usd-button.png"></a></div>
+    <% end %>
+    <div class="line"></div>
+    <P class="line-text">OR</P>
+    <div class="button-div img"><a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal')"><img src="../../assets/nft/fiat_payment/metamask-button.png"></a></div>
+    <div class="button-div img"><a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal')"><img src="../../assets/nft/fiat_payment/wallet-button.png"></a></div>
+</div>
+
+
+<%= render partial: 'collections/buy_modal' %>
+
+<%= render partial: 'collections/fiat_modal' %>
+
+<%= render partial: 'collections/fiat_status_modal_dummy' %>
+
+<%= render partial: 'collections/fiat_kyc_details_modal' %>
+
+<script type="text/javascript">
+  $('#text-what-is-wallet').click(function(){
+    $("#connect_to_wallet .modal__close").click();
+  });
+  var address;
+</script>
+
+

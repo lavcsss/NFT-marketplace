@@ -55,8 +55,7 @@ class DashboardController < ApplicationController
   def filter_by
     filter_query = ""
     params[:category] = [] if params[:category].nil?
-    session[:category]  =params[:category]
-    
+    session[:category]  = params[:category]
     render json: {filter_data: "success"}
   end   
    
@@ -77,6 +76,8 @@ class DashboardController < ApplicationController
             # { abi: Api::Etherscan.new.contract_abi(params[:contract_address]), bytecode: '' }
           elsif params[:contract_address].present? && (params[:type] == 'trade')
             Utils::Abi.trade
+          elsif params[:contract_address].present? && (params[:type] == 'trade_proxy')
+            Utils::Abi.trade_proxy
           elsif(shared)
             if params[:type] == 'nft721'
               Utils::Abi.shared_nft721

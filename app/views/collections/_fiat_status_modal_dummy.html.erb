@@ -1,0 +1,25 @@
+<div class="zoom-anim-dialog mfp-hide modal sm_modal status_modal" id="Fiat-Status-modal">
+  <button class="modal__close md_cls" type="button"><i class="fas fa-times"></i></button>
+  <h4><%= t('header.payment_status') %></h4>
+  <div class="w_btn">      
+    <a href="" class="w_btn_icon success triggerInrBuyValidation"  role="button">
+      <%= t('header.success') %>
+    </a>
+  </div>
+  <div class="w_btn">
+    <a href="" class="w_btn_icon failure">
+      <%= t('header.failure') %>
+    </a>
+  </div>
+</div>
+
+<%= render partial: 'collections/follow_steps_dummy' %>
+
+<script type="text/javascript">
+  $(document).ready(function($) {
+    $(document).on("click", ".failure", function (e) {
+      toastr.error('Payment cancelled, please try again');
+      window.location.href = '/collections/' + collectionId
+    });
+  });
+</script>

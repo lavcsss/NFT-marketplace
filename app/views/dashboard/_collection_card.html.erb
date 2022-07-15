@@ -24,7 +24,7 @@
                   <i class="fa fa-telegram"></i><span>Telegram</span>
                 </a></li>
                 <li><a target=_blank href="mailto:?subject=<%= collection.name %>&body=<%= collection.description %> Link here:<%= current_url %>">
-                  <i class="fa fa-envelope"></i><span>Envelope</span>
+                  <i class="fa fa-envelope"></i><span>Email</span>
                 </a></li>
               </ul>
               <%= react_component("collections/like", address: current_user&.address, 
@@ -108,3 +108,7 @@
     </div>
 </div>
 </li>
+
+<script>
+  $(document).ready(function() { ReactRailsUJS.mountComponents(); })
+</script>
