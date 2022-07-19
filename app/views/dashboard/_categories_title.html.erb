@@ -1,0 +1,14 @@
+<% if params[:category].present? %>
+    <h5> <button class="clear_all">Clear Filters</button></h5>
+<% end %>
+<ul class="current-filters">
+    <% if params[:category].present? %>
+        <% for category in params[:category] %>
+            <li>
+            <span><%= category %></span>&nbsp;<a href="javascript:void(0)" id="sub_<%= category %>" class="removeFilter"><img src="../../assets/nft/close-item.svg"></a>
+            </li>
+        <%end%>
+    <% else %>
+        <span> </span>
+    <% end %>
+</ul>

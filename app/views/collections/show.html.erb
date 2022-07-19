@@ -9,6 +9,7 @@
 <span id="SellerserviceFee" class="hide"><%= seller_service_fee %></span>
 <span id="contractType" class="hide"><%= @collection.nft_contract&.contract_type %></span>
 <span id="contractAddress" class="hide"><%= @collection.nft_contract&.address %></span>
+<span hidden="hidden" id="collection_id">  <%= @collection.id %> </span> 
 <%= hidden_field_tag 'collection_ismultiple', @collection.multiple? %>
 <main class="NFT-detail modeling-NFT" >
    <div class="container bg-effect">
@@ -115,9 +116,7 @@
                liked: @collection.is_liked_by_me(current_user&.id)) %>
             <% if current_user && @collection.is_owner?(current_user) %>
             <div class="more_action_block">
-               <a class="more_action_btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <!--                   <i class="fas fa-ellipsis-v"></i>
-                     -->                  
+               <a class="more_action_btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">               
                   <div class="option-btn">
                      <span></span>
                      <span></span>
@@ -293,15 +292,7 @@
                </div>
             </div>
             <div id="History" class="tabcontent">
-               <div class="member-detail">
-                  <% if @activities.present? %>
-                  <% @activities.each do |activity| %>
-                  <%= render "activities/collection_card_activity", activity: activity %>
-                  <% end %>
-                  <% else %>
-                  <p> No History yet! </p>
-                  <% end %>
-               </div>
+               
             </div>
             <!-- <div id="Details" class="tabcontent">
                <div class="member-detail">
@@ -539,19 +530,31 @@
    });
    
    function openCity(evt, cityName) {
-   var i, tabcontent, tablinks;
-   tabcontent = document.getElementsByClassName("tabcontent");
-   for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-   }
-   tablinks = document.getElementsByClassName("tablinks");
-   for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-   }
-   document.getElementById(cityName).style.display = "block";
-   evt.currentTarget.className += " active";
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(cityName).style.display = "block";
+      evt.currentTarget.className += " active";
+      if (cityName == 'History'){
+         updateHistory()
+      }
    }
 
+   function updateHistory() {
+      var collectionId = $("#collection_id").val();
+      var request = $.ajax({
+          url: `/collections/${collectionId}/history`,
+         type: "GET",
+         async: false,
+         dataType: "script"
+      });
+   }
   
    $('.expand-btn').click(function() {
          var src = $('img[data-enlargeable]').attr('src');

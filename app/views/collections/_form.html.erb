@@ -15,13 +15,24 @@
           $("#description").prop('disabled', true);
         $("#no_of_copies").prop('disabled', true);
           <% if ['audio/mp3', 'audio/webm', 'audio/mpeg'].include?(@nft[:file_type]) %>
-            $("#imagePreviewRes").append('<audio width="300" height="300" controls=""><source src="<%= @nft[:url] %>" id="audio_here"> </audio>');
+            $("#imagePreviewRes").append('<audio width="300" height="300" controls="" controlslist="nodownload noplaybackrate"><source src="<%= @nft[:url] %>" id="audio_here"> </audio>');
+            $(".codrops-header_innertab").css({ 'height': '55px' });
             dispalyPreviewImage();
           <% elsif ['video/mp4', 'video/webm'].include?(@nft[:file_type]) %>
-            $("#imagePreviewRes").append('<video width="300" height="200" controls=""><source src="<%= @nft[:url] %>" id="video_here"> </video>');
+            $("#imagePreviewRes").append('<video width="300" height="200" controls="" controlslist="nodownload noremoteplayback noplaybackrate" disablepictureinpicture="disablepictureinpicture"><source src="<%= @nft[:url] %>" id="video_here"> </video>');
+            $(".codrops-header_innertab").css({ 'height': '225px' });
             dispalyPreviewImage();
           <% else %>
-            $("#imagePreviewRes").css({"background-image": "url(<%= @nft[:url] %>)", "height": "225px", "width": "300px", "background-size": "cover", "background-repeat": "no-repeat", "background-position": "center center", "margin-left": "auto", "margin-right": "auto", "border-radius": "15px"});
+            $("#imagePreviewRes").css(
+               {
+               "background-image": "url(<%= @nft[:url] %>)", 
+               "height": "610px", 
+               "background-size": "cover",
+               "background-repeat": "no-repeat",
+               "background-position": "center center", 
+               "margin-left": "auto",
+               "margin-right": "auto",
+               });
             $('#my-preview-section').html('<img id="img_prv" width="300" height="300" src="<%= @nft[:url] %>" controls/>');
             $('#my-preview-section').hide();
             $('#my-preview-section').fadeIn(650);
@@ -32,15 +43,18 @@
           $('#choose_file_selected').fadeOut(100);
           $('#imagePreviewRes').hide();
           $('#imagePreviewRes').fadeIn(650);
+          $("#validation-info").css('display', 'none');
+          $(".nft-details-list").css('display', 'block');
+          $("#drop-img").css('display', 'none');
         });
         
         function dispalyPreviewImage() {
           <% preview_url = if @nft[:preview_url].present? then @nft[:preview_url] else "/assets/banner-1.png" end%>
-          $('#my-preview-section').html('<img id="img_prv" width="300" height="300" src="<%= preview_url %>" controls/>');
+          $('#my-preview-section').html('<img id="img_prv" width="540px" height="610px" src="<%= preview_url %>" controls/>');
           $('.coverUpload').removeClass("hide");
           $('#my-preview-section').hide();
           $('#my-preview-section').fadeIn(650);
-          $('#imagePreviewRes2').html('<img id="img_prv" width="300" height="300" src="<%= preview_url %>" controls/>')
+          $('#imagePreviewRes2').html('<img id="img_prv" width="540px" height="610px" src="<%= preview_url %>" controls/>')
           <% unless @nft[:preview_url].present? %>
             $('#close-preview-button2').css('display', 'inline-block');
           <% end %>
@@ -76,9 +90,25 @@
                      <input accept="image/png,image/jpeg,image/gif,video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg" type="file" name="collection[attachment]" id="file-1" class="sign__file-upload create_file_upload"/>
                      <div id="imagePreviewRes"></div>
                      <label id="choose_file_selected" for="file-1"><span><%= t('collections.form.choose_file') %>  </span></label> 
-                     <span  class="placeholder" id="placeholder" style=""><b>PNG, GIF, MP4 or MP3. Max 15mb. </b> </span>
+                     <span  class="placeholder" id="validation-info" style=""><b>PNG, GIF, MP4 or MP3. Max 15mb. </b> </span>
                      <div class="close-preview-button" id="close-preview-button">
                         <span>X</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="coverUpload hide">
+               <label><%= t('collections.form.upload_cover') %><span> *</span></label>
+               <div class="row mb-15">
+                  <div class="col-12">
+                     <div class="codrops-header">
+                     <div class="box">
+                        <span class="placeholder" id="placeholder2" style="">JPG, PNG or GIF. Max 30mb.</span>
+                        <input accept="image/png,image/jpeg,image/gif" type="file" name="collection[cover]" id="file-2" class="inputfile inputfile-1"/>
+                        <label id="choose_file_selected2" for="file-2"><span><%= t('collections.form.choose_file') %></span></label>
+                        <div id="imagePreviewRes2"></div>
+                        <div class="close-preview-button" id="close-preview-button2"><span>X</span></div>
+                     </div>
                      </div>
                   </div>
                </div>

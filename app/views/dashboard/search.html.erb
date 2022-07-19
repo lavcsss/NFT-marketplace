@@ -27,14 +27,6 @@
                       <img src="../../assets/nft/modeling/cate-black.svg" class="black">
                       <img src="../../assets/nft/modeling/cate.svg" class="blue">
                     Category</a></li>
-                    <!-- <li><a data-toggle="tab" href="#Sale_Type">
-                      <img src="../../assets/nft/modeling/Sale-Type.svg" class="black">
-                      <img src="../../assets/nft/modeling/Sale-Type_blue.svg" class="blue">
-                    Sale Type</a></li>
-                    <li><a data-toggle="tab" href="#Price_Range">
-                      <img src="../../assets/nft/modeling/Price-Range.svg" class="black">
-                      <img src="../../assets/nft/modeling/Price-Range-blue.svg" class="blue">
-                    Price Range </a></li> -->
                   </ul>
 
                   <div class="inner-tab-content-sec tab-content">
@@ -46,49 +38,14 @@
                     <div id="Category" class="tab-pane fade in active show">
                       <div class="Category-Lists">
                         <% Category.all.each do |category| %>
-                          <% 
-                          isActive = ""
-                          if session[:category].include? category.name
-                            isActive="active"
-                          end  
-                          %>
-                          <label class="<%= isActive%>">
-                            <a href="javascript:void(0);" class="category category_web <%= isActive%>" data-category="<%= category.name%>"><%= category.name%></a>
+                          <label class="label_category">
+                            <a href="javascript:void(0);" class="category category_web" data-category="<%= category.name%>"><%= category.name%></a>
                           </label>
                         <%end%>
                         <a class="mob-apply-btn"><button>Apply</button></a>
                       </div>
                     </div>
-                    
-                    <div id="Sale_Type" class="tab-pane fade">
-                       <div class="Category-Lists">
-                        <label>Buy Now</label>
-                        <label>On Auction</label>
-                        <label>New  </label>
-                        <label>Offers</label>
-                        <label>Not for Sale</label>
-                      
-                      </div>
-                    </div>
-                    <div id="Price_Range" class="tab-pane fade" >
-                      <div class="Category-Lists">
-                           <div class="member-detail">
-                             <div class="member-user-profile">
-                            <span>   <img src="../../assets/nft/banner-img/cc20c8bbceaa457718feb98ed273299c.png" alt="NFT_IMG_1" />  </span>
-                           <div class="user-profile-detail"> <a>ShannonRose</a></div>
-                          </div>
-                         </div>  
-                         <div class="min-to-max">
-                           <button><input placeholder="Min"></button>
-                           <button><input placeholder="Max"></button>
-                         </div>
-                         <div class="min-to-max next-proceed-btn">
-                           <button>Apply</button>
-                           <button>Clear</button>
-                         </div>
-                      </div>
-                    </div>
-                
+
                   </div>
                    
                 </div>
@@ -99,31 +56,20 @@
            
               <div class="col-xl-9 col-lg-8  col-md-12 col-sm-12 col-12">
                 <div class="clear-filter-heading">
-                  <% if session[:category].present? %> 
-                    <h5> <button class="clear_all">Clear Filters</button></h5>
-                      <ul class="current-filters">
-                        <% for category in session[:category] %>
-                          <li>
-                            <span><%= category %></span>&nbsp;<a href="javascript:void(0)" id="sub_<%= category %>" class="removeFilter"><img src="../../assets/nft/close-item.svg"></a>
-                          </li>
-                        <%end%>
-                      </ul>
-
-                  <%end%>
                 </div>
                 <div class="profile-tabs tabs-panel discover-profile"> 
                   <div class="tabcontent all_nfts">
                      <% if @category_collections.present? %>
                       <ul class="nft_collection"> 
                           <span class="bg-transition"></span>
-                            <% @category_collections.each do |collection| %>
-                              <%=render "dashboard/collection_card", collection: collection%>  
-                            <% end %>
+                          <% @category_collections.each do |collection| %>
+                            <%=render "dashboard/collection_card", collection: collection%>  
+                          <% end %>
                       </ul>
                   <%  else %>
                     <p style="text-align:center" class="no-data"> No NFT’s Found </p>
                   <% end %>
-                </div>
+                  </div>
                 <div class="col-12">
                   <% if params[:page_no].to_i < @category_collections.total_pages and @category_collections.present? %>
                     <div class="row">
@@ -136,21 +82,10 @@
                   <% end %>
                 </div>
               </div>
-                    <!-- <div class="sort-items">
-                      <select name="cars" id="cars">
-                        <option value="" disabled selected>Sort by  <span><img src="../../assets/nft/down-arrow.svg"> Recently Sold</span></option>
-                        <option value="volvo">Volvo</option>
-                        <option value="saab">Saab</option>
-                        <option value="opel">Opel</option>
-                        <option value="audi">Audi</option>
-                      </select>
-                    </div> -->
-
                 </div>
             </div>
           </div>
         </div>
-
         <div id="Artists" class="tabcontent" style="display: none;">
           <div class="">
           <div class="modeling-artist-list">
@@ -170,7 +105,6 @@
             </div>
           </div>
          </div>
-
          <div id="Collections" class="tabcontent" style="display: none;">
             <div class="">
             <div class="modeling-artist-list">
@@ -191,9 +125,6 @@
           </div>
          </div>
       </div>
-          
-    
-    
 </main>
 <div class="discover-container discover-footer-section">
           <div id="all_nfts" class="tabcontent" style="display: block;">
@@ -213,14 +144,6 @@
                       <img src="../../assets/nft/modeling/cate-black.svg" class="black">
                       <img src="../../assets/nft/modeling/cate.svg" class="blue">
                     Category</a></li>
-                    <!-- <li><a data-toggle="tab" href="#Sale_Type">
-                      <img src="../../assets/nft/modeling/Sale-Type.svg" class="black">
-                      <img src="../../assets/nft/modeling/Sale-Type_blue.svg" class="blue">
-                    Sale Type</a></li>
-                    <li><a data-toggle="tab" href="#Price_Range">
-                      <img src="../../assets/nft/modeling/Price-Range.svg" class="black">
-                      <img src="../../assets/nft/modeling/Price-Range-blue.svg" class="blue">
-                    Price Range </a></li> -->
                   </ul>
 
                   <div class="inner-tab-content-sec tab-content">
@@ -232,14 +155,8 @@
                     <div id="Category" class="tab-pane fade in active show">
                       <div class="Category-Lists">
                         <% Category.all.each do |category| %>
-                          <% 
-                          isActive = ""
-                          if session[:category].include? category.name
-                            isActive="active"
-                          end  
-                          %>
-                          <label class="<%= isActive%>">
-                            <a href="javascript:void(0);" class="category category_mobile  <%= isActive%>" data-category="<%= category.name%>"><%= category.name%></a>
+                          <label class="label_category">
+                            <a href="javascript:void(0);" class="category category_mobile" data-category="<%= category.name%>"><%= category.name%></a>
                           </label>
                         <%end%>
                         <a class="mob-apply-btn"><button class="apply">Apply</button></a>
@@ -273,18 +190,13 @@
                          </div>
                       </div>
                     </div>
-                
-                  </div>
-                   
+                  </div>                   
                 </div>
               </div>
-              
             </div>
             </div>
           </div>
         </div>
-
-
 <script>
    
    function openCity(evt, cityName) {
@@ -302,28 +214,31 @@
      evt.currentTarget.className += " active";
    }
 
+  // remove one filters
+  $('.current-filters > li > a').click(function(e){
+    var $this = $(this),
+    clearAll = $this.parent('li').hasClass('clear-current-filters')
+      if(clearAll ){
+          $this.closest('ul').empty();
+      }else{
+          $this.parent().remove();
+      }
+  });
 
-$('.current-filters > li > a').click(function(e){
-   var $this = $(this),
-       clearAll = $this.parent('li').hasClass('clear-current-filters')
-
-    if(clearAll ){
-        $this.closest('ul').empty();
-    }else{
-        $this.parent().remove();
-    }
-});
-
+// clear all filters
 $(document).on("click", ".clear_all", function() {
-    $(".category").removeClass("active")
-    filterRecords()
+    $(".category").removeClass("active");
+    $(".label_category").removeClass("active");
+    filterRecords();
 })
+
+// remove filter
 $(document).on("click", ".removeFilter", function() {
-var selected_filter = $(this).attr("id")
-selected_filter= selected_filter.replace("sub_","")
-$("[data-category="+selected_filter+"]").removeClass('active')
-$("[data-category="+selected_filter+"]").parent().removeClass('active')
-filterRecords()
+  var selected_filter = $(this).attr("id");
+  selected_filter= selected_filter.replace("sub_","")
+  $("[data-category="+selected_filter+"]").removeClass('active')
+  $("[data-category="+selected_filter+"]").parent().removeClass('active')
+  filterRecords()
 })
 
 
@@ -340,43 +255,8 @@ $(document).on("click", ".category_mobile", function() {
   $("[data-category="+$(this).attr("data-category")+"]").parent().toggleClass('active')
 })
 
-
-function filterRecords(){
-  var category = [];
-  
-  $(".filterList").html('');
-  $('.category').each(function(){
-    if($(this).hasClass("active") && category.indexOf($(this).attr("data-category"))== -1){
-      
-      category.push($(this).attr("data-category"))
-      $(".filterList").append('<span>'+$(this).attr("data-category")+'</span>&nbsp;<a  href="javascript:void(0)" id="sub_'+$(this).attr("data-category")+'" class="removeFilter"><img src="../../assets/nft/close-item.svg"></a>')
-    }
-  })
-    var url = "/filter_by"
-    var request =  $.ajax({
-      url: url,
-      type: "post",
-      dataType: "json",
-      async: false,
-      data: {category:category}
-    })
-  request.done(function (response) {
-  
-  if(response.filter_data='success'){
-      location.reload()
-  }else{
-    $("#nft_collection").html('<p> No records found! </p>');
-    $(".count_record").html("(0 Result)")
-  } });
-  request.fail(function () {
-  toastr.error('Something Went Wrong!')
-  });  
-}
-
 $('.category-show').click(function(e) {
-  
   $(this).addClass('open-inner-tab');
-  
 });
 
 $(document).on("click", ".apply", function() {
@@ -385,5 +265,31 @@ $(document).on("click", ".apply", function() {
   })
   filterRecords()
 })
+
+
+function filterRecords(){
+  var category = [];
+  
+  $(".filterList").html('');
+  
+  $('.category').each(function(){
+    if($(this).hasClass("active") && category.indexOf($(this).attr("data-category")) == -1){
+      category.push($(this).attr("data-category"))
+      $(".filterList").append('<span>'+$(this).attr("data-category")+'</span>&nbsp;<a  href="javascript:void(0)" id="sub_'+$(this).attr("data-category")+'" class="removeFilter"><img src="../../assets/nft/close-item.svg"></a>')
+    }
+  })
+  $(".loading-gif").show();
+  var request =  $.ajax({
+    url: "/category_filter",
+    type: "get",
+    dataType: "script",
+    async: false,
+    data: {category:category}
+  })
+  request.fail(function () {
+    toastr.error('Something Went Wrong!')
+    $(".loading-gif").hide();
+  });  
+}
 
 </script>
