@@ -118,20 +118,21 @@ $(document).ready(function(){
 					$('#file-2').prop('required', true);
 					previewSection.hide();
 					previewSection.fadeIn(650);
-					imagePreview.html('<audio width="300" height="300" controls><source src="mov_bbb.mp4" id="audio_here"> </audio>');
+					imagePreview.html('<audio width="300" height="300" controls controlslist="nodownload noplaybackrate"><source src="mov_bbb.mp4" id="audio_here"> </audio>');
 					imagePreview.css({ 'height': '55px' });
 					$('#audio_here')[0].src = URL.createObjectURL(input.files[0]);
 					$('#audio_here').parent()[0].load();
+					$('.codrops-header_innertab').css('height', '300px');
 				} else if (vidExt.includes(ftype)) {
 					$('.coverUpload').removeClass("hide");
-					// $('#file-2').prop('required', false);
 					$('#file-2').prop('required', true);
 					previewSection.hide();
 					previewSection.fadeIn(650);
-					imagePreview.html('<video width="300" height="200" controls><source src="mov_bbb.mp4" id="video_here"> </video>');
+					imagePreview.html('<video width="300" height="200" controls controlslist="nodownload noremoteplayback noplaybackrate" disablepictureinpicture="disablepictureinpicture"><source src="mov_bbb.mp4" id="video_here"> </video>');
 					imagePreview.css({ 'height': '225px' });
 					$('#video_here')[0].src = URL.createObjectURL(input.files[0]);
 					$('#video_here').parent()[0].load();
+					$('.codrops-header_innertab').css('height', '300px');
 				} else {
 					return toastr.error('Invalid file type!');
 				}
@@ -150,6 +151,9 @@ $(document).ready(function(){
 				chooseFile.fadeOut(100);
 				imagePreview.hide();
 				imagePreview.fadeIn(650);
+				$("#validation-info").css('display', 'none');
+				$('#drop-img').css('display', 'none');
+
 			}
 
 			reader.readAsDataURL(input.files[0]);
@@ -222,17 +226,34 @@ $(document).ready(function(){
 		var imagePreview = $('#imagePreview-contract');
 		var closePreviewBtn = $('#close-preview-button-contract');
 		var fileId = $('#nft_contract_attachment');
-		ClosePreviewSmall(imagePreview,closePreviewBtn,fileId)
+		closePreviewSmall(imagePreview,closePreviewBtn,fileId)
 	});
 
 	$('#close-cover-button-contract').click(function(){
 		var imagePreview = $('#imageCover-contract');
 		var closePreviewBtn = $('#close-cover-button-contract');
 		var fileId = $('#nft_contract_cover');
-		ClosePreviewSmall(imagePreview,closePreviewBtn,fileId)
+		closePreviewSmall(imagePreview,closePreviewBtn,fileId)
 	});
 
-	function closePreview(previewSection, imagePreview, closePreviewBtn, placeholder, fileId, chooseFile) {
+	function closePreviewSmall(imagePreview, closePreviewBtn, fileId){
+		fileId.val('');
+		imagePreview.css({ 
+			'width': 'auto', 
+			'height': 'auto', 
+			'background-size': 'cover',
+			'background-repeat': 'no-repeat',
+			'background-position': 'center',
+			'margin-left': 'auto',
+			'margin-right': 'auto'
+		});
+		closePreviewBtn.css('display', 'none');
+		imagePreview.css('background-image', 'none');
+		imagePreview.html('');
+		fileId.css('display', 'block');
+	}
+
+	function closePreview(previewSection, imagePreview, closePreviewBtn, placeholder, fileId, chooseFile, isCoverPreview=false) {
 		fileId.val('');
 		placeholder.fadeIn(100);
 		fileId.fadeIn(100);
@@ -252,6 +273,11 @@ $(document).ready(function(){
 		imagePreview.html('');
 		previewSection.css('background-image', 'none');
 		previewSection.html('');
+		if (!isCoverPreview){
+			$("#validation-info").css('display', 'block');
+			$('.codrops-header_innertab').css('height', '660px');
+			$('#drop-img').css('display', 'inline-block');
+		}
 	}
 
 	$('#close-preview-button').click(function(){
@@ -273,7 +299,10 @@ $(document).ready(function(){
 		var placeholder = $('#placeholder2');
 		var fileId = $('#file-2');
 		var chooseFile = $('#choose_file_selected2');
-		closePreview(previewSection, imagePreview, closePreviewBtn, placeholder, fileId, chooseFile);
+		$("#validation-info").css('display', 'none');
+		$('.codrops-header_innertab').css('height', '300px');
+		$('#drop-img').css('display', 'none');
+		closePreview(previewSection, imagePreview, closePreviewBtn, placeholder, fileId, chooseFile, true);
 	});
 
 	$('#token-maximize').click(function(){

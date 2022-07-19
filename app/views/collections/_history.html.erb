@@ -1,0 +1,9 @@
+<div class="member-detail">
+    <% if @activities.present? %>
+        <% @activities.each do |activity| %>
+        <%= render "activities/collection_card_activity", activity: activity %>
+        <% end %>
+    <% else %>
+        <p> No History yet! </p>
+    <% end %>
+</div>
