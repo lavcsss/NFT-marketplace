@@ -320,6 +320,7 @@ GEM
     sshkit (1.21.2)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    stripe (6.5.0)
     thor (1.1.0)
     tilt (2.0.10)
     turnout (2.5.0)
@@ -393,6 +394,7 @@ DEPENDENCIES
   selenium-webdriver
   sidekiq
   spring
+  stripe
   turnout
   tzinfo-data
   web-console (>= 4.1.0)
