@@ -229,25 +229,32 @@ class Collection < ApplicationRecord
       elsif final_qty > 0
         collection = Collection.where(owner_id: new_owner_id, nft_contract_id: nft_contract_id, token: token).first
         if collection && !burn_transfer
-      	  collection.assign_attributes({owned_tokens: (collection.owned_tokens + quantity)})
+          collection.assign_attributes({owned_tokens: (collection.owned_tokens + quantity)})
         else
           collection = self.dup.tap do |destination_package|
             destination_package.attachment.attach(self.attachment.blob)
             destination_package.cover.attach(self.cover.blob) if self.cover.present?
           end
-          collection.assign_attributes({owner_id: new_owner_id, address: self.class.generate_uniq_token, put_on_sale: false, owned_tokens: quantity, instant_sale_price: nil, instant_sale_enabled: false})
+          collection.assign_attributes({owner_id: new_owner_id, 
+            address: self.class.generate_uniq_token, 
+            put_on_sale: false, 
+            owned_tokens: quantity,
+            instant_sale_price: nil, 
+            instant_sale_enabled: false, 
+            no_of_copies: quantity})
         end
         collection.save
         quantity_remains = {
           owned_tokens: final_qty, 
-          put_on_sale: false, 
-          instant_sale_price: nil, 
-          instant_sale_enabled: false,
+          put_on_sale: true, 
+          instant_sale_price: instant_sale_price, 
+          instant_sale_enabled: true,
           transaction_hash: transaction_hash
         }
         quantity_remains.merge!({no_of_copies: no_of_copies - quantity}) if burn_transfer
         self.update(quantity_remains)
         redirect_address = collection.address
+        Notification.notify_nft_sold(self, self.owner_id)
       end
     else
       self.update({owner_id: new_owner_id, put_on_sale: false, instant_sale_price: nil, instant_sale_enabled: false, transaction_hash: transaction_hash })

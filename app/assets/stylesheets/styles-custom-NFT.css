@@ -1078,7 +1078,7 @@ span.edit-profile img {
   margin-bottom: 6px;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail {
-  width: 33%;
+  width: 39%;
 }
 .profile-tabs.tabs-panel .tabcontent ul li .img-panel .desc .caption .profile-detail img {
   width: 35px;
@@ -2049,7 +2049,7 @@ position: absolute;
     text-align: center;
 }
 .upload-choosen-files .codrops-header .box img {
-    max-width: 200px;
+    max-width: 540px;
 }
 .upload-choosen-files .codrops-header .box span#placeholder{
     width: 100%;

@@ -191,15 +191,9 @@
    });
    
    
-   //  $(document).ready(function(){
-   //   $("#mobile-search").click(function(){
-   //     $(".search-menu-action").removeClass("active");
-   //   });
-   // });
-   
    $(document).ready(function(){
      $(".create-nft").click(function(){
-       $("#create-nft-modal").addClass("open-modal");
+       $("#create-collectible-modal").addClass("open-modal");
        $("body").addClass("open-modal")
      });
    });
@@ -215,4 +209,4 @@
    
 </script>
 <%= render partial: 'common/wallet_connect' %>
-<%= render partial: "/common/create_nft" %>
+<%= render partial: "/common/create_collectible" %>

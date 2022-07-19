@@ -16,18 +16,19 @@ class DashboardController < ApplicationController
   def set_categories_by_filter
     params[:page_no] ||= 1
     filter_query = ""
-    session[:category] = [] if session[:category] .nil?
-      for category in session[:category]
-        if session[:category].find_index(category) == 0
+    @category_collections = params[:query].present? ? Collection.search("*#{build_elastic_search_str(params[:query].strip)}*").records.on_sale : Collection.on_sale
+    if params[:category].present?
+      for category in params[:category]
+        if params[:category].find_index(category) == 0
           filter_query = filter_query + "category like '%#{category}%'"
         else
           filter_query = filter_query + " OR category like '%#{category}%'"
         end
       end
-    @category_collections = params[:query].present? ? Collection.search("*#{build_elastic_search_str(params[:query].strip)}*").records.on_sale : Collection.on_sale
-    @category_collections= @category_collections.where(filter_query)
-    @category_collections = @category_collections.on_sale.with_attached_attachment.paginate(page: params[:page_no] || 1, per_page: 15)
-    @category_collections = @category_collections.reorder(likes_count: 'desc')
+      @category_collections = @category_collections.where(filter_query)
+    end
+    @category_collections = @category_collections.paginate(page: params[:page_no] || 1, per_page: 15)
+    @category_collections = @category_collections.reorder(likes_count: 'desc').distinct
   end
 
   def celebrity_list

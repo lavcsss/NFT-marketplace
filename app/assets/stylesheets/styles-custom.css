@@ -1667,6 +1667,16 @@ span#placeholder b {
   display: block;
 }
 
+span#validation-info b {
+  color: #2f2f2f;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  margin-bottom: 5px;
+  display: block;
+  font-family: 'Hahmlet', serif;
+}
+
 span#placeholder {
   font-size: 13px;
   line-height: 16px;

@@ -1,15 +1,7 @@
 <% if params[:page_no].to_i > 1 %>
-  <% if params[:category].present? %>
-    $('.nft_collection').replaceWith('<%= j(render partial: 'collection_card_by_categories', locals: {collections: @category_collections}) %>');
-  <% else %>
     $('.nft_collection').append('<%= j(render partial: 'collection_card_by_categories', locals: {collections: @category_collections}) %>');
-  <% end %>
 <% else %>
-  <% if params[:category].present? %>
-    $('.nft_collection').replaceWith('<%= j(render partial: 'collection_card_by_categories', locals: {collections: @category_collections}) %>');
-  <% else %>
     $('.nft_collection').html('<%= j(render partial: 'collection_card_by_categories', locals: {collections: @category_collections}) %>');
-  <% end %>
 <% end %>
 
 
@@ -19,13 +11,6 @@
   $(".top-filter li:first").addClass("active")
 <% end %>
 
-// Sort by filter highlight
-$(".dashboard-sort-by.active").removeClass("active")
-<% if params[:sort_by].present? %>
-  $("*[data-name='<%= params[:sort_by] %>']").addClass("active")
-<% else %>
-  $(".dashboard-sort-by:first").addClass("active")
-<% end %>
 
 // Load more button actions
 $(".dashboard-load-more").data("page-no", "<%= params[:page_no].to_i + 1 %>")
@@ -33,5 +18,14 @@ $(".dashboard-load-more").data("category", "<%= params[:category] %>")
 $(".dashboard-load-more").data("sort-by", "<%= params[:sort_by] %>")
 
 <% if params[:page_no].to_i == @category_collections.total_pages %>
-  $(".dashboard-load-more").closest(".row").hide()
+  $(".dashboard-load-more").closest(".row").hide();
 <% end %>
+
+$(".clear-filter-heading").html('<%= j(render partial: 'dashboard/categories_title') %>');
+
+
+setTimeout(
+  function(){
+    $(".loading-gif").hide();
+  },
+ 700);

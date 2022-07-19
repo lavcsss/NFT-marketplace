@@ -71,6 +71,7 @@ Rails.application.routes.draw do
       post :validate_fiat_payment
       post :transfer_nft
       get :total_fiat_price
+      get :history
 
     end
   end
@@ -98,7 +99,6 @@ Rails.application.routes.draw do
   get 'category_filter', to: 'dashboard#set_categories_by_filter'
   get 'gas_price', to: 'dashboard#gas_price'
   get 'collections', to: 'dashboard#collections'
-  post '/filter_by', to: 'dashboard#filter_by'
   put 'read_notifications', to: 'dashboard#read_notifications'
   get 'celebrity_list', to: 'dashboard#celebrity_list'
   get 'show_tabs', to: "users#show_tabs"

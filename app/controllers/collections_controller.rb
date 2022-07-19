@@ -344,6 +344,10 @@ class CollectionsController < ApplicationController
     render json: {status: "success", data: fiat_price}
   end
 
+  def history
+    @activities = PaperTrail::Version.where(item_type: "Collection", item_id: @collection.id).order("created_at desc")
+  end
+
   def fetch_details
     render json: {data: @collection.fetch_details(params[:bid_id], params[:erc20_address])}
   end
@@ -405,6 +409,9 @@ class CollectionsController < ApplicationController
     collection.save!
   end
 
+
+
+
   private
 
   def lazy_mint_token_update
@@ -458,6 +465,9 @@ class CollectionsController < ApplicationController
   def set_collection_gon
     gon.collection_data = @collection.gon_data
   end
+
+
+
 end
 
 
