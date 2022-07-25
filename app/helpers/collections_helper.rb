@@ -46,8 +46,15 @@ module CollectionsHelper
   end
 
   def gas_price_usd(collection)
-    gas_limit = 616883
-    gas_price_gwei = Api::Gasprice.gas_price["fastest"] / 10 
+    if collection.is_lazy_minted?
+      gas_limit = 616883
+    else
+      gas_limit = 516883
+    end
+    gas_price_gwei = Api::Etherscan.gas_price
+    if gas_price_gwei.nil?
+      gas_price_gwei = 40
+    end
     gas_consumed_in_gwei = gas_price_gwei * gas_limit
     gas_consumed_in_ether = gas_consumed_in_gwei.to_f * 0.000000001 # 1 gwei  - 0.000000001 ETH
     gas_consumed_in_usd = collection.sale_price_to_fiat(gas_consumed_in_ether, 'ETH')

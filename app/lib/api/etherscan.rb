@@ -42,5 +42,20 @@ module Api
       end
       response.code == '200' ? JSON.parse(response.body)[COINGECKO_IDS[currency.to_sym]][fiat].to_f : ZERO
     end
+
+    def self.gas_price
+      uri = URI.parse(Rails.application.credentials.etherscan.dig(:gas_price) + "?module=gastracker&action=gasoracle&apikey=#{Rails.application.credentials.etherscan[:api_key]}")
+      request = Net::HTTP::Get.new(uri)
+      request.content_type = "application/json"
+      req_options = {
+        use_ssl: uri.scheme == "https",
+        open_timeout: 5,
+        read_timeout: 5,
+      }
+      response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+        http.request(request)
+      end
+      response.code == '200' ? JSON.parse(response.body)['result']['FastGasPrice'].to_i : 0
+    end
   end
 end
