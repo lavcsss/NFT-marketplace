@@ -28,7 +28,8 @@ class DashboardController < ApplicationController
       @category_collections = @category_collections.where(filter_query)
     end
     @category_collections = @category_collections.paginate(page: params[:page_no] || 1, per_page: 15)
-    @category_collections = @category_collections.reorder(likes_count: 'desc').distinct
+    @category_collections = @category_collections.reorder(likes_count: 'desc',)
+    @category_collections = @category_collections.order(:id)
   end
 
   def celebrity_list

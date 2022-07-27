@@ -466,7 +466,11 @@
     });
 
     $(".mul_buy_inp").on('input', function () {
-      calculateBuyFiatAmt();
+      $(".loading-gif").show();
+         setTimeout(function(){
+            calculateBuyFiatAmt();
+            $(".loading-gif").hide();
+         }, 500);
     });
    
     <% if @collection.single? %>
@@ -476,9 +480,23 @@
         calculateBuy($('#BuyerserviceFee').text());
       });
     <% end %>
+   
+   <% if @collection.single? %>
+      $(".calculate_price").click(function(){
+         $(".loading-gif").show();
+         setTimeout(function(){
+            calculateBuyFiatAmt();
+            $(".loading-gif").hide();
+         }, 100);
+      })
+   <% end %>
 
-    function calculateBuyFiatAmt(){
-      var qty = $('#buy_qty').val().replace(/[^0-9]/g, '') || 0;
+    window.calculateBuyFiatAmt = function calculateBuyFiatAmt(){
+      <% if @collection.single? %>
+         var qty = $('#buy_qty').val().replace(/[^0-9]/g, '') || 1;
+      <% else %>
+         var qty = $('#buy_qty').val().replace(/[^0-9]/g, '') || 0;
+      <% end %>
       if (qty != 0) {
          $.ajax({
             url: '/collections/' + $('#collection_id').val() + '/total_fiat_price',

@@ -4,6 +4,7 @@ class KycDetailController < ApplicationController
         begin
             @kyc = KycDetail.new(kyc_params)
             @kyc.user = current_user
+            @kyc.country = country_name(kyc_params[:country_code])
             if @kyc.valid?
                 @kyc.save
             else
@@ -19,7 +20,12 @@ class KycDetailController < ApplicationController
     end
 
     def kyc_params
-        params.require(:kyc_detail).permit(:name, :email_id, :address, :country, :mobile_no)
+        params.require(:kyc_detail).permit(:name, :email_id, :address, :country_code, :mobile_no)
+    end
+    
+    def country_name(country_code)
+        country = ISO3166::Country[country_code]
+        country.translations[I18n.locale.to_s] || country.common_name || country.iso_short_name
     end
     
   end

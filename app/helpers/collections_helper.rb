@@ -41,7 +41,6 @@ module CollectionsHelper
 
   def contract_path(collection)
     return 'javascript:void(0)'if collection.nft_contract.shared? 
-    
     nft_contract_path(:id => collection.nft_contract.address)
   end
 
@@ -52,8 +51,11 @@ module CollectionsHelper
       gas_limit = 516883
     end
     gas_price_gwei = Api::Etherscan.gas_price
-    if gas_price_gwei.nil?
-      gas_price_gwei = 40
+    if gas_price_gwei.nil? || gas_price_gwei == 0
+      gas_price_gwei = Api::Gasprice.gas_price["fastest"] / 10
+      if gas_price_gwei == '' || gas_price_gwei.nil?
+        gas_price_gwei = 40
+      end
     end
     gas_consumed_in_gwei = gas_price_gwei * gas_limit
     gas_consumed_in_ether = gas_consumed_in_gwei.to_f * 0.000000001 # 1 gwei  - 0.000000001 ETH
@@ -101,9 +103,9 @@ module CollectionsHelper
     return success_key, failure_key, rand_token
   end
 
-  def has_kyc_detail
+  def no_kyc_detail
     kyc_detail = KycDetail.where(user: current_user)
-    return kyc_detail.present?
+    return kyc_detail.blank?
   end
 
   

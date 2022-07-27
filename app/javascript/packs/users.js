@@ -27,26 +27,29 @@
      $(document).on("click", "#kyc-submit", function (e) {
          e.preventDefault()
          var form = $("#kycDetailCreateForm")[0]
+         var country = $('#country').val();
+         var name = $('#name').val();
+         var email = $('#email_id').val();
+         var address = $('#address').val();
+         var mobile_no = $('.PhoneInputInput').val();
          if (form.checkValidity()){
             var isValidEmail = validateEmail($('#email_id').val());
             if (!isValidEmail){
                return toastr.error('Please enter an valid email id');
+            }else if (address.length < 10){
+               return toastr.error('Address is too short (minimum is 10 characters)');
             }
             else{
             $(".loading-gif").show();
             setTimeout(function() {
                $("#submitKycDetail").trigger("click");
+               calculateBuyFiatAmt();
                $(".loading-gif").hide();
                toastr.success("User details saved, successfully")
                window.show_modal('#Fiat-modal', false)
             }, 1000);
             }
          }else{
-         var country = $('#country option:selected').text();
-         var name = $('#name').val();
-         var email = $('#email_id').val();
-         var address = $('#address').val();
-         var mobile_no = $('#mobile_no').val();
          if (address === ''){
             toastr.error('Please enter your address');
          }if (mobile_no === ''){
@@ -55,7 +58,7 @@
             toastr.error('Please enter your email id');
          }if (name === ''){
             toastr.error('Please enter your name');
-         }if (country  == 'Select a country'){
+         }if (country  == 'ZZ'){
             toastr.error('Please select a country');
          }
          }

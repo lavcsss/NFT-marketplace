@@ -1,4 +1,3 @@
-
 class Collection < ApplicationRecord
   include Collection::ImportNft
   include Searchable
@@ -13,6 +12,7 @@ class Collection < ApplicationRecord
   FILE_EXTENSIONS = %w(png webp gif mp3 mp4).freeze
   CATEGORY_MAPPINGS = {art: ["png", "webp"], animation: ["gif"], audio: ["mp3"], video: ["mp4"]}.freeze
   IMAGE_SIZE = {thumb: {resize_to_limit: [500, 500]}, banner: {resize_to_limit: [500, 500]}}
+
 
   serialize :data, JSON
   serialize :category, Array
@@ -86,6 +86,8 @@ class Collection < ApplicationRecord
       indexes :address
     end
   end
+
+
 
   def as_indexed_json(options=nil)
     self.as_json(only: [:address,:name,:description,:category,:collection_type,:no_of_copies], methods: [:collection_name,:creator_name,:owner_name,:creator_address,:owner_address])

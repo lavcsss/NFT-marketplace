@@ -2,8 +2,8 @@
     <button class="modal__close close-icon" type="button"><i class="fas fa-times"></i></button>
     <h2>Mode of Payment</h2>
     <p>Pay using USD or Crypto to buy the<br> NFT</p>
-    <% if has_kyc_detail %>
-      <div  class="button-div img"><a href="javascript:void(0);" onclick="window.show_modal('#Fiat-modal', false)"><img src="../../assets/nft/fiat_payment/pay-usd-button.png"></a></div>
+    <% if !no_kyc_detail %>
+      <div  class="button-div img calculate_price"><a href="javascript:void(0);" onclick="window.show_modal('#Fiat-modal', false)"><img src="../../assets/nft/fiat_payment/pay-usd-button.png"></a></div>
     <% else %>
       <div  class="button-div img"><a href="javascript:void(0);" onclick="window.show_modal('#Kyc-detail-modal', false)"><img src="../../assets/nft/fiat_payment/pay-usd-button.png"></a></div>
     <% end %>
@@ -26,7 +26,6 @@
   $('#text-what-is-wallet').click(function(){
     $("#connect_to_wallet .modal__close").click();
   });
-  var address;
 </script>
 
 
