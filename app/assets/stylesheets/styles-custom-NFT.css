@@ -963,6 +963,12 @@ span.edit-profile img {
     padding: 0;
     width: 90%;
     margin: 0 auto;
+    max-width: 1170px;
+  }
+  
+  .my_own_collections{
+    width : 70% !important;
+    margin: 0;
 }
 .profile-tabs.tabs-panel .tabcontent ul li{
     margin: 0 20px 20px 0px;
@@ -4080,5 +4086,8 @@ footer.footer.nft-detail-bottom-footer.section-footer.wide-window{
 }
 .celebrity-img-info img{
     height: 200px;
+}
+.PhoneInputInput{
+    font-size: 15px;
 }
 }

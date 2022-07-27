@@ -93,9 +93,9 @@ const scrollableTabs = () => {
           </Tabs>
         </AppBar>
 
+    
         
-        
-      </div>);
+      </div> );
 
 }
 

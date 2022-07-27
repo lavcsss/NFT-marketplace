@@ -28,6 +28,7 @@ module Api
       response.code == '200' ? JSON.parse(response.body)['result']['ethusd'].to_f : ZERO
     end
 
+
     def self.erc20_price currency='weth', fiat='usd'
       uri = URI.parse(Rails.application.credentials.config[:coingecko_url] + "?ids=#{COINGECKO_IDS[currency.to_sym]}&vs_currencies=#{fiat}")
       request = Net::HTTP::Get.new(uri)
@@ -44,18 +45,25 @@ module Api
     end
 
     def self.gas_price
-      uri = URI.parse(Rails.application.credentials.etherscan.dig(:gas_price) + "?module=gastracker&action=gasoracle&apikey=#{Rails.application.credentials.etherscan[:api_key]}")
-      request = Net::HTTP::Get.new(uri)
-      request.content_type = "application/json"
-      req_options = {
-        use_ssl: uri.scheme == "https",
-        open_timeout: 5,
-        read_timeout: 5,
-      }
-      response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
-        http.request(request)
+      begin 
+        uri = URI.parse(Rails.application.credentials.etherscan.dig(:gas_price) + "?module=gastracker&action=gasoracle&apikey=#{Rails.application.credentials.etherscan[:api_key]}")
+        request = Net::HTTP::Get.new(uri)
+        request.content_type = "application/json"
+        req_options = {
+          use_ssl: uri.scheme == "https",
+          open_timeout: 5,
+          read_timeout: 5,
+        }
+        response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+          http.request(request)
+        end
+        response.code == '200' ? JSON.parse(response.body)['result']['FastGasPrice'].to_i : 0
+      rescue Exception => e
+        Rails.logger.warn "################## Exception while Fetching Gas Price ##################"
+        Rails.logger.warn "ERROR: #{e.message}"
+        Rails.logger.warn $!.backtrace[0..20].join("\n")
+        return 0
       end
-      response.code == '200' ? JSON.parse(response.body)['result']['FastGasPrice'].to_i : 0
     end
   end
 end

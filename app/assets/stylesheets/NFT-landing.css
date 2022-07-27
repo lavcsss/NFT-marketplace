@@ -3181,8 +3181,9 @@ top: 15px;
   }
 
   .NFT_SCREEN .section.section_2 ul li .carousal-menus::before{
-    border-radius: 65px;
+    border-radius: 47px;
   }
+
 footer.footer.section-footer .footer__tagline{
     width: 90%;
     text-align: center;
@@ -3804,7 +3805,7 @@ left: auto;
 }
 @media screen and (max-width: 375px) and (min-width: 280px) {
   .NFT_SCREEN .section.section_2 ul li .exclusive-row .exclusive-row.w-50 .carousal-menus::before{
-  border-radius: 14px;
+  border-radius: 29px;
 }
   .NFT_SCREEN .section.section_3 ul li .img-panel .image-fit .auction-heading strong{
     width: 200px;

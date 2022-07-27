@@ -40,7 +40,7 @@
         <div class="col-sm-12">
           <div class="form-group bidBuyInputs bordered">
             <div class="user-entered-value ">
-              <input type="text" name="collection[instant_sale_price]" prevVal="<%= @collection.instant_sale_price %>" value="<%= @collection.instant_sale_price %>" class="form-control input-custom sign__input" id="instant-price" placeholder="Enter price for one piece"/>
+              <input onkeypress="return validDecimalPoint(event)" type="text" name="collection[instant_sale_price]" prevVal="<%= @collection.instant_sale_price %>" value="<%= @collection.instant_sale_price %>" class="form-control input-custom sign__input" id="instant-price" placeholder="Enter price for one piece"/>
             </div>
             <div class="user-select-filed">
               <%= select_tag "collection[erc20_token_id]", options_for_select(Erc20Token.select_options, @collection.erc20_token_id), class: "form-control input-custom sign__input", required: true, prevVal: @collection.erc20_token_id %>
