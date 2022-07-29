@@ -198,6 +198,7 @@ ActiveRecord::Schema.define(version: 2022_06_20_152747) do
     t.text "address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "country_code"
     t.index ["user_id"], name: "index_kyc_details_on_user_id"
   end
 
@@ -219,6 +220,7 @@ ActiveRecord::Schema.define(version: 2022_06_20_152747) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "description"
+    t.boolean "is_active", default: true
     t.index ["owner_id"], name: "index_nft_contracts_on_owner_id"
   end
 
