@@ -6,7 +6,7 @@ class NftContract < ApplicationRecord
   belongs_to :owner, class_name: 'User', foreign_key: 'owner_id', optional: true
   has_one_attached :attachment, dependent: :destroy
   has_one_attached :cover, dependent: :destroy
-
+  default_scope { where(is_active: true) }
   enum contract_type: [:nft721, :nft1155]
 
   def self.get_shared_id type

@@ -6,7 +6,7 @@ class NftContractsController < ApplicationController
 
   def show
     params[:page_no] ||= 1
-    @contract = NftContract.where.not(symbol:"Shared").where(address: params[:id]).first
+    @contract = NftContract.where.not(symbol:"Shared").where(address: params[:id], is_active: true).first
     unless @contract.present?
       redirect_path = request.referer.present? ? request.referer : root_path
       redirect_to redirect_path, alert: 'Invalid contract address!' and return  
@@ -15,7 +15,7 @@ class NftContractsController < ApplicationController
   end
 
   def collections_list
-    @contract = NftContract.where(address: params[:id]).first
+    @contract = NftContract.where(address: params[:id], is_active: true).first
     @tokens = @contract.collections.order(:created_at).reverse_order.paginate(page: params[:page_no], per_page: 15)
   end
   
