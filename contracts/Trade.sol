@@ -230,6 +230,7 @@ contract Trade {
         uint256 fee;
         uint qty;
         bool isDeprecatedProxy;
+        bool isErc20Payment;
     }
 
     
@@ -350,26 +351,36 @@ contract Trade {
         }
         if(fee.platformFee > 0) {
             
-            if (!isTransferAsset) {
-            transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address), order.buyer, owner, fee.platformFee);
-            } else {
-                transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address), msg.sender, owner, fee.platformFee);
+            if (order.isErc20Payment){
+                if (!isTransferAsset) {
+                    transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address), order.buyer, owner, fee.platformFee);
+                } else {
+                    transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address), msg.sender, owner, fee.platformFee);
+                }
+            }else{
+                payable(owner).transfer(fee.platformFee);
             }
         }
         if(fee.royaltyFee > 0) {
-
-            if (!isTransferAsset) {
-            transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address), order.buyer, fee.tokenCreator, fee.royaltyFee);
-            } else {
-                transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address), msg.sender, fee.tokenCreator, fee.royaltyFee);
+            if (order.isErc20Payment){
+                if (!isTransferAsset) {
+                transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address), order.buyer, fee.tokenCreator, fee.royaltyFee);
+                } else {
+                    transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address), msg.sender, fee.tokenCreator, fee.royaltyFee);
+                }
+            }else{
+                payable(fee.tokenCreator).transfer(fee.royaltyFee);
             }
         }
-        if (!isTransferAsset) {
-        transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address), order.buyer, order.seller, fee.assetFee);
-        } else {
-        transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address),  msg.sender, order.seller, fee.assetFee);
+        if (order.isErc20Payment){
+            if (!isTransferAsset) {
+            transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address), order.buyer, order.seller, fee.assetFee);
+            } else {
+            transferProxy.erc20safeTransferFrom(IERC20(order.erc20Address),  msg.sender, order.seller, fee.assetFee);
+            }
+        }else{
+            payable(order.seller).transfer(fee.assetFee);
         }
-
         if(order.isDeprecatedProxy){
             transferProxy = previousTransferProxy;
         }
@@ -459,4 +470,58 @@ contract Trade {
         return true;
     }
 
+    function buyAssetWithEth(Order memory order, bool _import, Sign memory sign) external payable returns (bool) {
+        require(!usedNonce[sign.nonce],"Nonce: Invalid Nonce");
+        usedNonce[sign.nonce] = true;
+        Fee memory fee = getFees(order, _import);
+        require(msg.value >= fee.price, "Paid Invalid amount");
+        verifySellerSign(order.seller, order.tokenId, order.unitPrice, order.erc20Address, order.nftAddress, sign);
+        order.buyer = msg.sender;
+        tradeAsset(order, fee, false);
+        emit BuyAsset(order.seller , order.tokenId, order.qty, msg.sender);
+        return true;
+    }
+
+    function mintAndBuyAssetWithEth(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) external payable returns (bool){
+        require(!usedNonce[sign.nonce] && !usedNonce[ownerSign.nonce],"Nonce: Invalid Nonce");
+        usedNonce[sign.nonce] = true;
+        usedNonce[ownerSign.nonce] = true;
+        Fee memory fee = getFees(order, false);
+        require(msg.value >= fee.price, "Paid Invalid amount");
+        if(isShared) {
+            verifyOwnerSign(order.nftAddress, order.seller, order.tokenURI, ownerSign);
+        }
+        verifySellerSign(order.seller, order.tokenId, order.unitPrice, order.erc20Address, order.nftAddress, sign);
+        order.buyer = msg.sender;
+        tradeAsset(order, fee, false);
+        emit BuyAsset(order.seller , order.tokenId, order.qty, msg.sender);
+        return true;
+
+    }
+
+    function buyAndTransferAssetWithEth(Order memory order, bool _import, Sign memory sign) external payable returns(bool) {
+        require(!usedNonce[sign.nonce],"Nonce: Invalid Nonce");
+        usedNonce[sign.nonce] = true;
+        Fee memory fee = getFees(order, _import);
+        require(msg.value >= fee.price, "Paid Invalid amount");
+        verifySellerSign(order.seller, order.tokenId, order.unitPrice, order.erc20Address, order.nftAddress, sign);
+        tradeAsset(order, fee, true);
+        emit BuyAsset(order.seller , order.tokenId, order.qty, order.buyer);
+        return true;
+    }
+
+    function mintAndTransferAssetWithEth(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) external payable returns(bool){
+        require(!usedNonce[sign.nonce] && !usedNonce[ownerSign.nonce],"Nonce: Invalid Nonce");
+        usedNonce[sign.nonce] = true;
+        usedNonce[ownerSign.nonce] = true;
+        Fee memory fee = getFees(order, false);
+        require(msg.value >= fee.price, "Paid Invalid amount");
+        if(isShared) {
+            verifyOwnerSign(order.nftAddress, order.seller, order.tokenURI, ownerSign);
+        }
+        verifySellerSign(order.seller, order.tokenId, order.unitPrice, order.erc20Address, order.nftAddress, sign);
+        tradeAsset(order, fee, true);
+        emit BuyAsset(order.seller , order.tokenId, order.qty, order.buyer);
+        return true;
+    }
 }

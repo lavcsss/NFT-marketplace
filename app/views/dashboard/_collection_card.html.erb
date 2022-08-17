@@ -69,11 +69,11 @@
                 <div class="name-detail">
                   <% if collection.instant_sale_price%>
                         <h6> Price </h6>
-                    <i><a><%=collection.instant_sale_price%> </a> WETH</i>
+                    <i><a><%=collection.instant_sale_price%> </a> <%= collection.collection_coin %></i>
                   <% else %>
                       <% if collection.max_bid %>
                         <h6 class="bid_status">Highest bid </h6>
-                      <i><a><%= collection.max_bid.amount %></a> WETH </i>
+                      <i><a><%= collection.max_bid.amount %></a> <%= collection.collection_coin %> </i>
                     <%else%>
                         <h6><span>No active Bids<span></h6> 
                     <% end %>  

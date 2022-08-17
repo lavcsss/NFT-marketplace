@@ -4,8 +4,10 @@
     <h4 class="modal-title share_link_page_h4"><%= t('collections.show.checkout') %></h4>
     <div class="modal-body pt-10 pb-10">
       <% erc20_token = @collection.erc20_token %>
-      <span id="buyContractAddress" class="hide"><%= erc20_token.address %></span>
-      <span id="buyContractDecimals" class="hide"><%= erc20_token.decimals %></span>
+      <% unless erc20_token.nil? %>
+        <span id="buyContractAddress" class="hide"><%= erc20_token.address %></span>
+        <span id="buyContractDecimals" class="hide"><%= erc20_token.decimals %></span>
+      <% end %>
       <p class="buynow-content">
         <span class="innertitle"><%= t('collections.show.you_are_abt_purchase') %></span>
         <span class="frm-title"><b><%= @collection.name %></b>,</span>
@@ -14,6 +16,7 @@
       </p>
       <div class="placebidbuy_valbox">
         <% price, symbol = @collection.sale_price %>
+        <% collection_coin = @collection.collection_coin %>
         <div class="form-group bidBuyInputs">
           <% if @collection.multiple? %>
             <div>
@@ -27,7 +30,7 @@
           <div>
             <label for="recipient-name" class="col-form-label"><%= t('collections.show.buy_price') %></label>
             <span class="price_currency sign__input <% if @collection.single?%> single_collection_price_currency <%end%>">
-              <span id="buy_price" price="<%= price %>"><%= price %></span><span id="buy_currency">&nbsp;<%= symbol %></span>
+              <span id="buy_price" price="<%= price %>"><%= price %></span><span id="buy_currency">&nbsp;<%= collection_coin %></span>
                 </span>
           </div>
         </div>
@@ -35,17 +38,19 @@
           <span class="price-amt-content"><%= t('collections.show.your_balance') %></span>
           <span class="price-amt-val" id="current_balance"><%= current_balance %> <%= Rails.application.credentials.config[:base_coin] %></span>
         </div>
-        <div class="flex_box_inputs">
-          <span class="price-amt-content"><%= t('collections.show.your_buy_balance') %></span>
-          <span class="price-amt-val"><span class="ercCurBalance">0</span> <%= symbol %></span>
-        </div>
+        <% unless @collection.is_eth_payment %>
+          <div class="flex_box_inputs">
+            <span class="price-amt-content"><%= t('collections.show.your_buy_balance') %></span>
+            <span class="price-amt-val"><span class="ercCurBalance">0</span> <%= collection_coin %></span>
+          </div>
+        <% end %>
         <div class="flex_box_inputs">
           <span class="price-amt-content"><%= t('collections.show.service_fee') %></span>
-          <span class="price-amt-val"><span id="buy-amt-dp">0</span> <%= symbol %></span>
+          <span class="price-amt-val"><span id="buy-amt-dp">0</span> <%= collection_coin %></span>
         </div>
         <div class="flex_box_inputs">
           <span class="price-amt-content"><%= t('collections.show.you_will_pay') %></span>
-          <span class="price-amt-val"><span id="buy-total-amt-dp">0</span> <%= symbol %></span>
+          <span class="price-amt-val"><span id="buy-total-amt-dp">0</span> <%= collection_coin %></span>
         </div>
       </div>
     </div>

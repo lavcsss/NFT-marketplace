@@ -138,6 +138,8 @@ $(document).ready(function () {
     }
   })
 
+
+
   $(document).on("click", ".collection-submit", function (e) {
     e.preventDefault()
     $(this).text("In Progress");
@@ -375,9 +377,18 @@ $(document).ready(function () {
       // tokenID is 0 for Lazy-minting blocks
       const tokenId = is_lazy_minting ? 0 : details['token_id']  
       console.log(details['unit_price'], details['pay_token_decimal'], details['pay_token_address'],
-        details['token_id'], details['asset_address'], details['collection_id'])
-      signSellOrder(details['unit_price'], details['pay_token_decimal'], details['pay_token_address'],
-      tokenId, details['asset_address'], details['collection_id'])
+        details['token_id'], details['asset_address'], details['collection_id'], details['is_eth_payment'])
+      if (details['is_eth_payment']){
+        console.log(details['is_eth_payment']);
+        var paymentCoin = "0x0000000000000000000000000000000000000000";
+        var ethDecimals = 18;
+        signSellOrder(details['unit_price'], ethDecimals, paymentCoin,
+        tokenId, details['asset_address'], details['collection_id'],
+        )
+      }else{
+        signSellOrder(details['unit_price'], details['pay_token_decimal'], details['pay_token_address'],
+        tokenId, details['asset_address'], details['collection_id'])
+      }
     } else {
       bidSignFixedFailed('Unable to fetch tokan details. Please try again later')
     }
@@ -437,16 +448,12 @@ function updateOwnContractCollection(collectionId) {
     }
   })
 
-  // TODO: WHILE ADDING NEW CUREENCIES HAVE TO MAKE LOGIC TO FETCH DECIMALS HERE
+  // TODO: WHILE ADDING NEW CURRENCIES HAVE TO MAKE LOGIC TO FETCH DECIMALS HERE
   window.initBidProcess = async function isApprovedNFT(contractAddress, contractDecimal) {
     var curErc20Balance = $('#erc20_balance').text()
     var ethBalance = await window.ethBalance();
     var totalAmt = $("#bid-total-amt-dp").attr('bidAmt')
     var symbol = $('#bid_currency :selected').text();
-    console.log(curErc20Balance)
-    console.log(totalAmt)
-    console.log((isGreaterThanOrEqualTo(curErc20Balance, totalAmt)))
-    console.log(symbol)
     if (isGreaterThanOrEqualTo(curErc20Balance, totalAmt)) {
       $('.convertEth').addClass("hide")
       initApproveBidProcess(contractAddress)
@@ -654,7 +661,8 @@ function updateOwnContractCollection(collectionId) {
           $("#buy_qty").val(1);
           calculateBuy($('#BuyerserviceFee').text());
           initBuyFiatProcess($("#buyContractAddress").text(), 
-                             $("#buyContractDecimals").text(), msg['quantity'], msg['payment_amt']);
+                             $("#buyContractDecimals").text(), msg['quantity'], msg['payment_amt'],
+                             msg['is_eth_payment']);
       }
       else if (msg['status'] == 'cancelled'){
         $.magnificPopup.close();
@@ -674,22 +682,28 @@ function updateOwnContractCollection(collectionId) {
   });
 
 
-  window.initBuyFiatProcess = async function initBuyFiatProcess(contractAddress, contractDecimals, fiatQty, paymentAmt) {
+  window.initBuyFiatProcess = async function initBuyFiatProcess(contractAddress, contractDecimals, fiatQty,
+     paymentAmt, isEthPayment=false) {
     var paymentDetails = fetchCollectionDetails(null, contractAddress)
+    if (isEthPayment == true){
+      paymentDetails['pay_token_address'] = '0x0000000000000000000000000000000000000000';
+      paymentDetails['pay_token_decimal'] = 18;
+    }
     console.log(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
       paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum(fiatQty), toNum(paymentAmt),
       paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
-      paymentDetails['seller_sign'], paymentDetails['collection_id'])
+      paymentDetails['seller_sign'], paymentDetails['collection_id'], isEthPayment)
     if($('#is_collection_lazy_minted').val() == "true"){
       MintAndTransferAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
         paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum(fiatQty), toNum(paymentAmt),
         paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
-        paymentDetails['seller_sign'], paymentDetails['collection_id'], paymentDetails['token_uri'], paymentDetails['royalty'],paymentDetails['shared'],paymentDetails['total'])
+        paymentDetails['seller_sign'], paymentDetails['collection_id'], paymentDetails['token_uri'], 
+        paymentDetails['royalty'],paymentDetails['shared'],paymentDetails['total'], isEthPayment)
     }else{
       buyAndTransferAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
       paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum(fiatQty), toNum(paymentAmt),
       paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
-      paymentDetails['seller_sign'], paymentDetails['collection_id'])
+      paymentDetails['seller_sign'], paymentDetails['collection_id'], isEthPayment)
     }
   }
 
@@ -697,17 +711,28 @@ function updateOwnContractCollection(collectionId) {
   window.initBuyProcess = async function initBuyProcess() {
     var curErc20Balance = $('#erc20_balance').text()
     var ethBalance = await window.ethBalance();
-    var totalAmt = $("#buy-total-amt-dp").attr('buyAmt')
-    if (isGreaterThanOrEqualTo(curErc20Balance, totalAmt)) {
-      $('.convertEth').addClass("hide")
-      initApproveBuyProcess($("#buyContractAddress").text(), $("#buyContractDecimals").text())
-    } else if (isGreaterThanOrEqualTo(ethBalance, totalAmt)) {
-      convertEthToWeth(totalAmt, 'Buy')
-    } else {
-      $("#buyForm :input").prop("disabled", false);
-      // $("#placeBuy").modal("hide");
-      $.magnificPopup.close();
-      return toastr.error('Not enough balance');
+    var totalAmt = $("#buy-total-amt-dp").attr('buyAmt'); 
+    var isEthPayment = $('#is_eth_payment').attr('is_eth_payment');
+    if (isEthPayment === 'false'){
+      if (isGreaterThanOrEqualTo(curErc20Balance, totalAmt)) {
+        $('.convertEth').addClass("hide")
+        initApproveBuyProcess($("#buyContractAddress").text(), $("#buyContractDecimals").text())
+      } else if (isGreaterThanOrEqualTo(ethBalance, totalAmt)) {
+        convertEthToWeth(totalAmt, 'Buy')
+      } else {
+        $("#buyForm :input").prop("disabled", false);
+        // $("#placeBuy").modal("hide");
+        $.magnificPopup.close();
+        return toastr.error('Not enough balance');
+      }
+    }else{
+      if (isGreaterThanOrEqualTo(ethBalance, totalAmt)) {
+        initEthBuyProcess();
+      }else{
+        $("#buyForm :input").prop("disabled", false);
+        $.magnificPopup.close();
+        return toastr.error('Not enough balance');
+      }
     }
   }
 
@@ -749,6 +774,31 @@ function updateOwnContractCollection(collectionId) {
     approveERC20(contractAddress, 'erc20', $("#buy-total-amt-dp").attr('buyAmt'), contractDecimals, 'Buy')
   }
 
+  window.initEthBuyProcess = function initEthBuyProcess() {
+    $('.convertEth').addClass('hide');
+    $('.approveBuy').addClass('hide');
+    $.magnificPopup.close();
+    $.magnificPopup.open({
+      closeOnBgClick: false ,
+      enableEscapeKey: false,
+      items: {
+        src: '#placeBuy'
+      },
+      type: 'inline',
+      callbacks: {
+        close: function(){
+          $("#buyForm :input").prop("disabled", false);
+        }
+      }
+    });
+    $("#placeBuy").modal("show");
+    $(".purchaseStart").hide();
+    $(".purchaseDone").hide();
+    $(".purchaseRetry").hide();
+    $(".allProgress").removeClass('hide');
+    initPurchaseProcess('', true);
+  }
+
   window.buyApproveSuccess = function buyApproveSuccess(transactionHash, contractAddress) {
     console.log("buyApproveSuccess")
     console.log(contractAddress)
@@ -770,31 +820,49 @@ function updateOwnContractCollection(collectionId) {
     initApproveBuyProcess($("#buyContractAddress").text(), $("#buyContractDecimals").text())
   })
 
-  window.initPurchaseProcess = function initPurchaseBuyProcess(contractAddress) {
-    hideAll()
-    $('.convertDone').removeClass('hide')
-    $('.approvebuyDone').removeClass('hide')
-    $('.purchaseProgress').removeClass('hide')
-    $('.purchaseAndMintProgress').removeClass('hide')
+  window.initPurchaseProcess = function initPurchaseBuyProcess(contractAddress, isEthPayment=false) {
+    if (!isEthPayment){
+      hideAll();
+      $('.convertDone').removeClass('hide')
+      $('.approvebuyDone').removeClass('hide')
+      $('.purchaseProgress').removeClass('hide')
+      $('.purchaseAndMintProgress').removeClass('hide')
+    }
     console.log("initPurchaseProcess")
     console.log(contractAddress)
     var paymentDetails = fetchCollectionDetails(null, contractAddress)
-    console.log(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
-      paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy-total-amt-dp").attr('buyAmt')),
+    if (isEthPayment){
+      paymentDetails['pay_token_address'] = '0x0000000000000000000000000000000000000000';
+      paymentDetails['pay_token_decimal'] = 18;
+    }
+    console.log(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), 
+      paymentDetails['asset_address'],
+      paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), 
+      toNum($("#buy-total-amt-dp").attr('buyAmt')),
       paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
       paymentDetails['seller_sign'], paymentDetails['collection_id'])
     if($('#is_collection_lazy_minted').val()=="true"){
-      MintAndBuyAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
-        paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy-total-amt-dp").attr('buyAmt')),
+      MintAndBuyAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']),
+        paymentDetails['asset_address'],
+        paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()),
+        toNum($("#buy-total-amt-dp").attr('buyAmt')),
         paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
-        paymentDetails['seller_sign'], paymentDetails['collection_id'], paymentDetails['token_uri'], paymentDetails['royalty'],paymentDetails['shared'],paymentDetails['total'])
+        paymentDetails['seller_sign'], paymentDetails['collection_id'], paymentDetails['token_uri'], 
+        paymentDetails['royalty'],paymentDetails['shared'],paymentDetails['total'], 
+        isEthPayment)
     }else{
-      buyAsset(paymentDetails['owner_address'], toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
-      paymentDetails['token_id'], toNum(paymentDetails['unit_price']), toNum($('#buy_qty').val()), toNum($("#buy-total-amt-dp").attr('buyAmt')),
-      paymentDetails['pay_token_address'], toNum(paymentDetails['pay_token_decimal']),
-      paymentDetails['seller_sign'], paymentDetails['collection_id'])
+      buyAsset(paymentDetails['owner_address'],
+      toNum(paymentDetails['asset_type']), paymentDetails['asset_address'],
+      paymentDetails['token_id'], toNum(paymentDetails['unit_price']),
+      toNum($('#buy_qty').val()), toNum($("#buy-total-amt-dp").attr('buyAmt')),
+      paymentDetails['pay_token_address'], paymentDetails['pay_token_decimal'],
+      paymentDetails['seller_sign'],
+      paymentDetails['collection_id'], isEthPayment)
     }
   }
+
+
+
 
   window.buyPurchaseSuccess = function buyPurchaseSuccess(collectionId) {
     $('.convertDone').removeClass('hide')
@@ -821,6 +889,13 @@ function updateOwnContractCollection(collectionId) {
     $('.convertDone').removeClass('hide')
     $('.approvebuyDone').removeClass('hide')
     $('.purchaseRetry').removeClass('hide')
+  }
+
+  window.buyWithEthPurchaseFailed = function buyWithEthPurchaseFailed(errorMsg) {
+    toastr.error(errorMsg)
+    $(".allProgress").addClass('hide');
+    $(".purchaseRetry").removeClass('hide');
+    $('.purchaseRetry').show();
   }
 
   $(document).on("click", ".purchaseRetry", function () {
@@ -990,8 +1065,6 @@ function updateOwnContractCollection(collectionId) {
     } else if (form.checkValidity()) {
       var address = fetchTransferDetails()
       if (address) {
-        // $("#transferTokenForm").modal("hide");
-        // $("#transferToken").modal("show");
         show_modal('#transferToken');
         initTransferProcess($('.transferAddress').val(), $('.transferQuantity').val());
       } else {
@@ -1110,8 +1183,16 @@ function updateOwnContractCollection(collectionId) {
     var pay_token_decimal = $('#collection_erc20_token_id option:selected, this').attr('decimals')
     var details = fetchCollectionDetails(null, pay_token_address)
     if (details) {
-      signSellOrder($('#instant-price').val(), pay_token_decimal, pay_token_address,
-        details['token_id'], details['asset_address'], details['collection_id'], 'update')
+      if (details['is_eth_payment']){
+        console.log(details['is_eth_payment']);
+        var paymentCoin = "0x0000000000000000000000000000000000000000";
+        signSellOrder($('#instant-price').val(), null, paymentCoin,
+        details['token_id'], details['asset_address'], details['collection_id'], 'update'
+        )
+      }else{
+        signSellOrder($('#instant-price').val(), pay_token_decimal, pay_token_address,
+        details['token_id'], details['asset_address'], details['collection_id'], 'update');
+      }      
     } else {
       bidSignFixedFailed('Unable to fetch tokan details. Please try again later')
     }
@@ -1235,6 +1316,7 @@ function updateOwnContractCollection(collectionId) {
     $("#buy-total-amt-dp").attr('buyAmt', numToString(totalAmt));
   }
 
+
   window.calculateBidExec = function calculateBuy(thisBid) {
     var payAmt = thisBid.attr('price');
     var qty = thisBid.attr('qty');
@@ -1242,8 +1324,8 @@ function updateOwnContractCollection(collectionId) {
     var serviceFee = percentageOf(serviceFee, payAmt);
     var totalAmt = minusNum(payAmt, serviceFee);
     $("#execServiceFee").html(numToString(serviceFee));
-    if ($('#royaltyFee').attr('royaltyPercentage')) {
-      var royaltyFeePer = $('#royaltyFee').attr('royaltyPercentage')
+    if ($('#executeBidRoyaltyFee').attr('royaltyPercentage')) {
+      var royaltyFeePer = $('#executeBidRoyaltyFee').attr('royaltyPercentage')
       var royaltyFee = percentageOf(royaltyFeePer, payAmt)
       $("#executeBidRoyaltyFee").html(royaltyFee);
       var totalAmt = minusNum(totalAmt, royaltyFee);

@@ -133,6 +133,10 @@ class CollectionsController < ApplicationController
         @collection.address = Collection.generate_uniq_token
         @collection.creator_id = current_user.id
         @collection.owner_id = current_user.id
+        if collection_params[:erc20_token_id] == "eth"
+          @collection.is_eth_payment = true
+          @collection.erc20_token_id = nil
+        end
         @collection.data = JSON.parse(collection_params[:data]) if collection_params[:data].present?
         if @collection.valid?
           @collection.save
@@ -204,7 +208,11 @@ class CollectionsController < ApplicationController
   end
 
   def change_price
-    @collection.assign_attributes(change_price_params)
+    if change_price_params[:erc20_token_id] == "eth"
+      @collection.is_eth_payment = true
+    else
+      @collection.assign_attributes(change_price_params)
+    end
     @collection.save
   end
 
@@ -251,7 +259,7 @@ class CollectionsController < ApplicationController
         if(find_collection)
           obj = Utils::Web3.new
           nonce = DateTime.now.strftime('%Q').to_i
-          obj.sign_metadata_hash(Settings.tradeContractAddress, account.address, params[:tokenURI],nonce)
+          obj.sign_metadata_hash(Settings.tradeContractAddress, account.address, params[:tokenURI], nonce)
         else 
           ""
         end
@@ -336,7 +344,7 @@ class CollectionsController < ApplicationController
       status = "failure"
     end
     crypto_amt = total_payment_crypto(@collection, quantity)
-    render json: {status: status, quantity: quantity, payment_amt: crypto_amt }
+    render json: {status: status, quantity: quantity, payment_amt: crypto_amt, is_eth_payment: @collection.is_eth_payment }
   end
 
   def total_fiat_price
@@ -432,7 +440,9 @@ class CollectionsController < ApplicationController
     params['collection']['category'] = params['collection']['category'].present? ? params['collection']['category'].split(",") : []
     params['collection']['nft_contract_id'] = NftContract.get_shared_id(params[:collection][:collection_type]) if params['chooseCollection'] == 'nft'
     params['collection']['nft_contract_id'] = NftContract.find_by_address(params['chooseOwnCollection'])&.id if params['chooseOwnCollection']!= 'new' && params['chooseCollection'] == 'create'
-    params['collection']['erc20_token_id'] = Erc20Token.where(address: params[:collection][:currency]).first&.id if params[:collection][:currency].present?
+    unless params[:collection][:erc20_token_id] == "eth"
+      params['collection']['erc20_token_id'] = Erc20Token.where(address: params[:collection][:currency]).first&.id if params[:collection][:currency].present?
+    end
     params.require(:collection).permit(:name, :description, :collection_address, :put_on_sale, :instant_sale_enabled, :instant_sale_price, :unlock_on_purchase,
                                :bid_id, :no_of_copies, :attachment, :cover, :data, :collection_type, :royalty, :nft_contract_id, :unlock_description,
                                :erc20_token_id, :source, :nft_link, :token, :total_copies, :contract_address, :contract_type, :imported, category: [])

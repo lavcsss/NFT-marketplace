@@ -1,5 +1,5 @@
 <div class="modeling-artist-list">
-    <ul>
+    <ul class="my_own_collections">
         <%if @data.present? %>
             <%@data.all.each do |single_contract|%>
                 <%= render 'dashboard/own_contract', contract: single_contract %>

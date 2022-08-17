@@ -177,7 +177,13 @@
                               <input onkeypress="return validDecimalPoint(event)" type="text" name="collection[instant_sale_price]" class="sign__input" id="instant-price" placeholder="Enter price for one piece" />
                            </div>
                            <div class="sign__group">
-                              <%= select_tag "collection[erc20_token_id]", options_for_select(Erc20Token.select_options), class: "sign__select chosen-select", required: true %>
+                              <select name="collection[erc20_token_id]" id="collection_erc20_token_id" class="sign__select chosen-select" required="required">
+                                 <!-- Adding ethereum here as default, because ethereum is not an ERC20 -->
+                                 <option value="eth" address="0x0000000000000000000000000000000000000000" > ETH </option>
+                                 <% (Erc20Token.select_options).each do |token| %>
+                                    <option address="<%=token.address%>" decimals="<%=token.decimals%>" value="<%=token.id%>"> <%=token.symbol.upcase%> </option>
+                                 <% end %>
+                              </select>
                            </div>
                         </div>
                      </li>

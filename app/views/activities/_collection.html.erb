@@ -29,7 +29,7 @@
               <% elsif activity.changeset.keys.include?("instant_sale_price") %>
                     <span>  <%= image_tag url_for(activity.item.owner.profile_image) %> </span>
                     <div class="user-profile-detail">  <a href="<%= user_path(activity.item.owner.address)%>"> <%= owner_name %> </a>
-                        <em> Updated the price for <%= activity.item.title %> to <%= activity.changeset["instant_sale_price"].last %> WETH </em>
+                        <em> Updated the price for <%= activity.item.title %> to <%= activity.changeset["instant_sale_price"].last %> <%= activity.item.collection_coin %> </em>
                         <i><%= time_ago_in_words(activity.created_at) %> ago </i>
                     </div>
               <% elsif activity.changeset.keys.include?("put_on_sale") %>

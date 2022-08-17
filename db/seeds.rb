@@ -15,9 +15,9 @@ Erc20Token.find_or_create_by(chain_id: CHAIN_ID, symbol: 'WETH')
 
 ### CREATING SHARED NFT CONTRACT ADDRESSES
 NftContract.find_or_create_by(contract_type: 'nft721', symbol: 'Shared')
-  .update(name: 'NFT', address: '0x561d7Cb8628A7E661f47Fe0ef0c0a676546b781E')
+  .update(name: 'NFT', address: '0xea00f782e1Bd1BBA2b809F20D5d8503181b2e796')
 NftContract.find_or_create_by(contract_type: 'nft1155', symbol: 'Shared')
-  .update(name: 'NFT', address: '0xAAab06CdC8A4Ff6B04F58EA59BE9014B7b0717cD')
+  .update(name: 'NFT', address: '0x769e095A8efdE9bfb4714490975e3959E121636e')
 
   # SEEDING CELEBRITY USER DATA
   celebrity_data = JSON.parse(File.read('app/assets/static/celebrity.json'))

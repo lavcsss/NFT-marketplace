@@ -285,6 +285,11 @@ module Utils
                     "internalType": "bool",
                     "name": "isDeprecatedProxy",
                     "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
+                    "type": "bool"
                   }
                 ],
                 "internalType": "struct Trade.Order",
@@ -403,6 +408,134 @@ module Utils
                     "internalType": "bool",
                     "name": "isDeprecatedProxy",
                     "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
+                    "type": "bool"
+                  }
+                ],
+                "internalType": "struct Trade.Order",
+                "name": "order",
+                "type": "tuple"
+              },
+              {
+                "internalType": "bool",
+                "name": "_import",
+                "type": "bool"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint8",
+                    "name": "v",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "r",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "s",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "nonce",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct Trade.Sign",
+                "name": "sign",
+                "type": "tuple"
+              }
+            ],
+            "name": "buyAndTransferAssetWithEth",
+            "outputs": [
+              {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+              }
+            ],
+            "stateMutability": "payable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "components": [
+                  {
+                    "internalType": "address",
+                    "name": "seller",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "buyer",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "erc20Address",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "nftAddress",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "enum Trade.BuyingAssetType",
+                    "name": "nftType",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "unitPrice",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "supply",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "string",
+                    "name": "tokenURI",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "fee",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "qty",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isDeprecatedProxy",
+                    "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
+                    "type": "bool"
                   }
                 ],
                 "internalType": "struct Trade.Order",
@@ -451,6 +584,129 @@ module Utils
               }
             ],
             "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "components": [
+                  {
+                    "internalType": "address",
+                    "name": "seller",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "buyer",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "erc20Address",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "nftAddress",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "enum Trade.BuyingAssetType",
+                    "name": "nftType",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "unitPrice",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "supply",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "string",
+                    "name": "tokenURI",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "fee",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "qty",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isDeprecatedProxy",
+                    "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
+                    "type": "bool"
+                  }
+                ],
+                "internalType": "struct Trade.Order",
+                "name": "order",
+                "type": "tuple"
+              },
+              {
+                "internalType": "bool",
+                "name": "_import",
+                "type": "bool"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint8",
+                    "name": "v",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "r",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "s",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "nonce",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct Trade.Sign",
+                "name": "sign",
+                "type": "tuple"
+              }
+            ],
+            "name": "buyAssetWithEth",
+            "outputs": [
+              {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+              }
+            ],
+            "stateMutability": "payable",
             "type": "function"
           },
           {
@@ -533,6 +789,11 @@ module Utils
                   {
                     "internalType": "bool",
                     "name": "isDeprecatedProxy",
+                    "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
                     "type": "bool"
                   }
                 ],
@@ -651,6 +912,11 @@ module Utils
                   {
                     "internalType": "bool",
                     "name": "isDeprecatedProxy",
+                    "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
                     "type": "bool"
                   }
                 ],
@@ -797,6 +1063,161 @@ module Utils
                     "internalType": "bool",
                     "name": "isDeprecatedProxy",
                     "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
+                    "type": "bool"
+                  }
+                ],
+                "internalType": "struct Trade.Order",
+                "name": "order",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint8",
+                    "name": "v",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "r",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "s",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "nonce",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct Trade.Sign",
+                "name": "ownerSign",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint8",
+                    "name": "v",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "r",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "s",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "nonce",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct Trade.Sign",
+                "name": "sign",
+                "type": "tuple"
+              },
+              {
+                "internalType": "bool",
+                "name": "isShared",
+                "type": "bool"
+              }
+            ],
+            "name": "mintAndBuyAssetWithEth",
+            "outputs": [
+              {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+              }
+            ],
+            "stateMutability": "payable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "components": [
+                  {
+                    "internalType": "address",
+                    "name": "seller",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "buyer",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "erc20Address",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "nftAddress",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "enum Trade.BuyingAssetType",
+                    "name": "nftType",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "unitPrice",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "supply",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "string",
+                    "name": "tokenURI",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "fee",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "qty",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isDeprecatedProxy",
+                    "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
+                    "type": "bool"
                   }
                 ],
                 "internalType": "struct Trade.Order",
@@ -942,6 +1363,11 @@ module Utils
                     "internalType": "bool",
                     "name": "isDeprecatedProxy",
                     "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
+                    "type": "bool"
                   }
                 ],
                 "internalType": "struct Trade.Order",
@@ -1017,6 +1443,156 @@ module Utils
               }
             ],
             "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "components": [
+                  {
+                    "internalType": "address",
+                    "name": "seller",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "buyer",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "erc20Address",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "nftAddress",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "enum Trade.BuyingAssetType",
+                    "name": "nftType",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "unitPrice",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "supply",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "string",
+                    "name": "tokenURI",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "fee",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "qty",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isDeprecatedProxy",
+                    "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
+                    "type": "bool"
+                  }
+                ],
+                "internalType": "struct Trade.Order",
+                "name": "order",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint8",
+                    "name": "v",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "r",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "s",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "nonce",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct Trade.Sign",
+                "name": "ownerSign",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint8",
+                    "name": "v",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "r",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "s",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "nonce",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct Trade.Sign",
+                "name": "sign",
+                "type": "tuple"
+              },
+              {
+                "internalType": "bool",
+                "name": "isShared",
+                "type": "bool"
+              }
+            ],
+            "name": "mintAndTransferAssetWithEth",
+            "outputs": [
+              {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+              }
+            ],
+            "stateMutability": "payable",
             "type": "function"
           },
           {
@@ -1127,7 +1703,7 @@ module Utils
             "inputs": [
               {
                 "internalType": "address",
-                "name": "tradeAddress",
+                "name": "_trade",
                 "type": "address"
               },
               {
@@ -1211,6 +1787,11 @@ module Utils
                   {
                     "internalType": "bool",
                     "name": "isDeprecatedProxy",
+                    "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
                     "type": "bool"
                   }
                 ],
@@ -1330,6 +1911,11 @@ module Utils
                     "internalType": "bool",
                     "name": "isDeprecatedProxy",
                     "type": "bool"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "isErc20Payment",
+                    "type": "bool"
                   }
                 ],
                 "internalType": "struct Order",
@@ -1439,7 +2025,7 @@ module Utils
                 "type": "address"
               }
             ],
-            "name": "depositERC20",
+            "name": "depositErc20",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -1518,6 +2104,35 @@ module Utils
           {
             "inputs": [
               {
+                "internalType": "address",
+                "name": "_trade",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "_transferProxy",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "_depreciatedTransferProxy",
+                "type": "address"
+              }
+            ],
+            "name": "updateOperators",
+            "outputs": [
+              {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+              }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
                 "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
@@ -1528,10 +2143,27 @@ module Utils
                 "type": "address"
               }
             ],
-            "name": "withdrawERC20",
+            "name": "withdrawErc20",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              }
+            ],
+            "name": "withdrawEth",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "stateMutability": "payable",
+            "type": "receive"
           }
         ],
         bytecode: ''

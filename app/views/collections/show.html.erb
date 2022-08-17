@@ -10,6 +10,7 @@
 <span id="contractType" class="hide"><%= @collection.nft_contract&.contract_type %></span>
 <span id="contractAddress" class="hide"><%= @collection.nft_contract&.address %></span>
 <span hidden="hidden" id="collection_id">  <%= @collection.id %> </span> 
+<span hidden="hidden" id="is_eth_payment" is_eth_payment="<%= @collection.is_eth_payment %>"> </span> 
 <%= hidden_field_tag 'collection_ismultiple', @collection.multiple? %>
 <main class="NFT-detail modeling-NFT" >
    <div class="container bg-effect">
@@ -200,7 +201,7 @@
             <div class="highest-bid">
                <h6>Highest Bid</h6>
                <% if @max_bid%>
-               <h5><%= @max_bid.value %></h5>
+               <h5><%= @max_bid.value %> for <%= @max_bid.quantity %> edition(s) </h5>
                <%else%>
                <h5>No bids</h5>
                <%end%>
@@ -217,7 +218,7 @@
             <div class="highest-bid hide-text">
                <h6>Highest Bid</h6>
                <% if @max_bid%>
-               <h5><%= @max_bid.value %></h5>
+               <h5><%= @max_bid.value %> for <%= @max_bid.quantity %> edition(s) </h5>
                <%else%>
                <h5>No bids</h5>
                <%end%>
@@ -227,9 +228,9 @@
                   <% else %>
                      <a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal', false)" class="buy-now"><button>Buy for 
                   <% end %>
-               <i><%= @collection.instant_sale_price%></i> WETH</button></a>
+               <i><%= @collection.instant_sale_price%></i> <%= @collection.collection_coin %> </button></a>
                <% else %>
-               <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> WETH</button></a>
+               <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> <%= @collection.collection_coin %> </button></a>
                <% end %>
             </div>
             <%end%>        
@@ -247,11 +248,11 @@
                <% if current_user && current_user.is_approved? %>
                <a>
                   <button> 
-                     <i><%= @collection.instant_sale_price%></i> WETH <%= @collection.title_desc_detail %>
+                     <i><%= @collection.instant_sale_price%></i> <%= @collection.collection_coin %> <%= @collection.title_desc_detail %>
                   </button>
                </a>
                <% else %>
-               <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> WETH</button></a>
+               <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> <%= @collection.collection_coin %>  </button></a>
                <% end %>
             </div>
             <%end%>        
@@ -259,7 +260,7 @@
             <div class="highest-bid">
                <h6>Highest Bid</h6>
                <% if @max_bid%>
-               <h5><%= @max_bid.value %></h5>
+               <h5><%= @max_bid.value %> for <%= @max_bid.quantity %> edition(s) </h5>
                <%else%>
                <h5>No bids</h5>
                <%end%>
@@ -270,8 +271,6 @@
             <div class="tab">
                <button class="tablinks active" onclick="openCity(event, 'Bids')">Bids</button>
                <button class="tablinks" onclick="openCity(event, 'History')">History</button>
-               <!--                   <button class="tablinks" onclick="openCity(event, 'Details')">Details</button>
-                  -->                
             </div>
             <div id="Bids" class="tabcontent" style="display: block;">
                <div class="member-detail">
@@ -292,30 +291,10 @@
                </div>
             </div>
             <div id="History" class="tabcontent">
-               
             </div>
-            <!-- <div id="Details" class="tabcontent">
-               <div class="member-detail">
-                    <ul class="asset__authors asset__authors--tab">
-                     <li>
-                       <span>Owner</span>
-                       <div class="asset__author asset__author--verified">
-                         <%= image_tag url_for(@collection.owner.profile_image) %>
-                         @<%= link_to @collection.owner.full_name, user_path(@collection.owner.address)%>
-                       </div>
-                     </li>
-                     <li>
-                       <span>Year created</span>
-                       <p><%=@collection.created_at.strftime("%Y")%></p>
-                     </li>
-                   </ul>
-                 </div>
-               </div> -->
+          
          </div>
          <div class="modeling-details responsive-modeling">
-            <!--  <div class="modal-sub-heading">
-               Details
-               </div> -->
             <ul >
                <div class="modal-sub-heading">
                   Details
@@ -337,6 +316,7 @@
                   <label>Contract Address</label>
                   <a>
                      <strong><%=@collection.contract_address%></strong>
+                     <span id="address" hidden="hidden"> <%= @collection.nft_contract&.address %> </span>
                      <img src="../../assets/nft/modeling/copy.png" class="copy_address">
                   </a>
                </li>
@@ -372,7 +352,7 @@
    <div class="highest-bid">
       <h6>Highest Bid</h6>
       <% if @max_bid%>
-      <h5><%= @max_bid.value %></h5>
+      <h5><%= @max_bid.value %> for <%= @max_bid.quantity %> edition(s) </h5>
       <%else%>
       <h5>No bids</h5>
       <%end%>
@@ -389,7 +369,7 @@
    <div class="highest-bid hide-text">
       <h6>Highest Bid</h6>
       <% if @max_bid%>
-      <h5><%= @max_bid.value %></h5>
+      <h5><%= @max_bid.value %> for <%= @max_bid.quantity %> edition(s) </h5>
       <%else%>
       <h5>No bids</h5>
       <%end%>
@@ -399,9 +379,9 @@
          <% else %>
                <a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal', false)" class="buy-now"><button>Buy for 
          <% end %>
-         <i><%= @collection.instant_sale_price%></i> WETH</button></a>
+         <i><%= @collection.instant_sale_price%></i> <%= @collection.collection_coin %> </button></a>
       <% else %>
-      <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> WETH</button></a>
+      <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> <%= @collection.collection_coin %> </button></a>
       <% end %>
    </div>
    <%end%>        
@@ -419,11 +399,11 @@
       <% if current_user && current_user.is_approved? %>
       <a>
          <h5> 
-            <i><%= @collection.instant_sale_price%></i> WETH <%= @collection.title_desc_detail %>
+            <i><%= @collection.instant_sale_price%></i> <%= @collection.collection_coin %> <%= @collection.title_desc_detail %>
          </h5>
       </a>
       <% else %>
-      <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> WETH</button></a>
+      <a class="button-no-user"><button>Buy for <i><%= @collection.instant_sale_price%></i> <%= @collection.collection_coin %> </button></a>
       <% end %>
    </div>
    <%end%>        
@@ -431,7 +411,7 @@
    <div class="highest-bid">
       <h6>Highest Bid</h6>
       <% if @max_bid%>
-      <h5><%= @max_bid.value %></h5>
+      <h5><%= @max_bid.value %> for <%= @max_bid.quantity %> edition(s) </h5>
       <%else%>
       <h5>No bids</h5>
       <%end%>

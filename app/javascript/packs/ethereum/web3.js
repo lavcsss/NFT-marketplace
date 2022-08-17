@@ -171,6 +171,7 @@ function updateCollectionBuy(collectionId, quantity, transactionHash, tokenId=0)
     dataType: "script",
     success: function (respVal) {
       console.trace("updateCollectionBuy" + respVal)
+      return respVal;
     }
   });
 }
@@ -584,7 +585,6 @@ window.approveNFT = async function approveNFT(contractType, contractAddress, sha
       return window.collectionApproveFailed(err['message'])
     }
   }
-   console.log("--step-2")
 }
 
 window.approveResaleNFT = async function approveResaleNFT(contractType, contractAddress, sharedCollection) {
@@ -614,7 +614,7 @@ window.fetchContract = async function fetchContract(contractAddress, type, share
     var obj = new ethers.Contract(contractAddress,abi,window.provider);
     var connection = obj.connect(window.signer);
   }else{
-    var obj = new ethers.Contract(contractAddress,abi, provider);
+    var obj = new ethers.Contract(contractAddress, abi, provider);
     var connection = obj.connect(signer);
    }
     return connection
@@ -770,6 +770,12 @@ window.bidAsset = async function bidAsset(assetAddress, tokenId, qty = 1, amount
     var amountInDec = roundNumber(mulBy(amount, 10 ** decimals), 0);
     console.log(amountInDec)
     var nonce_value = await getNonceValue(collectionId);
+    if (payingTokenAddress === null || payingTokenAddress === undefined){
+      payingTokenAddress = wethAddress;
+    }
+    if (decimals === null || decimals === undefined){
+      decimals = 18;
+    }
     //var messageHash = window.web3.utils.soliditySha3(assetAddress, tokenId, payingTokenAddress, amountInDec, qty, nonce_value);
     var messageHash = ethers.utils.solidityKeccak256(['address', 'uint256', 'address', 'uint256', 'uint256', 'uint256'], [assetAddress, tokenId, payingTokenAddress, amountInDec, qty, nonce_value]);
     var account = getCurrentAccount()
@@ -815,13 +821,15 @@ window.signMessage = async function signMessage(msg) {
   }
 }
 
-window.signSellOrder = async function signSellOrder(amount, decimals, paymentAssetAddress, tokenId, assetAddress, collectionId, sendBackTo='') {
+window.signSellOrder = async function signSellOrder(amount, decimals, paymentAssetAddress, tokenId,
+   assetAddress, collectionId, sendBackTo='',) {
   try {
     console.log("enter signSellOrder")
     amount = roundNumber(mulBy(amount, 10 ** decimals), 0);
     console.log(assetAddress, tokenId, paymentAssetAddress, amount)
     var nonce_value = await getNonceValue(collectionId);
-    var messageHash = ethers.utils.solidityKeccak256(["address","uint256","address","uint256","uint256"],[assetAddress, tokenId, paymentAssetAddress, amount, nonce_value]);
+    var messageHash;
+    messageHash = ethers.utils.solidityKeccak256(["address","uint256","address","uint256","uint256"],[assetAddress, tokenId, paymentAssetAddress, amount, nonce_value]);
     console.log([assetAddress, tokenId, paymentAssetAddress, amount, nonce_value]);
     messageHash = ethers.utils.arrayify(messageHash);
     var account = getCurrentAccount()
@@ -851,10 +859,18 @@ window.signSellOrder = async function signSellOrder(amount, decimals, paymentAss
 // buyingAssetType = 1 # 721
 // buyingAssetType = 0 # 1155
 window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
-                                          paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId) {
+                                          paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId, isEthPayment=false) {
   try {
-    paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
-    unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
+    isEthPayment = isEthPayment === true;
+    var isErc20Payment = isEthPayment === false;
+    if (isEthPayment) {
+      paymentAssetAddress = "0x0000000000000000000000000000000000000000";
+      paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** 18), 0);
+      unitPrice = roundNumber(mulBy(unitPrice, 10 ** 18), 0);
+    }else{
+      paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
+      unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
+    }
     var contract = await fetchContract(tradeContractAddress, 'trade');
     var nonce_value = await getContractSignNonce(collectionId, sellerSign);
     var account = getCurrentAccount();
@@ -875,26 +891,45 @@ window.buyAsset = async function buyAsset(assetOwner, buyingAssetType, buyingAss
       royaltyFee,
       buyingAssetQty,
       gon.depricated_status,
+      isErc20Payment
     ]
     var gasPrices = await gasPrice();
-    var receipt = await contract.buyAsset(orderStruct,gon.collection_data["imported"],splitSign(sellerSign, nonce_value),{from: account, gasLimit: 516883, gasPrice: String(gasPrices)});
+    if (!isEthPayment){
+      var receipt = await contract.buyAsset(orderStruct, gon.collection_data["imported"],splitSign(sellerSign, nonce_value),{from: account, gasLimit: 516883, gasPrice: String(gasPrices)});
+    }else{
+      var receipt = await contract.buyAssetWithEth(orderStruct, gon.collection_data["imported"], splitSign(sellerSign, nonce_value),
+      {from: account, gasLimit: 516883, gasPrice: String(gasPrices), value: paymentAmt});
+    }
     receipt = await receipt.wait();
     await updateCollectionBuy(collectionId, buyingAssetQty, receipt.transactionHash)
     return window.buyPurchaseSuccess(collectionId)
-  } catch (err) {
+  } 
+  catch (err) {
     console.log(err);
-    return window.buyPurchaseFailed(err['message'])
+    if (!isEthPayment){
+      return window.buyPurchaseFailed(err['message'])
+    }else{
+      return window.buyWithEthPurchaseFailed(err['message'])
+    }   
   }
 }
 
 window.buyAndTransferAsset = async function buyAndTransferAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
-  paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId) {
+  paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId, isEthPayment=false) {
     try {
+        isEthPayment = isEthPayment === true;
+        var isErc20Payment = isEthPayment === false;
+        if (isEthPayment) {
+          paymentAssetAddress = "0x0000000000000000000000000000000000000000";
+          paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** 18), 0);
+          unitPrice = roundNumber(mulBy(unitPrice, 10 ** 18), 0);
+        }else{
+          paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
+          unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
+        }
         const signer = new ethers.Wallet(primaryAccountPrivateKey, provider);
         const _trade_proxy = await fetchContract(tradeProxyContractAddress, 'trade_proxy');
         const buyer = await getCurrentAccount();
-        paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
-        unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
         var nonce_value = await getContractSignNonce(collectionId, sellerSign);
         var supply = 0;
         var tokenURI = "abcde";
@@ -913,6 +948,7 @@ window.buyAndTransferAsset = async function buyAndTransferAsset(assetOwner, buyi
           royaltyFee,
           buyingAssetQty, 
           gon.depricated_status,
+          isErc20Payment,
         ]
         var signStruct = splitSign(sellerSign, nonce_value)
         var imported = gon.collection_data["imported"]
@@ -948,13 +984,21 @@ window.buyAndTransferAsset = async function buyAndTransferAsset(assetOwner, buyi
 
 
 window.MintAndTransferAsset = async function MintAndTransferAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
-  paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId, tokenURI, royaltyFee, sharedCollection, supply) {
+  paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId, tokenURI, royaltyFee, sharedCollection, supply, isEthPayment=false) {
   try {
+      isEthPayment = isEthPayment === true;
+      var isErc20Payment = isEthPayment === false;
+      if (isEthPayment) {
+        paymentAssetAddress = "0x0000000000000000000000000000000000000000";
+        paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** 18), 0);
+        unitPrice = roundNumber(mulBy(unitPrice, 10 ** 18), 0);
+      }else{
+        paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
+        unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
+      }
       const signer = new ethers.Wallet(primaryAccountPrivateKey, provider);
       const _trade_proxy = await fetchContract(tradeProxyContractAddress, 'trade_proxy');
       const nonce = await web3.eth.getTransactionCount(primaryAccount, 'latest')
-      paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
-      unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
       var buyingAssetType = buyingAssetType + 2; // BuyAssetType -> 3: Lazy721 , 2: Lazy1155, 1:721, 0: 1155
       var nonce_value = await getContractSignNonce(collectionId, sellerSign);
       var buyer = getCurrentAccount();
@@ -972,6 +1016,7 @@ window.MintAndTransferAsset = async function MintAndTransferAsset(assetOwner, bu
         royaltyFee,
         buyingAssetQty,
         gon.depricated_status,
+        isErc20Payment,
       ]
       var gasPrices = await gasPrice();
       var ownerSign = await sign_metadata_with_creator(assetOwner, tokenURI, collectionId);
@@ -993,7 +1038,10 @@ window.MintAndTransferAsset = async function MintAndTransferAsset(assetOwner, bu
           if (buyingAssetType == 3){
             responseToken = receipt.logs[3].topics[3];
             var tokenId = parseInt(responseToken);
-          }else{
+          }else if(buyingAssetType === 2){
+            var tokenId = parseInt(receipt.logs[2].topics[1]);
+          }
+          else{
             if (receipt.events){
             responseToken = receipt.events[0].data.slice(0,66)
             var tokenId = parseInt(responseToken)
@@ -1017,11 +1065,19 @@ window.MintAndTransferAsset = async function MintAndTransferAsset(assetOwner, bu
 
 
 window.MintAndBuyAsset = async function MintAndBuyAsset(assetOwner, buyingAssetType, buyingAssetAddress, tokenId, unitPrice, buyingAssetQty,
-                                          paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId, tokenURI, royaltyFee, sharedCollection, supply) {
+                                          paymentAmt, paymentAssetAddress, decimals, sellerSign, collectionId, tokenURI, royaltyFee, sharedCollection, supply, isEthPayment=false) {
   try {
-    console.log("Enter MintAndBuyAsset")
-    paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
-    unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
+    console.log("Enter MintAndBuyAsset");
+    isEthPayment = isEthPayment === true;
+    var isErc20Payment = isEthPayment === false;
+    if (isEthPayment) {
+      paymentAssetAddress = "0x0000000000000000000000000000000000000000";
+      paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** 18), 0);
+      unitPrice = roundNumber(mulBy(unitPrice, 10 ** 18), 0);
+    }else{
+      paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
+      unitPrice = roundNumber(mulBy(unitPrice, 10 ** decimals), 0);
+    }
     var buyingAssetType = buyingAssetType + 2; // BuyAssetType -> 3: Lazy721 , 2: Lazy1155, 1:721, 0: 1155
     var contract = await fetchContract(tradeContractAddress, 'trade');
     var nonce_value = await getContractSignNonce(collectionId, sellerSign);
@@ -1040,13 +1096,19 @@ window.MintAndBuyAsset = async function MintAndBuyAsset(assetOwner, buyingAssetT
       royaltyFee,
       buyingAssetQty,
       gon.depricated_status,
+      isErc20Payment,
     ]
     // ownerSign -> selleraddress & URI
     var gasPrices = await gasPrice();
     var ownerSign = await sign_metadata_with_creator(assetOwner, tokenURI, collectionId);
     console.log("ownerSign" + ownerSign)
     console.log("orderStruct" + orderStruct)
+    if (!isEthPayment){
     var receipt = await contract.mintAndBuyAsset(orderStruct,splitSign(ownerSign['signature'], ownerSign['nonce']),splitSign(sellerSign, nonce_value), sharedCollection, { gasLimit: 616883, gasPrice: String(gasPrices)});
+    }else{
+      var receipt = await contract.mintAndBuyAssetWithEth(orderStruct,splitSign(ownerSign['signature'], ownerSign['nonce']),splitSign(sellerSign, nonce_value), sharedCollection,
+       { gasLimit: 616883, gasPrice: String(gasPrices), value: paymentAmt});
+    }
     receipt = await receipt.wait();
     console.log("--------step -1-----")
     var responseToken;
@@ -1056,21 +1118,29 @@ window.MintAndBuyAsset = async function MintAndBuyAsset(assetOwner, buyingAssetT
       responseToken = receipt.events[0].data.slice(0,66)
     }
     var tokenId = parseInt(responseToken)
-     console.log("--------step -2-----tokenId" + tokenId)
+     console.log("--------step -2-----tokenId " + tokenId)
     await updateCollectionBuy(collectionId, buyingAssetQty, receipt.transactionHash, tokenId)
      console.log("--------step -3-----")
     return window.buyPurchaseSuccess(collectionId)
   } catch (err) {
-    console.error(err);
-    return window.buyMintAndPurchaseFailed(err['message'])
-  }
+      console.log(err);
+      if (!isEthPayment){
+        return window.buyPurchaseFailed(err['message'])
+      }else{
+        return window.buyWithEthPurchaseFailed(err['message'])
+      }   
+    }
 }
 
 
-window.MintAndAcceptBid = async function MintAndAcceptBid(buyer, buyingAssetType, buyingAssetAddress, tokenId, paymentAmt, buyingAssetQty, paymentAssetAddress, decimals, buyerSign, collectionId, bidId, tokenURI, royaltyFee, sharedCollection,supply) {
+window.MintAndAcceptBid = async function MintAndAcceptBid(buyer, buyingAssetType, buyingAssetAddress, tokenId, paymentAmt, buyingAssetQty, paymentAssetAddress, decimals, buyerSign, collectionId, bidId, tokenURI, royaltyFee, sharedCollection,supply, ) {
   try {
     console.log("Enter MintAndAcceptBid")
     console.log(tokenURI, royaltyFee, sharedCollection)
+    if (paymentAssetAddress === undefined || paymentAssetAddress === null) {
+      paymentAssetAddress = wethAddress;
+      decimals = 18;
+    }
     paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
     var unitPrice = 1; 
     var buyingAssetType = buyingAssetType + 2; // BuyAssetType -> 3: Lazy721 , 2: Lazy1155, 1:721, 0: 1155
@@ -1093,16 +1163,15 @@ window.MintAndAcceptBid = async function MintAndAcceptBid(buyer, buyingAssetType
       royaltyFee,
       buyingAssetQty,
       gon.depricated_status,
-
+      true,
     ]
     var gasPrices = await gasPrice();
     // ownerSign -> selleraddress & URI
     var ownerSign = await sign_metadata_with_creator(account, tokenURI, collectionId);
     await saveContractNonceValue(collectionId, ownerSign)
     console.log(ownerSign)
-    var receipt = await contract.mintAndExecuteBid(orderStruct,splitSign(ownerSign['signature'], ownerSign['nonce']),splitSign(buyerSign, nonce_value), sharedCollection, {from: account,gasLimit: 516883,gasPrice: String(gasPrices)});
+    var receipt = await contract.mintAndExecuteBid(orderStruct,splitSign(ownerSign['signature'], ownerSign['nonce']),splitSign(buyerSign, nonce_value), sharedCollection, {from: account,gasLimit: 616883,gasPrice: String(gasPrices)});
     var tx = await receipt.wait();
-    console.log("ttt" + tx)
     var tokenId = parseInt(tx.logs[0].topics[3])
 
     await updateCollectionSell(collectionId, buyer, bidId, receipt.transactionHash, tokenId)
@@ -1125,8 +1194,12 @@ window.MintAndAcceptBid = async function MintAndAcceptBid(buyer, buyingAssetType
 
 window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAssetAddress, tokenId, paymentAmt, buyingAssetQty, paymentAssetAddress, decimals, buyerSign, collectionId, bidId) {
   try {
-    paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
     var unitPrice = 1;
+    if (paymentAssetAddress === undefined || paymentAssetAddress === null) {
+      paymentAssetAddress = wethAddress;
+      decimals = 18;
+    }
+    paymentAmt = roundNumber(mulBy(paymentAmt, 10 ** decimals), 0);
     const contract = await fetchContract(tradeContractAddress, 'trade');
     var nonce_value = await getContractSignNonce(collectionId, buyerSign);
     var account = getCurrentAccount()
@@ -1149,6 +1222,7 @@ window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAsse
       royaltyFee,
       buyingAssetQty,
       gon.depricated_status,
+      true,
     ]
     console.log(orderStruct, nonce_value)
     var receipt = await contract.executeBid(orderStruct,gon.collection_data["imported"],splitSign(buyerSign, nonce_value),{from: account, gasLimit: 516883, gasPrice: String(gasPrices)});

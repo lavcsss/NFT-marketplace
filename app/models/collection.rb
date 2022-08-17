@@ -114,7 +114,11 @@ class Collection < ApplicationRecord
   end
 
   def title_desc_detail
-    price, currency = sale_price
+    if self.is_eth_payment
+      price, currency = [instant_sale_price.to_s, "ETH"]
+    else
+      price, currency = sale_price
+    end
     fiat_price = sale_price_to_fiat(price, currency)
     "#{'<span>($ ' + fiat_price.to_s + ')</span>' if fiat_price > 0}".html_safe
   end
@@ -196,13 +200,28 @@ class Collection < ApplicationRecord
   end 
 
   def own_collection 
-    self.nft_contract.owner_id
+    self.nft_contract ? self.nft_contract.owner_id : nil
   end
 
   def collection_address
-    self.nft_contract.address
+    self.nft_contract ? self.nft_contract.address : nil
   end
 
+  def collection_coin
+    if self.is_eth_payment
+      return "ETH"
+    else
+      self.erc20_token.currency_symbol
+    end
+  end
+
+  def bidding_coin
+    if self.is_eth_payment
+      return "WETH"
+    else
+      self.erc20_token.currency_symbol
+    end
+  end
 
   def place_bid(bidding_params)
     details = bidding_params[:details]
@@ -243,7 +262,8 @@ class Collection < ApplicationRecord
             owned_tokens: quantity,
             instant_sale_price: nil, 
             instant_sale_enabled: false, 
-            no_of_copies: quantity})
+            no_of_copies: quantity, 
+            transaction_hash: transaction_hash})
         end
         collection.save
         quantity_remains = {
@@ -356,7 +376,9 @@ class Collection < ApplicationRecord
   end
 
   def fetch_details(bid_id, erc20_address)
-    pay_token = Erc20Token.where(address: erc20_address).first
+    unless is_eth_payment
+      pay_token = Erc20Token.where(address: erc20_address).first
+    end
     bid_detail = bids.where(id: bid_id).first if bid_id.present?
     details = { collection_id: self.address, owner_address: owner.address, token_id: token, unit_price: instant_sale_price,
                 asset_type: nft_contract&.contract_asset_type, asset_address: nft_contract&.address, shared: shared?,
@@ -367,6 +389,7 @@ class Collection < ApplicationRecord
       details = details.merge(token_id: token)
     end 
     details = details.merge(pay_token_address: pay_token.address, pay_token_decimal: pay_token.decimals) if pay_token
+    details = details.merge(is_eth_payment: is_eth_payment)
     details = details.merge(buyer_address: bid_detail.user.address, amount: bid_detail.amount, amount_with_fee: bid_detail.amount_with_fee,
                             quantity: bid_detail.quantity, buyer_sign: bid_detail.sign, bid_id: bid_detail.id) if bid_detail
     return details

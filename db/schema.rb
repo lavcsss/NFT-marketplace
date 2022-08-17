@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 2022_06_20_152747) do
     t.string "transaction_hash"
     t.boolean "imported", default: false
     t.integer "likes_count", default: 0, null: false
+    t.boolean "is_eth_payment", default: false
     t.index ["creator_id"], name: "index_collections_on_creator_id"
     t.index ["erc20_token_id"], name: "index_collections_on_erc20_token_id"
     t.index ["nft_contract_id"], name: "index_collections_on_nft_contract_id"
