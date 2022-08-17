@@ -25,7 +25,7 @@
           <% if @collection.royalty && @collection.royalty > 0 %>
             <div class="flex_box_inputs">
               <span class="price-amt-content"><%= t('collections.show.royalty_fee')%></span>
-              <span class="price-amt-val"><span  id="executeBidRoyaltyFee"><%= @collection.royalty %></span> <span class="executeBidSymbol"></span></span>
+              <span class="price-amt-val"><span id="executeBidRoyaltyFee" royaltyPercentage=<%= @collection.royalty %>></span> <span class="executeBidSymbol"></span></span>
             </div>
           <% end %>
 

@@ -5,12 +5,12 @@
       <div class="input-icons">
           <p>User Wallet Address</p>
           <i class="fa-solid fa-wallet icon"  style="margin-top:-7px;"><img src="../../assets/nft/fiat_payment/wallet-black.svg" class="checkout-pop-wallet-icon"></i>
-          <i class="fa fa-info-circle icon info-icon" aria-hidden="true"></i>
+          <i class="fa fa-info-circle icon info-icon" style="cursor:pointer" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="This is the wallet address in which the NFT will be transferred."></i>
           <% if current_user.present? %>
           <input class="input-field wallet-input-box" type="text" placeholder="<%= current_user.address %>" readonly>
           <% end %>
           <p>From Address</p>
-          <i class="fa-solid fa-wallet icon"  style="margin-top:-7px;"><img src="../../assets/nft/fiat_payment/wallet-blue.svg" class="checkout-pop-wallet-icon"></i>
+          <i class="fa-solid fa-wallet icon"  style="margin-top:-7px;"><img src="../../assets/nft/fiat_payment/wallet-black.svg" class="checkout-pop-wallet-icon"></i>
           <input class="input-field" type="text" placeholder="<%= @collection.owner.address %>" readonly>
           <h2 style="margin:0px; padding: 10px 0px;">NFT Details</h2>
           <% price, symbol = @collection.sale_price %>
@@ -43,11 +43,7 @@
                   <span style="font-size: 13px;"><b>This cost include gas & conversion fees</b></span>
                 </td>
                 <td></td>
-                <% if @collection.multiple? %>
-                  <td style="text-align:right ;" id="total-fiat-price"> $ 0.00 </td>
-                <% else %>
-                  <td style="text-align:right ;" id="total-fiat-price"> $ 0.00 </td>
-                <% end %>
+                <td style="text-align:right ;" id="total-fiat-price"> $ 0.00 </td>
             </tr>
           </table>
           <div class="pop-button" style="margin-top:50px ;"><a href="javascript:void(0);" class="triggerFiatBuyValidation" role="button"> Proceed to Buy</a></div>

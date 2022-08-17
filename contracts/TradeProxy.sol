@@ -89,16 +89,18 @@ struct Order {
     uint256 fee;
     uint qty;
     bool isDeprecatedProxy;
+    bool isErc20Payment;
 }
 
 enum BuyingAssetType {ERC1155, ERC721 , LazyMintERC1155, LazyMintERC721}
 
 interface ITrade {
 
-    
-
     function buyAndTransferAsset(Order memory order, bool _import, Sign memory sign) external returns(bool);
     function mintAndTransferAsset(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) external returns(bool);
+    function buyAndTransferAssetWithEth(Order memory order, bool _import, Sign memory sign) external payable returns (bool);
+    function mintAndTransferAssetWithEth(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) external payable returns(bool);
+
 }
 
 
@@ -132,36 +134,54 @@ contract TradeProxy {
         return true;
     }
 
-    function depositERC20(uint amount, address tokenAddress) public{   
+    function depositErc20(uint amount, address tokenAddress) public{   
         IERC20 token = IERC20(tokenAddress);
         token.transferFrom(msg.sender, address(this), amount);
     }
     
-    function withdrawERC20(uint amount, address tokenAddress) public onlyOwner{
+    function withdrawErc20(uint amount, address tokenAddress) public onlyOwner{
         IERC20 token = IERC20(tokenAddress);
         token.transfer(msg.sender, amount);
     }
+    
+    receive() external payable {}
+    
+    function withdrawEth(uint amount) public onlyOwner{
+        payable(msg.sender).transfer(amount);
+    }
+
 
     function _buyAndTransferAsset(Order memory order, bool _import, Sign memory sign) public returns(bool) {
-        require((checkBalance(order.erc20Address) >= order.amount), 'Not enough balance');
         ITrade tradeContract = ITrade(trade);
-        if (order.isDeprecatedProxy){
-            require(approveSpending(order.erc20Address, depreciatedTransferProxy, order.amount), 'Approval for spending failed');
+        if (order.isErc20Payment){
+            require((checkBalance(order.erc20Address) >= order.amount), 'Not enough balance');
+            if (order.isDeprecatedProxy){
+                require(approveSpending(order.erc20Address, depreciatedTransferProxy, order.amount), 'Approval for spending failed');
+            }else{
+                require(approveSpending(order.erc20Address, transferProxy, order.amount), 'Approval for spending failed');
+            }
+            return tradeContract.buyAndTransferAsset(order, _import, sign);
         }else{
-            require(approveSpending(order.erc20Address, transferProxy, order.amount), 'Approval for spending failed');
+            require(address(this).balance >= order.amount, "Not Enough Balance");   
+            return tradeContract.buyAndTransferAssetWithEth{value: order.amount}(order, _import, sign);
         }
-        return tradeContract.buyAndTransferAsset(order, _import, sign);
+        
     }
 
     function _mintAndTransferAsset(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) public returns(bool) {
-        require((checkBalance(order.erc20Address) >= order.amount), 'Not enough balance');
         ITrade tradeContract = ITrade(trade);
-        if (order.isDeprecatedProxy){
-            require(approveSpending(order.erc20Address, depreciatedTransferProxy, order.amount), 'Approval for spending failed');
+        if (order.isErc20Payment){
+            require((checkBalance(order.erc20Address) >= order.amount), 'Not enough balance');
+            if (order.isDeprecatedProxy){
+                require(approveSpending(order.erc20Address, depreciatedTransferProxy, order.amount), 'Approval for spending failed');
+            }else{
+                require(approveSpending(order.erc20Address, transferProxy, order.amount), 'Approval for spending failed');
+            }
+            return tradeContract.mintAndTransferAsset(order, ownerSign, sign, isShared);
         }else{
-            require(approveSpending(order.erc20Address, transferProxy, order.amount), 'Approval for spending failed');
+            require(address(this).balance >= order.amount, "Not Enough Balance");   
+            return tradeContract.mintAndTransferAssetWithEth{value: order.amount}(order, ownerSign, sign, isShared);
         }
-        return tradeContract.mintAndTransferAsset(order, ownerSign, sign, isShared);
     }
 
     function approveSpending(address erc20, address receipient, uint amount) internal returns(bool){

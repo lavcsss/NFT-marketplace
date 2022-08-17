@@ -66,12 +66,12 @@ module CollectionsHelper
   def service_fee(collection, quantity=1)
     collection_price = collection.instant_sale_price.to_f * quantity
     service_fee = (collection_price / 100) * Fee.buyer_service_fee.to_f
-    collection.sale_price_to_fiat(service_fee, collection.instant_currency_symbol)
+    collection.sale_price_to_fiat(service_fee, collection.collection_coin)
   end
 
   def total_fiat_price_helper(collection, quantity=1)
     collection_price = collection.instant_sale_price.to_f * quantity
-    collection_price_usd = collection.sale_price_to_fiat(collection_price, collection.instant_currency_symbol)
+    collection_price_usd = collection.sale_price_to_fiat(collection_price, collection.collection_coin)
     return (collection_price_usd + service_fee(collection, quantity) + gas_price_usd(collection)).round(2)
   end
 

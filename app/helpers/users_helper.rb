@@ -9,8 +9,6 @@ module UsersHelper
       link_to user.full_name, user_path(user.address)
   end
 
-
-
   def link_to_twitter(user)
     return if user&.twitter_link.blank?
       link_to "https://twitter.com/#{user.twitter_link}" do

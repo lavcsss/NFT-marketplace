@@ -21,7 +21,11 @@
         </div>
         <div>
           <label class="sign__label" for="propertie"> <%= t('collections.show.crypto_type') %></label>
-          <%= select_tag("bids[crypto_currency_type]", options_for_select(Erc20Token.select_options), {:id => "bid_currency", :class => "sign__select", :required => true}) %>
+            <select name="bids[crypto_currency_type]" id="bid_currency" class="sign__select" required="required">
+                <% (Erc20Token.select_options).each do |token| %>
+                  <option address="<%=token.address%>" decimals="<%=token.decimals%>" value="<%=token.id%>"><%=token.symbol.upcase%></option>
+                <% end %>
+            </select>
         </div>
       </div>
       <div>
@@ -40,15 +44,15 @@
       </div>
       <div class="flex_box_inputs">
         <span class="price-amt-content"> <%= t('collections.show.your_bidding_balance') %></span>
-        <span class="price-amt-val"><span id="biding-asset-balance">0 WETH</span></span>
+        <span class="price-amt-val"><span id="biding-asset-balance">0 <%= @collection.bidding_coin %></span></span>
       </div>
       <div class="flex_box_inputs">
         <span class="price-amt-content"> <%= t('collections.show.service_fee') %></span>
-        <span class="price-amt-val"><span id="bid-amt-dp">0 WETH</span></span>
+        <span class="price-amt-val"><span id="bid-amt-dp">0 <%= @collection.bidding_coin %></span></span>
       </div>
       <div class="flex_box_inputs">
         <span class="price-amt-content"> <%= t('collections.show.total_bid_amount') %></span>
-        <span class="price-amt-val"><span id="bid-total-amt-dp">0 WETH</span></span>
+        <span class="price-amt-val"><span id="bid-total-amt-dp">0 <%= @collection.bidding_coin %></span></span>
       </div>
     </div>
     <div class="modal-footer" style="text-align:center">
