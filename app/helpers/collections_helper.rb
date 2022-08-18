@@ -44,7 +44,7 @@ module CollectionsHelper
     nft_contract_path(:id => collection.nft_contract.address)
   end
 
-  def gas_price_usd(collection)
+  def gas_price_eth(collection)
     if collection.is_lazy_minted?
       gas_limit = 616883
     else
@@ -59,6 +59,10 @@ module CollectionsHelper
     end
     gas_consumed_in_gwei = gas_price_gwei * gas_limit
     gas_consumed_in_ether = gas_consumed_in_gwei.to_f * 0.000000001 # 1 gwei  - 0.000000001 ETH
+  end
+
+  def gas_price_usd(collection)
+    gas_consumed_in_ether = gas_price_eth(collection)
     gas_consumed_in_usd = collection.sale_price_to_fiat(gas_consumed_in_ether, 'ETH')
     return (gas_consumed_in_usd * GAS_PRICE_BUFFER) + gas_consumed_in_usd
   end
@@ -106,6 +110,36 @@ module CollectionsHelper
   def no_kyc_detail
     kyc_detail = KycDetail.where(user: current_user)
     return kyc_detail.blank?
+  end
+
+  def check_balance_erc20(erc20_address)
+    obj = Utils::Web3.new
+    obj.check_balance_erc20(erc20_address, Settings.tradeProxyContractAddress)
+  end
+
+  def check_balance_eth(address)
+    obj = Utils::Web3.new
+    obj.check_balance_eth(address)
+  end
+
+  def show_fiat_buy_option(collection)
+    gas_price = Rails.cache.fetch "gas_price", expires_in: 10.minute do
+      gas_price_eth(collection)
+    end
+    primary_acc_balance = Rails.cache.fetch "primary_acc_balance", expires_in: 10.minute do
+      check_balance_eth(Rails.application.credentials[:primary_account][:address]).to_d
+    end
+    contract_eth_balance = Rails.cache.fetch "contract_eth_balance", expires_in: 10.minute do
+      check_balance_eth(Settings.tradeProxyContractAddress).to_d
+    end
+    contract_weth_balance = Rails.cache.fetch "contract_weth_balance", expires_in: 10.minute do
+      check_balance_erc20(Settings.wethAddress).to_d
+    end
+    if collection.is_eth_payment
+      return  contract_eth_balance >= collection.instant_sale_price && primary_acc_balance >= gas_price
+    else
+      return contract_weth_balance >= collection.instant_sale_price && primary_acc_balance >= gas_price
+    end
   end
 
   

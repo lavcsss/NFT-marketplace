@@ -384,7 +384,7 @@ class Collection < ApplicationRecord
                 asset_type: nft_contract&.contract_asset_type, asset_address: nft_contract&.address, shared: shared?,
                 seller_sign: sign_instant_sale_price, contract_type: contract_type, owned_tokens: owned_tokens, total: no_of_copies }
     if is_lazy_minted?
-      details = details.merge(token_id: 0, type: collection_type, token_uri: metadata_hash, royalty: royalty)
+      details = details.merge(token_id: 0, type: collection_type, token_uri: metadata_hash, royalty: self.royalty_fee)
     else 
       details = details.merge(token_id: token)
     end 

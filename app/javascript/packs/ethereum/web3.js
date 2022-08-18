@@ -446,7 +446,7 @@ window.getContract = async function getContract(contractAddress, type, shared = 
 
 window.createCollectible721 = async function createCollectible721(contractAddress, tokenURI, royaltyFee, collectionId, sharedCollection) {
   try {
-      console.log("enter createCollectible721")
+    console.log("enter createCollectible721")
     var account = getCurrentAccount()
     console.log(account, contractAddress, 'nft721', sharedCollection)
     const contract721 = await fetchContract(contractAddress, 'nft721', sharedCollection);
@@ -1028,7 +1028,6 @@ window.MintAndTransferAsset = async function MintAndTransferAsset(assetOwner, bu
         'gasLimit': 616883,
         'gasPrice': String(gasPrices),
       };
-
       var transaction = await _trade_proxy.connect(signer)._mintAndTransferAsset(orderStruct, ownerSignStruct, sellerSignStruct, sharedCollection, tx);
       await transaction.wait();
       var receipt = await provider.getTransactionReceipt(transaction['hash']);
@@ -1173,7 +1172,6 @@ window.MintAndAcceptBid = async function MintAndAcceptBid(buyer, buyingAssetType
     var receipt = await contract.mintAndExecuteBid(orderStruct,splitSign(ownerSign['signature'], ownerSign['nonce']),splitSign(buyerSign, nonce_value), sharedCollection, {from: account,gasLimit: 616883,gasPrice: String(gasPrices)});
     var tx = await receipt.wait();
     var tokenId = parseInt(tx.logs[0].topics[3])
-
     await updateCollectionSell(collectionId, buyer, bidId, receipt.transactionHash, tokenId)
     return window.acceptBidSuccess(collectionId)
   } catch (err) {
@@ -1191,6 +1189,7 @@ window.MintAndAcceptBid = async function MintAndAcceptBid(buyer, buyingAssetType
 //     return contract
 
 // }
+
 
 window.executeBid = async function executeBid(buyer, buyingAssetType, buyingAssetAddress, tokenId, paymentAmt, buyingAssetQty, paymentAssetAddress, decimals, buyerSign, collectionId, bidId) {
   try {
