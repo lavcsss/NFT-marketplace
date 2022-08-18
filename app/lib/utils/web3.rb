@@ -83,13 +83,48 @@ module Utils
           const contract = await new web3.eth.Contract(abi, contractAddress);
           return await contract.methods.balanceOf(wallet_address, tokenId).call();
         }
-
       '
+    get_primary_contract_erc20_balance_func = 
+      '
+      async function(provider, contractAddress, erc20){
+        var web3 = new Web3(new Web3.providers.HttpProvider(provider));
+          const abi = [{
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "erc20",
+                "type": "address"
+              }
+            ],
+            "name": "checkBalance",
+            "outputs": [
+              {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          }];
+        const contract = await new web3.eth.Contract(abi, contractAddress,);
+        var balance = await contract.methods.checkBalance(erc20).call();
+        return web3.utils.fromWei(String(balance));
+      }'
+    get_primary_contract_eth_balance_func  =
+    '
+    async function(provider, contractAddress){
+      var web3 = new Web3(new Web3.providers.HttpProvider(provider));
+      var balance = await web3.eth.getBalance(contractAddress)
+      return web3.utils.fromWei(String(balance));
+    }'
     method :solidity_sha3, solidity_sha3_func
     method :sign, sign_func
     method :recover, recover_func
     method :get_721_balance, get_721_balance_func
     method :get_1155_balance, get_1155_balance_func
+    method :get_primary_contract_erc20_balance, get_primary_contract_erc20_balance_func
+    method :get_primary_contract_eth_balance, get_primary_contract_eth_balance_func
   end
 
   class Web3
@@ -110,6 +145,14 @@ module Utils
 
     def recover(msg, sign)
       @web3_schmoozer.recover(msg, sign, @provider)
+    end
+
+    def check_balance_erc20(erc20_contract_address, trade_proxy_address)
+      @web3_schmoozer.get_primary_contract_erc20_balance(@provider, trade_proxy_address, erc20_contract_address)
+    end
+
+    def check_balance_eth(trade_proxy_address)
+      @web3_schmoozer.get_primary_contract_eth_balance(@provider, trade_proxy_address)
     end
 
     def sign_metadata_hash(contract_address, current_user_address, metadata_hash, nonce_value=nil)
