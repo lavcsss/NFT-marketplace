@@ -210,8 +210,10 @@ class CollectionsController < ApplicationController
   def change_price
     if change_price_params[:erc20_token_id] == "eth"
       @collection.is_eth_payment = true
+      @collection.erc20_token_id = nil
     else
       @collection.assign_attributes(change_price_params)
+      @collection.is_eth_payment = false
     end
     @collection.save
   end

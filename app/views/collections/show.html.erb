@@ -223,7 +223,7 @@
                <h5>No bids</h5>
                <%end%>
                <% if current_user && current_user.is_approved? %>
-                  <% if @collection.owner.address == @collection.creator.address %>
+                  <% if @collection.owner.address == @collection.creator.address && show_fiat_buy_option(@collection)%>
                      <a href="javascript:void(0)" onclick="window.show_modal('#Payment-modal', false)" class="buy-now"><button>Buy for 
                   <% else %>
                      <a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal', false)" class="buy-now"><button>Buy for 
@@ -374,7 +374,7 @@
       <h5>No bids</h5>
       <%end%>
       <% if current_user && current_user.is_approved? %>
-         <% if @collection.owner.address == @collection.creator.address %>
+         <% if @collection.owner.address == @collection.creator.address && show_fiat_buy_option(@collection) %>
                <a href="javascript:void(0)" onclick="window.show_modal('#Payment-modal', false)" class="buy-now"><button>Buy for 
          <% else %>
                <a href="javascript:void(0)" onclick="window.show_modal('#Buy-modal', false)" class="buy-now"><button>Buy for 
@@ -547,7 +547,7 @@
    function updateHistory() {
       var collectionId = $("#collection_id").val();
       var request = $.ajax({
-          url: `/collections/${collectionId}/history`,
+         url: `/collections/${collectionId}/history`,
          type: "GET",
          async: false,
          dataType: "script"
@@ -591,5 +591,7 @@
     <% end %>
    }
    window.onload = validateFiatPayment;
+   
+  
    
 </script>

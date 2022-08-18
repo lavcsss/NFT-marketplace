@@ -1183,8 +1183,7 @@ function updateOwnContractCollection(collectionId) {
     var pay_token_decimal = $('#collection_erc20_token_id option:selected, this').attr('decimals')
     var details = fetchCollectionDetails(null, pay_token_address)
     if (details) {
-      if (details['is_eth_payment']){
-        console.log(details['is_eth_payment']);
+      if (details['is_eth_payment'] || pay_token_address === '0x0000000000000000000000000000000000000000'){
         var paymentCoin = "0x0000000000000000000000000000000000000000";
         signSellOrder($('#instant-price').val(), null, paymentCoin,
         details['token_id'], details['asset_address'], details['collection_id'], 'update'
@@ -1194,7 +1193,7 @@ function updateOwnContractCollection(collectionId) {
         details['token_id'], details['asset_address'], details['collection_id'], 'update');
       }      
     } else {
-      bidSignFixedFailed('Unable to fetch tokan details. Please try again later')
+      bidSignFixedFailed('Unable to fetch token details. Please try again later')
     }
   }
 
