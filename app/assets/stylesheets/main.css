@@ -3337,6 +3337,7 @@ top: 6px!important;
 }
 a.more_action_btn {
   color: var(--theme-color);
+  cursor: inherit;
 }
 /*==============================
 	Sellers-list
