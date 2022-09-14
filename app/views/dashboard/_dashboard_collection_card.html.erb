@@ -58,7 +58,7 @@
                 <% if collection.creator.name %>
                       <a href="/users/<%=collection.creator.address%>"> <p> <%= collection.creator.name %> </p> </a>
                     <% else %>
-                      <a href="/users/<%=collection.creator.address%>"> <p> <%= masked_address(collection.creator.address, 3, 4) %> </p> </a>
+                      <a href="/users/<%=collection.creator.address%>"> <p> <%= masked_address(collection.creator.address, 3, 3) %> </p> </a>
                 <% end %>
             </div>
             <div class="pro-div">
@@ -69,25 +69,29 @@
                 <% if collection.owner.name %>
                       <a href="/users/<%=collection.owner.address%>"> <p> <%= collection.owner.name %> </p> </a>
                     <% else %>
-                      <a href="/users/<%=collection.owner.address%>"> <p> <%= masked_address(collection.owner.address, 3, 4) %> </p> </a>
+                      <a href="/users/<%=collection.owner.address%>"> <p> <%= masked_address(collection.owner.address, 3, 3) %> </p> </a>
                 <% end %>
             </div>
         </div>
         </div>
         <div class="price-div">
-        <div class="price-sub">
             <% if collection.instant_sale_price%>
+            <div class="price-sub">
                 <span> Price </span>
                 <p> <%=collection.instant_sale_price%> <%= collection.collection_coin %></p>
+            </div>
             <% else %>
                 <% if collection.max_bid %>
-                    <span> Highest bid </span>
-                    <p><%= collection.max_bid.amount %> <%= collection.collection_coin %> </p>
+                    <div class="price-sub">
+                        <span> Highest bid </span>
+                        <p><%= collection.max_bid.amount %> <%= collection.collection_coin %> </p>
+                    </div>
                     <%else%>
+                    <div class="price-sub price-sub-text">
                         <span>No active Bids<span>
+                    </div>
                     <% end %>  
                   <% end %>
-        </div>
         <% if not collection.is_owner?(current_user)%>   
             <% if collection.put_on_sale? %>
                 <div class="price-sub price-sub-space">

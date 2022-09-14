@@ -8,6 +8,9 @@
     opacity: 1;
 }
 
+.nav-tabs, .panel-group .panel-footer+.panel-collapse .panel-body {
+    border-bottom:none !important;
+}
 
 .hero-section{background: transparent linear-gradient(69deg, #91C5D7 0%, #7CA7D0 10%, #6F93CB 16%, #7168AB 30%, #D75681 53%, #E68548 77%, #EBA441 100%) 0% 0% no-repeat padding-box;
     opacity: 1; min-height: 600px; position: relative;  background-size: 600% 100%;
@@ -21,7 +24,7 @@
 
 .hero-section-logo{position: absolute; right: 0px; bottom:0px;}  
 .hero-section h1{color: #fff; padding: 100px 0px 20px; font: normal normal bold 48px/60px Playfair Display;}
-.hero-section p{color: #000;font-size: 18px; padding-bottom: 20px;}
+.hero-section p{color: #000;font-size: 18px; padding-bottom: 20px; max-width: 450px;}
 .hero-section p span{ font-weight: bold; text-decoration:underline;}
 .btn-hero-b{width:auto; float: left; margin: 15px 0px; cursor: pointer;}
 .btn-hero-b a{background: #000000 0% 0% no-repeat padding-box; text-decoration: none !important;
@@ -50,10 +53,12 @@
     box-shadow: 0px 10px 20px #00000029;
     border-radius: 10px;
     opacity: 1; margin-bottom: 30px;
-    
+    min-height: 450px;
 }
-
-    
+    .price-sub-text{
+        padding-top: 13px;
+    }
+        
     .nft-box-img-box{position: relative;}
     .nft-box-img-box img{width:100%; border-top-left-radius: 10px; border-top-right-radius: 10px;}
     .nft-box-img-box .cover_pic{
@@ -87,20 +92,19 @@
     border-radius: 50%;
     object-position: unset;
     object-fit: cover;}
-.user-detail{margin-left: 5px;margin-top: 13px;
+.user-detail{margin-left: 5px;margin-top: 0px;
     width: 80%;}
     .user-detail span{color: #707070; font-size: 11px; font-weight: bold;}
     .user-detail p{padding-bottom: 10px;
     color: #000; font-size: 12px; line-height: 10px;
     white-space: nowrap;
-    width: 84px;
+    width: 79px;
     overflow: hidden;
-    text-overflow: clip;}
+    text-overflow: ellipsis;}
     .nft-icon-box{position: relative; font-weight: bold;  display: block;}
     .dashboard-like-icon{ 
         background-color: transparent !important;
         border: none !important;
-        width: 37px !important;
         color: #000 !important;
         right: 0px !important;
         bottom: 23px !important;
@@ -145,8 +149,10 @@
     
     .nft-title-box{margin-top: 70px;} 
     
-    .banner-box{margin-bottom: 20px;}
-
+    .banner-box{margin-bottom:50px; margin-top: 50px;}
+    .hero-section p {
+        font-size: 17px;
+    }
 
 
                 }

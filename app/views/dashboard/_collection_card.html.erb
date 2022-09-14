@@ -46,7 +46,7 @@
                     <% if collection.creator.name %>
                       <a href="/users/<%=collection.creator.address%>" class="user_name"> <%= collection.creator.name %> </a>
                     <% else %>
-                      <a href="/users/<%=collection.creator.address%>" class="user_address"> <%= masked_address(collection.creator.address) %> </a>
+                      <a href="/users/<%=collection.creator.address%>" class="user_address"> <%= masked_address(collection.creator.address, 1, 3) %> </a>
                     <% end %>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                     <% if collection.owner.name %>
                       <a href="/users/<%=collection.owner.address%>" class="user_name"> <%= collection.owner.name %> </a>
                     <% else %>
-                      <a href="/users/<%=collection.owner.address%>" class="user_address"> <%= masked_address(collection.owner.address) %> </a>
+                      <a href="/users/<%=collection.owner.address%>" class="user_address"> <%= masked_address(collection.owner.address, 1, 3) %> </a>
                     <% end %>
                 </div>
             </div>
