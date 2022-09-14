@@ -53,5 +53,34 @@ module UsersHelper
       image_url
     end   
   end
-  
+
+  def save_nftmetadata(asset_response, user, contract_address, token_id)
+    nft_metadata = NftMetadata.new(
+      user: user, 
+      contract_address: contract_address,
+      token_id: token_id,
+      name: asset_response[:name],
+      description: asset_response[:description],
+      image_url: asset_response[:image]
+    )
+    if nft_metadata.valid?
+      nft_metadata.save
+    end
+  end
+
+  def fetch_nftmetadata(user, contract_address, token_id)
+    meta_info = NftMetadata.where(user: user, contract_address: contract_address, token_id: token_id).first
+    if meta_info
+      data = Hash.new
+      data[:name] = meta_info.name
+      data[:description] = meta_info.description
+      data[:image] = meta_info.image_url
+      return data
+    end
+  end
+
+  def valid_url(url)
+    uri = URI.parse(url)
+    uri.kind_of?(URI::HTTP) or uri.kind_of?(URI::HTTPS)
+  end
 end

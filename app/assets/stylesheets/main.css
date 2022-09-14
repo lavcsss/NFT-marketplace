@@ -816,6 +816,7 @@ box-shadow: 0px 0px 10px #00000017;
     width: 100%;
     padding-left: 0;
     padding-right: 0;
+    display: inline-block !important;
 }
 
 .header__profile-menu li a {
@@ -824,6 +825,7 @@ box-shadow: 0px 0px 10px #00000017;
     letter-spacing: 0px;
     color: #162C5B;
     padding: 10px 15px;
+    display: inline-block !important;
 }
 
 .header__profile-menu li:hover {
@@ -879,6 +881,7 @@ box-shadow: 0px 0px 10px #00000017;
   fill: var(--theme-color);
 }
 .header__profile-menu.show {
+  display: inline;
   z-index: 1000;
   pointer-events: auto;
   opacity: 1;
@@ -912,6 +915,7 @@ box-shadow: 0px 0px 10px #00000017;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none !important;
 }
 .w_btn a:hover {
   box-shadow: 0 0 10px #ccc;
@@ -2538,7 +2542,7 @@ a.explore-all {
 }
 
 .t_c .card__likes {
-  position: absolute;
+  position: relative;
   bottom: 0;
   right: 0;
   z-index: 1;

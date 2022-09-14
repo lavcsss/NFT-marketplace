@@ -1,32 +1,97 @@
+require "uri"
+require "net/http"
+include UsersHelper
+
 module Api
   class NftCollections
     def self.nft_collections(owner_address, page)
+      items_per_page = 9
+      end_range = (page.to_i * items_per_page) - 1
+      start_index = end_range - (items_per_page - 1)
+      base_url = Rails.application.credentials.config[:alchemy][:base_url]
+      api_key = Rails.application.credentials.config[:alchemy][:api_key]
+      # start = Time.now
+      api_url = base_url + "/nft/v2/#{api_key}/getNFTs?owner=#{owner_address}"
       response = Rails.cache.fetch "#{owner_address}_assets", expires_in: 1.minutes do
-        send_request(Rails.application.credentials.config[:opensea_url] + "/api/v1/assets?owner=#{owner_address}")
+        send_request(api_url)
       end
       if response
-        response_body = response["assets"]
+        response_body = response["ownedNfts"]
+        response_body.reverse!
         user = User.find_by(address: owner_address)
-        user_collections = user.imported_collections.includes(:nft_contract).pluck(:token, 'nft_contracts.address')
-        next_page = response_body.length == 15
+        user_collections = user.collections.includes(:nft_contract)
+        filtered_res = []
         response_body.map! do |resp|
-          status = user_collections.select { |c| c.first == resp["token_id"] && c.last.downcase == resp["asset_contract"]["address"].downcase }.present?
+          token_id = resp["id"]["tokenId"].to_i(16)
+          contract_address = resp["contract"]["address"]
+          status = user_collections.where(token: token_id, 'nft_contracts.address': contract_address).present?
+          # status = user_collections.select { |c| c.first == token_id && c.last.downcase == contract_address.downcase }.present?
           unless status
-            {
-              type: resp["asset_contract"]["schema_name"],
-              title: resp["name"],
-              description: resp["description"],
-              image_url: resp["image_url"],
-              metadata: resp["token_metadata"],
-              token: resp["token_id"],
-              contract_address: resp["asset_contract"]["address"]
-            } #unless resp["token_metadata"].nil?
+            if resp["media"][0]["raw"].present? or ["ERC1155"].include?(resp["id"]["tokenMetadata"]["tokenType"])
+               filtered_res.append(resp)
+            end
           end
         end
-        { collections: response_body.compact, next_page: next_page }
+        total_count = filtered_res.length()
+        filtered_res = filtered_res[start_index..end_range]
+        filtered_res.map! do |resp|
+          token_id = resp["id"]["tokenId"].to_i(16)
+          contract_address = resp["contract"]["address"]
+          if resp["media"][0]["raw"].present?
+            {
+              type: resp["id"]["tokenMetadata"]["tokenType"],
+              title: resp["title"],
+              description: resp["description"],
+              image_url: resp["media"][0]["raw"],
+              metadata: resp["metadata"],
+              token: token_id,
+              contract_address: contract_address,
+              contract_symbol: resp["id"]["tokenMetadata"]["tokenType"],
+              balance: resp["balance"]
+            }
+          else
+            if ["ERC1155"].include?(resp["id"]["tokenMetadata"]["tokenType"])
+              asset_response = fetch_nftmetadata(user, contract_address, token_id)
+              if asset_response.nil?
+                obj = Utils::Web3.new
+                metadata_url = obj.get_nftmetadata(contract_address, token_id)
+                begin
+                  url = URI(metadata_url)
+                  https = Net::HTTP.new(url.host, url.port)
+                  https.use_ssl = true
+                  https.read_timeout = 10
+                  request = Net::HTTP::Get.new(url)
+                  response = https.request(request)
+                  asset_response = eval(response.read_body)
+                  save_nftmetadata(asset_response, user, contract_address, token_id)
+                rescue Net::ReadTimeout => e
+                  Rails.logger.warn "################## Exception while reading NFT metadata ##################"
+                  Rails.logger.warn "ERROR: #{e.message}, PARAMS: #{params.inspect}"
+                  Rails.logger.warn $!.backtrace[0..20].join("\n")
+                  next
+                end
+              end
+              {
+                type: resp["id"]["tokenMetadata"]["tokenType"],
+                title: asset_response[:name],
+                description: asset_response[:description],
+                image_url: asset_response[:image],
+                metadata: asset_response,
+                token: token_id,
+                contract_address: contract_address, 
+                contract_symbol: resp["id"]["tokenMetadata"]["tokenType"],
+                balance: resp["balance"]
+              }
+            end
+          end
+        end
+        # finish = Time.now
+        # diff = finish - start
+        {collections: filtered_res.compact, total_pages: (total_count.to_f / items_per_page.to_f).ceil }
       else
         ''
-      end  
+      end
+      
     end
 
     def self.send_request(url)

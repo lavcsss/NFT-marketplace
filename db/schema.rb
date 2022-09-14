@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_06_132308) do
+ActiveRecord::Schema.define(version: 2022_09_06_155734) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -225,6 +225,18 @@ ActiveRecord::Schema.define(version: 2022_07_06_132308) do
     t.index ["owner_id"], name: "index_nft_contracts_on_owner_id"
   end
 
+  create_table "nft_metadata", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "contract_address"
+    t.string "token_id"
+    t.string "name"
+    t.text "description"
+    t.text "image_url"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_nft_metadata_on_user_id"
+  end
+
   create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "from_user_id"
     t.bigint "to_user_id"
@@ -301,6 +313,7 @@ ActiveRecord::Schema.define(version: 2022_07_06_132308) do
   add_foreign_key "likes", "collections"
   add_foreign_key "likes", "users"
   add_foreign_key "nft_contracts", "users", column: "owner_id"
+  add_foreign_key "nft_metadata", "users"
   add_foreign_key "notifications", "users", column: "from_user_id"
   add_foreign_key "notifications", "users", column: "to_user_id"
   add_foreign_key "report_users", "users"

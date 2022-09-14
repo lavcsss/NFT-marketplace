@@ -76,7 +76,11 @@ module CollectionsHelper
   def total_fiat_price_helper(collection, quantity=1)
     collection_price = collection.instant_sale_price.to_f * quantity
     collection_price_usd = collection.sale_price_to_fiat(collection_price, collection.collection_coin)
-    return (collection_price_usd + service_fee(collection, quantity) + gas_price_usd(collection)).round(2)
+    total_price_usd = (collection_price_usd + service_fee(collection, quantity) + gas_price_usd(collection)).round(2)
+    if total_price_usd < 0.5
+      total_price_usd = 0.6
+    end
+    return total_price_usd
   end
 
   def total_payment_crypto(collection, quantity=1)

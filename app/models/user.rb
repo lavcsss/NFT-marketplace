@@ -24,7 +24,7 @@ class User < ApplicationRecord
   has_many :notifications, foreign_key: "to_user_id"
   has_many :fiat_payments, class_name: 'FiatPayment', foreign_key: 'user_id'
   has_one  :kyc_details, class_name: 'KycDetail', foreign_key: 'user_id'
-
+  has_many  :nft_metadatas, class_name: 'NftMetaData', foreign_key: 'user_id'
 
   has_one_attached :attachment
   has_one_attached :banner

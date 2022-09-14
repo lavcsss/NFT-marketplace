@@ -1,0 +1,22 @@
+<section class="nft-box-section">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12">
+                  <h1>Trending NFTs</h1>
+               </div>
+            </div>
+            <div class="row">
+               <% if @hot_collections.present? %>
+                  <% @hot_collections.each do |collection| %> 
+                     <%= render "dashboard_collection_card", collection: collection %>
+                  <% end %>
+               <% else %>
+                  <% 1.times do %>
+                     <div class="col-12">
+                        <%= render partial: 'common/empty' %>
+                     </div>
+                  <% end %>
+               <% end %>
+            </div>
+         </div>
+      </section>

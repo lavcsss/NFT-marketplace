@@ -3,16 +3,25 @@
 <% type = collection[:type] == "ERC721" ? 'single' : 'multiple' %>
 <div class="card">
   <div class="t_c">
-    <a href="<%= new_collection_path(type: type, nft: collection[:metadata], token: collection[:token], contract_address: collection[:contract_address]) %>" class="card__cover">
+    <% allow_redirection = valid_url(collection[:image_url]) && current_user.address == @user.address %>
+    <% if allow_redirection %>
+        <a href="<%= new_collection_path(type: type, nft: collection[:metadata], token: collection[:token], contract_address: collection[:contract_address], response: collection) %>" class="card__cover">
+    <% else %>
+        <a class="card__cover">
+     <% end %>
       <span class="collection-card-img" style="background-image: url('<%= img_url %>')">
-         <%= image_tag img_url %>
+         <img src="<%= img_url %>" onerror="this.onerror=null;this.src='/assets/banner-1.png';">
       </span>
     </a>
   </div>
 
   <div class="grid-box">
     <h3 class="card__title" data-toggle="tooltip" data-placement="top" title="<%= collection[:title] %>">
-      <a href="<%= new_collection_path(type: type, nft: collection[:metadata], token: collection[:token], contract_address: collection[:contract_address]) %>"><%= collection[:title] %><a>
+    <% if allow_redirection %>
+      <a href="<%= new_collection_path(type: type, nft: collection[:metadata], token: collection[:token], contract_address: collection[:contract_address], response: collection) %>"><%= collection[:title] %><a>
+    <% else %>
+      <a><%= collection[:title] %><a>
+    <% end %>
     </h3>
   </div>
 </div>

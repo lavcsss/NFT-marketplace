@@ -47,8 +47,12 @@ yarn-debug.log*
 # yarn lock and package.json-lock
 jsconfig.json
 package-lock.json
+package.json
 yarn.lock
 nohup.out
+Gemfile
+Gemfile.lock
+db/schema.rb
 .browserslistrc
 .eslintrc
 .nvmrc

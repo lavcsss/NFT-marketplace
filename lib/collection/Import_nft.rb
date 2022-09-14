@@ -42,7 +42,8 @@ class Collection
     end
 
     def verify_collection
-      Utils::Web3.new.check_ownership(
+      obj = Utils::Web3.new
+      obj.check_ownership(
         collection_type,
         nft_contract.address,
         owner.address,

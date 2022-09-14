@@ -20,6 +20,7 @@ module Api
     end
 
     def upload(collection)
+      
       attachment = collection.attachment
       file_path = ActiveStorage::Blob.service.send(:path_for, attachment.key)
       content_type = attachment.blob.content_type
@@ -31,11 +32,13 @@ module Api
         description: collection.description,
         image: 'https://ipfs.io/ipfs/' + image_ipfs_hash
       }
+
       File.write("tmp/metadata.json", metadata.to_json)
       metadata_io = Faraday::UploadIO.new("tmp/metadata.json", 'application/json')
       ok, metadata_ipfs_hash = send_file(metadata_io)
       collection.update(image_hash: image_ipfs_hash, metadata_hash: metadata_ipfs_hash)
       ok ? metadata_ipfs_hash : nil
+
     end
 
     def connection

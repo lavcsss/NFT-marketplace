@@ -9,7 +9,8 @@ class DashboardController < ApplicationController
     @featured_collections = FeaturedCollection.limit(5).map(&:collection).compact
     @own_contract = NftContract.where.not(owner_id: nil).limit(5)
     @featured_users = User.where(id: FeaturedUser.all.map(&:user_id))
-    @hot_collections = Collection.on_sale.reorder(likes_count: 'desc').limit(18)
+    @hot_collections = Collection.on_sale.reorder(likes_count: 'desc').limit(16)
+    @curated_nfts = Collection.on_sale.reorder(likes_count: 'asc').limit(4)
     top_buyers_and_sellers
   end
 

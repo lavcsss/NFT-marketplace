@@ -314,8 +314,8 @@ NFT landing page css start */
   display: block;
 }
 .NFT_SCREEN_Header .profile-img {
-  width: 28px!important;
-  height: 28px;
+  width: 35px!important;
+  height: 35px;
   background: #F4F4F4;
   border-radius: 100px;
   padding: 5px!important;
@@ -621,7 +621,7 @@ footer.footer.section-footer.wide-window .container {
     right: 13px;
 }
 .NFT_SCREEN_Header .nft-header ul li .dropdown-lists .header__search button svg{
-  fill: #3C97F2;
+  fill: #000000;
 }
 .NFT_SCREEN .section.section_1.art-sec .art-collection .browse-btn button a {
     color: #fff!important;
@@ -1881,7 +1881,7 @@ footer.footer.section-footer .footer__tagline{
     font-weight: 400;
 }
 footer.footer.section-footer  .footer_nav li a{
-      color: #3c97f2;
+      color: #000000;
     font-size: 18px;
     font-family: 'Hahmlet', serif;;
     cursor: pointer;
@@ -2238,6 +2238,7 @@ display: none;
   .NFT_SCREEN_Header .nft-header.header-all ul li:last-child .dropdown-lists .nft-menus a{
     margin-right: 0;
     font-size: 17px;
+    text-decoration: none !important;
   }
   .NFT_SCREEN_Header .nft-header ul li:last-child .dropdown-lists .nft-menus.search-menu {
     width: 220px;
