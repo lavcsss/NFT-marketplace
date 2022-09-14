@@ -115,7 +115,7 @@
     .dashboard-share-menu{
         width: 18px !important;
         margin-left: 36px;
-        /*margin-top: -59px;*/
+        cursor: pointer;
     }
     .icon-div{float: left;  position: absolute; right: 0; }
     .icon-div img{width: 28px;}
