@@ -1,6 +1,6 @@
 <ul>
     <span class="bg-transition"></span>
-    <% if @data.present? && @data[:collections].present? %>
+    <% if @data[:collections].present? %>
         <% @data[:collections].each do |collection| %>
             <%= render "my_collection_card", collection: collection %>
         <% end %>

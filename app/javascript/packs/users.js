@@ -67,8 +67,14 @@
   });
 
   window.openTabs = function openTabs(evt, tabName, ) {
-        var i, tabcontent, tablinks, activityElement ;
+        var i, tabcontent, tablinks, activityElement, current_tab ;
         tabcontent = document.getElementsByClassName("tabcontent");
+        current_tab = document.getElementsByClassName(tabName);
+        for(var i = 0; i < current_tab.length; i++){
+            if (current_tab[i].classList.contains('active')){
+               return '';
+            }
+         }
         for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
         }
@@ -91,7 +97,6 @@
   }
 
   window.fetchTabContent = function fetchTabContent(tabName, page_no=1){
-   console.log(tabName);
    var load_tabs = document.getElementById("load_tabs").innerText;
     if (!['About', 'following', 'followers', 'activity', 'following-mob', 'followers-mob'].includes(tabName)){
         if (page_no === 1){
@@ -166,6 +171,9 @@
 
      $(document).on("click", ".user-dashboard-load-more", function (e) {
          var tabs = document.getElementById("current_tab").innerText.trim();
+         if (tabs == 'nft_collections'){
+            $(".loading-gif").show();
+         }
          fetchTabContent(tabs, $(this).data("page-no"))
      })
 

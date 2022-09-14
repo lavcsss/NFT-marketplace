@@ -113,11 +113,39 @@ module Utils
       }'
     get_primary_contract_eth_balance_func  =
     '
-    async function(provider, contractAddress){
-      var web3 = new Web3(new Web3.providers.HttpProvider(provider));
-      var balance = await web3.eth.getBalance(contractAddress)
-      return web3.utils.fromWei(String(balance));
-    }'
+      async function(provider, contractAddress){
+        var web3 = new Web3(new Web3.providers.HttpProvider(provider));
+        var balance = await web3.eth.getBalance(contractAddress)
+        return web3.utils.fromWei(String(balance));
+      }
+    '
+    get_metadata_func = '
+    async function(provider, contractAddress, tokenId) {
+      const web3 = new Web3(new Web3.providers.HttpProvider(provider));
+      const abi = [{
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "name": "tokenURI",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      }];
+      const contract = await new web3.eth.Contract(abi, contractAddress);
+      return await contract.methods.tokenURI(tokenId).call();
+    }
+    '
+
     method :solidity_sha3, solidity_sha3_func
     method :sign, sign_func
     method :recover, recover_func
@@ -125,6 +153,7 @@ module Utils
     method :get_1155_balance, get_1155_balance_func
     method :get_primary_contract_erc20_balance, get_primary_contract_erc20_balance_func
     method :get_primary_contract_eth_balance, get_primary_contract_eth_balance_func
+    method :get_metadata, get_metadata_func
   end
 
   class Web3
@@ -134,9 +163,11 @@ module Utils
     end
 
     def check_ownership(type, contract_address, wallet_address, token_id)
-      return @web3_schmoozer.get_721_balance(@provider, contract_address, token_id) if type == 'single'
-
-      @web3_schmoozer.get_1155_balance(@provider, contract_address, wallet_address, token_id)
+      if type == 'single'
+        @web3_schmoozer.get_721_balance(@provider, contract_address, token_id) 
+      else
+        @web3_schmoozer.get_1155_balance(@provider, contract_address, wallet_address, token_id)
+      end
     end
 
     def sign(msg)
@@ -158,6 +189,10 @@ module Utils
     def sign_metadata_hash(contract_address, current_user_address, metadata_hash, nonce_value=nil)
       hash = @web3_schmoozer.solidity_sha3(contract_address, current_user_address, metadata_hash, @provider, nonce_value)
       sign(hash)
+    end
+
+    def get_nftmetadata(contract_address, token_id)
+      @web3_schmoozer.get_metadata(@provider, contract_address, token_id)
     end
 
     def valid_like?(signer, sign, contract_address, token_id)

@@ -509,7 +509,8 @@ width: 14px;
 }
 .place-buy-details .highest-bid h5{
     font-weight: bold;
-    font-size: 16px;
+    font-size: 15px;
+    white-space: nowrap;
 }
 .place-buy-details .highest-bid h5 i {
     font-style: normal;
@@ -1830,7 +1831,7 @@ a.mob-apply-btn button {
     height: 15px;
     border-radius: 0;
     object-fit: contain;
-    margin-top: -12px;
+    margin-top: -2px;
 }
 
 

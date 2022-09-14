@@ -41,18 +41,20 @@
          <li>
             <div class="dropdown-lists">
                <div class="nft-menus">
-                  <img src="/assets/nft/Create.svg" alt="NFT_Create"  class="visible-none" /> 
+                  <!-- <img src="/assets/nft/Create.svg" alt="NFT_Create"  class="visible-none" /> 
                   <img src="/assets/nft/Create-bg-fill.svg" alt="NFT_Create" class=" mobile-visible-none" />
+                  -->
                   <a class="create-nft">Create</a>
                </div>
                <div class="nft-menus">
-                  <img  src="/assets/nft/Discover.svg" alt="NFT_Discover"  class="visible-none"  />
+                  <!-- <img src="/assets/nft/Discover.svg" alt="NFT_Discover"  class="visible-none"  />
                   <img src="/assets/nft/Discover-bg-fill.svg" alt="NFT_Create" class=" mobile-visible-none" />
+                  -->
                   <a href="/search">Discover</a>
                </div>
                <div class="nft-menus open-menu">
-                  <img src="/assets/nft/communicative.svg" alt="NFT_COMMU"  class="visible-none"  />
-                  <img src="/assets/nft/communicative-bg-fill.svg" alt="NFT_Create" class=" mobile-visible-none" />
+                  <!-- <img src="/assets/nft/communicative.svg" alt="NFT_COMMU"  class="visible-none"  />
+                  <img src="/assets/nft/communicative-bg-fill.svg" alt="NFT_Create" class=" mobile-visible-none" /> -->
                   <a>Community</a>
                   <div class="drop-list" id="open-menu">
                      <a target="_blank" href="https://crosstower.com/_nft/blogs.html">Blog</a>
@@ -62,7 +64,7 @@
                </div>
                <%= render "common/search" %>
                <div class="nft-menus open-right-menu-detail open-menu-profile">
-                  <img src="/assets/nft/wallet.svg" alt="NFT_Wallet" class="wallet-icon"/>
+                  <img src="/assets/landing_page/wallet.png" alt="NFT_Wallet" class="wallet-icon"/>
                   <% if current_user.attachment.present? %>
                   <%= image_tag url_for(current_user.profile_image), class: "profile-img current-user-profile" %>
                   <% else %>
@@ -92,15 +94,15 @@
       <li>
          <div class="dropdown-lists">
             <div class="nft-menus">
-               <img src="/assets/nft/Create-bg-fill.svg" alt="NFT_Create" />
+               <!-- <img src="/assets/nft/Create-bg-fill.svg" alt="NFT_Create" /> -->
                <a class="create-nft">Create</a>
             </div>
             <div class="nft-menus">
-               <img  src="/assets/nft/Discover-bg-fill.svg" alt="NFT_Discover" />
+               <!-- <img  src="/assets/nft/Discover-bg-fill.svg" alt="NFT_Discover" /> -->
                <a href="/search">Discover</a>
             </div>
             <div class="nft-menus">
-               <img src="/assets/nft/communicative-bg-fill.svg" alt="NFT_COMMU" />
+               <!-- <img src="/assets/nft/communicative-bg-fill.svg" alt="NFT_COMMU" /> -->
                <a>Community</a>
                <div class="inline-menus">
                   <a href="https://crosstower.com/_nft/blogs.html">Blog</a>
@@ -109,7 +111,7 @@
                </div>
             </div>
             <div class="nft-menus">
-               <span class="profile wallet-icon"> <img src="/assets/nft/wallet.svg" alt="NFT_Profile"  /></span>
+               <span class="profile wallet-icon"> <img src="/assets/landing_page/wallet.png" alt="NFT_Profile"  /></span>
                <a> User </a>
                <div class="inline-menus">
                   <a href="<%=my_items_path%>">Profile</a>

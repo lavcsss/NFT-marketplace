@@ -73,7 +73,7 @@
             <%= form_tag collections_path, method: :post, multipart: true, remote: true, authenticity_token: true, id: "collectionCreateForm", :class => "" do %>
             <%= hidden_field_tag 'collection[collection_type]', @collection_type %>
             <%= hidden_field_tag 'collection[data]', nil, class: 'collection-data-val' %>
-            <%= hidden_field_tag 'collection[source]', if @nft.nil? then 'self' else 'opensea' end %>
+            <%= hidden_field_tag 'collection[source]', if @nft.nil? then 'self' else 'alchemy' end %>
             <% unless @nft.nil? %>
             <%= hidden_field_tag 'collection[nft_link]', @nft[:metadata] %>
             <%= hidden_field_tag 'collection[token]', @nft[:token] %>
@@ -148,11 +148,13 @@
                   <% end %>
                </div>
                <% end %>
-               <div class="sign__group crator-royalty-span">
-                  <label class="sign__label" for="royalties"><%= t('collections.form.royalties') %></label>
-                  <input id="royalties" name="collection[royalty]" class="validNumber sign__input" placeholder="0%"></input>
-                  <span>Maximum 30%</span>
-               </div>
+               <% if @nft.nil? %>
+                  <div class="sign__group crator-royalty-span">
+                     <label class="sign__label" for="royalties"><%= t('collections.form.royalties') %></label>
+                     <input id="royalties" name="collection[royalty]" class="validNumber sign__input" placeholder="0%"></input>
+                     <span>Maximum 30%</span>
+                  </div>
+               <% end %>
                <div class="sign__group sign__group--row">
                   <ul class="switch_group">
                      <li>
@@ -187,6 +189,30 @@
                            </div>
                         </div>
                      </li>
+                     <!-- <li>
+                        <label for="auction_time"><%= t('shared.auction_time') %></label>
+                        <p><%= t('shared.auction_time_msg') %></p>
+                        <label class="switch_type" id="auction_time">
+                        <input type="checkbox" id="auction_enabled" name="collection[auction_enabled]">
+                        <span class="slider round"></span>
+                        </label>
+                     </li>
+                     <li id="auctionTimeDetail" class="li_inp_grp hide">
+                        <div class="inp-grp-flex">
+                           <div class="sign__group" style="width: 28%;">
+                              <label for="auction_days"><%= t('shared.auction_days') %></label>
+                              <input type="text" name="collection[auction_days]" class="sign__input" id="auction-days" placeholder="Days" />
+                           </div>
+                           <div class="sign__group" style="width: 27%;">
+                              <label for="auction_hours"><%= t('shared.auction_time_title') %></label>
+                              <input type="text" name="collection[auction_hours]" class="sign__input" id="auction-hours" placeholder="Hours" />
+                           </div>
+                           <div class="sign__group" style="width: 45%;">
+                              <label for="auction_reserve_price"><%= t('shared.auction_reserve_price') %></label>
+                              <input type="text" name="collection[auction_reserve_price]" class="sign__input" id="auction-reserve-price" placeholder="00 WETH" />
+                           </div>
+                        </div>
+                     </li> -->
                      <!-- <li>
                         <label for="unlock_purchase"><%= t('shared.unlock_one_purchased') %></label>
                         <p><%= t('shared.unlock_one_purchased_msg') %></p>

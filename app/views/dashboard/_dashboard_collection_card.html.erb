@@ -1,0 +1,111 @@
+<div class="col-md-3  col-sm-6">
+    <div class="nft-box">
+        <div class="nft-box-img-box">
+            <a href="<%= collection_path(collection.address)%>" class="image-fit">
+                <img src="<%= cover_url(collection)%>" class="cover_pic">
+            </a>
+         </div>
+        <div style="clear:both;"></div>
+        <!-- <a href="<%= collection_path(collection.address)%>">
+            <div class="nft-title-box"><%= collection.title %></div>
+        </a>-->
+        
+        <div class="nft-box-div">
+            <div class="nft-icon-box">
+                <div class="icon-div">
+                    <div class="t_c share-icon">
+                    <a class="more_action_btn" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="assets/nft/share-black.svg" class="share-menu-icon dashboard-share-menu" />
+                        </a>
+                        <ul class="dropdown-menu header__profile-menu" aria-labelledby="dropdownMenuProfile">
+                            <li><a target=_blank href="https://www.facebook.com/sharer/sharer.php?u=<%= current_url %>&caption=<%= collection.name %>&description=<%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                                <i class="fa fa-facebook"></i><span>Facebook</span>
+                                </a>
+                            </li>
+                            <li><a target=_blank href="https://twitter.com/share?url=<%= current_url %>&text=<%= collection.name %>, <%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                                <i class="fa fa-twitter"></i><span>Twitter</span>
+                                </a>
+                            </li>
+                            <li><a target=_blank href="https://telegram.me/share/url?url=<%= current_url %>&text=<%= collection.name %>, <%= collection.description %>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                                <i class="fa fa-telegram"></i><span>Telegram</span>
+                                </a>
+                            </li>
+                            <li><a target=_blank href="mailto:?subject=<%= collection.name %>&body=<%= collection.description %> Link here:<%= current_url %>">
+                                <i class="fa fa-envelope"></i><span>Email</span>
+                                </a>
+                            </li>
+                        </ul>
+                    <%= react_component("collections/like", address: current_user&.address, likes: collection.likes, collectionId: collection.id, 
+                        addClass: "dashboard-like-icon", 
+                        liked: collection.is_liked_by_me(current_user&.id), 
+                        ) %>
+                        
+                    </div>
+                </div>
+           <a href="<%= collection_path(collection.address)%>"><p><%= collection.title %></p></a>
+            <% if collection.own_collection.present? %>
+                <a href="<%=nft_contract_path(collection.collection_address)%>"> <span><%= collection.contract_name %></span></a>
+            <% else %>                    
+                <a><span><%= collection.collection_info_name %></span></a>
+            <% end %>
+        </div>
+        <div class="datils-div">
+            <div class="pro-div">
+                <a href="/users/<%=collection.creator.address%>"> <%= image_tag collection.creator.profile_image %> </a>
+            </div>
+            <div class="user-detail">
+                <span>Creator</span> 
+                <% if collection.creator.name %>
+                      <a href="/users/<%=collection.creator.address%>"> <p> <%= collection.creator.name %> </p> </a>
+                    <% else %>
+                      <a href="/users/<%=collection.creator.address%>"> <p> <%= masked_address(collection.creator.address, 3, 4) %> </p> </a>
+                <% end %>
+            </div>
+            <div class="pro-div">
+                <a href="/users/<%=collection.owner.address%>"> <%= image_tag collection.owner.profile_image %> </a>
+            </div>
+            <div class="user-detail">
+                <span>Owner</span> 
+                <% if collection.owner.name %>
+                      <a href="/users/<%=collection.owner.address%>"> <p> <%= collection.owner.name %> </p> </a>
+                    <% else %>
+                      <a href="/users/<%=collection.owner.address%>"> <p> <%= masked_address(collection.owner.address, 3, 4) %> </p> </a>
+                <% end %>
+            </div>
+        </div>
+        </div>
+        <div class="price-div">
+        <div class="price-sub">
+            <% if collection.instant_sale_price%>
+                <span> Price </span>
+                <p> <%=collection.instant_sale_price%> <%= collection.collection_coin %></p>
+            <% else %>
+                <% if collection.max_bid %>
+                    <span> Highest bid </span>
+                    <p><%= collection.max_bid.amount %> <%= collection.collection_coin %> </p>
+                    <%else%>
+                        <span>No active Bids<span>
+                    <% end %>  
+                  <% end %>
+        </div>
+        <% if not collection.is_owner?(current_user)%>   
+            <% if collection.put_on_sale? %>
+                <div class="price-sub price-sub-space">
+                    <a href="<%= collection_path(collection.address)%>">Buy</a>
+                </div>
+            <% else %>
+                <div class="price-sub price-sub-space">
+                    <a href="<%= collection_path(collection.address)%>">Not for Sale</a>
+                </div>
+            <% end %>
+        <% end %>
+        
+        <div style="clear:both;"></div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+  $(document).ready(function() { ReactRailsUJS.mountComponents(); })
+</script>

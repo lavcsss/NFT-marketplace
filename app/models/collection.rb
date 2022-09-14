@@ -42,7 +42,7 @@ class Collection < ApplicationRecord
   store :config, accessors: [:size, :width]
   store :data, accessors: [:highest_bid, :expire_bid_days]
 
-  validates :name, :description, :category, :attachment, :royalty, presence: true
+  validates :name, :category, :attachment, :royalty, presence: true
   validates :royalty, numericality: { less_than_or_equal_to: 30, message: "accepts numbers less than or equal to 30 only" }, if: Proc.new { |c| c.royalty.present? }
   validates :name, length: {maximum: 100}
   validates :description, length: {maximum: 1000}, allow_blank: true

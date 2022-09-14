@@ -12,20 +12,67 @@ class CollectionsController < ApplicationController
     @collection_type = params[:type]
     if params[:contract_address] && params[:token]
       begin
-        asset_response = JSON.parse(URI.open(Rails.application.credentials.config[:opensea_url] + "/api/v1/asset/#{params[:contract_address]}/#{params[:token]}").read)
-        if asset_response["top_ownerships"]
-          contract_symbol = asset_response["asset_contract"]["symbol"]
-          contract_type = (contract_symbol.include?("NFT1155") || contract_symbol.include?("NFT721")) ? "Shared" : "Own"
-          num_of_copy = asset_response["top_ownerships"].find { |resp| resp["owner"]["address"].downcase == current_user.address.downcase }.try(:fetch, "quantity")
-          if params[:nft]
-            data = JSON.parse(URI.open(params[:nft]).read)
-          else
+        # asset_response = JSON.parse(URI.open(Rails.application.credentials.config[:opensea_url] + "/api/v1/asset/#{params[:contract_address]}/#{params[:token]}").read)
+        base_url = Rails.application.credentials.config[:alchemy][:base_url]
+        api_key = Rails.application.credentials.config[:alchemy][:api_key]
+        if params[:type] == 'single'
+          api_url = base_url + "/nft/v2/#{api_key}/getNFTMetadata?contractAddress=#{params[:contract_address]}&tokenId=#{params[:token]}"
+          asset_response = JSON.parse(URI.open(api_url).read)
+          if asset_response
+            contract_symbol = asset_response["id"]["tokenMetadata"]["tokenType"]
+            contract_type = (contract_symbol.include?("ERC1155") || contract_symbol.include?("ERC721")) ? "Shared" : "Own"
+            # num_of_copy = asset_response["top_ownerships"].find { |resp| resp["owner"]["address"].downcase == current_user.address.downcase }.try(:fetch, "quantity")
+            num_of_copy = 1
             data = { }
-            data["name"] = asset_response["name"]
-            data["description"] = asset_response["description"]
-            data["image"] = asset_response["image_url"]
+            data["name"] = asset_response["metadata"]["name"]
+            data["description"] = asset_response["metadata"]["description"]
+            data["image"] = asset_response["metadata"]["image"]
+            @nft = {
+              title: data["name"],
+              description: data["description"],
+              metadata: params[:nft],
+              token: params[:token],
+              contract_type: contract_type,
+              num_copies: num_of_copy,
+              contract_address: params[:contract_address]
+            }
+            OpenURI::Buffer.send :remove_const, 'StringMax' if OpenURI::Buffer.const_defined?('StringMax')
+            OpenURI::Buffer.const_set 'StringMax', 0
+            if data.has_key?("animation_url")
+              file = URI.open(asset_response['animation_url'])
+              @nft.merge!({
+                url: asset_response['animation_url'],
+                file_path: file.path,
+                file_type: file.content_type,
+                preview_url: asset_response['image_url']
+              })
+            elsif data.has_key?("image")
+              image = data['image'].match(/ipfs:\/\/ipfs/).present? ? asset_response['image_url'] : data["image"]
+              file = URI.open(image)
+              @nft.merge!({
+                url: image,
+                file_path: file.path,
+                file_type: file.content_type
+              })
+            elsif data.has_key?("image_url")
+              file = URI.open("https://ipfs.io/ipfs/" + data["image_url"].split("://")[1])
+              @nft.merge!({
+                url: "https://ipfs.io/ipfs/" + data["image_url"].split("://")[1],
+                file_path: file.path,
+                file_type: file.content_type
+              })
+            end
+          else
+            raise "Unable to fetch the asset details"
           end
-
+        else
+          contract_symbol = params[:response][:contract_symbol]
+          contract_type = (contract_symbol.include?("ERC1155") || contract_symbol.include?("ERC721")) ? "Shared" : "Own"
+          num_of_copy = params[:response][:balance]
+          data = { }
+          data["name"] = params[:response][:title]
+          data["description"] = params[:response][:description]
+          data["image"] = params[:response][:image_url]
           @nft = {
             title: data["name"],
             description: data["description"],
@@ -35,38 +82,19 @@ class CollectionsController < ApplicationController
             num_copies: num_of_copy,
             contract_address: params[:contract_address]
           }
-
           OpenURI::Buffer.send :remove_const, 'StringMax' if OpenURI::Buffer.const_defined?('StringMax')
           OpenURI::Buffer.const_set 'StringMax', 0
-          if data.has_key?("animation_url")
-            file = URI.open(asset_response['animation_url'])
-            @nft.merge!({
-              url: asset_response['animation_url'],
-              file_path: file.path,
-              file_type: file.content_type,
-              preview_url: asset_response['image_url']
-            })
-          elsif data.has_key?("image")
-            image = data['image'].match(/ipfs:\/\/ipfs/).present? ? asset_response['image_url'] : data["image"]
-            file = URI.open(image)
-            @nft.merge!({
-              url: image,
-              file_path: file.path,
-              file_type: file.content_type
-            })
-          elsif data.has_key?("image_url")
-            file = URI.open("https://ipfs.io/ipfs/" + data["image_url"].split("://")[1])
-            @nft.merge!({
-              url: "https://ipfs.io/ipfs/" + data["image_url"].split("://")[1],
-              file_path: file.path,
-              file_type: file.content_type
-            })
-          end
-        else
-          raise "Unable to fetch the asset details"
+          file = URI.open(data['image'])
+          @nft.merge!({
+            url: data['image'],
+            file_path: file.path,
+            file_type: file.content_type
+          })
         end
      rescue Exception => e
-        Rails.logger.warn "################## Exception while reading Opensea Collection file ##################"
+        Rails.logger.warn "################## Exception while reading Alchemy Collection file ##################"
+        Rails.logger.warn "ERROR: #{e.message}"
+        Rails.logger.warn $!.backtrace[0..20].join("\n")
         redirect_to user_path(id: current_user.address, tab: 'nft_collections')
       end
     end
@@ -85,27 +113,28 @@ class CollectionsController < ApplicationController
       # ActiveRecord::Base.transaction do
         @collection = Collection.new(collection_params.except(:source, :nft_link, :token, :total_copies, :contract_address, :contract_type))
         @collection.state = :pending
-        if collection_params[:source] == "opensea"
+        if collection_params[:source] == "alchemy"
           @collection.state = :approved
-          asset_response = JSON.parse(URI.open(Rails.application.credentials.config[:opensea_url] + "/api/v1/asset/#{collection_params[:contract_address]}/#{collection_params[:token]}").read)
-          if collection_params[:nft_link].present?
-            data = JSON.parse(URI.open(collection_params[:nft_link]).read)
-            OpenURI::Buffer.send :remove_const, 'StringMax' if OpenURI::Buffer.const_defined?('StringMax')
-            OpenURI::Buffer.const_set 'StringMax', 0
-          else
+          base_url = Rails.application.credentials.config[:alchemy][:base_url]
+          api_key = Rails.application.credentials.config[:alchemy][:api_key]
+          if collection_params[:collection_type] == "single"
+            api_url = base_url + "/nft/v2/#{api_key}/getNFTMetadata?contractAddress=#{collection_params[:contract_address]}&tokenId=#{collection_params[:token]}"
+            asset_response = JSON.parse(URI.open(api_url).read)
             data = { }
-            data["name"] = asset_response["name"]
-            data["description"] = asset_response["description"]
-            data["image"] = asset_response["image_url"]
-          end
-
-          if data["animation_url"]
-            file = URI.open(asset_response["animation_url"])
-          elsif data["image_url"]
-            file = URI.open("https://ipfs.io/ipfs/" + data["image_url"].split("://")[1])
+            data["name"] = asset_response["metadata"]["name"]
+            data["description"] = asset_response["metadata"]["description"]
+            data["image"] = asset_response["metadata"]["image"]
+            if data["animation_url"]
+              file = URI.open(asset_response["animation_url"])
+            elsif data["image_url"]
+              file = URI.open("https://ipfs.io/ipfs/" + data["image_url"].split("://")[1])
+            else
+              image = data['image'].match(/ipfs:\/\/ipfs/).present? ? asset_response['image_url'] : data["image"]
+              file = URI.open(image)
+            end
           else
-            image = data['image'].match(/ipfs:\/\/ipfs/).present? ? asset_response['image_url'] : data["image"]
-            file = URI.open(image)
+            data = eval(collection_params[:nft_link])
+            file = URI.open(data['image'])
           end
           @collection.name = data['name']
           unless @collection.nft_contract.address == collection_params[:contract_address]
