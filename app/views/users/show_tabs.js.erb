@@ -67,8 +67,10 @@ $("#current_tab").replaceWith('<span hidden="hiddden" id="current_tab"> <%= @tab
   $(".user-dashboard-load-more").closest(".row").hide()
 <% end %>
 
-<%  @tab == 'nft_collections' && if params[:page_no].to_i == @data[:total_pages]%>
-  $(".user-dashboard-load-more").closest(".row").hide()
+<% if @tab == 'nft_collections' %>
+    <% if params[:page_no].to_i == @data[:total_pages] || !@data[:collections].present? %>
+    $(".user-dashboard-load-more").closest(".row").hide()
+    <% end %>
 <% end %>
 
 
