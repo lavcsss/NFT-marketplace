@@ -49,6 +49,7 @@ jsconfig.json
 package-lock.json
 package.json
 yarn.lock
+nohup.out
 Gemfile
 Gemfile.lock
 db/schema.rb

@@ -112,9 +112,10 @@ $(document).ready(function() {
   $(function () {
      $(".morelink").trigger( "click");
   });
-  var showChar = 130;  
+  var showChar = 130;
   var moretext = "...Read more";
   var lesstext = "Read less";
+  console.log("hello");
 
   $('.textControl').each(function() {
      var content = $(this).html();
@@ -237,3 +238,4 @@ function negativeNumberPrevent(input) {
   }
 
 }
+
