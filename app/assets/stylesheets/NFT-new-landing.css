@@ -78,7 +78,21 @@
         text-overflow: ellipsis;
     }
 
-    .nft-box-div span{font-size: 13px; font-weight: bold; padding: 0px; color: #3C97F2;}
+    .nft-box-div span{
+    font-size: 13px;
+    font-weight: bold; 
+    padding: 0px; 
+    color: #3C97F2;
+    
+}
+    .collection_name {
+    width: 168px;
+    white-space: nowrap;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    }
+
     .datils-div{display: flex;
         align-items: center;
         justify-content: space-between;
@@ -114,7 +128,7 @@
     }
     .dashboard-share-menu{
         width: 18px !important;
-        margin-left: 36px;
+        margin-right: 36px;
         cursor: pointer;
     }
     .icon-div{float: left;  position: absolute; right: 0; }

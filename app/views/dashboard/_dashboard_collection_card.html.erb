@@ -44,9 +44,9 @@
                 </div>
            <a href="<%= collection_path(collection.address)%>"><p><%= collection.title %></p></a>
             <% if collection.own_collection.present? %>
-                <a href="<%=nft_contract_path(collection.collection_address)%>"> <span><%= collection.contract_name %></span></a>
+                <a href="<%=nft_contract_path(collection.collection_address)%>"> <span class="collection_name"><%= collection.contract_name %></span></a>
             <% else %>                    
-                <a><span><%= collection.collection_info_name %></span></a>
+                <a><span class="collection_name"><%= collection.collection_info_name %></span></a>
             <% end %>
         </div>
         <div class="datils-div">

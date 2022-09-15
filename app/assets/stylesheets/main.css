@@ -876,6 +876,7 @@ box-shadow: 0px 0px 10px #00000017;
 .header__profile-menu li a:hover {
     color: #162C5B;
     background: #F2F2F2 0% 0% no-repeat padding-box;
+    width: 100%;
 }
 .header__profile-menu a:hover svg {
   fill: var(--theme-color);
@@ -2569,7 +2570,10 @@ button.card__likes.heart i {
   left: 14px;
   top: 5px;
 }
-.t_c .card__likes {width: 20px;height: 20px;padding: 0;right: 8px;}
+.t_c .card__likes {width: 20px;
+  height: 20px;
+  padding: 0;
+  right: -40px !important;}
 
 .t_c .card__likes i {left: 0!important;top: 3px!important;}
 button.card__likes.heart i.far {
