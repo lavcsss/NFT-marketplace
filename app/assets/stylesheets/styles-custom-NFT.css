@@ -527,6 +527,7 @@ width: 14px;
     text-overflow: ellipsis;
     overflow: hidden;
     display: inline-block;*/
+    font-size: 13px;
 }
 .place-buy-details .highest-bid p {
     text-align: left;
@@ -3544,8 +3545,8 @@ main.NFT-detail.modeling-NFT {
 .modal-more-options{
     background: #fff;
     right: 15px;
-    top: 4px;
     padding: 0px 12px;
+    position: absolute;
 }
 
 
@@ -4092,3 +4093,39 @@ footer.footer.nft-detail-bottom-footer.section-footer.wide-window{
     font-size: 15px;
 }
 }
+
+@media only screen and (max-width: 484px) {
+    .modal-more-options {
+        margin-top: -105%;
+    }
+  }
+
+  @media only screen and (max-width: 425px) {
+    .modal-more-options {
+        margin-top: -94%;
+    }
+  }
+
+@media only screen and (max-width: 390px) {
+    .modal-more-options {
+        margin-top: -105%;
+    }
+  }
+
+  @media only screen and (max-width: 375px) {
+    .modal-more-options {
+        margin-top: -105%;
+    }
+  }
+
+  @media only screen and (max-width: 360px) {
+    .modal-more-options {
+        margin-top: -110%;
+    }
+  }
+
+  @media only screen and (max-width: 320px) {
+    .modal-more-options {
+        margin-top: -126%;
+    }
+  }
