@@ -11,7 +11,7 @@ Fee.find_or_create_by(fee_type: 'seller').update(name: 'Service Charge', percent
 
 #Creating ERC20 Token List
 Erc20Token.find_or_create_by(chain_id: CHAIN_ID, symbol: 'WETH')
-  .update(address: '0xc778417E063141139Fce010982780140Aa0cD5Ab', name: 'Wrapped Ether', decimals: 18)
+  .update(address: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', name: 'Wrapped Ether', decimals: 18)
 
 ### CREATING SHARED NFT CONTRACT ADDRESSES
 NftContract.find_or_create_by(contract_type: 'nft721', symbol: 'Shared')
