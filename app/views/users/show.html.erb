@@ -116,7 +116,6 @@
                               <%= @user.address %> </span> 
                               <img src="../../assets/nft/modeling/copy.png" class="copy_address">
                             </span>
-                           
                         </h5>
                         <% if @user.bio.present? and @user.bio.length > 150 %>
                            <p> <a class="textControl" > <%= link_to_bio(@user) %> </a></p>
@@ -149,7 +148,7 @@
                      <div class="col-lg-8 col-md-12 col-sm-12 col-12 border-bottom-grey">
                         <div class="tab about-profile-information">
                            <button class="tablinks active hide-in-mob-view About" onclick="openTabs(event, 'About')">
-                           <%= t('users.show.about') %>
+                           About
                            </button>
                            <button class="tablinks hide-in-mob-view listings" onclick="openTabs(event, 'listings')">
                            Listings
@@ -280,6 +279,7 @@
          </div>
       </div>
    </div>
+   
 </main>
 
 
@@ -288,8 +288,6 @@
 
 <div class="User_following-list" id="mob-followers-list">
 </div>
-
-
 
 
 <%= render partial: 'users/report_user' %>

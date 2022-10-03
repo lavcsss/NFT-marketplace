@@ -1,12 +1,12 @@
-<div id="transferTokenForm" class="zoom-anim-dialog mfp-hide modal sm_modal transfer-token">
+<div id="transferTokenForm" class="zoom-anim-dialog mfp-hide modal sm_modal transfer-token collection-page">
   <button class="modal__close md_cls" type="button"><i class="fas fa-times"></i></button>
   <h4 class="modal-title share_link_page_h4"><%= t('collections.show.transfer_token')%></h4>
   <%= form_tag('#', class: 'change-price-form', id: 'tokenTransferForm') do %>
     <div class="modal-body pl-30 pr-30">
-      <div class="row mb-15">
+      <div class="row mb-15 grey-bg">
         <div class="col-md-12">
-          <div class="form-group">
-            <label for="full_name"><%= t('collections.show.user_wallet_address')%></label>
+          <div class="form-div">
+            <label for="full_name">User Wallet Address</label>
             <%= text_field_tag "address", nil, class: 'form-control transferAddress sign__input', placeholder: 'Please provide wallet address', required: true %>
           </div>
         </div>
@@ -22,8 +22,9 @@
         <% end %>
       </div>
     </div>
-    <div class="modal-footer text-center">
-      <a class="btn buy-now bidding-element-btn triggerTransfer theme-btn" href="" role="button"><%= t('shared.transfer')%></a>
+    <div class="modal-footer" style="text-align:right">
+      <a class="bidding-element-btn secondary-btn" data-dismiss="modal" role="button"><%= t('shared.cancel')%></a>
+      <a class="btn buy-now bidding-element-btn triggerTransfer theme-btn" href="" role="button">Confirm</a>
     </div>
   <% end %>
 </div>

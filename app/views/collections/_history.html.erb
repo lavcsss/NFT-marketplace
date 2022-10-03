@@ -1,8 +1,10 @@
-<div class="member-detail">
+<div class="tab">
     <% if @activities.present? %>
+        <table>
         <% @activities.each do |activity| %>
-        <%= render "activities/collection_card_activity", activity: activity %>
+            <%= render "activities/collection_card_activity", activity: activity %>
         <% end %>
+        </table>
     <% else %>
         <p> No History yet! </p>
     <% end %>

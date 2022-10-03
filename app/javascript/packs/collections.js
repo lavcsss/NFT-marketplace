@@ -103,29 +103,21 @@ $(document).ready(function () {
     var form = $("#collectionCreateForm")[0]
     var source = $("#collection_source").val();
     if (source == "opensea" || form.checkValidity()) {
-      const mintType = $("input[name=chooseMintType]").filter(":checked").val();
-      if(mintType == undefined) {
-        return toastr.error('Please select minting type')
+      if ($('#collection_instant_sale_enabled').is(":checked") && (!validFloat($("#instant-price").val()))) {
+        return toastr.error('Please enter valid instant price')
+      } else if ($('#no_of_copies').length && !validNum($('#no_of_copies').val())) {
+        return toastr.error('Please enter valid no of copies')
+      } else if ($('#no_of_copies').length && $("#no_of_copies")[0].validationMessage !== "") {
+        return toastr.error("Number of copies " + $("#no_of_copies")[0].validationMessage.toLowerCase())
       } else {
-        if ($('#collection_instant_sale_enabled').is(":checked") && (!validFloat($("#instant-price").val()))) {
-          return toastr.error('Please enter valid instant price')
-        } else if ($('#no_of_copies').length && !validNum($('#no_of_copies').val())) {
-          return toastr.error('Please enter valid no of copies')
-        } else if ($('#no_of_copies').length && $("#no_of_copies")[0].validationMessage !== "") {
-          return toastr.error("Number of copies " + $("#no_of_copies")[0].validationMessage.toLowerCase())
-        } else {
-          $("#submitCollection").click();
-          $("#collectionCreateForm :input").prop("disabled", true);
-        }
+        $("#submitCollection").click();
+        $("#collectionCreateForm :input").prop("disabled", true);
       }
     } else {
-      var collectionType = $("input[name=chooseCollection]").filter(":checked").val();
       if ($('#file-1').val() === '') {
         return toastr.error('Please select collection file')
       } else if ($("#collection-category option:selected").length === 0) {
         return toastr.error('Please select categories')
-      } else if (collectionType === undefined) {
-        return toastr.error('Please select collection type')
       } else if ($('#collection-name').val() === '') {
         return toastr.error('Please provide collection name')
       } else if ($('#description').val() === '') {
@@ -226,9 +218,8 @@ $(document).ready(function () {
     // $('.signDone').addClass('hide')
     // $('.signStart').addClass('hide')
     // $('.signProgress').removeClass('hide')
-    console.log(contractAddress, contractType)
-    var MintType = $("input[name=chooseMintType]").filter(":checked").val()
-    if (MintType == 'lazy') {
+    var mintType =  $("input[name=is_lazy_mint]");
+    if (($(mintType).is(':checked'))) {
       initLazyMint()
     } else {
       initCollectionCreate(contractAddress, contractType)
@@ -304,14 +295,14 @@ $(document).ready(function () {
     $('.signFixPriceStart').removeClass('hide').addClass('grey')
     if (existingToken) {
       if ($('#collection_instant_sale_enabled').is(":checked")) {
-        initsignFixedPriceProcess()
+        initsignFixedPriceProcess();
       } else {
         toastr.success('Collection created succcessfully.')
         window.location.href = '/collections/' + $('#collection_id').val()
       }
     } else {
       // TODO: WHILE CHANGE NFT TO SHARED/OWNER THS HAS TO BE CHANGED
-      var sharedCollection = ($("input[name=chooseCollection]").filter(":checked").val() === 'nft')
+      var sharedCollection = ($("input[name=chooseCrossTowerCollection]").is(':checked'))
       if (contractType === 'nft721') {
         createCollectible721($('#collection_contract_address').val(), $('#collection_token_uri').val(),
           $('#collection_royalty_fee').val(), $('#collection_id').val(), sharedCollection)
@@ -376,10 +367,7 @@ $(document).ready(function () {
     if (details) {
       // tokenID is 0 for Lazy-minting blocks
       const tokenId = is_lazy_minting ? 0 : details['token_id']  
-      console.log(details['unit_price'], details['pay_token_decimal'], details['pay_token_address'],
-        details['token_id'], details['asset_address'], details['collection_id'], details['is_eth_payment'])
       if (details['is_eth_payment']){
-        console.log(details['is_eth_payment']);
         var paymentCoin = "0x0000000000000000000000000000000000000000";
         var ethDecimals = 18;
         signSellOrder(details['unit_price'], ethDecimals, paymentCoin,
@@ -424,7 +412,8 @@ function updateOwnContractCollection(collectionId) {
     if($('#priceChange').length){
       initsignFixedPriceUpdate()
     }else{
-      initsignFixedPriceProcess($("input[name=chooseMintType]").filter(":checked").val() === 'lazy')
+      var mintType =  $("input[name=is_lazy_mint]");
+      initsignFixedPriceProcess(($(mintType).is(':checked')));
     }
   })
 
@@ -529,8 +518,6 @@ function updateOwnContractCollection(collectionId) {
     $('.signbidProgress').removeClass('hide')
     var details = fetchCollectionDetails(null, contractAddress)
     if (details) {
-      console.log(details['asset_address'], details['token_id'], $("#bid_qty").val(), $("#bid-total-amt-dp").attr('bidAmt'),
-        details['pay_token_address'], details['pay_token_decimal'], details['collection_id'], $("#bid-total-amt-dp").attr('bidPayAmt'))
       bidAsset(details['asset_address'], details['token_id'], $("#bid_qty").val(), $("#bid-total-amt-dp").attr('bidAmt'),
         details['pay_token_address'], details['pay_token_decimal'], details['collection_id'], $("#bid-total-amt-dp").attr('bidPayAmt'))
     } else {
@@ -660,8 +647,8 @@ function updateOwnContractCollection(collectionId) {
           $("#loader-text").replaceWith("<h1 id='loader-text'>Transferring your NFT. Please wait ... </h1>");
           $("#buy_qty").val(1);
           calculateBuy($('#BuyerserviceFee').text());
-          initBuyFiatProcess($("#buyContractAddress").text(), 
-                             $("#buyContractDecimals").text(), msg['quantity'], msg['payment_amt'],
+          initBuyFiatProcess($("#buyContractAddress").val(), 
+                             $("#buyContractDecimals").val(), msg['quantity'], msg['payment_amt'],
                              msg['is_eth_payment']);
       }
       else if (msg['status'] == 'cancelled'){
@@ -716,7 +703,7 @@ function updateOwnContractCollection(collectionId) {
     if (isEthPayment === 'false'){
       if (isGreaterThanOrEqualTo(curErc20Balance, totalAmt)) {
         $('.convertEth').addClass("hide")
-        initApproveBuyProcess($("#buyContractAddress").text(), $("#buyContractDecimals").text())
+        initApproveBuyProcess($("#buyContractAddress").val(), $("#buyContractDecimals").val())
       } else if (isGreaterThanOrEqualTo(ethBalance, totalAmt)) {
         convertEthToWeth(totalAmt, 'Buy')
       } else {
@@ -739,7 +726,7 @@ function updateOwnContractCollection(collectionId) {
   window.buyConvertSuccess = function buyConvertSuccess(transactionHash) {
     $('.convertProgress').addClass('hide')
     $('.convertDone').removeClass('hide')
-    initApproveBuyProcess($("#buyContractAddress").text(), $("#buyContractDecimals").text())
+    initApproveBuyProcess($("#buyContractAddress").val(), $("#buyContractDecimals").val())
   }
 
   window.buyConvertFailed = function buyConvertFailed(errorMsg) {
@@ -817,7 +804,7 @@ function updateOwnContractCollection(collectionId) {
   }
 
   $(document).on("click", ".approvebuyRetry", function () {
-    initApproveBuyProcess($("#buyContractAddress").text(), $("#buyContractDecimals").text())
+    initApproveBuyProcess($("#buyContractAddress").val(), $("#buyContractDecimals").val())
   })
 
   window.initPurchaseProcess = function initPurchaseBuyProcess(contractAddress, isEthPayment=false) {
@@ -899,7 +886,7 @@ function updateOwnContractCollection(collectionId) {
   }
 
   $(document).on("click", ".purchaseRetry", function () {
-    initPurchaseProcess($("#buyContractAddress").text())
+    initPurchaseProcess($("#buyContractAddress").val())
   })
 
 
@@ -1181,13 +1168,14 @@ function updateOwnContractCollection(collectionId) {
     $('.signFixPriceProgress').removeClass('hide')
     var pay_token_address = $('#collection_erc20_token_id option:selected, this').attr('address')
     var pay_token_decimal = $('#collection_erc20_token_id option:selected, this').attr('decimals')
-    var details = fetchCollectionDetails(null, pay_token_address)
+    var details = fetchCollectionDetails(null, pay_token_address);
     if (details) {
       if (details['is_eth_payment'] || pay_token_address === '0x0000000000000000000000000000000000000000'){
+        pay_token_decimal = 18;
         var paymentCoin = "0x0000000000000000000000000000000000000000";
         signSellOrder($('#instant-price').val(), null, paymentCoin,
         details['token_id'], details['asset_address'], details['collection_id'], 'update'
-        )
+        );
       }else{
         signSellOrder($('#instant-price').val(), pay_token_decimal, pay_token_address,
         details['token_id'], details['asset_address'], details['collection_id'], 'update');
@@ -1250,7 +1238,7 @@ function updateOwnContractCollection(collectionId) {
   })
 
   $(document).on("click", ".buy-now", function () {
-    loadTokenBalance($('#buyContractAddress').text(), $('#buyContractDecimals').text());
+    loadTokenBalance($('#buyContractAddress').val(), $('#buyContractDecimals').val());
   })
 
   $(document).on("click", ".bid-now", function () {

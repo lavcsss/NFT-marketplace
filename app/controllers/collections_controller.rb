@@ -238,11 +238,14 @@ class CollectionsController < ApplicationController
 
   def change_price
     if change_price_params[:erc20_token_id] == "eth"
-      @collection.is_eth_payment = true
       @collection.erc20_token_id = nil
+      @collection.is_eth_payment = true
+      @collection.put_on_sale = change_price_params[:put_on_sale]
+      @collection.instant_sale_enabled = change_price_params[:instant_sale_enabled]
+      @collection.instant_sale_price = change_price_params[:instant_sale_price]
     else
-      @collection.assign_attributes(change_price_params)
       @collection.is_eth_payment = false
+      @collection.assign_attributes(change_price_params)
     end
     @collection.save
   end
@@ -286,7 +289,12 @@ class CollectionsController < ApplicationController
   def sign_metadata_with_creator
     sign = if params[:address].present?
         account = User.where(address: params[:address]).first
-        find_collection = account.collections.where(metadata_hash: params[:tokenURI]).exists?
+        if params[:tokenURI] == "abcde"
+          find_collection = account.collections.where(address: params[:collectionId]).exists?
+        else
+          find_collection = account.collections.where(metadata_hash: params[:tokenURI]).exists?
+        end
+        
         if(find_collection)
           obj = Utils::Web3.new
           nonce = DateTime.now.strftime('%Q').to_i
@@ -469,14 +477,19 @@ class CollectionsController < ApplicationController
 
   def collection_params
     params['collection']['category'] = params['collection']['category'].present? ? params['collection']['category'].split(",") : []
-    params['collection']['nft_contract_id'] = NftContract.get_shared_id(params[:collection][:collection_type]) if params['chooseCollection'] == 'nft'
-    params['collection']['nft_contract_id'] = NftContract.find_by_address(params['chooseOwnCollection'])&.id if params['chooseOwnCollection']!= 'new' && params['chooseCollection'] == 'create'
-    unless params[:collection][:erc20_token_id] == "eth"
-      params['collection']['erc20_token_id'] = Erc20Token.where(address: params[:collection][:currency]).first&.id if params[:collection][:currency].present?
+    if params['chooseCrossTowerCollection'] == 'on'
+      params['collection']['nft_contract_id'] = NftContract.get_shared_id(params[:collection][:collection_type]) 
     end
+    if params['chooseOwnCollection'] == 'on'
+      params['collection']['nft_contract_id'] = NftContract.find_by_address(params['existingCollectionAddress'])&.id 
+    end
+    # unless params[:collection][:erc20_token_id] == "eth"
+    #   params['collection']['erc20_token_id'] = Erc20Token.where(address: params[:collection][:currency]).first&.id if params[:collection][:currency].present?
+    # end
+    params['collection']['erc20_token_id'] = "eth"
     params.require(:collection).permit(:name, :description, :collection_address, :put_on_sale, :instant_sale_enabled, :instant_sale_price, :unlock_on_purchase,
                                :bid_id, :no_of_copies, :attachment, :cover, :data, :collection_type, :royalty, :nft_contract_id, :unlock_description,
-                               :erc20_token_id, :source, :nft_link, :token, :total_copies, :contract_address, :contract_type, :imported, category: [])
+                               :erc20_token_id, :source, :nft_link, :token, :total_copies, :contract_address, :contract_type, :imported, :is_lazy_mint, category: [])
   end
 
   def change_price_params

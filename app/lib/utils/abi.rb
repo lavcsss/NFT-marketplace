@@ -325,6 +325,33 @@ module Utils
                   }
                 ],
                 "internalType": "struct Trade.Sign",
+                "name": "ownerSign",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint8",
+                    "name": "v",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "r",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "s",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "nonce",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct Trade.Sign",
                 "name": "sign",
                 "type": "tuple"
               }
@@ -423,6 +450,33 @@ module Utils
                 "internalType": "bool",
                 "name": "_import",
                 "type": "bool"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint8",
+                    "name": "v",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "r",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "s",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "nonce",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct Trade.Sign",
+                "name": "ownerSign",
+                "type": "tuple"
               },
               {
                 "components": [
@@ -1427,11 +1481,6 @@ module Utils
                 "internalType": "struct Trade.Sign",
                 "name": "sign",
                 "type": "tuple"
-              },
-              {
-                "internalType": "bool",
-                "name": "isShared",
-                "type": "bool"
               }
             ],
             "name": "mintAndTransferAsset",
@@ -1577,11 +1626,6 @@ module Utils
                 "internalType": "struct Trade.Sign",
                 "name": "sign",
                 "type": "tuple"
-              },
-              {
-                "internalType": "bool",
-                "name": "isShared",
-                "type": "bool"
               }
             ],
             "name": "mintAndTransferAssetWithEth",
@@ -1797,6 +1841,33 @@ module Utils
                 ],
                 "internalType": "struct Order",
                 "name": "order",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint8",
+                    "name": "v",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "r",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "s",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "nonce",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct Sign",
+                "name": "ownerSign",
                 "type": "tuple"
               },
               {
@@ -2070,6 +2141,19 @@ module Utils
             "type": "function"
           },
           {
+            "inputs": [],
+            "name": "tradeOperator",
+            "outputs": [
+              {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
             "inputs": [
               {
                 "internalType": "address",
@@ -2120,6 +2204,25 @@ module Utils
               }
             ],
             "name": "updateOperators",
+            "outputs": [
+              {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+              }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "newOperator",
+                "type": "address"
+              }
+            ],
+            "name": "updateTradeOperator",
             "outputs": [
               {
                 "internalType": "bool",

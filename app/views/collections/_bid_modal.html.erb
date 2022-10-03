@@ -1,65 +1,63 @@
-<div id="Bid-modal" class="zoom-anim-dialog mfp-hide modal sm_modal">
-  <button class="modal__close md_cls" type="button"><i class="fas fa-times"></i></button>
-  <h4 class="modal-title share_link_page_h4"><%= t('collections.show.place_a_bid') %></h4>
-
-
-  <p class="buynow-content">
-    <span class="innertitle"> <%= t('collections.show.bid_msg') %></span>
-    <span class="frm-title"><b><%= @collection.name %></b>,</span>
-    <span class="frm-desc"><%= @collection.description %>
-      <span class="frm-from" data-toggle="tooltip" data-placement="top" title="<%= @collection.owner.full_name %>">by <%= link_to @collection.owner.full_name, user_path(@collection.owner.address), target: '_blank' %></span></span>
-  </p>
-
-  <%= form_tag bid_collection_path(@collection.address), method: :post, remote: true, multipart: true, id: 'biddingForm' do %>
-
-
-    <div class="placebidbuy_valbox">
-      <div class="form-group bidBuyInputs">
-        <div>
-          <label class="sign__label" for="size"> <%= t('collections.show.your_bid') %></label>
-          <input type="text" id='bid_amt' name="bids[crypto_currency]" class="validNumber sign__input" placeholder="Enter price for one piece" required/>
-        </div>
-        <div>
-          <label class="sign__label" for="propertie"> <%= t('collections.show.crypto_type') %></label>
-            <select name="bids[crypto_currency_type]" id="bid_currency" class="sign__select" required="required">
-                <% (Erc20Token.select_options).each do |token| %>
-                  <option address="<%=token.address%>" decimals="<%=token.decimals%>" value="<%=token.id%>"><%=token.symbol.upcase%></option>
-                <% end %>
-            </select>
-        </div>
+<div id="Bid-modal" class="mfp-hide pop-bg">
+    <%= form_tag bid_collection_path(@collection.address), method: :post, remote: true, multipart: true, id: 'biddingForm' do %>
+      <div  class="pop_content">
+         <button class="modal__close md_cls" type="button"><i class="fas fa-times"></i></button>
+         <h2 >Place A Bid</h2>
+         <div class="bid-pop-div">
+            <p style="color:#98999D;">You are about to place a bid for</p>
+            <p><%= @collection.title %></p>
+            <p>by <span class="frm-from" data-toggle="tooltip" data-placement="top" title="<%= @collection.owner.full_name %>"> <%= link_to @collection.owner.full_name, user_path(@collection.owner.address), target: '_blank' %></span></span></p>
+         </div>
+         <div class="row grey-bg">
+            <div class="col-sm-12">
+               <div  class="form-div col-sm-8">        
+                  <label for="name">Your Bid</label>
+                  <input type="text" id="bid_amt" name="bids[crypto_currency]" class="validNumber" placeholder="Enter price for one piece" required/>
+               </div>
+               <div class="form-div  col-sm-4">
+                  <label for="propertie">Crypto Type</label>
+                  <select id="bid_currency" name="bids[crypto_currency_type]" required="required">
+                      <% (Erc20Token.select_options).each do |token| %>
+                        <option address="<%=token.address%>" decimals="<%=token.decimals%>" value="<%=token.id%>"><%=token.symbol.upcase%></option>
+                      <% end %>
+                  </select>
+               </div>
+              <% if @collection.multiple? %>
+                <div class="form-div  col-sm-4">
+                  <label for="size"><%= t('collections.show.quantity') %>*</label>
+                  <input type="number" id='bid_qty' name="bids[quantity]" class="validInteger validatePresence" maxQuantity="<%= @collection.owned_tokens.to_i %>" placeholder="Enter Quantity" max="<%= @collection.owned_tokens %>" required/>
+                </div>
+              <% end %>
+            </div>
+            <div class="bid-details">
+               <p>Your Balance</p>
+               <span class="price-amt-val" id="current_balance"><%= current_balance %> <%= Rails.application.credentials.config[:base_coin] %></span>
+            </div>
+            <div class="bid-details">
+              <p>Your Bidding Balance</p>
+              <span class="price-amt-val"><span id="biding-asset-balance">0 <%= @collection.bidding_coin %></span></span>
+            </div>
+            <div class="bid-details">
+               <p>Service Fee</p>
+               <span class="price-amt-val"><span id="bid-amt-dp">0 <%= @collection.bidding_coin %></span></span>
+            </div>
+            <div class="bid-details">
+                <p>Total Bid Amount</p>
+                <span class="price-amt-val"><span id="bid-total-amt-dp">0 <%= @collection.bidding_coin %></span></span>
+            </div>
+         </div>
+         <div class="col-md-6" style="text-align: center;">
+            <a href="">
+               <div class="modal__close md_cls cancel-button" style="margin: -4px auto;">Cancel</div>
+            </a>
+         </div>
+         <div class="col-md-6" style="text-align: center;">
+            <a class="triggerBiddingValidation" href="" role="button">
+               <div class="creat-button">Place a Bid</div>
+            </a>
+         </div>
       </div>
-      <div>
-      
-        <% if @collection.multiple? %>
-          <div>
-            <label class="sign__label" for="size"><%= t('collections.show.quantity') %>*</label>
-            <input type="number" id='bid_qty' name="bids[quantity]" class="validInteger sign__input validatePresence" maxQuantity="<%= @collection.owned_tokens.to_i %>" placeholder="Enter Quantity" max="<%= @collection.owned_tokens %>" required/>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="flex_box_inputs">
-        <span class="price-amt-content"> <%= t('collections.show.your_balance') %></span>
-        <span class="price-amt-val" id="current_balance"><%= current_balance %> <%= Rails.application.credentials.config[:base_coin] %></span>
-      </div>
-      <div class="flex_box_inputs">
-        <span class="price-amt-content"> <%= t('collections.show.your_bidding_balance') %></span>
-        <span class="price-amt-val"><span id="biding-asset-balance">0 <%= @collection.bidding_coin %></span></span>
-      </div>
-      <div class="flex_box_inputs">
-        <span class="price-amt-content"> <%= t('collections.show.service_fee') %></span>
-        <span class="price-amt-val"><span id="bid-amt-dp">0 <%= @collection.bidding_coin %></span></span>
-      </div>
-      <div class="flex_box_inputs">
-        <span class="price-amt-content"> <%= t('collections.show.total_bid_amount') %></span>
-        <span class="price-amt-val"><span id="bid-total-amt-dp">0 <%= @collection.bidding_coin %></span></span>
-      </div>
-    </div>
-    <div class="modal-footer" style="text-align:center">
-      <a class="btn bidding-element-btn sign__btn triggerBiddingValidation" href="" role="button">Place a Bid</a>
-    </div>
-  <% end %>
-</div>
+   <% end %>
 </div>
 
 

@@ -4,45 +4,81 @@
                 (!activity.changeset["state"].present? ||
                         (activity.changeset["state"].present? && activity.changeset["state"] != ["pending", "approved"]))) %>
 
-    <div class="asset__action asset__action--verified">
       <% if activity.event == "create" && activity.item.present? %>
-          <%= link_to user_path(activity.item.creator.address), class:"user_img" do %>
-              <%= image_tag url_for(activity.item.creator.profile_image) %>
-          <% end %>
-          <p class="content_details"> Minted by <%= link_to activity.item.creator.full_name, user_path(activity.item.creator.address)%>
-          <i><%= time_ago_in_words(activity.created_at) %> ago </i> </p>
-
+        <tr>
+            <td>
+                <div class="tab-img-box">
+                    <%= link_to user_path(activity.item.creator.address), class:"user_img" do %>
+                        <%= image_tag url_for(activity.item.creator.profile_image) %>
+                    <% end %>
+                </div>
+            </td>
+            <td>
+                <p> Minted by <%= link_to activity.item.creator.full_name, user_path(activity.item.creator.address)%> </p>
+                <span><%= time_ago_in_words(activity.created_at) %> ago</span>
+            </td>
+        </tr>
       <% else %>
           <% owner_name = activity.next ? activity.next.reify.owner.full_name : activity.item.owner.full_name %>
           <% if activity.event == "update" %>
               <% if activity.changeset.keys.include?("owner_id") %>
-                 <% activity_dup = activity.dup %>
-                  <%= link_to user_path(activity.reify.owner.address), class:"user_img" do %>
-                      <%= image_tag url_for(activity.reify.owner.profile_image) %>
-                  <% end %>
-                 <p class="content_details"> Transfered to <%= link_to owner_name, user_path(activity_dup.item.owner.address)%> 
-                 <i> <%= time_ago_in_words(activity.created_at) %> ago from <%= activity.reify.owner.full_name %> </i></p>
+                <tr>
+                    <td>
+                    <div class="tab-img-box">
+                        <%= link_to user_path(activity.reify.owner.address), class:"user_img" do %>
+                            <%= image_tag url_for(activity.reify.owner.profile_image) %>
+                        <% end %>
+                    </div>
+                    </td>
+                    <td>
+                        <p> Transfered to <%= link_to owner_name, user_path(activity_dup.item.owner.address)%> </p>
+                        <span> <%= time_ago_in_words(activity.created_at) %> ago from <%= activity.reify.owner.full_name %> </span>
+                    </td>
+                </tr>
               <% elsif activity.changeset.keys.include?("instant_sale_price") %>
-
-                  <%= link_to user_path(activity.item.owner.address), class:"user_img" do %>
-                      <%= image_tag url_for(activity.item.owner.profile_image) %>
-                  <% end %>
-                  <p class="content_details"> Price updated by <%= link_to owner_name, user_path(activity.item.owner.address)%> 
-                  <i> <%= time_ago_in_words(activity.created_at) %> ago to <%= activity.changeset["instant_sale_price"].last %> </i> </p>
+                <tr>
+                    <td>
+                    <div class="tab-img-box">
+                        <%= link_to user_path(activity.reify.owner.address), class:"user_img" do %>
+                            <%= image_tag url_for(activity.reify.owner.profile_image) %>
+                        <% end %>
+                    </div>
+                    </td>
+                    <td>
+                        <p> Price updated by <%= link_to owner_name, user_path(activity.item.owner.address)%> </p>
+                        <span> <%= time_ago_in_words(activity.created_at) %> ago to <%= activity.changeset["instant_sale_price"].last %> </span>
+                    </td>
+                </tr>
               <% elsif activity.changeset.keys.include?("put_on_sale") %>
-                  <%= link_to user_path(activity.item.owner.address), class:"user_img" do %>
-                      <%= image_tag url_for(activity.item.owner.profile_image) %>
-                  <% end %>
-                  <p class="content_details"> Put on sale by <%= link_to owner_name, user_path(activity.item.owner.address)%>
-                  <i> <%= time_ago_in_words(activity.created_at) %> ago </i>  </p>
+                <tr>
+                    <td>
+                        <div class="tab-img-box">
+                            <%= link_to user_path(activity.item.owner.address), class:"user_img" do %>
+                                <%= image_tag url_for(activity.item.owner.profile_image) %>
+                            <% end %>
+                        </div>
+                    </td>
+                    <td>
+                        <p> Put on sale by <%= link_to owner_name, user_path(activity.item.owner.address)%> </p>
+                        <span> <%= time_ago_in_words(activity.created_at) %> ago </span>
+                    </td>
+                </tr>
               <% elsif activity.changeset["state"].present? && activity.changeset["state"] == ["approved", "burned"] %>
-                  <%= link_to user_path(activity.item.owner.address), class:"user_img" do %>
-                      <%= image_tag url_for(activity.item.owner.profile_image), class: 'img-responsive' %>
-                      <% end %>
-                      <p class="content_details"> Burned by <%= link_to owner_name, user_path(activity.item.owner.address)%> 
-                      <i> <%= time_ago_in_words(activity.created_at) %> ago</i> </p>
-                  <% end %>
+                <tr>
+                    <td>
+                        <div class="tab-img-box">
+                            <%= link_to user_path(activity.item.owner.address), class:"user_img" do %>
+                                <%= image_tag url_for(activity.item.owner.profile_image), class: 'img-responsive' %>
+                            <% end %>
+                        </div>
+                    </td>
+                    <td>
+                        <p> Burned by <%= link_to owner_name, user_path(activity.item.owner.address)%> </p>
+                        <i> <%= time_ago_in_words(activity.created_at) %> ago</i> </span>
+                    </td>
+                </tr>
+            <% end %>
           <% end %>
       <% end %>
-    </div>
 <% end %>
+

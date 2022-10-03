@@ -96,9 +96,9 @@ enum BuyingAssetType {ERC1155, ERC721 , LazyMintERC1155, LazyMintERC721}
 
 interface ITrade {
 
-    function buyAndTransferAsset(Order memory order, bool _import, Sign memory sign) external returns(bool);
+    function buyAndTransferAsset(Order memory order, bool _import, Sign memory ownerSign, Sign memory sign) external returns(bool);
     function mintAndTransferAsset(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) external returns(bool);
-    function buyAndTransferAssetWithEth(Order memory order, bool _import, Sign memory sign) external payable returns (bool);
+    function buyAndTransferAssetWithEth(Order memory order, bool _import, Sign memory ownerSign, Sign memory sign) external payable returns (bool);
     function mintAndTransferAssetWithEth(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) external payable returns(bool);
 
 }
@@ -108,12 +108,13 @@ contract TradeProxy {
 
     address public owner;
     address public trade;
+    address public tradeOperator;
     address public transferProxy;
     address public depreciatedTransferProxy;
 
-    constructor(address tradeAddress, address _transferProxy, address _depreciatedTransferProxy) {
+    constructor(address _trade, address _transferProxy, address _depreciatedTransferProxy) {
         owner = msg.sender;
-        trade = tradeAddress;
+        trade = _trade;
         transferProxy = _transferProxy;
         depreciatedTransferProxy = _depreciatedTransferProxy;
     }
@@ -127,10 +128,27 @@ contract TradeProxy {
         _;
     }
 
+    modifier onlyTradeOperator() {
+        require(tradeOperator == msg.sender, "Caller is not the trade operator");
+        _;
+    }
 
     function transferOwnership(address newOwner) public onlyOwner returns(bool){
         require(newOwner != address(0), "Ownable: new owner is the zero address");
         owner = newOwner;
+        return true;
+    }
+
+    function updateTradeOperator(address newOperator) public onlyOwner returns(bool){
+        require(newOperator != address(0), "New operator is the zero address");
+        tradeOperator = newOperator;
+        return true;
+    }
+
+    function updateOperators(address _trade, address _transferProxy, address _depreciatedTransferProxy) public onlyOwner returns(bool){
+        trade = _trade;
+        transferProxy = _transferProxy;
+        depreciatedTransferProxy = _depreciatedTransferProxy;
         return true;
     }
 
@@ -150,8 +168,7 @@ contract TradeProxy {
         payable(msg.sender).transfer(amount);
     }
 
-
-    function _buyAndTransferAsset(Order memory order, bool _import, Sign memory sign) public returns(bool) {
+    function _buyAndTransferAsset(Order memory order, Sign memory ownerSign, bool _import, Sign memory sign) public onlyTradeOperator returns(bool) {
         ITrade tradeContract = ITrade(trade);
         if (order.isErc20Payment){
             require((checkBalance(order.erc20Address) >= order.amount), 'Not enough balance');
@@ -160,15 +177,15 @@ contract TradeProxy {
             }else{
                 require(approveSpending(order.erc20Address, transferProxy, order.amount), 'Approval for spending failed');
             }
-            return tradeContract.buyAndTransferAsset(order, _import, sign);
+            return tradeContract.buyAndTransferAsset(order, _import, ownerSign, sign);
         }else{
             require(address(this).balance >= order.amount, "Not Enough Balance");   
-            return tradeContract.buyAndTransferAssetWithEth{value: order.amount}(order, _import, sign);
+            return tradeContract.buyAndTransferAssetWithEth{value: order.amount}(order, _import, ownerSign, sign);
         }
         
     }
 
-    function _mintAndTransferAsset(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) public returns(bool) {
+    function _mintAndTransferAsset(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) public onlyTradeOperator returns(bool) {
         ITrade tradeContract = ITrade(trade);
         if (order.isErc20Payment){
             require((checkBalance(order.erc20Address) >= order.amount), 'Not enough balance');

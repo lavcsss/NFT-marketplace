@@ -1,6 +1,6 @@
 <main class="main mt-0 NFT-detail discover_Page">
     <div class="discover_menus">
-        <div class="tab">
+        <div class="tab" style="display: block !important">
            <div class="container">
           <button class="tablinks active" onclick="openCity(event, 'all_nfts')">All NFTs</button>
           <button class="tablinks" onclick="openCity(event, 'Artists')">Artists</button>
@@ -145,7 +145,6 @@
                       <img src="../../assets/nft/modeling/cate.svg" class="blue">
                     Category</a></li>
                   </ul>
-
                   <div class="inner-tab-content-sec tab-content">
                     <div class="discover_menus">
                     <h5 class="panel-heading">Filter
@@ -169,7 +168,6 @@
                         <label>New  </label>
                         <label>Offers</label>
                         <label>Not for Sale</label>
-                      
                       </div>
                     </div>
                     <div id="Price_Range" class="tab-pane fade" >
@@ -240,8 +238,6 @@ $(document).on("click", ".removeFilter", function() {
   $("[data-category="+selected_filter+"]").parent().removeClass('active')
   filterRecords()
 })
-
-
 
 
 $(document).on("click", ".category_web", function() {

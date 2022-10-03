@@ -16,7 +16,7 @@ $(document).ready(function(){
 	async function checkNetwork() {
     if (window.ethers && window.ethers.providers.Web3Provider) {
         const network = await getNetworkType();
-        if (parseInt(network['chainId']) === 4){
+        if (parseInt(network['chainId']) === 5){
            $(".loading-gif-network").hide();
             loadBalance();
         } else {
@@ -110,7 +110,9 @@ $(document).ready(function(){
 					previewSection.fadeIn(650);
 					imagePreview.css('background-image', 'url('+e.target.result +')');
 					imagePreview.css({ 'height': '610px' });
-					document.getElementById("drop-img").className = "drop-file-img";  
+					$('.formbold-drop-file').hide();
+					// document.getElementById("drop-img").className = "drop-file-img";  
+
 				} else if (coverImg) {
 					return toastr.error('Invalid file type!');
 				} else if (audExt.includes(ftype)) {
@@ -155,9 +157,9 @@ $(document).ready(function(){
 				$('#drop-img').css('display', 'none');
 
 			}
-
 			reader.readAsDataURL(input.files[0]);
 		}
+
 	}
 
 	$("#file-1").change(function(e) {
@@ -258,7 +260,7 @@ $(document).ready(function(){
 		placeholder.fadeIn(100);
 		fileId.fadeIn(100);
 		chooseFile.fadeIn(100);
-		chooseFile.html('Choose file');
+		chooseFile.html('Browse');
 		imagePreview.css({ 
 			'width': 'auto', 
 			'height': 'auto', 
@@ -275,8 +277,7 @@ $(document).ready(function(){
 		previewSection.html('');
 		if (!isCoverPreview){
 			$("#validation-info").css('display', 'block');
-			$('.codrops-header_innertab').css('height', '660px');
-			$('#drop-img').css('display', 'inline-block');
+			$('.formbold-drop-file').show();
 		}
 	}
 

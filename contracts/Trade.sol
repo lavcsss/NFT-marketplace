@@ -85,6 +85,7 @@ interface IERC1155 is IERC165 {
     function getCreator(uint256 tokenId) external view returns(address);
     function lastTokenId()external returns(uint256);
     function mintAndTransfer(address from, address to, uint256 itemId, uint256 fee, uint256 _supply, string memory _tokenURI, uint256 qty, bytes memory data)external returns(uint256);
+    function ownerOf(uint256 tokenId) external view returns (address owner);
 }
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP. Does not include
@@ -183,7 +184,6 @@ contract TransferProxy {
 contract Trade {
 
     enum BuyingAssetType {ERC1155, ERC721 , LazyMintERC1155, LazyMintERC721}
-
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
     event SellerFee(uint8 sellerFee);
     event BuyerFee(uint8 buyerFee);
@@ -222,8 +222,8 @@ contract Trade {
         address erc20Address;
         address nftAddress;
         BuyingAssetType nftType;
-        uint unitPrice;
-        uint amount;
+        uint unitPrice; 
+        uint amount; 
         uint tokenId;
         uint256 supply;
         string tokenURI;
@@ -289,7 +289,7 @@ contract Trade {
     }
 
 
-    function verifyOwnerSign(address buyingAssetAddress,address seller,string memory tokenURI, Sign memory sign) internal view {
+    function verifyOwnerSign(address buyingAssetAddress, address seller, string memory tokenURI, Sign memory sign) internal view {
         address _owner = IERC721(buyingAssetAddress).contractOwner();
         bytes32 hash = keccak256(abi.encodePacked(this, seller, tokenURI, sign.nonce));
         require(_owner == getSigner(hash, sign), "Owner sign verification failed");
@@ -347,7 +347,7 @@ contract Trade {
             transferProxy.erc721mintAndTransfer(IERC721(order.nftAddress), order.seller, order.buyer, order.tokenId, order.fee,order.tokenURI,"" );
         }
         if(order.nftType == BuyingAssetType.LazyMintERC1155){
-            transferProxy.erc1155mintAndTransfer(IERC1155(order.nftAddress), order.seller, order.buyer, order.tokenId, order.fee, order.supply,order.tokenURI,order.qty,"" );
+            transferProxy.erc1155mintAndTransfer(IERC1155(order.nftAddress), order.seller, order.buyer, order.tokenId, order.fee, order.supply, order.tokenURI,order.qty,"" );
         }
         if(fee.platformFee > 0) {
             
@@ -386,12 +386,45 @@ contract Trade {
         }
     }
 
+    function isValidOrder(Order memory order) internal view returns(bool){
+        if (order.buyer == order.seller || order.qty == 0 || order.unitPrice == 0){
+            return false;
+        }
+        if(order.nftType == BuyingAssetType.ERC721) {   
+            if (IERC721(order.nftAddress).ownerOf(order.tokenId) != order.seller){
+                return false;
+            }
+            if (order.nftAddress.code.length <= 0){
+                return false;
+            }
+        }
+        if(order.nftType == BuyingAssetType.ERC1155) {   
+            if (IERC1155(order.nftAddress).ownerOf(order.tokenId) != order.seller){
+                return false;
+            }
+            if (order.nftAddress.code.length <= 0){
+                return false;
+            }
+        }
+        if(order.nftType == BuyingAssetType.LazyMintERC721 || order.nftType == BuyingAssetType.LazyMintERC1155 ){
+            if (keccak256(abi.encodePacked(order.tokenURI)) == keccak256(abi.encodePacked(''))){
+                return false;
+            }
+        }
+
+        if (order.isErc20Payment && order.erc20Address.code.length <= 0){
+            return false;
+        }
+        return true;
+    }
+    
     function mintAndBuyAsset(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) external returns(bool){
         require(!usedNonce[sign.nonce] && !usedNonce[ownerSign.nonce],"Nonce: Invalid Nonce");
         usedNonce[sign.nonce] = true;
         usedNonce[ownerSign.nonce] = true;
         Fee memory fee = getFees(order, false);
         require((fee.price >= order.unitPrice * order.qty), "Paid invalid amount");
+        require(isValidOrder(order), "Invalid order details");
         if(isShared) {
             verifyOwnerSign(order.nftAddress, order.seller, order.tokenURI, ownerSign);
         }
@@ -400,18 +433,16 @@ contract Trade {
         tradeAsset(order, fee, false);
         emit BuyAsset(order.seller , order.tokenId, order.qty, msg.sender);
         return true;
-
     }
 
-    function mintAndTransferAsset(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) external returns(bool){
+    function mintAndTransferAsset(Order memory order, Sign memory ownerSign, Sign memory sign) external returns(bool){
         require(!usedNonce[sign.nonce] && !usedNonce[ownerSign.nonce],"Nonce: Invalid Nonce");
         usedNonce[sign.nonce] = true;
         usedNonce[ownerSign.nonce] = true;
         Fee memory fee = getFees(order, false);
         require((fee.price >= order.unitPrice * order.qty), "Paid invalid amount");
-        if(isShared) {
-            verifyOwnerSign(order.nftAddress, order.seller, order.tokenURI, ownerSign);
-        }
+        require(isValidOrder(order), "Invalid order details");
+        verifyOwnerSign(order.nftAddress, order.seller, order.tokenURI, ownerSign);
         verifySellerSign(order.seller, order.tokenId, order.unitPrice, order.erc20Address, order.nftAddress, sign);
         tradeAsset(order, fee, true);
         emit BuyAsset(order.seller , order.tokenId, order.qty, order.buyer);
@@ -425,6 +456,7 @@ contract Trade {
         usedNonce[ownerSign.nonce] = true;
         Fee memory fee = getFees(order, false);
         require((fee.price >= order.unitPrice * order.qty), "Paid invalid amount");
+        require(isValidOrder(order), "Invalid order details");
         if(isShared) {
             verifyOwnerSign(order.nftAddress,order.seller, order.tokenURI, ownerSign);
         }
@@ -441,6 +473,7 @@ contract Trade {
         usedNonce[sign.nonce] = true;
         Fee memory fee = getFees(order, _import);
         require((fee.price >= order.unitPrice * order.qty), "Paid invalid amount");
+        require(isValidOrder(order), "Invalid order details");
         verifySellerSign(order.seller, order.tokenId, order.unitPrice, order.erc20Address, order.nftAddress, sign);
         order.buyer = msg.sender;
         tradeAsset(order, fee, false);
@@ -448,11 +481,13 @@ contract Trade {
         return true;
     }
 
-    function buyAndTransferAsset(Order memory order, bool _import, Sign memory sign) external returns(bool) {
+    function buyAndTransferAsset(Order memory order, bool _import, Sign memory ownerSign, Sign memory sign) external returns(bool) {
         require(!usedNonce[sign.nonce],"Nonce: Invalid Nonce");
         usedNonce[sign.nonce] = true;
         Fee memory fee = getFees(order, _import);
         require((fee.price >= order.unitPrice * order.qty), "Paid invalid amount");
+        require(isValidOrder(order), "Invalid order details");
+        verifyOwnerSign(order.nftAddress, order.seller, order.tokenURI, ownerSign);
         verifySellerSign(order.seller, order.tokenId, order.unitPrice, order.erc20Address, order.nftAddress, sign);
         tradeAsset(order, fee, true);
         emit BuyAsset(order.seller , order.tokenId, order.qty, order.buyer);
@@ -463,6 +498,7 @@ contract Trade {
         require(!usedNonce[sign.nonce],"Nonce: Invalid Nonce");
         usedNonce[sign.nonce] = true;
         Fee memory fee = getFees(order, _import);
+        require(isValidOrder(order), "Invalid order details");
         verifyBuyerSign(order.buyer, order.tokenId, order.amount, order.erc20Address, order.nftAddress, order.qty, sign);
         order.seller = msg.sender;
         tradeAsset(order, fee, false);
@@ -475,6 +511,7 @@ contract Trade {
         usedNonce[sign.nonce] = true;
         Fee memory fee = getFees(order, _import);
         require(msg.value >= fee.price, "Paid Invalid amount");
+        require(isValidOrder(order), "Invalid order details");
         verifySellerSign(order.seller, order.tokenId, order.unitPrice, order.erc20Address, order.nftAddress, sign);
         order.buyer = msg.sender;
         tradeAsset(order, fee, false);
@@ -488,6 +525,7 @@ contract Trade {
         usedNonce[ownerSign.nonce] = true;
         Fee memory fee = getFees(order, false);
         require(msg.value >= fee.price, "Paid Invalid amount");
+        require(isValidOrder(order), "Invalid order details");
         if(isShared) {
             verifyOwnerSign(order.nftAddress, order.seller, order.tokenURI, ownerSign);
         }
@@ -499,26 +537,27 @@ contract Trade {
 
     }
 
-    function buyAndTransferAssetWithEth(Order memory order, bool _import, Sign memory sign) external payable returns(bool) {
+    function buyAndTransferAssetWithEth(Order memory order, bool _import, Sign memory ownerSign, Sign memory sign) external payable returns(bool) {
         require(!usedNonce[sign.nonce],"Nonce: Invalid Nonce");
         usedNonce[sign.nonce] = true;
         Fee memory fee = getFees(order, _import);
         require(msg.value >= fee.price, "Paid Invalid amount");
+        require(isValidOrder(order), "Invalid order details");
+        verifyOwnerSign(order.nftAddress, order.seller, order.tokenURI, ownerSign);
         verifySellerSign(order.seller, order.tokenId, order.unitPrice, order.erc20Address, order.nftAddress, sign);
         tradeAsset(order, fee, true);
         emit BuyAsset(order.seller , order.tokenId, order.qty, order.buyer);
         return true;
     }
 
-    function mintAndTransferAssetWithEth(Order memory order, Sign memory ownerSign, Sign memory sign, bool isShared) external payable returns(bool){
+    function mintAndTransferAssetWithEth(Order memory order, Sign memory ownerSign, Sign memory sign) external payable returns(bool){
         require(!usedNonce[sign.nonce] && !usedNonce[ownerSign.nonce],"Nonce: Invalid Nonce");
         usedNonce[sign.nonce] = true;
         usedNonce[ownerSign.nonce] = true;
         Fee memory fee = getFees(order, false);
         require(msg.value >= fee.price, "Paid Invalid amount");
-        if(isShared) {
-            verifyOwnerSign(order.nftAddress, order.seller, order.tokenURI, ownerSign);
-        }
+        require(isValidOrder(order), "Invalid order details");
+        verifyOwnerSign(order.nftAddress, order.seller, order.tokenURI, ownerSign);
         verifySellerSign(order.seller, order.tokenId, order.unitPrice, order.erc20Address, order.nftAddress, sign);
         tradeAsset(order, fee, true);
         emit BuyAsset(order.seller , order.tokenId, order.qty, order.buyer);

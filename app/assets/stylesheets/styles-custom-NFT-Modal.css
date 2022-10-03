@@ -1054,7 +1054,7 @@ input{
  ;
   width: 100% !important;
  ;
-  padding: 10px 50px !important;
+  /*padding: 10px 50px !important;*/
  ;
   font-size: 14px !important;
  ;
@@ -1062,7 +1062,7 @@ input{
   background-color: #fff;
   background-image: none;
   border: none !important;
-  border-radius: 4px !important;
+  border-radius: 10px !important;
  ;
   -webkit-box-shadow:none !important;
  ;

@@ -44,6 +44,7 @@ class Collection < ApplicationRecord
 
   validates :name, :category, :attachment, :royalty, presence: true
   validates :royalty, numericality: { less_than_or_equal_to: 30, message: "accepts numbers less than or equal to 30 only" }, if: Proc.new { |c| c.royalty.present? }
+  validates :no_of_copies, numericality: { less_than_or_equal_to: 10000, message: "accepts numbers less than or equal to 10000 only" }, if: Proc.new { |c| c.no_of_copies.present? }
   validates :name, length: {maximum: 100}
   validates :description, length: {maximum: 1000}, allow_blank: true
   validates :unlock_description, length: {maximum: 250}, allow_blank: true
@@ -155,7 +156,7 @@ class Collection < ApplicationRecord
   end
 
   def contract_address
-    "<h4 data-toggle='tooltip' data-placement='top' title=\"#{nft_contract&.address}\">#{nft_contract&.masked_address}</h4>".html_safe
+    "<span data-toggle='tooltip' data-placement='top' title=\"#{nft_contract&.address}\">#{nft_contract&.masked_address}</span>".html_safe
   end
 
   def collection_info_name

@@ -1,9 +1,4 @@
-<main class="main choose-upload-file">
-   <!--<% if current_user.banner.present? %>
-      <div class="main__author" style="background: url(<%= url_for(current_user.banner) %>) center center / cover no-repeat;;"></div>
-      <% else %>
-      <div class="main__author" data-bg="/assets/dummy-image.jpg" style="background: url(/assets/dummy-image.jpg) center center / cover no-repeat;"></div>
-      <% end %>-->
+<div class="collection-page">
    <% if !@nft.nil? %>
     <script>
         $(function(){
@@ -14,38 +9,38 @@
           $("#description").val("<%= @nft[:description] %>");
           $("#description").prop('disabled', true);
         $("#no_of_copies").prop('disabled', true);
-          <% if ['audio/mp3', 'audio/webm', 'audio/mpeg'].include?(@nft[:file_type]) %>
-            $("#imagePreviewRes").append('<audio width="300" height="300" controls="" controlslist="nodownload noplaybackrate"><source src="<%= @nft[:url] %>" id="audio_here"> </audio>');
-            $(".codrops-header_innertab").css({ 'height': '55px' });
-            dispalyPreviewImage();
-          <% elsif ['video/mp4', 'video/webm'].include?(@nft[:file_type]) %>
-            $("#imagePreviewRes").append('<video width="300" height="200" controls="" controlslist="nodownload noremoteplayback noplaybackrate" disablepictureinpicture="disablepictureinpicture"><source src="<%= @nft[:url] %>" id="video_here"> </video>');
-            $(".codrops-header_innertab").css({ 'height': '225px' });
-            dispalyPreviewImage();
-          <% else %>
-            $("#imagePreviewRes").css(
-               {
-               "background-image": "url(<%= @nft[:url] %>)", 
-               "height": "610px", 
-               "background-size": "cover",
-               "background-repeat": "no-repeat",
-               "background-position": "center center", 
-               "margin-left": "auto",
-               "margin-right": "auto",
-               });
-            $('#my-preview-section').html('<img id="img_prv" width="300" height="300" src="<%= @nft[:url] %>" controls/>');
-            $('#my-preview-section').hide();
-            $('#my-preview-section').fadeIn(650);
-          <% end %>
-          $("#file-1").hide();
-          $('#placeholder').fadeOut(100);
-          $('#file-1').fadeOut(100);
-          $('#choose_file_selected').fadeOut(100);
-          $('#imagePreviewRes').hide();
-          $('#imagePreviewRes').fadeIn(650);
-          $("#validation-info").css('display', 'none');
-          $(".nft-details-list").css('display', 'block');
-          $("#drop-img").css('display', 'none');
+         <% if ['audio/mp3', 'audio/webm', 'audio/mpeg'].include?(@nft[:file_type]) %>
+         $("#imagePreviewRes").append('<audio width="300" height="300" controls="" controlslist="nodownload noplaybackrate"><source src="<%= @nft[:url] %>" id="audio_here"> </audio>');
+         $(".codrops-header_innertab").css({ 'height': '55px' });
+         dispalyPreviewImage();
+         <% elsif ['video/mp4', 'video/webm'].include?(@nft[:file_type]) %>
+         $("#imagePreviewRes").append('<video width="300" height="200" controls="" controlslist="nodownload noremoteplayback noplaybackrate" disablepictureinpicture="disablepictureinpicture"><source src="<%= @nft[:url] %>" id="video_here"> </video>');
+         $(".codrops-header_innertab").css({ 'height': '225px' });
+         dispalyPreviewImage();
+         <% else %>
+         $("#imagePreviewRes").css(
+            {
+            "background-image": "url(<%= @nft[:url] %>)", 
+            "height": "610px", 
+            "background-size": "cover",
+            "background-repeat": "no-repeat",
+            "background-position": "center center", 
+            "margin-left": "auto",
+            "margin-right": "auto",
+            });
+         $('#my-preview-section').html('<img id="img_prv" width="300" height="300" src="<%= @nft[:url] %>" controls/>');
+         $('#my-preview-section').hide();
+         $('#my-preview-section').fadeIn(650);
+         <% end %>
+         $("#file-1").hide();
+         $('#placeholder').fadeOut(100);
+         $('#file-1').fadeOut(100);
+         $('#choose_file_selected').fadeOut(100);
+         $('#imagePreviewRes').hide();
+         $('#imagePreviewRes').fadeIn(650);
+         $("#validation-info").css('display', 'none');
+         $(".nft-details-list").css('display', 'block');
+         $("#drop-img").css('display', 'none');
         });
         
         function dispalyPreviewImage() {
@@ -66,9 +61,20 @@
         }
     </script>
    <% end %>
+   <header style="padding: 12px 30px;
+    margin: 0;
+    background-color: #fff;
+    height: 50px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin: 0 auto; width: 100%; margin-bottom: 50px;"></header>
    <div class="container">
       <div class="row">
          <div class="col-lg-6 col-md-6 col-12 col-sm-12 upload-choosen-files">
+            <label class="formbold-form-label formbold-form-label-2">
+                  Upload File
+            </label>
             <!-- create form -->
             <%= form_tag collections_path, method: :post, multipart: true, remote: true, authenticity_token: true, id: "collectionCreateForm", :class => "" do %>
             <%= hidden_field_tag 'collection[collection_type]', @collection_type %>
@@ -82,19 +88,16 @@
             <%= hidden_field_tag 'collection[contract_type]', @nft[:contract_type] %>
             <%= hidden_field_tag 'collection[imported]', true %>
             <% end %>
-            <div class="codrops-header">
-               <div class="codrops-header_innertab">
-                  <div class="box">
-                     <img src="../../assets/nft/modal-img/drop.png" id="drop-img">
-                     <span class="placeholder" id="placeholder" style=""><b>Drag and Drop files</b>or</span>
+            <div>
+               <div class="collectionUpload formbold-file-input">
                      <input accept="image/png,image/jpeg,image/gif,video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg" type="file" name="collection[attachment]" id="file-1" class="sign__file-upload create_file_upload"/>
                      <div id="imagePreviewRes"></div>
-                     <label id="choose_file_selected" for="file-1"><span><%= t('collections.form.choose_file') %>  </span></label> 
-                     <span  class="placeholder" id="validation-info" style=""><b>PNG, GIF, MP4 or MP3. Max 15mb. </b> </span>
+                     <span class="formbold-drop-file"><i class="fa fa-cloud-upload"></i> </span>
+                     <span id="validation-info" class="formbold-or"> PNG, GIF, WEBP, MP4 or MP3. Max 15mb. </span>
+                     <label id="choose_file_selected" for="file-1"><span>Browse  </span></label> 
                      <div class="close-preview-button" id="close-preview-button">
                         <span>X</span>
-                     </div>
-                  </div>
+                     </div> 
                </div>
             </div>
             <div class="coverUpload hide">
@@ -115,159 +118,160 @@
             </div>
          </div>
          <div class="col-lg-6 col-md-6 col-12 col-sm-12 signle-collectible-item-info">
-            <div class="main__title main__title--create">
-               <h2><%= t('collections.form.create_collection_tittle', collection_type: @collection_type) %></h2>
-            </div>
-            <h4 class="sign__title">NFT Details</h4>
-            <div class="nft-details-list">
-               <div class="sign__group">
-                  <label class="sign__label" for="itemname"><%= t('collections.form.item_name') %></label>
-                  <input id="itemname" type="text" name="collection[name]" class="sign__input" placeholder="Enter Name">
-               </div>
-               <div class="sign__group">
-                  <label class="sign__label" for="royalties"><%= t('collections.form.categories') %></label>
-                  <select data-placeholder="Choose tags ..." name="collection[category]" id="collection-category" class="sign__select chosen-select" required>
-                     <option class="select-categories">Select Categories</option>
-                     <% Category.pluck(:name).each do |category| %>
-                     <option value="<%= category %>"><%= category %></option>
+            <div class="form-section">
+               <% if @collection_type == 'single' %>
+                  <p class="">Create 1/1 Item</p>
+               <% else %>
+                  <p class="">Create Multiple Item</p>
+               <% end %>
+               <div class="form-section-b"></div>
+               <p class="p-2">NFT Details</p>
+               <div class="nft-details-list">
+                  <div class="form-div">
+                     <label for="itemname"><%= t('collections.form.item_name') %></label>
+                     <input id="itemname" type="text" name="collection[name]" placeholder="Enter Name">
+                  </div>
+                  <div class="form-div">
+                     <label for="categories"><%= t('collections.form.categories') %></label>
+                     <select data-placeholder="Choose tags ..." name="collection[category]" id="collection-category" class="chosen-select" required>
+                        <option class="select-categories">Select Categories</option>
+                        <% Category.pluck(:name).each do |category| %>
+                        <option value="<%= category %>"><%= category %></option>
+                        <% end %>
+                     </select>
+                  </div>
+                  <div class="form-div">
+                     <label for="description"><%= t('collections.form.description') %></label>
+                     <textarea id="description" name="collection[description]" placeholder="e. g. 'Music cover art for My Single , Artist Name , Date, Art making process etc...'"></textarea>
+                  </div>
+                  <% if @collection_type == "multiple" %>
+                  <div class="form-div">
+                     <label class="" for="no_of_copies"><%= t('collections.form.number_of_copies') %></label>
+                     <% if !@nft.nil? %>
+                     <input type="number" min="1" max="<%= @nft[:num_copies] %>" value="<%= @nft[:num_copies] %>" id="no_of_copies" name="collection[no_of_copies]" class="" placeholder="e.g 5" required></input>
+                     <p style="font-size: 14px; color: #666; margin-left: 2px;"> You have <%= @nft[:num_copies] %> <%= if @nft[:num_copies].to_i > 1 then 'copies' else 'copy' end %> only</p>
+                     <% else %>
+                     <input type="number" min="1" id="no_of_copies" name="collection[no_of_copies]" class="" placeholder="e.g 5" required></input>
                      <% end %>
-                  </select>
-               </div>
-               <div class="sign__group">
-                  <label class="sign__label" for="description"><%= t('collections.form.description') %></label>
-                  <textarea id="description" name="collection[description]" class="sign__textarea" placeholder="e. g. 'Music cover art for My Single , Artist Name , Date, Art making process etc...'"></textarea>
-               </div>
-               <% if @collection_type == "multiple" %>
-               <div class="sign__group">
-                  <label class="sign__label" for="no_of_copies"><%= t('collections.form.number_of_copies') %></label>
-                  <% if !@nft.nil? %>
-                  <input type="number" min="1" max="<%= @nft[:num_copies] %>" value="<%= @nft[:num_copies] %>" id="no_of_copies" name="collection[no_of_copies]" class="sign__input" placeholder="e.g 5" required></input>
-                  <p style="font-size: 14px; color: #666; margin-left: 2px;"> You have <%= @nft[:num_copies] %> <%= if @nft[:num_copies].to_i > 1 then 'copies' else 'copy' end %> only</p>
-                  <% else %>
-                  <input type="number" min="1" id="no_of_copies" name="collection[no_of_copies]" class="sign__input" placeholder="e.g 5" required></input>
+                  </div>
                   <% end %>
-               </div>
-               <% end %>
-               <% if @nft.nil? %>
-                  <div class="sign__group crator-royalty-span">
-                     <label class="sign__label" for="royalties"><%= t('collections.form.royalties') %></label>
-                     <input id="royalties" name="collection[royalty]" class="validNumber sign__input" placeholder="0%"></input>
-                     <span>Maximum 30%</span>
+                  <% if @nft.nil? %>
+                     <div class="form-div">
+                        <div class="max">Maximum 30% </div>
+                        <label for="name">Creator Royalty</label>
+                        <input id="royalties" name="collection[royalty]" class="validNumber" placeholder="0%" type="text"></input>
+                     </div>
+                  <% end %>
+                  <div class="tab-wrap">
+                        <input type="radio" id="tab1" name="tabGroup1" class="tab" checked>
+                        <label for="tab1">
+                           <img src="../../assets/landing_page/price-tag.svg">
+                           <p>Fixed Price</p>
+                        </label>
+                        <input type="radio" id="tab2" name="tabGroup1" class="tab">
+                        <label for="tab2">
+                           <img src="../../assets/landing_page/bid.svg">
+                           <p>Open for bids</p>
+                        </label>
+                        <!-- <input type="radio" id="tab3" name="tabGroup1" class="tab">
+                        <label for="tab3">
+                           <img src="../../assets/landing_page/auction-count.svg">
+                           <p>Timed Auction</p>
+                        </label> -->
+                        <div class="tab__content">
+                           <div  class="form-div">
+                              <div class="check-div">
+                                 <label for="instant_sale">Price</label> <br>
+                                 <span style="color: #98999D;"><%= t('shared.instant_sale_price_msg') %></span>
+                                 <label class="switch_type" id="instant_sale">
+                                 <input type="checkbox" id="collection_instant_sale_enabled" name="collection[instant_sale_enabled]">
+                                 <span class="slider round"></span>
+                                 </label>
+                              </div>
+                              <div class="max" style="max-width: 40px;top: 93px; color:#98999D">ETH</div>
+                              <input onkeypress="return validDecimalPoint(event)" type="text" name="collection[instant_sale_price]" class="" id="instant-price" placeholder="Enter price for one piece" />
+                              <div class="max" style="max-width: 30px;top: 157px;">2.5%</div>
+                              <input type="text" id="name" name="user_name" placeholder="Service Fee" readonly>
+                           </div>
+                        </div>
+                        <div class="tab__content">
+                           <div  class="form-div">        
+                              <ul class="">
+                                 <li>
+                                    <div class="check-div">
+                                    <label for="put_sale"><%= t('shared.put_on_sale') %></label> <br>
+                                    <span style="color: #98999D;">You'll receive bids on this item</span>
+                                    <label class="switch_type" id="put_sale">
+                                    <input type="checkbox" name="collection[put_on_sale]">
+                                    <span class="slider round"></span>
+                                    </label>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                        <div class="tab__content">
+                           <div  class="form-div">        
+                              <label for="name">Timed Auction</label>
+                              <input type="text" id="name" name="user_name" placeholder="Enter Name">
+                              <input type="text" id="name" name="user_name" placeholder="Enter Name">
+                           </div>
+                        </div>
+                     </div>
+                  
+                  <div>
+                  <div id="collection-type">
+                     <div class="show-items-div" style="margin-bottom:50px;">
+                        <a href="javascript:void(0);" >
+                           <div id="ownContract" class="show-items">
+                              <img src="./../assets/landing_page/plus-icon.svg">
+                              <p>Create</p>
+                              <input type="radio" id="own" name="chooseNewCollection" class="tab">
+                           </div>
+                        </a>
+                        <% current_user.get_contracts(@collection_type).each do |contract|%>
+                           <a href="javascript:void(0);" onclick="highlightContract(event, '<%= contract.address %>')">
+                              <div id="<%= contract.address %>" class="existingContracts show-items">
+                              <img src="<%= contract.attachment_url %>" style="height: 45px;">
+                              <p><%= contract.symbol %></p>
+                              <input type="radio" id="exisitng" name="chooseOwnCollection" class="tab">
+                              <%= hidden_field_tag 'existingCollectionAddress', contract.address %>        
+                              </div>
+                           </a>         
+                        <%end%>
+                        
+                        <a href="javascript:void(0);" >
+                           <div id="sharedContract" class="show-items show-items-active">
+                              <img src="./../assets/landing_page/ct-icon.svg">
+                              <p>CrossTower</p>
+                              <input type="radio" id="shared" name="chooseCrossTowerCollection" class="tab" checked>
+                           </div>
+                        </a>
+                     </div>
+                     
+                     
+
                   </div>
-               <% end %>
-               <div class="sign__group sign__group--row">
-                  <ul class="switch_group">
-                     <li>
-                        <label for="put_sale"><%= t('shared.put_on_sale') %></label>
-                        <p><%= t('shared.put_on_sale_msg') %></p>
-                        <label class="switch_type" id="put_sale">
-                        <input type="checkbox" name="collection[put_on_sale]">
-                        <span class="slider round"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label for="instant_sale"><%= t('shared.instant_sale_price') %></label>
-                        <p><%= t('shared.instant_sale_price_msg') %></p>
-                        <label class="switch_type" id="instant_sale">
-                        <input type="checkbox" id="collection_instant_sale_enabled" name="collection[instant_sale_enabled]">
-                        <span class="slider round"></span>
-                        </label>
-                     </li>
-                     <li id="instPrice" class="li_inp_grp hide">
-                        <div class="inp-grp-flex">
-                           <div class="sign__group" style="width: 181%;">
-                              <input onkeypress="return validDecimalPoint(event)" type="text" name="collection[instant_sale_price]" class="sign__input" id="instant-price" placeholder="Enter price for one piece" />
-                           </div>
-                           <div class="sign__group">
-                              <select name="collection[erc20_token_id]" id="collection_erc20_token_id" class="sign__select chosen-select" required="required">
-                                 <!-- Adding ethereum here as default, because ethereum is not an ERC20 -->
-                                 <option value="eth" address="0x0000000000000000000000000000000000000000" > ETH </option>
-                                 <% (Erc20Token.select_options).each do |token| %>
-                                    <option address="<%=token.address%>" decimals="<%=token.decimals%>" value="<%=token.id%>"> <%=token.symbol.upcase%> </option>
-                                 <% end %>
-                              </select>
-                           </div>
-                        </div>
-                     </li>
-                     <!-- <li>
-                        <label for="auction_time"><%= t('shared.auction_time') %></label>
-                        <p><%= t('shared.auction_time_msg') %></p>
-                        <label class="switch_type" id="auction_time">
-                        <input type="checkbox" id="auction_enabled" name="collection[auction_enabled]">
-                        <span class="slider round"></span>
-                        </label>
-                     </li>
-                     <li id="auctionTimeDetail" class="li_inp_grp hide">
-                        <div class="inp-grp-flex">
-                           <div class="sign__group" style="width: 28%;">
-                              <label for="auction_days"><%= t('shared.auction_days') %></label>
-                              <input type="text" name="collection[auction_days]" class="sign__input" id="auction-days" placeholder="Days" />
-                           </div>
-                           <div class="sign__group" style="width: 27%;">
-                              <label for="auction_hours"><%= t('shared.auction_time_title') %></label>
-                              <input type="text" name="collection[auction_hours]" class="sign__input" id="auction-hours" placeholder="Hours" />
-                           </div>
-                           <div class="sign__group" style="width: 45%;">
-                              <label for="auction_reserve_price"><%= t('shared.auction_reserve_price') %></label>
-                              <input type="text" name="collection[auction_reserve_price]" class="sign__input" id="auction-reserve-price" placeholder="00 WETH" />
-                           </div>
-                        </div>
-                     </li> -->
-                     <!-- <li>
-                        <label for="unlock_purchase"><%= t('shared.unlock_one_purchased') %></label>
-                        <p><%= t('shared.unlock_one_purchased_msg') %></p>
-                        <label class="switch_type" id="unlock_purchase">
-                          <input type="checkbox" name="collection[unlock_on_purchase]" id="collection-unlock-on-purchase">
-                          <span class="slider round"></span>
-                        </label>
-                        </li> 
-                        <li class="li_inp_grp unlock-description-section hide">
-                        <div class="sign__group">
-                          <input type="text" id="collection-unlock-description" name="collection[unlock_description]" class="sign__input" placeholder="Enter unlock description">
-                        </div>
-                        </li> -->
-                  </ul>
-               </div>
-               <div>
-               <div id="collection-type">
-                  <h4 class="sign__title"><%= t('collections.form.choose_collection') %></h4>
-                  <div class="sign__group sign__group--row">
-                     <ul class="sign__radio">
-                        <li>
-                           <%= radio_button_tag 'chooseCollection', "create", nil, class: "chooseCollectionErc chooseCollectionType", :id => "type4" %>
-                           <label for="type4">Owntoken<%#= collection_type @collection_type %></label>
-                        </li>
-                        <li>
-                           <%= radio_button_tag 'chooseCollection', "nft", nil, class: "chooseCollectionNft chooseCollectionType", :id => "type5", :checked => true %>
-                           <label for="type5">Crosstower<%#= t('collections.form.nft') %></label>
-                        </li>
-                     </ul>
-                  </div>
-               </div>
-               <div class="Own_contract_partials hide">
-                  <% current_user.get_contracts(@collection_type).each do |contract|%>
-                  <%=render partial: 'own_contract',  locals: {contract: contract, blank:false} %>
-                  <%end%>
-                  <%=render partial: 'own_contract',  locals: {blank:true, contract: nil} %>
-               </div>
-                <div class="<%= 'hide' if @nft.present? %>">
-                  <h4 class="sign__title">Choose Minting Type</h4>
-                  <div class="sign__group sign__group--row">
-                     <ul class="sign__radio">
-                        <li>
-                           <%= radio_button_tag 'chooseMintType', "mint", nil, class: "chooseCollectionErc", :checked => true%>
-                           <label for="chooseMintType_mint">Instant Minting</label>
-                        </li>
-                        <li id="lazy_minting">
-                           <%= radio_button_tag 'chooseMintType', "lazy", nil, class: "chooseCollectionNft", disabled: @nft.present? %>
-                           <label for="chooseMintType_lazy">Lazy Minting</label>
-                        </li>
-                     </ul>
+                  
+
+               <div class="<%= 'hide' if @nft.present? %>">
+                  <div class="check-div" style="margin:35px 0px;" >
+                     <label>Free Minting<br>
+                     <span>Buyer will pay gas fees for minting</span>
+                     </label>
+                     <label class="switch" style="float:right ;">
+                     <input type="checkbox" name="is_lazy_mint" checked >
+                     <span class="slider round"></span>
+                     </label>
                   </div>
                </div>
                <div class="remove-border">
                   <%= submit_tag 'Create', class: 'sign__btn hide', id: 'submitCollection', 'data-disable-with': "<i class='fa fa-spinner fa-spin'></i> Creating...".html_safe %>
-                  <a class="sign__btn create-item collection-submit-btn triggerCollectionValidation" href="#" role="button"><%= @nft.nil? ? t('collections.form.create_contract') : t('shared.put_on_sale') %></a>
+                  <!-- <a class="sign__btn create-item collection-submit-btn triggerCollectionValidation" href="#" role="button"><%= @nft.nil? ? t('collections.form.create_contract') : t('shared.put_on_sale') %></a> -->
+                  <div class="create-button-div">
+                     <button class="create-item collection-submit-btn triggerCollectionValidation">Create</button> 
+                  </div>
+               </div>
             </div>
          </div>
          <% end %>
@@ -292,19 +296,15 @@
    </div>
 </div>
 
-<div class="zoom-anim-dialog mfp-hide modal sm_modal contract-detail-popup" id="createOwnErc721">
+<div class="collection-page zoom-anim-dialog modal sm_modal mfp-hide contract-detail-popup" id="createOwnErc721">
    <button class="modal__close md_cls own-contract-close" type="button"><i class="fas fa-times"></i></button>
    <h4 class="modal-title share_link_page_h4"><%= t('collections.form.contract_detail') %></h4>
-   <div class="row">
+   <div class="row grey-bg">
       <div class="col-12 col-md-12">
          <div class="box">
-            <label class="sign__label" for="propertie">Attachment</label>
+            <label class="form-label" for="propertie">Attachment</label>
             <div class="choose-file-design">
             <%= file_field_tag "nft_contract[attachment]", accept: 'image/png,image/gif,image/jpeg', class: 'sign__file-upload create_file_upload sign__input inputfile inputfile-1', required: true %>
-           <!--   <div class="choose-imgaes">
-               <span>Choose File</span>
-               <em>No file chosen</em>
-               </div> -->
             </div>
             <div id="imagePreview-contract"></div>
             <div class="close-preview-button" id="close-preview-button-contract"><span>X</span></div>
@@ -312,7 +312,7 @@
       </div>
       <div class="col-12 col-md-12">
          <div class="box">
-            <label class="sign__label" for="propertie">cover</label>
+            <label class="form-label" for="propertie">Cover</label>
           
             <div class="choose-file-design">
                  <%= file_field_tag "nft_contract[cover]", accept: 'image/png,image/gif,image/jpeg', class: 'sign__file-upload create_file_upload sign__input inputfile inputfile-1', required: true %>
@@ -326,19 +326,19 @@
          <div class="sign__group">
             <%= hidden_field_tag 'nft_contract[owner_id]', current_user.address, class: 'nft-detail-name', disabled: true %>
             <%= hidden_field_tag("nft_contract[address]") %>
-            <label class="sign__label" for="propertie"><%= t('collections.form.name') %></label>
+            <label class="form-label" for="propertie"><%= t('collections.form.name') %></label>
             <%= text_field_tag "nft_contract[name]", nil, class: 'sign__input', placeholder: 'Name of the Contract', required: true %>
          </div>
       </div>
       <div class="col-12 col-md-12">
          <div class="sign__group">
-            <label class="sign__label" for="propertie"><%= t('collections.form.symbol') %></label>
+            <label class="form-label" for="propertie"><%= t('collections.form.symbol') %></label>
             <%= text_field_tag "nft_contract[symbol]", nil, class: 'sign__input', placeholder: 'Symbol of the Contract', required: true %>
          </div>
       </div>
       <div class="col-12 col-md-12">
          <div class="sign__group">
-            <label class="sign__label" for="propertie">Description</label>
+            <label class="form-label" for="propertie">Description</label>
             <%= text_field_tag "nft_contract[desc]", nil, class: 'sign__input', placeholder: 'Description of the Contract', required: true %>
          </div>
       </div>
@@ -346,10 +346,10 @@
    <div class="modal-footer">
       <div class="row">
          <div class="col-md-6 col-6">
-            <button type="button" class="sign__btn btn btn-primary modal__close md_cls own-contract-close" data-dismiss="modal"><%= t('shared.cancel') %></button>
+            <button type="button" class="cancel-button modal__close md_cls own-contract-close" data-dismiss="modal"><%= t('shared.cancel') %></button>
          </div>
          <div class="col-md-6 col-6">
-            <button type="submit" class="sign__btn btn btn-primary createOwnErc721Form"><%= t('collections.form.create_contract') %></button>
+            <button type="submit" class="creat-button createOwnErc721Form"><%= t('collections.form.create_contract') %></button>
          </div>
       </div>
    </div>
@@ -398,10 +398,42 @@
 
 <script>
    $(document).ready(function(){
+     
      $(".close-top-notify").click(function(){
        $(".main").addClass("close-nav");
      });
+
+     $("#ownContract").click(function(){
+       $("#ownContract").addClass("show-items-active");
+       $("#sharedContract").removeClass("show-items-active");
+       $(".existingContracts").removeClass("show-items-active");
+       $("#own").prop("checked", true);
+       $("#shared").prop("checked", false);
+       $("#exisitng").prop("checked", false);
+     })
+
+     $("#sharedContract").click(function(){
+         $("#sharedContract").addClass("show-items-active");
+         $("#ownContract").removeClass("show-items-active");
+         $(".existingContracts").removeClass("show-items-active");
+         $("#shared").prop("checked", true);
+         $("#own").prop("checked", false);
+         $("#exisitng").prop("checked", false);
+     })
+
    });
+
+   function highlightContract(event, contractId){
+      tabcontent = document.getElementById(contractId);
+      tabcontent.classList.add('show-items-active');
+      $("#ownContract").removeClass("show-items-active");
+      $("#sharedContract").removeClass("show-items-active");
+      $("#shared").prop("checked", false);
+      $("#own").prop("checked", false);
+      $("#exisitng").prop("checked", true);
+   }
+
+   
    
      
 </script>

@@ -5502,7 +5502,7 @@ input.sign__input:-internal-autofill-selected {
   margin-bottom: 10px;
   font-family: "DM Sans", sans-serif;
   letter-spacing: 0.5px;
-  color: #162C5B;
+  color: #333;
 }
 
 
@@ -5518,7 +5518,7 @@ input.sign__input:-internal-autofill-selected {
     right: 0;
     top: 0; */
     opacity: 1;
-    color: #3C97F2;
+    color: #333;
     width: 35px;
     height: 35px;
     line-height: 36px;
@@ -5530,8 +5530,8 @@ input.sign__input:-internal-autofill-selected {
 }
 
 .sm_modal button.modal__close.md_cls {
-    right: 10px;
-    top: 10px;
+    right: 27px;
+    top: 1px;
     z-index: 111;
 }
 button.sign__btn.modal__close.md_cls {
@@ -6246,7 +6246,7 @@ div#Fiat-modal .mfp-close-btn-in .mfp-close {
 }
 
 .sm_modal {
-  background: #fff;
+  background: #fff !important;
   max-width: 600px;
   /* max-width: 440px; */
   overflow: visible;

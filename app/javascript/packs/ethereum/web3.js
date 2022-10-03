@@ -195,7 +195,7 @@ function sign_metadata_with_creator(creator_address, tokenURI, collectionId) {
     url: `/collections/${collectionId}/sign_metadata_with_creator`,
     type: "POST",
     async: false,
-    data: {address: creator_address, tokenURI: tokenURI},
+    data: {address: creator_address, tokenURI: tokenURI, collectionId: collectionId},
     dataType: "json"
   })
   .done(function(msg) {
@@ -452,7 +452,9 @@ window.createCollectible721 = async function createCollectible721(contractAddres
     const contract721 = await fetchContract(contractAddress, 'nft721', sharedCollection);
     var gasPrices = await gasPrice();
     var txn;
+    console.log(sharedCollection)
     if (sharedCollection) {
+      console.log("HI")
       var sign = await signMetadataHash(collectionId, contractAddress);
       await saveContractNonceValue(collectionId, sign)
       var signStruct = splitSign(sign['sign'], sign['nonce']);
@@ -824,13 +826,10 @@ window.signMessage = async function signMessage(msg) {
 window.signSellOrder = async function signSellOrder(amount, decimals, paymentAssetAddress, tokenId,
    assetAddress, collectionId, sendBackTo='',) {
   try {
-    console.log("enter signSellOrder")
     amount = roundNumber(mulBy(amount, 10 ** decimals), 0);
-    console.log(assetAddress, tokenId, paymentAssetAddress, amount)
     var nonce_value = await getNonceValue(collectionId);
     var messageHash;
     messageHash = ethers.utils.solidityKeccak256(["address","uint256","address","uint256","uint256"],[assetAddress, tokenId, paymentAssetAddress, amount, nonce_value]);
-    console.log([assetAddress, tokenId, paymentAssetAddress, amount, nonce_value]);
     messageHash = ethers.utils.arrayify(messageHash);
     var account = getCurrentAccount()
      if (window.wallet == 'walletConnect') {
@@ -953,14 +952,16 @@ window.buyAndTransferAsset = async function buyAndTransferAsset(assetOwner, buyi
         var signStruct = splitSign(sellerSign, nonce_value)
         var imported = gon.collection_data["imported"]
         const nonce = await web3.eth.getTransactionCount(primaryAccount, 'latest')
-        var gasPrices = await gasPrice();               
+        var gasPrices = await gasPrice();         
+        var ownerSign = await sign_metadata_with_creator(assetOwner, tokenURI, collectionId);
+        const ownerSignStruct = splitSign(ownerSign['signature'], ownerSign['nonce']);    
         const tx = {
           'from': primaryAccount,
           'nonce': nonce,
           'gasLimit': 516883,
           'gasPrice': String(gasPrices),
         };
-        var transaction = await _trade_proxy.connect(signer)._buyAndTransferAsset(orderStruct, imported, signStruct, tx);
+        var transaction = await _trade_proxy.connect(signer)._buyAndTransferAsset(orderStruct, ownerSignStruct, imported, signStruct, tx);
         await transaction.wait();
         var receipt = await provider.getTransactionReceipt(transaction['hash']);
         if (receipt['status'] == 1){
@@ -1319,24 +1320,26 @@ async function load(shouldDestroySession = false) {
 async function createDeleteSession(account, balance, shouldDestroySession, wallet) {
   const networkType = await getNetworkType();
   const isValidUserResp = await isValidUser(account, '', wallet)
-    if (isValidUserResp.user_exists) {
-      await createUserSession(account, balance, shouldDestroySession, wallet)
-      if (shouldDestroySession) {
-        window.location.href = '/'
-      } else {
-        return true
-      }
+  if (isValidUserResp.user_exists) {
+    await createUserSession(account, balance, shouldDestroySession, wallet)
+    if (shouldDestroySession) {
+      // window.location.href = '/'
+      location.reload();
     } else {
-      if (gon.session) {
-        if (account) {
-          await destroySession()
-        }
-        window.location.href = '/'
-      } else {
-        showTermsCondition(account, balance, networkType)
-        return false
-      }
+      return true
     }
+  } else {
+    if (gon.session) {
+      if (account) {
+        await destroySession()
+      }
+      // window.location.href = '/'
+      location.reload();
+    } else {
+      showTermsCondition(account, balance, networkType)
+      return false
+    }
+  }
 }
 
 window.disconnect = async function disconnect(address) {
@@ -1366,13 +1369,15 @@ window.connect = async function connect(wallet = '') {
     }else if (typeof web3 !== 'undefined') {
       const status = await load();
       if (status) {
-        window.location.href = '/'
+        // window.location.href = '/'
+        location.reload();
       }
     } else {
             if (typeof web3 == 'undefined' && wallet == 'walletConnect'){
             const status = await load();
             if (status) {
-              window.location.href = '/'
+              // window.location.href = '/';
+              location.reload();
             }
     }else{
       toastr.error('Please install Metamask Extension to your browser. <a target="_blank" href="https://metamask.io/download.html">Download Here</a>')
@@ -1386,7 +1391,8 @@ window.proceedWithLoad = async function proceedWithLoad() {
   const networkType = $("#network_type").val()
   if ($("#condition1").is(":checked") && $("#condition2").is(":checked")) {
     await createUserSession(account, ethBal, networkType, window.wallet)
-    window.location.href = '/'
+    // window.location.href = '/'
+    location.reload();
   } else {
     toastr.error('Please accept the conditions to proceed')
   }

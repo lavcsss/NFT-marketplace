@@ -94,13 +94,14 @@
 
 
 <!-- end get started -->
-<% if action_name == "search" %>
-<footer class="footer section-footer wide-window discover-bottom-footer">
-<% elsif controller.controller_name == "collections" %>
-<footer class="footer section-footer wide-window nft-detail-bottom-footer">
-<% else %>
-<footer class="footer section-footer wide-window">
-<% end %>
+<% if action_name != 'new' %>
+  <% if action_name == "search" %>
+  <footer class="footer section-footer wide-window discover-bottom-footer">
+  <% elsif controller.controller_name == "collections" %>
+  <footer class="footer section-footer wide-window nft-detail-bottom-footer">
+  <% else %>
+  <footer class="footer section-footer wide-window">
+  <% end %>
   <div class="container">
     <div class="row">
       <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -233,5 +234,6 @@
       </div>
     </div>
   </div>
-</footer>
+  </footer>
+<% end %>
 
