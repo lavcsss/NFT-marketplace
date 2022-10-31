@@ -7,32 +7,85 @@
   width: 800px;
   background: #fff;
   padding: 30px;
-  border-radius: 30px;
+  border-radius: 10px;
   display: none;
 }
+
+.alrtPoup .about-notification {
+  border: 0px;
+}
+
+.alrtPoup .info-detail {
+  position: relative;
+  font-family: "Poppins";
+}
+
+.alrtPoup .info-detail h6 {
+  color: #000;
+  font-size: 16px;
+  font-family: "Poppins";
+  font-weight: 600;
+}
+
+.alrtPoup .info-detail p {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  font-family: "Poppins";
+}
+
+.alrtPoup .info-detail .notify-time {
+  font-size: 12px;
+  color: #98999d;
+  font-weight: 500;
+}
+
+.alrtPoup .info-detail:after {
+  content: "";
+  position: absolute;
+  height: 8px;
+  width: 8px;
+  background: #000;
+  top: 8px;
+  left: -18px;
+  border-radius: 100%;
+}
+
+.alrtPoup .modal-body-section {
+  margin: 0px;
+  padding: 0px;
+}
+.alrtPoup .notice-box-img {
+  margin: 0px;
+}
+.alrtPoup .notice-box {
+  padding: 0px;
+  display: block;
+}
+
 body.open-modal {
-    background: #000;
-    position: relative;
+  background: #000;
+  position: relative;
 }
 body.open-modal:before {
-    content: '';
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-    background: #00000070;
-    top: 0;
-    left: 0;
-    z-index: 99;
+  content: "";
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background: #00000070;
+  top: 0;
+  left: 0;
+  z-index: 99;
 }
 .My_modal.open-modal {
-    display: block;
-    position: fixed;
-    z-index: 99;
+  display: block;
+  position: fixed;
+  z-index: 99;
 }
 .My_modal .close-icon {
   float: right;
-  background: #EFEFF0 0% 0% no-repeat padding-box;
-  border-radius: 11px 41px 11px 11px;
+  background: #efeff0 0% 0% no-repeat padding-box;
+  border-radius: 100%;
   width: 33px;
   height: 33px;
   display: flex;
@@ -41,15 +94,19 @@ body.open-modal:before {
   position: absolute;
   right: 11px;
   top: 10px;
+  z-index: 9999;
+}
+.My_modal .close-icon a {
+  color: #000;
 }
 .My_modal .close-icon img {
-  width: 10px!important;
+  width: 10px !important;
   cursor: pointer;
 }
 .My_modal .payment-details h5 {
   letter-spacing: 0px;
   color: #000000;
-  font-family: 'Hahmlet', serif;
+  font-family: "Hahmlet", serif;
   font-weight: 500;
   font-size: 22px;
   text-align: center;
@@ -60,16 +117,16 @@ body.open-modal:before {
   text-align: center;
   letter-spacing: 0px;
   font-size: 16px;
-  font-family: 'Hahmlet', serif;
-font-weight: 500;
-  color: #162C5B;
+  font-family: "Hahmlet", serif;
+  font-weight: 500;
+  color: #162c5b;
   width: 100%;
   padding: 0 0 15px 0;
 }
 .My_modal .payment-details a {
   display: block;
-  background: #FFFFFF 0% 0% no-repeat padding-box;
-  border: 1px solid #F0F0F0;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #f0f0f0;
   border-radius: 5px;
   width: 70%;
   font-size: 13px;
@@ -88,8 +145,8 @@ font-weight: 500;
 .My_modal .form-grid label {
   text-align: left;
   letter-spacing: 0px;
-  color: #162C5B;
-  font-family: 'Hahmlet', serif;
+  color: #162c5b;
+  font-family: "Hahmlet", serif;
   font-size: 15px;
 }
 .My_modal .form-grid .input-values {
@@ -114,7 +171,7 @@ font-weight: 500;
 .My_modal .form-grid .input-values input {
   width: 100%;
   background: #fff 0% 0% no-repeat padding-box;
-  border: 1px solid #F0F0F0;
+  border: 1px solid #f0f0f0;
   border-radius: 5px;
   font-size: 13px;
   padding: 7px 40px;
@@ -122,7 +179,7 @@ font-weight: 500;
   outline: none;
 }
 .My_modal .form-grid .input-values.bg-fill input {
-  background: #E6E6E6 0% 0% no-repeat padding-box;
+  background: #e6e6e6 0% 0% no-repeat padding-box;
 }
 .My_modal .form-grid .nft-details {
   display: flex;
@@ -139,7 +196,7 @@ font-weight: 500;
 .My_modal .form-grid .nft-details p em {
   text-align: left;
   letter-spacing: 0px;
-  color: #162C5B;
+  color: #162c5b;
   font-size: 14px;
   font-family: CircularStd_Normal;
   display: block;
@@ -150,7 +207,7 @@ font-weight: 500;
   font-family: CircularStd_Bold;
   font-size: 15px;
   font-weight: 600;
-  color: #162C5B;
+  color: #162c5b;
 }
 .My_modal .form-grid .nft-details p em {
   font-size: 13px;
@@ -158,7 +215,7 @@ font-weight: 500;
 }
 .My_modal .form-grid .nft-details a {
   font-size: 14px;
-  color: #162C5B;
+  color: #162c5b;
 }
 .My_modal .form-grid .nft-details.total {
   border-bottom: 0;
@@ -167,7 +224,7 @@ font-weight: 500;
   text-align: center;
 }
 .My_modal .form-grid .proceed-btn button {
-  background: #3C97F2 0% 0% no-repeat padding-box;
+  background: #3c97f2 0% 0% no-repeat padding-box;
   border-radius: 10px;
   font-size: 14px;
   color: #fff;
@@ -199,7 +256,7 @@ font-weight: 500;
   padding-right: 0;
 }
 .My_modal ul li img {
-  width: 80px!important;
+  width: 80px !important;
   margin-bottom: 20px;
 }
 .My_modal ul li h6 {
@@ -207,19 +264,19 @@ font-weight: 500;
   letter-spacing: 0px;
   color: #000000;
   font-size: 18px;
-  font-family: 'Hahmlet', serif;
+  font-family: "Hahmlet", serif;
 }
 .My_modal ul li p {
   text-align: center;
   letter-spacing: 0px;
-  color: #162C5B;
-  font-family: 'Hahmlet', serif;
+  color: #162c5b;
+  font-family: "Hahmlet", serif;
   font-size: 14px;
   margin: 0;
   line-height: 20px;
   margin-bottom: 10px;
   border-bottom: 1px solid #f5f5f5;
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 .My_modal ul li p.remove-border {
   border-bottom: 0;
@@ -227,29 +284,27 @@ font-weight: 500;
 }
 
 .My_modal ul li p img {
-
-    width: 16px;
-    margin: unset;
-    max-width: 16px;
-    padding-right: 5px;
-
+  width: 16px;
+  margin: unset;
+  max-width: 16px;
+  padding-right: 5px;
 }
 
 .My_modal ul li button {
-    width: 70%;
-    background: #3C97F2 0% 0% no-repeat padding-box !important;
-    border-radius: 10px;
-    padding: 10px;
-    color: #fff;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;  
+  width: 70%;
+  background: #3c97f2 0% 0% no-repeat padding-box !important;
+  border-radius: 10px;
+  padding: 10px;
+  color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 .payment-modal {
   width: auto;
-  background: #FCFCFC 0% 0% no-repeat padding-box;
+  background: #fcfcfc 0% 0% no-repeat padding-box;
   box-shadow: -16px 3px 20px #00000010;
   border-radius: 30px;
 }
@@ -258,152 +313,151 @@ font-weight: 500;
   padding-right: 70px;
 }
 .My_modal.mft-purchase.open-modal {
-    width: auto;
+  width: auto;
 }
 
 .My_modal.mft-purchase.open-modal ul {
-    flex-flow: row wrap;
+  flex-flow: row wrap;
 }
 
 .My_modal.mft-purchase.open-modal ul li {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
 .My_modal.mft-purchase.open-modal ul li button {
-    position: unset;
+  position: unset;
 }
 
 .My_modal.mft-purchase.open-modal ul li h6 {
-    text-align: center;
-    letter-spacing: 0px;
-    color: #162C5B;
-    font-size: 24px;
-    font-weight: 600;
+  text-align: center;
+  letter-spacing: 0px;
+  color: #162c5b;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .My_modal.mft-purchase.open-modal ul li p {
-    text-align: center;
-    letter-spacing: 0px;
-    color: #162C5B;
-    width: 70%;
-    margin: 0 auto 20px auto;
-        font-family: CircularStd_Normal;
-    font-weight: 400;
-        font-size: 16px;
-    line-height: 25px;
+  text-align: center;
+  letter-spacing: 0px;
+  color: #162c5b;
+  width: 70%;
+  margin: 0 auto 20px auto;
+  font-family: CircularStd_Normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
 }
 
 .My_modal.create_collectible.open-modal {
-  cursor: default;  
+  cursor: default;
 }
 
 .My_modal.create_collectible.open-modal .modal-body-sec h6 {
-    text-align: center;
-    letter-spacing: 0px;
-    color: #162C5B;
-    font-size: 24px;
-    font-family: Hahmlet;
-    font-weight: 600;
-    margin: 20px 0 0 0;
+  text-align: center;
+  letter-spacing: 0px;
+  color: #162c5b;
+  font-size: 24px;
+  font-family: Hahmlet;
+  font-weight: 600;
+  margin: 20px 0 0 0;
 }
 
 .My_modal.create_collectible.open-modal .modal-body-sec p {
-    text-align: center;
-    letter-spacing: 0px;
-    color: #162C5B;
-    width: 72%;
-    opacity: 1;
-    margin: 15px auto 5px auto;
-/*        font-family: CircularStd_Normal;
+  text-align: center;
+  letter-spacing: 0px;
+  color: #162c5b;
+  width: 72%;
+  opacity: 1;
+  margin: 15px auto 5px auto;
+  /*        font-family: CircularStd_Normal;
     font-weight: 400;*/
-        font-size: 16px;
-    line-height: 24px;
+  font-size: 16px;
+  line-height: 24px;
 }
 .back-btn {
-    float: left;
-    background: #D9ECFF;
-    font-size: 13px;
-    border-radius: 100px;
-    padding: 5px 15px;
-    border: 1px solid #3C97F2;
-    color: #3C97F2;
-    font-family: Hahmlet;
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-        position: absolute;
-    top: 14px;
-    left: 14px;
+  float: left;
+  background: #d9ecff;
+  font-size: 13px;
+  border-radius: 100px;
+  padding: 5px 15px;
+  border: 1px solid #3c97f2;
+  color: #3c97f2;
+  font-family: Hahmlet;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  top: 14px;
+  left: 14px;
 }
 .back-btn img {
-    max-width: 20px;
-    width: 20px;
-    transform: rotate(180deg);
-    padding-left: 8px;
+  max-width: 20px;
+  width: 20px;
+  transform: rotate(180deg);
+  padding-left: 8px;
 }
 .My_modal.create_collectible.open-modal .modal-body-sec ul li {
-    height: auto;
-    padding: 0;
-    width: 43%;
-    margin: 0 auto;
-    border-right: 0;
-    box-shadow: none;
+  height: auto;
+  padding: 0;
+  width: 43%;
+  margin: 0 auto;
+  border-right: 0;
+  box-shadow: none;
 }
 box.My_modal.create_collectible.open-modal ul li .choose-single-multiple {
-    width: 170px;
-    height: 180px;
-    margin: 10px auto 15px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-flow: row wrap;
-    position: relative;
-    background: #FFFFFF 0% 0% no-repeat padding-box;
-    border-radius: 10px;
+  width: 170px;
+  height: 180px;
+  margin: 10px auto 15px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row wrap;
+  position: relative;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border-radius: 10px;
 }
 .My_modal.create_collectible.open-modal .modal-body-sec ul li p {
-    width: auto;
-    margin: auto;
-    text-align: center;
-    letter-spacing: 0px;
-    display: block;
-/*    font-family: CircularStd_Normal;
+  width: auto;
+  margin: auto;
+  text-align: center;
+  letter-spacing: 0px;
+  display: block;
+  /*    font-family: CircularStd_Normal;
     font-weight: 400;*/
-        font-size: 15px;
-    line-height: 20px;
-
+  font-size: 15px;
+  line-height: 20px;
 }
 
 .My_modal.create_collectible.open-modal .modal-body-sec ul {
-    background: #F2F2F2 0% 0% no-repeat padding-box;
-    border-radius: 20px;
+  background: #f2f2f2 0% 0% no-repeat padding-box;
+  border-radius: 20px;
   padding: 35px 35px 20px 35px;
-    margin: 20px 0 20px 0;
+  margin: 20px 0 20px 0;
 }
 
 .My_modal.create_collectible.open-modal ul li .choose-single-multiple img {
-    margin: auto;
-    margin-top: 35px;
+  margin: auto;
+  margin-top: 35px;
 }
 .My_modal.create_collectible.open-modal ul li .choose-single-multiple button {
-    border-radius: 50px;
-    font-size: 14px;
-    bottom: 20px;
-    width: fit-content;
-    padding: 3px 20px;
-    position: absolute;
+  border-radius: 50px;
+  font-size: 14px;
+  bottom: 20px;
+  width: fit-content;
+  padding: 3px 20px;
+  position: absolute;
 }
 .My_modal.create_collectible.open-modal .modal-body-sec ul li p a {
-    text-align: center;
-    font-size: 16px;
-    line-height: 23px;
-    letter-spacing: 0px;
-    color: #3C97F2;
-        font-family: CircularStd_Normal;
-    font-weight: 400;
-  }
+  text-align: center;
+  font-size: 16px;
+  line-height: 23px;
+  letter-spacing: 0px;
+  color: #3c97f2;
+  font-family: CircularStd_Normal;
+  font-weight: 400;
+}
 
 /*  .My_modal.create_collectible.open-modal .modal-body-sec .footer-bottom {
   background: #3C97F2 0% 0% no-repeat padding-box;
@@ -417,142 +471,145 @@ box.My_modal.create_collectible.open-modal ul li .choose-single-multiple {
 }*/
 
 .My_modal.create_collectible.open-modal .modal-body-sec .footer-bottom p {
-    letter-spacing: 0px;
-    color: #162C5B;
-    opacity: 1;
-    width: 71%;
-    font-style: italic;
-    margin: 0 auto;
-        font-size: 16px;
-    line-height: 24px;
-        font-family: CircularStd_Normal;
-    font-weight: 400;
+  letter-spacing: 0px;
+  color: #162c5b;
+  opacity: 1;
+  width: 71%;
+  font-style: italic;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: CircularStd_Normal;
+  font-weight: 400;
 }
 box.My_modal.steps-approve.open-modal {
-    width: 520px;
+  width: 520px;
 }
 .My_modal .modal-top-heading h6 {
-    text-align: center;
-    letter-spacing: 0px;
-    color: #162C5B;
-    font: normal normal medium 26px/30px Hahmlet;
+  text-align: center;
+  letter-spacing: 0px;
+  color: #162c5b;
+  font: normal normal medium 26px/30px Hahmlet;
 }
 .My_modal .modal-top-heading p {
-    text-align: center;
-    letter-spacing: 0px;
-    color: #162C5B;
-    width: 80%;
-    margin: 0 auto;
-    font-size: 18px;
-    line-height: 25px;
+  text-align: center;
+  letter-spacing: 0px;
+  color: #162c5b;
+  width: 80%;
+  margin: 0 auto;
+  font-size: 18px;
+  line-height: 25px;
 }
 .progress-steps {
-    display: flex;
-    align-items: center;
-    width: 95%;
-    margin: 20px auto 0 auto;
+  display: flex;
+  align-items: center;
+  width: 95%;
+  margin: 20px auto 0 auto;
 }
- .progress-steps img {
-    background: #766d6d;
-    border-radius: 100px;
-    padding: 10px;
-    width: 44px;
-    margin: unset;
+.progress-steps img {
+  background: #766d6d;
+  border-radius: 100px;
+  padding: 10px;
+  width: 44px;
+  margin: unset;
 }
 .process-states {
-    margin-left: 13px;
+  margin-left: 13px;
 }
 .process-states h6 {
-    text-align: left;
-    letter-spacing: 0px;
-    font-size: 20px;
-    line-height: 32px;
-    color: #162C5B;
-    font-weight: bold;
+  text-align: left;
+  letter-spacing: 0px;
+  font-size: 20px;
+  line-height: 32px;
+  color: #162c5b;
+  font-weight: bold;
 }
 .process-states p {
-    text-align: left;
-        letter-spacing: 0px;
-    color: #162C5B;
-    line-height: 28px;
-    font-size: 16px;
+  text-align: left;
+  letter-spacing: 0px;
+  color: #162c5b;
+  line-height: 28px;
+  font-size: 16px;
 }
-.process-states h6,  .process-states p {
-    text-align: left;
-    margin: auto;
-    border-bottom: 0;
-    padding: 0;
+.process-states h6,
+.process-states p {
+  text-align: left;
+  margin: auto;
+  border-bottom: 0;
+  padding: 0;
 }
- .progress-steps button {
-    position: unset;
-    width: unset;
-    margin: unset;
-    margin-left: auto;
-    border-radius: 100px;
-    padding: 6px 20px;
-    font-size: 15px;
-    min-width: 140px;
-    background: #3C97F2 0% 0% no-repeat padding-box;
-border-radius: 26px;
-color: #fff;
+.progress-steps button {
+  position: unset;
+  width: unset;
+  margin: unset;
+  margin-left: auto;
+  border-radius: 100px;
+  padding: 6px 20px;
+  font-size: 15px;
+  min-width: 140px;
+  background: #3c97f2 0% 0% no-repeat padding-box;
+  border-radius: 26px;
+  color: #fff;
 }
 
 /*
 notification css start*/
 box.My_modal.notify-inbox-message.open-modal {
-    width: 500px;
+  width: 500px;
 }
 
 .notify-heading {
-    text-align: left;
-    font: normal normal bold 25px/30px Hahmlet;
-    letter-spacing: 0px;
-    color: #162C5B;
-    }
+  text-align: center;
+  font: normal normal bold 25px/30px Hahmlet;
+  letter-spacing: 0px;
+  color: #162c5b;
+}
 
 .about-notification {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 0px;
-    background: #FFFFFF 0% 0% no-repeat padding-box;
-    border: 1px solid #E2E2E2;
-    border-radius: 5px;
-    padding: 10px;
-    border-left: 5px solid #e2e2e2;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  margin-bottom: 0px;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
+  padding: 10px;
+  border-left: 5px solid #e2e2e2;
 }
 
 .info-detail {
-    margin-left: 12px;
+  margin-left: 12px;
 }
 
 .info-detail h6 {
-    text-align: left;
-    font: normal normal normal 20px/24px Hahmlet;
-    letter-spacing: 0px;
-    color: #3C97F2;margin: 0;
+  text-align: left;
+  font: normal normal normal 20px/24px Hahmlet;
+  letter-spacing: 0px;
+  color: #3c97f2;
+  margin: 0;
 }
 
 .info-detail p {
-    text-align: left;
-    font: normal normal normal 15px/25px Hahmlet;
-    letter-spacing: 0px;
-    color: #162C5B;
-    opacity: 1;margin: 0;
+  text-align: left;
+  font: normal normal normal 15px/25px Hahmlet;
+  letter-spacing: 0px;
+  color: #162c5b;
+  opacity: 1;
+  margin: 0;
 }
 
 .about-notification img {
-    width: 45px;
-    border-radius: 50%;
-    height: 45px;
+  width: 45px;
+  border-radius: 50%;
+  height: 45px;
 }
 .about-notification.active {
-    border: 1px solid #3C97F2;
-    border-left: 5px solid #3C97F2;
+  border: 1px solid #3c97f2;
+  border-left: 5px solid #3c97f2;
 }
-.about-notification  img.notify-clear,
-.about-notification.active img.notify-icon{
-    display: none;
+.about-notification img.notify-clear,
+.about-notification.active img.notify-icon {
+  display: none;
 }
 
 .about-notification.active img.notify-clear {
@@ -560,134 +617,156 @@ box.My_modal.notify-inbox-message.open-modal {
 }
 
 .notify-msg-box p.notify-time {
-    text-align: right;
-    font-size: 13px;
-    letter-spacing: 0px;
-    color: #8C939A;
+  text-align: right;
+  font-size: 13px;
+  letter-spacing: 0px;
+  color: #8c939a;
 }
 box.My_modal.notify-inbox-message.open-modal .modal-body-section {
-  max-height: 320px;
+  /* max-height: 320px; */
   overflow: auto;
   padding-right: 10px;
 }
 
 /*notification css end*/
-box.My_modal.notify-inbox-message.share-media.open-modal .notify-heading {color: #000000;font-size: 20px;text-align: center;}
+box.My_modal.notify-inbox-message.share-media.open-modal .notify-heading {
+  color: #000000;
+  font-size: 20px;
+  text-align: center;
+}
 
 box.My_modal.notify-inbox-message.share-media.open-modal .about-notification {
-      border: 0;
-    padding: 0;
-    justify-content: center;
-    margin: 10px 10px 30px 10px;
+  border: 0;
+  padding: 0;
+  justify-content: center;
+  margin: 10px 10px 30px 10px;
 }
-box.My_modal.notify-inbox-message.share-media.open-modal .about-notification img {width: 36px;margin: 0 7px;}
+box.My_modal.notify-inbox-message.share-media.open-modal
+  .about-notification
+  img {
+  width: 36px;
+  margin: 0 7px;
+}
 
-box.My_modal.notify-inbox-message.share-media.open-modal {width: 410px;}
-box.My_modal.notify-inbox-message.share-media.open-modal button {background: #fff;border: 1px solid #3C97F2;color: #3C97F2;background: #E3F1FF;border-radius: 30px;padding: 10px;min-width: 170px;}
+box.My_modal.notify-inbox-message.share-media.open-modal {
+  width: 410px;
+}
+box.My_modal.notify-inbox-message.share-media.open-modal button {
+  background: #fff;
+  border: 1px solid #3c97f2;
+  color: #3c97f2;
+  background: #e3f1ff;
+  border-radius: 30px;
+  padding: 10px;
+  min-width: 170px;
+}
 
-box.My_modal.notify-inbox-message.share-media.open-modal button img {width: 20px;margin-right: 10px;}
+box.My_modal.notify-inbox-message.share-media.open-modal button img {
+  width: 20px;
+  margin-right: 10px;
+}
 .contract-detail-popup .sm_modal h4 {
-    text-align: center;
-     font: normal normal 26px/30px Hahmlet;
-     letter-spacing: 0px;
-     color: #162C5B;
-    font-weight: 500;
+  text-align: center;
+  font: normal normal 26px/30px Hahmlet;
+  letter-spacing: 0px;
+  color: #162c5b;
+  font-weight: 500;
 }
 .contract-detail-popup .sign__label {
-    padding: 0;
-    text-align: left;
-     font: normal normal 15px/27px Hahmlet;
-     letter-spacing: 0px;
-     color: #162C5B;
+  padding: 0;
+  text-align: left;
+  font: normal normal 15px/27px Hahmlet;
+  letter-spacing: 0px;
+  color: #162c5b;
 }
 
 .contract-detail-popup input[type="file" i] {
-    padding: 3px 5px;
+  padding: 3px 5px;
 }
 .contract-detail-popup .box {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 .contract-detail-popup button.sign__btn.modal__close.md_cls {
-    background: #fff;
-    color: #3C97F2;
+  background: #fff;
+  color: #3c97f2;
 }
 .contract-detail-popup .sign__btn {
-    min-width: 200px;
-    width: auto;
-    margin: 0;
-    border-radius: 8px;
-    font: normal normal bold 16px/37px Hahmlet;
+  min-width: 200px;
+  width: auto;
+  margin: 0;
+  border-radius: 8px;
+  font: normal normal bold 16px/37px Hahmlet;
 }
 .contract-detail-popup button.sign__btn.btn.btn-primary.createOwnErc721Form {
-    margin-left: auto;
+  margin-left: auto;
 }
 .choose-file-design {
-    position: relative;
+  position: relative;
 }
 
- span.choose-file {
-    position: absolute;
-    left: 0;
+span.choose-file {
+  position: absolute;
+  left: 0;
 }
- .choose-imgaes {
-    position: absolute;
-    top: 1px;
-    left: 1px;
-    background: #fff;
-    border-radius: 5px;
-    height: 97%;
-    width: 99%;
-    bottom: 0;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    padding: 3px;
-    padding-left: 6px;
+.choose-imgaes {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  background: #fff;
+  border-radius: 5px;
+  height: 97%;
+  width: 99%;
+  bottom: 0;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  padding-left: 6px;
 }
 
 .choose-imgaes span {
-    background: #F2F2F2 0% 0% no-repeat padding-box;
-     border: 1px solid #E2E2E2;
-     border-radius: 5px;
-     text-align: left;
-     font: normal normal 14px/24px Hahmlet;
-     letter-spacing: 0px;
-     color: #162C5B;
-    padding: 2px 11px;
+  background: #f2f2f2 0% 0% no-repeat padding-box;
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
+  text-align: left;
+  font: normal normal 14px/24px Hahmlet;
+  letter-spacing: 0px;
+  color: #162c5b;
+  padding: 2px 11px;
 }
- .choose-imgaes em {
-    text-align: left;
-     font: normal normal 14px/25px Hahmlet;
-     letter-spacing: 0px;
-     color: #162C5B;
-     opacity: 0.5;
-    font-weight: 500;
-    margin-left: 16px;
+.choose-imgaes em {
+  text-align: left;
+  font: normal normal 14px/25px Hahmlet;
+  letter-spacing: 0px;
+  color: #162c5b;
+  opacity: 0.5;
+  font-weight: 500;
+  margin-left: 16px;
 }
 .contract-detail-popup .sign__input {
-    color: #162C5B;
-    opacity: 0.5;
+  color: #162c5b;
+  opacity: 0.5;
 }
 .contract-detail-popup .modal-footer {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .contract-detail-popup [type="file"]::-webkit-file-upload-button {
-  background: #F2F2F2 0% 0% no-repeat padding-box;
-border: 1px solid #E2E2E2;
+  background: #f2f2f2 0% 0% no-repeat padding-box;
+  border: 1px solid #e2e2e2;
   border-radius: 5px;
-  color: #162C5B;
+  color: #162c5b;
   cursor: pointer;
   font: normal normal 14px/25px Hahmlet;
   outline: none;
   padding: 3px 12px;
   transition: all 1s ease;
-  font-weight:500;
+  font-weight: 500;
   opacity: 1;
 }
 
 @media screen and (max-width: 991px) and (min-width: 768px) {
-  .My_modal.open-modal{
+  .My_modal.open-modal {
     width: 730px;
   }
   .My_modal ul li {
@@ -695,17 +774,18 @@ border: 1px solid #E2E2E2;
   }
 }
 @media screen and (max-width: 767px) and (min-width: 280px) {
-
-  .My_modal ,
-  box.My_modal.notify-inbox-message.open-modal{
+  .My_modal,
+  box.My_modal.notify-inbox-message.open-modal {
     width: 90%;
     height: calc(100% - 120px);
     overflow: auto;
     margin-top: 20px;
   }
   box.My_modal.steps-approve.open-modal,
-  box.My_modal.notify-inbox-message.open-modal {height: auto;}
-  box.My_modal.steps-approve.open-modal ul li{
+  box.My_modal.notify-inbox-message.open-modal {
+    height: auto;
+  }
+  box.My_modal.steps-approve.open-modal ul li {
     box-shadow: none;
     margin-top: 0;
   }
@@ -726,7 +806,7 @@ border: 1px solid #E2E2E2;
     margin-top: 20px;
     width: 90%;
     padding: 8px;
-}
+  }
   .My_modal ul li .input-wrap {
     bottom: 30px;
   }
@@ -737,76 +817,79 @@ border: 1px solid #E2E2E2;
     padding-left: 30px;
     padding-right: 30px;
   }
-  .My_modal.create_collectible.open-modal .modal-body-sec ul li{
+  .My_modal.create_collectible.open-modal .modal-body-sec ul li {
     width: 60%;
   }
   contract-detail-popup .sign__btn {
     min-width: 160px;
-}
+  }
 }
 @media screen and (max-width: 425px) and (min-width: 280px) {
   .My_modal ul li img {
     width: 60px;
   }
-  .contract-detail-popup .sign__btn{
+  .contract-detail-popup .sign__btn {
     min-width: 150px;
     font-size: 14px;
     padding: 0 10px;
   }
-  box.My_modal.notify-inbox-message.share-media.open-modal{
+  box.My_modal.notify-inbox-message.share-media.open-modal {
     width: 90%;
   }
-  box.My_modal.notify-inbox-message.share-media.open-modal .about-notification img{
-        width: 34px;
+  box.My_modal.notify-inbox-message.share-media.open-modal
+    .about-notification
+    img {
+    width: 34px;
     margin: 0px;
   }
-  box.My_modal.notify-inbox-message.share-media.open-modal .about-notification{
-        justify-content: space-between;
+  box.My_modal.notify-inbox-message.share-media.open-modal .about-notification {
+    justify-content: space-between;
     margin: 5px 0 30px 0;
   }
- box.My_modal.notify-inbox-message.share-media.open-modal .modal-body-section{
+  box.My_modal.notify-inbox-message.share-media.open-modal .modal-body-section {
     padding: 0;
   }
-  box.My_modal.notify-inbox-message.share-media.open-modal button{
+  box.My_modal.notify-inbox-message.share-media.open-modal button {
     min-width: 140px;
     padding: 6px;
   }
-  box.My_modal.notify-inbox-message.share-media.open-modal .modal-body-section{
+  box.My_modal.notify-inbox-message.share-media.open-modal .modal-body-section {
     padding: 0;
   }
   .My_modal ul li h6 {
     font-size: 14px;
   }
-  .My_modal ul li p ,
-  .notify-msg-box p.notify-time{
+  .My_modal ul li p,
+  .notify-msg-box p.notify-time {
     font-size: 12px;
   }
   .My_modal.payment-modal.MuiBox-root.css-0 {
     width: 90%;
     height: auto;
   }
-.info-detail h6{
-  font-size: 15px;
-}
-.info-detail p{
-  font-size: 13px;
-}
-.about-notification img{
-  width: 48px;
-}
+  .info-detail h6 {
+    font-size: 15px;
+  }
+  .info-detail p {
+    font-size: 13px;
+  }
+  .about-notification img {
+    width: 48px;
+  }
 
   .My_modal.payment-modal.MuiBox-root.css-0 .payment-details h5,
-    .notify-heading ,.sm_modal h4{
+  .notify-heading,
+  .sm_modal h4 {
     font-size: 19px;
   }
   .My_modal.payment-modal.MuiBox-root.css-0 .payment-details p,
   .My_modal.create_collectible.open-modal .modal-body-sec p,
-  .My_modal.create_collectible.open-modal .modal-body-sec ul li p ,
-  .follow-step-content .head{
+  .My_modal.create_collectible.open-modal .modal-body-sec ul li p,
+  .follow-step-content .head {
     font-size: 14px;
   }
-  .My_modal.payment-modal.MuiBox-root.css-0 .payment-details a ,
-  .follow-step-content .text{
+  .My_modal.payment-modal.MuiBox-root.css-0 .payment-details a,
+  .follow-step-content .text {
     font-size: 12px;
   }
   .My_modal .form-grid .nft-details {
@@ -816,10 +899,10 @@ border: 1px solid #E2E2E2;
     margin-bottom: 10px;
     border-radius: 4px;
   }
-  .My_modal .form-grid .nft-details p ,
+  .My_modal .form-grid .nft-details p,
   .My_modal.create_collectible.open-modal .modal-body-sec ul li,
   .My_modal.create_collectible.open-modal .modal-body-sec p,
-  .My_modal.create_collectible.open-modal .modal-body-sec .footer-bottom p{
+  .My_modal.create_collectible.open-modal .modal-body-sec .footer-bottom p {
     width: 100%;
   }
   .My_modal .form-grid .nft-details.total {
@@ -827,7 +910,7 @@ border: 1px solid #E2E2E2;
   }
   .My_modal.create_collectible.open-modal .modal-body-sec {
     margin-top: 40px;
-}
+  }
 }
 @media screen and (max-width: 375px) and (min-width: 280px) {
   .My_modal {
@@ -840,58 +923,61 @@ border: 1px solid #E2E2E2;
   .My_modal ul li .input-wrap {
     bottom: 18px;
   }
-  .change-price-popup .modal-footer .bidding-element-btn, .burn-Token .modal-footer .bidding-element-btn{
+  .change-price-popup .modal-footer .bidding-element-btn,
+  .burn-Token .modal-footer .bidding-element-btn {
     margin: 10px 0 0 6px;
     min-width: 71px;
-    padding: 8px 7px!important;
+    padding: 8px 7px !important;
     font-size: 12px;
   }
-  .change-price-popup h4, .sm_modal h4{
+  .change-price-popup h4,
+  .sm_modal h4 {
     font-size: 20px;
   }
-  .modal-body label, .modal-body p, .sign__input{
+  .modal-body label,
+  .modal-body p,
+  .sign__input {
     font-size: 13px;
   }
-  box.My_modal.notify-inbox-message.share-media.open-modal button{
-        min-width: 130px;
+  box.My_modal.notify-inbox-message.share-media.open-modal button {
+    min-width: 130px;
     padding: 5px;
     font-size: 13px;
   }
-  box.My_modal.notify-inbox-message.share-media.open-modal button img{
+  box.My_modal.notify-inbox-message.share-media.open-modal button img {
     margin-right: 2px;
   }
-  box.My_modal.create_collectible.open-modal ul li .choose-single-multiple{
-        transform: scale(0.8);
+  box.My_modal.create_collectible.open-modal ul li .choose-single-multiple {
+    transform: scale(0.8);
   }
-  .My_modal.create_collectible.open-modal .modal-body-sec ul{
+  .My_modal.create_collectible.open-modal .modal-body-sec ul {
     padding: 10px;
   }
-  .contract-detail-popup .sign__btn
-  {
-       min-width: 125px;
+  .contract-detail-popup .sign__btn {
+    min-width: 125px;
     line-height: unset;
-
   }
 }
 @media screen and (max-width: 319px) and (min-width: 280px) {
-box.My_modal.notify-inbox-message.share-media.open-modal .about-notification img{
-  width: 27px;
-
-}
-.contract-detail-popup .sign__btn{
-      min-width: auto;
+  box.My_modal.notify-inbox-message.share-media.open-modal
+    .about-notification
+    img {
+    width: 27px;
+  }
+  .contract-detail-popup .sign__btn {
+    min-width: auto;
     font-size: 13px;
     padding: 0 20px;
     line-height: unset;
-}
+  }
 }
 /*NFT Modal end*/
 
 /* Fiat Payment Popups starts */
-.pop-div{
+.pop-div {
   max-width: 450px;
   margin: 5% auto;
-  background: #FFFFFE 0% 0% no-repeat padding-box;
+  background: #fffffe 0% 0% no-repeat padding-box;
   box-shadow: -16px 3px 20px #00000010;
   border-radius: 30px;
   position: relative;
@@ -899,15 +985,15 @@ box.My_modal.notify-inbox-message.share-media.open-modal .about-notification img
   min-height: 400px;
   padding: 20px 0px;
 }
-.pop-div h2{
+.pop-div h2 {
   font-size: 20px;
   font-weight: 700;
   margin: 10px 0px 0px;
   padding: 20px;
   letter-spacing: 0px;
-  color: #162C5B;
+  color: #162c5b;
 }
-.close-button{
+.close-button {
   width: 50px;
   position: absolute;
   right: 5px;
@@ -915,43 +1001,43 @@ box.My_modal.notify-inbox-message.share-media.open-modal .about-notification img
   cursor: pointer;
 }
 .close-button img {
- width: 70%;
+  width: 70%;
 }
-.button-div{
- position: relative;
+.button-div {
+  position: relative;
   max-width: 200px;
   margin: 0 auto;
   margin-bottom: 30px;
 }
-.button-div img{
- width: 100%;
+.button-div img {
+  width: 100%;
 }
-.line{
- height: 1px;
+.line {
+  height: 1px;
   max-width: 200px;
   margin: 20px auto;
-  background-color:#DDDCDD;
+  background-color: #dddcdd;
 }
-.line-text{
- background: #fff;
+.line-text {
+  background: #fff;
   max-width: 50px;
   margin: -36px auto 16px;
 }
 .input-container {
   display: -ms-flexbox;
- /* IE10 */
+  /* IE10 */
   display: flex;
   width: 100%;
   margin-bottom: 15px;
 }
-.inline{
-  max-width:400px;
-  margin:auto;
+.inline {
+  max-width: 400px;
+  margin: auto;
   text-align: left;
 }
-.inline-2{
-  max-width:400px;
-  margin:auto;
+.inline-2 {
+  max-width: 400px;
+  margin: auto;
   text-align: left;
 }
 .input-icons i {
@@ -964,29 +1050,29 @@ box.My_modal.notify-inbox-message.share-media.open-modal .about-notification img
   padding: 5px 0px;
   font-weight: 700;
   margin: 0px;
-  color: #162C5B;
+  color: #162c5b;
 }
 .input-icons {
   width: 100%;
   margin-bottom: 10px;
 }
-input{
- background: #F0F0F0 0% 0% no-repeat padding-box;
-  border: 1px solid #F0F0F0;
+input {
+  background: #f0f0f0 0% 0% no-repeat padding-box;
+  border: 1px solid #f0f0f0;
   border-radius: 5px;
   opacity: 1;
 }
-input{
- text-align: left;
+input {
+  text-align: left;
 }
 .icon {
   padding: 9px;
   min-width: 40px;
 }
 .select-field {
-  background: #FFFFFF 0% 0% no-repeat padding-box;
-  border: 1px solid #F0F0F0;
-  color: #162C5B;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #f0f0f0;
+  color: #162c5b;
   font-family: CircularStd_Normal;
   border-radius: 5px;
   height: 40px;
@@ -997,7 +1083,7 @@ input{
   text-align: left;
   margin-bottom: 10px;
   padding-left: 35px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
 }
 .input-field {
   font-size: 14px;
@@ -1006,16 +1092,16 @@ input{
   text-align: left;
   margin-bottom: 5px;
   padding-left: 35px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
 }
-.select-icons{
+.select-icons {
   margin-top: 56px !important;
   margin-left: 9px !important;
 }
-.wallet-input-box{
- background: #F0F0F0 0% 0% no-repeat padding-box;
+.wallet-input-box {
+  background: #f0f0f0 0% 0% no-repeat padding-box;
   color: #000;
-  border: 1px solid #F0F0F0;
+  border: 1px solid #f0f0f0;
 }
 .intl-tel-input {
   display: table-cell;
@@ -1033,8 +1119,8 @@ input{
   border-bottom-right-radius: 0;
 }
 .intl-tel-input {
-  background: #FFFFFF 0% 0% no-repeat padding-box;
-  border: 1px solid #F0F0F0;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #f0f0f0;
   border-radius: 5px;
   opacity: 1;
   z-index: 1;
@@ -1042,38 +1128,32 @@ input{
   position: relative;
   display: inline-block;
 }
-.pop-width{
- max-width:600px ;
+.pop-width {
+  max-width: 600px;
 }
-.inline-pop{
- max-width:500px ;
+.inline-pop {
+  max-width: 500px;
 }
 .form-control {
- height: 46px;
+  height: 46px;
   display: block !important;
- ;
   width: 100% !important;
- ;
   /*padding: 10px 50px !important;*/
- ;
   font-size: 14px !important;
- ;
   line-height: 1.42857143;
   background-color: #fff;
   background-image: none;
   border: none !important;
   border-radius: 10px !important;
- ;
-  -webkit-box-shadow:none !important;
- ;
-  box-shadow:none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
 }
-.pop-button{
- text-align: center;
+.pop-button {
+  text-align: center;
   margin: 30px auto;
 }
 .pop-button a {
-  background: #3C97F2 0% 0% no-repeat padding-box;
+  background: #3c97f2 0% 0% no-repeat padding-box;
   border-radius: 10px;
   text-align: center;
   color: #fff;
@@ -1082,48 +1162,48 @@ input{
   opacity: 1;
 }
 .pop-button a:hover {
- background: #6aaff4 0% 0% no-repeat padding-box;
+  background: #6aaff4 0% 0% no-repeat padding-box;
   text-align: center;
   color: #fff;
   text-decoration: none;
 }
-.mini-wallet-icon{
+.mini-wallet-icon {
   position: relative;
   left: -15px;
   top: -6px;
 }
 
-.checkout-pop-wallet-icon{
+.checkout-pop-wallet-icon {
   position: relative;
   left: -15px;
   top: -1px;
 }
 
-table{
- width: 100%;
-  font-family: 'DM Sans', sans-serif;
+table {
+  width: 100%;
+  font-family: "DM Sans", sans-serif;
   font-size: 16px;
-  color: #162C5B
+  color: #162c5b;
 }
-.info-icon{
- right: 50px;
-  color: #FF9336 !important;
+.info-icon {
+  right: 50px;
+  color: #ff9336 !important;
 }
-table td{
- padding: 15px 0px;
+table td {
+  padding: 15px 0px;
 }
-table tr{
- border-bottom: 1px solid #e1dddd;
+table tr {
+  border-bottom: 1px solid #e1dddd;
 }
 @media (max-width: 767px) {
-  .footersec-2{
-     margin-left: 0px;
- }
-  .pop-width{
-     margin: 0px 15px;
- }
-  .inline-pop{
-     padding: 0px 15px;
- }
+  .footersec-2 {
+    margin-left: 0px;
+  }
+  .pop-width {
+    margin: 0px 15px;
+  }
+  .inline-pop {
+    padding: 0px 15px;
+  }
 }
 /* Fiat Payment Popups ends*/

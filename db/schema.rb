@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2022_09_06_155734) do
 
-  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -34,13 +34,13 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "admin_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "admin_users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
-  create_table "bids", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "bids", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "collection_id"
     t.datetime "register_date"
@@ -70,14 +70,14 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.decimal "amount_with_fee", precision: 32, scale: 16
   end
 
-  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name"
     t.boolean "is_active", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "celebrities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "celebrities", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "asset"
     t.string "title"
     t.string "description"
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "collections", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "collections", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "address", null: false
     t.string "name"
     t.text "description"
@@ -125,7 +125,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.index ["owner_id"], name: "index_collections_on_owner_id"
   end
 
-  create_table "contract_nonce_verifies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "contract_nonce_verifies", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "contract_sign_address"
     t.string "contract_sign_nonce"
     t.integer "network_id"
@@ -134,7 +134,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "erc20_tokens", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "erc20_tokens", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "address"
     t.string "chain_id"
     t.string "name"
@@ -145,21 +145,21 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "featured_collections", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "featured_collections", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "collection_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["collection_id"], name: "index_featured_collections_on_collection_id"
   end
 
-  create_table "featured_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "featured_users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_featured_users_on_user_id"
   end
 
-  create_table "fees", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "fees", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name"
     t.string "fee_type"
     t.string "price"
@@ -168,7 +168,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "fiat_payments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "fiat_payments", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "collection_id"
     t.integer "amount"
@@ -183,14 +183,14 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.index ["user_id"], name: "index_fiat_payments_on_user_id"
   end
 
-  create_table "follows", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "follows", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.integer "follower_id", null: false
     t.integer "followee_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "kyc_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "kyc_details", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "user_id"
     t.string "name"
     t.string "email_id"
@@ -203,7 +203,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.index ["user_id"], name: "index_kyc_details_on_user_id"
   end
 
-  create_table "likes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "likes", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "collection_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -212,7 +212,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
-  create_table "nft_contracts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "nft_contracts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name"
     t.string "symbol"
     t.string "address"
@@ -225,7 +225,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.index ["owner_id"], name: "index_nft_contracts_on_owner_id"
   end
 
-  create_table "nft_metadata", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "nft_metadata", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "user_id"
     t.string "contract_address"
     t.string "token_id"
@@ -237,7 +237,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.index ["user_id"], name: "index_nft_metadata_on_user_id"
   end
 
-  create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "from_user_id"
     t.bigint "to_user_id"
     t.text "message"
@@ -251,7 +251,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.index ["to_user_id"], name: "index_notifications_on_to_user_id"
   end
 
-  create_table "report_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "report_users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.text "message"
     t.bigint "created_by_id", null: false
@@ -261,7 +261,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.index ["user_id"], name: "index_report_users_on_user_id"
   end
 
-  create_table "transactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "transactions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.integer "buyer_id"
     t.integer "seller_id"
     t.integer "collection_id"
@@ -272,7 +272,7 @@ ActiveRecord::Schema.define(version: 2022_09_06_155734) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "address"
     t.boolean "is_verified"
     t.string "name"

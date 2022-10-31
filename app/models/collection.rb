@@ -401,13 +401,13 @@ class Collection < ApplicationRecord
   end
 
   def gon_data
-    { contract_address: nft_contract&.address,
-      contract_type: nft_contract&.contract_type,
-      contract_shared: shared?,
-      instant_sale_price: instant_sale_price,
-      put_on_sale: put_on_sale,
-      imported: imported,
-      owner_address: owner&.address
+    { contract_address: nft_contract&.address,        #table=> nft_contracts - address
+      contract_type: nft_contract&.contract_type,       #table=> nft_contracts - contract_type
+      contract_shared: shared?,       # /nft_contract.rb  :16
+      instant_sale_price: instant_sale_price,     #table=>collections
+      put_on_sale: put_on_sale,       #table=>collections
+      imported: imported,       #table=>collections
+      owner_address: owner&.address       #table=> Users - address(foreign key- owner_id)  :
     }
   end
 
